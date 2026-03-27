@@ -19,90 +19,139 @@
     <section class="pt-20 pb-10">
       <div class="max-w-6xl mx-auto px-6 md:px-10">
         <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 anim-fade">Contact</p>
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-5 anim-up">Let's have a conversation.</h1>
-        <p class="anim-up anim-d1" style="color:rgba(255,255,255,0.35);line-height:1.85;font-size:0.88rem;max-width:36rem">Whether you have a specific project in mind or just want to explore whether AI and data solutions make sense for your business, I'm happy to talk.</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-5 anim-up">Book a Discovery Call</h1>
+        <p class="anim-up anim-d1" style="color:rgba(255,255,255,0.35);line-height:1.85;font-size:0.88rem;max-width:36rem">Pick a time that works for you, tell me a bit about your situation, and I'll be there. Free, no commitment, no pitch.</p>
       </div>
     </section>
 
     <section class="pb-20">
       <div class="max-w-6xl mx-auto px-6 md:px-10">
-        <div class="flex flex-col lg:flex-row gap-8">
+        <div class="flex flex-col lg:flex-row gap-6">
 
-          <div class="flex-1 reveal">
-            <div class="card">
-              <form id="contact-form">
-                <div class="form-group">
-                  <label for="name" class="form-label">Name</label>
-                  <input type="text" id="name" name="name" class="form-input" placeholder="Your name" required>
+          <!-- Booking flow -->
+          <div class="flex-1 min-w-0 reveal">
+            <div class="card" id="booking-card">
+
+              <!-- Step indicator -->
+              <div class="flex items-center gap-3 mb-6" id="step-indicator">
+                <div class="step-item active" data-step="1">
+                  <span class="step-dot active" data-step="1">1</span>
+                  <span class="step-label">Date</span>
                 </div>
-                <div class="form-group">
-                  <label for="email" class="form-label">Email</label>
-                  <input type="email" id="email" name="email" class="form-input" placeholder="you@company.com" required>
+                <div class="step-connector" id="conn-1-2"><div class="step-connector-fill"></div></div>
+                <div class="step-item" data-step="2">
+                  <span class="step-dot" data-step="2">2</span>
+                  <span class="step-label">Time</span>
                 </div>
-                <div class="form-group">
-                  <label for="company" class="form-label">Company <span style="color:rgba(255,255,255,0.1)">(optional)</span></label>
-                  <input type="text" id="company" name="company" class="form-input" placeholder="Your company">
+                <div class="step-connector" id="conn-2-3"><div class="step-connector-fill"></div></div>
+                <div class="step-item" data-step="3">
+                  <span class="step-dot" data-step="3">3</span>
+                  <span class="step-label">Details</span>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Interested in</label>
-                  <input type="hidden" id="interest" name="interest" value="">
-                  <div class="custom-select" id="interest-select">
-                    <div class="custom-select-trigger" id="interest-trigger">Select an option</div>
-                    <div class="custom-select-options">
-                      <div class="custom-select-option" data-value="ai">AI Solutions & Architecture</div>
-                      <div class="custom-select-option" data-value="data">Data Engineering & Infrastructure</div>
-                      <div class="custom-select-option" data-value="analytics">Analytics & Business Intelligence</div>
-                      <div class="custom-select-option" data-value="not-sure">Not sure yet - let's talk</div>
-                    </div>
+              </div>
+
+              <!-- Step 1: Pick a date -->
+              <div id="step-1" class="booking-step">
+                <div class="form-label" style="margin-bottom:1rem">Select a date</div>
+                <div id="date-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                  <div style="grid-column:1/-1;padding:2.5rem 0;display:flex;flex-direction:column;align-items:center;gap:0.75rem">
+                    <div class="spinner"></div>
+                    <span style="color:rgba(255,255,255,0.15);font-size:0.72rem">Loading availability...</span>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="message" class="form-label">Tell me about your situation</label>
-                  <textarea id="message" name="message" rows="3" class="form-input" placeholder="What challenges are you facing?"></textarea>
-                </div>
-                <div style="padding-top:0.4rem">
-                  <button type="submit" class="btn-primary">Send Message</button>
-                </div>
-              </form>
-              <div class="form-success" id="form-success">
-                <svg width="32" height="32" fill="none" stroke="#4ade80" viewBox="0 0 24 24" style="margin:0 auto 1rem"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <p style="font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.5rem">Message sent.</p>
-                <p style="font-size:0.78rem;color:rgba(255,255,255,0.35);line-height:1.7">I'll get back to you within 24 hours.</p>
               </div>
+
+              <!-- Step 2: Pick a time -->
+              <div id="step-2" class="booking-step" style="display:none">
+                <div class="flex items-center gap-3 mb-4">
+                  <button id="back-to-dates" style="color:rgba(255,255,255,0.3);font-size:0.72rem;cursor:pointer;background:none;border:none;font-family:inherit;padding:0">&larr; Back</button>
+                  <div class="form-label" style="margin:0">Pick a time on <span id="selected-date-label" style="color:rgba(255,255,255,0.5)"></span></div>
+                </div>
+                <div id="time-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2"></div>
+              </div>
+
+              <!-- Step 3: Details + submit -->
+              <div id="step-3" class="booking-step" style="display:none">
+                <div class="flex items-center gap-3 mb-4">
+                  <button id="back-to-times" style="color:rgba(255,255,255,0.3);font-size:0.72rem;cursor:pointer;background:none;border:none;font-family:inherit;padding:0">&larr; Back</button>
+                  <div class="form-label" style="margin:0">Your details</div>
+                </div>
+
+                <!-- Selected slot summary -->
+                <div id="slot-summary" style="background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.1);border-radius:0.5rem;padding:0.6rem 0.85rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem">
+                  <svg width="14" height="14" fill="none" stroke="rgba(74,222,128,0.6)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  <span id="slot-summary-text" style="font-size:0.78rem;color:rgba(255,255,255,0.5)"></span>
+                </div>
+
+                <form id="booking-form">
+                  <div class="form-group">
+                    <label for="b-name" class="form-label">Name</label>
+                    <input type="text" id="b-name" class="form-input" placeholder="Your name" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="b-email" class="form-label">Email</label>
+                    <input type="email" id="b-email" class="form-input" placeholder="you@company.com" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="b-company" class="form-label">Company <span style="color:rgba(255,255,255,0.1)">(optional)</span></label>
+                    <input type="text" id="b-company" class="form-input" placeholder="Your company">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Interested in</label>
+                    <div class="custom-select" id="interest-select">
+                      <div class="custom-select-trigger" id="interest-trigger">Select an option</div>
+                      <div class="custom-select-options">
+                        <div class="custom-select-option" data-value="AI Solutions & Architecture">AI Solutions & Architecture</div>
+                        <div class="custom-select-option" data-value="Data Engineering & Infrastructure">Data Engineering & Infrastructure</div>
+                        <div class="custom-select-option" data-value="Analytics & Business Intelligence">Analytics & Business Intelligence</div>
+                        <div class="custom-select-option" data-value="Not sure yet">Not sure yet - let's talk</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="b-message" class="form-label">Tell me about your situation <span style="color:rgba(255,255,255,0.1)">(optional)</span></label>
+                    <textarea id="b-message" rows="2" class="form-input" placeholder="What challenges are you facing?"></textarea>
+                  </div>
+                  <div style="padding-top:0.4rem">
+                    <button type="submit" id="submit-btn" class="btn-primary">Confirm Booking</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Success -->
+              <div id="step-success" class="booking-step" style="display:none;text-align:center;padding:2.5rem 1rem">
+                <svg width="36" height="36" fill="none" stroke="#4ade80" viewBox="0 0 24 24" style="margin:0 auto 1rem"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <p style="font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:0.5rem">You're booked.</p>
+                <p id="success-detail" style="font-size:0.78rem;color:rgba(255,255,255,0.35);line-height:1.7"></p>
+                <p style="font-size:0.72rem;color:rgba(255,255,255,0.2);margin-top:1rem">A calendar invite has been sent to your email.</p>
+              </div>
+
             </div>
           </div>
 
-          <div class="lg:w-64 shrink-0 reveal reveal-d1">
+          <!-- Sidebar -->
+          <div class="lg:w-56 shrink-0 reveal reveal-d1">
             <div style="position:sticky;top:1.5rem" class="flex flex-col gap-5">
               <div class="sidebar-card">
-                <div style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1rem">What to expect</div>
-                <div class="flex flex-col gap-4">
-                  <div class="flex items-start gap-3">
-                    <span style="width:1.3rem;height:1.3rem;border-radius:0.25rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:0.5rem;color:rgba(74,222,128,0.6);font-weight:700">1</span></span>
-                    <div>
-                      <div style="font-size:0.75rem;font-weight:500;color:rgba(255,255,255,0.4)">You reach out</div>
-                      <div style="font-size:0.65rem;color:rgba(255,255,255,0.15);line-height:1.5;margin-top:1px">I'll respond within 24 hours.</div>
-                    </div>
+                <div style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1rem">Discovery Call</div>
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-center gap-2.5">
+                    <svg width="13" height="13" fill="none" stroke="rgba(255,255,255,0.2)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span style="font-size:0.75rem;color:rgba(255,255,255,0.35)">30 minutes</span>
                   </div>
-                  <div class="flex items-start gap-3">
-                    <span style="width:1.3rem;height:1.3rem;border-radius:0.25rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:0.5rem;color:rgba(74,222,128,0.6);font-weight:700">2</span></span>
-                    <div>
-                      <div style="font-size:0.75rem;font-weight:500;color:rgba(255,255,255,0.4)">Discovery call</div>
-                      <div style="font-size:0.65rem;color:rgba(255,255,255,0.15);line-height:1.5;margin-top:1px">Free, no-commitment conversation.</div>
-                    </div>
+                  <div class="flex items-center gap-2.5">
+                    <svg width="13" height="13" fill="none" stroke="rgba(255,255,255,0.2)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span style="font-size:0.75rem;color:rgba(255,255,255,0.35)">Google Meet</span>
                   </div>
-                  <div class="flex items-start gap-3">
-                    <span style="width:1.3rem;height:1.3rem;border-radius:0.25rem;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><span style="font-size:0.5rem;color:rgba(74,222,128,0.6);font-weight:700">3</span></span>
-                    <div>
-                      <div style="font-size:0.75rem;font-weight:500;color:rgba(255,255,255,0.4)">Honest assessment</div>
-                      <div style="font-size:0.65rem;color:rgba(255,255,255,0.15);line-height:1.5;margin-top:1px">Even if the answer is nothing right now.</div>
-                    </div>
+                  <div class="flex items-center gap-2.5">
+                    <svg width="13" height="13" fill="none" stroke="rgba(255,255,255,0.2)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span style="font-size:0.75rem;color:rgba(255,255,255,0.35)">Free, no commitment</span>
                   </div>
                 </div>
               </div>
               <div class="sidebar-card">
                 <div style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.5rem">Prefer email?</div>
-                <a href="mailto:hello@mouliqe.com" style="color:#4ade80;font-size:0.75rem;font-weight:500">hello@mouliqe.com</a>
+                <a href="mailto:imtiaz@mouliqe.com" style="color:#4ade80;font-size:0.75rem;font-weight:500">imtiaz@mouliqe.com</a>
               </div>
             </div>
           </div>
@@ -110,30 +159,153 @@
         </div>
       </div>
     </section>
-
   </div>
 
   <script src="components.js"></script>
   <script>
-    // Custom dropdown
-    const sel = document.getElementById('interest-select');
-    const trigger = document.getElementById('interest-trigger');
-    const hidden = document.getElementById('interest');
-    if (sel && trigger) {
-      trigger.addEventListener('click', (e) => { e.stopPropagation(); sel.classList.toggle('open'); });
-      sel.querySelectorAll('.custom-select-option').forEach(opt => {
-        opt.addEventListener('click', (e) => {
-          e.stopPropagation();
-          hidden.value = opt.dataset.value;
-          trigger.textContent = opt.textContent;
-          trigger.classList.add('has-value');
-          sel.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
-          opt.classList.add('selected');
-          sel.classList.remove('open');
-        });
-      });
-      document.addEventListener('click', () => sel.classList.remove('open'));
+  const API = 'https://script.google.com/macros/s/AKfycbzg3YyUhQGz-DSj966ma53mP79g5-u00OIjv8WUtW4cJOTcHu387uMbKpPNpS_kMoE/exec';
+  let slots = {};
+  let selectedDate = '';
+  let selectedTime = '';
+  let selectedInterest = '';
+
+  // Step management
+  function showStep(n) {
+    document.querySelectorAll('.booking-step').forEach(s => s.style.display = 'none');
+    const target = n === 'success' ? 'step-success' : 'step-' + n;
+    document.getElementById(target).style.display = 'block';
+    const stepNum = n === 'success' ? 4 : n;
+    document.querySelectorAll('.step-item').forEach(item => {
+      const s = parseInt(item.dataset.step);
+      item.classList.toggle('active', s <= stepNum);
+      item.querySelector('.step-dot').classList.toggle('active', s <= stepNum);
+    });
+    const c12 = document.getElementById('conn-1-2');
+    const c23 = document.getElementById('conn-2-3');
+    c12.classList.toggle('filled', stepNum >= 2);
+    c23.classList.toggle('filled', stepNum >= 3);
+  }
+
+  // Format date for display
+  function fmtDate(dateStr) {
+    const d = new Date(dateStr + 'T12:00:00');
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+
+  // Format time for display
+  function fmtTime(t) {
+    const [h, m] = t.split(':').map(Number);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    return ((h % 12) || 12) + ':' + String(m).padStart(2, '0') + ' ' + ampm;
+  }
+
+  // Load slots
+  fetch(API).then(r => r.json()).then(data => {
+    if (!data.success) return;
+    slots = data.slots;
+    const grid = document.getElementById('date-grid');
+    const dates = Object.keys(slots);
+    if (!dates.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;padding:2rem 0;text-align:center;color:rgba(255,255,255,0.2);font-size:0.78rem">No available slots in the next 2 weeks. Please email me directly.</div>';
+      return;
     }
+    grid.innerHTML = dates.map((d, i) => {
+      const dt = new Date(d + 'T12:00:00');
+      const today = new Date();
+      const isToday = dt.toDateString() === today.toDateString();
+      const day = dt.toLocaleDateString('en-US', { weekday: 'short' });
+      const num = dt.getDate();
+      const mon = dt.toLocaleDateString('en-US', { month: 'short' });
+      const count = slots[d].length;
+      return `<button class="slot-btn date-btn" data-date="${d}">
+        ${isToday ? '<span class="today-badge">Today</span>' : `<span style="font-size:0.6rem;color:rgba(255,255,255,0.2);text-transform:uppercase">${day}</span>`}
+        <span style="font-size:1.1rem;font-weight:600;color:rgba(255,255,255,0.6)">${num}</span>
+        <span style="font-size:0.6rem;color:rgba(255,255,255,0.2)">${mon}</span>
+        <span style="font-size:0.5rem;color:rgba(255,255,255,0.12);margin-top:0.1rem">${count} slot${count !== 1 ? 's' : ''}</span>
+      </button>`;
+    }).join('');
+
+    grid.querySelectorAll('.date-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedDate = btn.dataset.date;
+        document.getElementById('selected-date-label').textContent = fmtDate(selectedDate);
+        const tg = document.getElementById('time-grid');
+        tg.innerHTML = slots[selectedDate].map(t =>
+          `<button class="slot-btn time-btn" data-time="${t}">${fmtTime(t)}</button>`
+        ).join('');
+        tg.querySelectorAll('.time-btn').forEach(tb => {
+          tb.addEventListener('click', () => {
+            selectedTime = tb.dataset.time;
+            document.getElementById('slot-summary-text').textContent = fmtDate(selectedDate) + ' at ' + fmtTime(selectedTime) + ' ET — 30 min';
+            showStep(3);
+          });
+        });
+        showStep(2);
+      });
+    });
+  });
+
+  // Back buttons
+  document.getElementById('back-to-dates').addEventListener('click', () => showStep(1));
+  document.getElementById('back-to-times').addEventListener('click', () => showStep(2));
+
+  // Custom dropdown
+  const sel = document.getElementById('interest-select');
+  const trigger = document.getElementById('interest-trigger');
+  trigger.addEventListener('click', (e) => { e.stopPropagation(); sel.classList.toggle('open'); });
+  sel.querySelectorAll('.custom-select-option').forEach(opt => {
+    opt.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectedInterest = opt.dataset.value;
+      trigger.textContent = opt.textContent;
+      trigger.classList.add('has-value');
+      sel.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      sel.classList.remove('open');
+    });
+  });
+  document.addEventListener('click', () => sel.classList.remove('open'));
+
+  // Submit
+  document.getElementById('booking-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.textContent = 'Booking...';
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+
+    const payload = {
+      date: selectedDate,
+      time: selectedTime,
+      name: document.getElementById('b-name').value,
+      email: document.getElementById('b-email').value,
+      company: document.getElementById('b-company').value,
+      interest: selectedInterest,
+      message: document.getElementById('b-message').value
+    };
+
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('success-detail').textContent = fmtDate(selectedDate) + ' at ' + fmtTime(selectedTime) + ' ET with Imtiaz Ahmed';
+        showStep('success');
+      } else {
+        alert(data.error || 'Something went wrong. Please try again.');
+        btn.textContent = 'Confirm Booking';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
+    } catch (err) {
+      alert('Connection error. Please try again.');
+      btn.textContent = 'Confirm Booking';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  });
   </script>
 </body>
 </html>
