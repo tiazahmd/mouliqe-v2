@@ -1,24 +1,28 @@
 // Mouliqe — Components v3
 
 const NAV_LINKS = [
-  { href: 'index.html', label: 'Home' },
-  { href: 'about.html', label: 'About' },
-  { href: 'services.html', label: 'Services' },
-  { href: 'process.html', label: 'Process' },
-  { href: 'contact.html', label: 'Contact' },
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/services', label: 'Services' },
+  { href: '/process', label: 'Process' },
+  { href: '/contact', label: 'Contact' },
 ];
 
-const LOGO_SVG = '';
 const LOGO_HTML = `<div style="display:flex;flex-direction:column;align-items:center;width:100%">
   <span style="font-size:0.95rem;font-weight:700;color:#4ade80;letter-spacing:0.2em;text-transform:uppercase">Mouliqe</span>
   <span style="font-size:0.68rem;color:rgba(255,255,255,0.4);letter-spacing:0.06em;margin-top:0.35rem">fundamental &middot; /moʊ.liːk/</span>
 </div>`;
 const CHEVRON = `<svg class="chevron" width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>`;
-const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+const path = window.location.pathname.replace(/\/+$/, '') || '/';
+
+function isActive(href) {
+  if (href === '/') return path === '/' || path === '' || path === '/index' || path === '/index.html';
+  return path === href || path === href + '.html';
+}
 
 function buildLinks() {
   return NAV_LINKS.map(l =>
-    `<a href="${l.href}" class="sidebar-link${l.href === currentPage ? ' active' : ''}">${l.href === currentPage ? CHEVRON : ''}<span>${l.label}</span></a>`
+    `<a href="${l.href}" class="sidebar-link${isActive(l.href) ? ' active' : ''}">${isActive(l.href) ? CHEVRON : ''}<span>${l.label}</span></a>`
   ).join('');
 }
 
@@ -29,13 +33,13 @@ function injectNav() {
   el.innerHTML = `
     <div class="scroll-progress"><div class="scroll-progress-bar" id="scroll-bar"></div></div>
     <aside class="sidebar">
-      <a href="index.html" class="sidebar-logo">${LOGO_HTML}</a>
+      <a href="/" class="sidebar-logo">${LOGO_HTML}</a>
       <nav class="sidebar-nav">${buildLinks()}</nav>
       <div class="sidebar-footer mt-auto pt-8"><p class="text-[0.6rem] text-white/15 tracking-wider">&copy; 2026 Mouliqe</p></div>
     </aside>
     <div class="mobile-overlay" id="mobile-overlay"></div>
     <div class="mobile-menu" id="mobile-menu">
-      <a href="index.html" class="sidebar-logo" style="margin-bottom:2rem">${LOGO_HTML}</a>
+      <a href="/" class="sidebar-logo" style="margin-bottom:2rem">${LOGO_HTML}</a>
       <nav class="flex flex-col gap-1">${buildLinks()}</nav>
     </div>
     <button id="menu-toggle" class="mobile-toggle hidden fixed top-4 right-4 z-50 md:hidden flex-col gap-[5px] p-2" aria-label="Menu">
