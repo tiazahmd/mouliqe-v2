@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Guardrails Problem: When Your AI Needs to Be Told No — Mouliqe</title>
+  <meta name="description" content="AI without guardrails is a liability. But most guardrail implementations are either too loose or too restrictive. Here's how to get it right.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
+  <div id="site-nav"></div>
+  <div class="main-content">
+
+    <section class="pt-20 pb-10">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <a href="/blog" class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 inline-block anim-fade" style="text-decoration:none">&larr; Back to Blog</a>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 anim-up">The Guardrails Problem: When Your AI Needs to Be Told No</h1>
+        <div class="flex items-center gap-4 anim-up anim-d1">
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.25)">March 9, 2026</span>
+          <span style="font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.5);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);padding:0.15rem 0.45rem;border-radius:0.25rem">AI Architecture</span>
+          <span style="font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.5);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);padding:0.15rem 0.45rem;border-radius:0.25rem">Reliability</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-20">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+          <div class="flex-1 min-w-0 reveal">
+            <div class="prose-custom" style="max-width:42rem">
+
+              <p>Here's something nobody talks about when they're selling you on AI: the model will do whatever you ask. That sounds like a feature. It's actually a problem.</p>
+
+              <p>An AI assistant without guardrails is like giving an intern full admin access on their first day. They're smart, they're eager, and they will absolutely destroy something important if you don't set boundaries.</p>
+
+              <p>I learned this the hard way. Multiple times.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Email Incident</h2>
+
+              <p>Early in Mimir's development, I asked it to "clean up my inbox." I meant: flag important emails, archive the newsletters, maybe draft some quick replies for me to review. What it interpreted was: process every email in my inbox and take action. It started archiving emails I hadn't read. It drafted replies and — because I hadn't implemented a confirmation step — it sent them.</p>
+
+              <p>Nothing catastrophic happened, thankfully. But it could have. And the model wasn't wrong, technically. I said "clean up my inbox" and it cleaned up my inbox. The problem was that I hadn't defined what "clean up" meant, and I hadn't built any mechanism to prevent irreversible actions without confirmation.</p>
+
+              <div style="border-left:2px solid rgba(34,197,94,0.3);padding-left:1rem;margin:1.15rem 0">
+                <p style="color:rgba(255,255,255,0.65);font-size:0.86rem;font-weight:500;margin:0">The model will always try to be helpful. Your job is to define the boundaries of what "helpful" means.</p>
+              </div>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">Three Layers of Guardrails</h2>
+
+              <p>After several incidents like this, I built a three-layer guardrail system. Each layer catches a different class of problem.</p>
+
+              <h3 style="font-size:0.95rem;font-weight:700;color:rgba(255,255,255,0.85);margin:1.5rem 0 0.75rem">Layer 1: Permission Classification</h3>
+
+              <p>Every tool in Mimir is classified as either "automatic" or "ask first." Automatic tools are read operations — searching, listing, retrieving. They can't change anything, so they're safe to execute without confirmation. Ask-first tools are write operations — sending emails, creating events, deleting files. These require explicit user approval before execution.</p>
+
+              <p>This sounds obvious, but most AI applications don't do it. They either require confirmation for everything (annoying and slow) or confirm nothing (dangerous). The classification approach gives you speed for safe operations and safety for dangerous ones.</p>
+
+              <h3 style="font-size:0.95rem;font-weight:700;color:rgba(255,255,255,0.85);margin:1.5rem 0 0.75rem">Layer 2: Output Validation</h3>
+
+              <p>Before any tool result reaches the user, it passes through validation. Did the tool actually get called? Does the response match the expected schema? If the Planner said "create a calendar event" and the Worker's results don't contain a calendar API response, the Synthesizer catches the discrepancy.</p>
+
+              <p>This is the layer that catches hallucinated tool calls — the model claiming it did something it didn't actually do. Without this validation, the user would see a confident "Done! I've created your event" message for an event that doesn't exist.</p>
+
+              <h3 style="font-size:0.95rem;font-weight:700;color:rgba(255,255,255,0.85);margin:1.5rem 0 0.75rem">Layer 3: Behavioral Playbooks</h3>
+
+              <p>These are scenario-specific rules that the Planner retrieves when it recognizes certain patterns. For example: if the user asks to delete something, always confirm and show what will be deleted. If the user asks to send a message to multiple people, show a preview first. If the user seems frustrated, don't make jokes.</p>
+
+              <p>Playbooks are stored as retrievable documents, not hardcoded in the system prompt. This means they only get loaded when relevant — they don't add noise to every request. And they can be updated without changing any code.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Balance</h2>
+
+              <p>The hardest part of guardrails isn't building them. It's calibrating them. Too strict and the assistant becomes useless — every action requires three confirmations and the user gives up. Too loose and you're one ambiguous request away from an incident.</p>
+
+              <p>The principle I follow: be strict about irreversibility. If an action can be undone (creating a draft, adding a todo), lean toward automatic. If an action can't be undone (sending an email, deleting a file), always confirm. The cost of a false positive (unnecessary confirmation) is a minor annoyance. The cost of a false negative (unconfirmed destructive action) is real damage.</p>
+
+              <div style="border-left:2px solid rgba(34,197,94,0.3);padding-left:1rem;margin:1.15rem 0">
+                <p style="color:rgba(255,255,255,0.65);font-size:0.86rem;font-weight:500;margin:0">Guardrails aren't restrictions. They're trust infrastructure. Users trust systems that behave predictably, even if that means occasionally asking "are you sure?"</p>
+              </div>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">For Your AI Product</h2>
+
+              <p>If you're building anything where AI takes actions on behalf of users, guardrails aren't optional. Here's the minimum:</p>
+
+              <ol style="padding-left:1.25rem;margin:1rem 0">
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">Classify every action by risk level.</strong> Read vs. write. Reversible vs. irreversible. Internal vs. external. Each classification determines the confirmation requirement.</li>
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">Validate outputs, not just inputs.</strong> Don't just check what the user asked for — check what the model actually did. These are often different.</li>
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">Build an undo mechanism.</strong> For actions that can be reversed, make reversal easy. This lets you be more permissive with confirmations because mistakes are recoverable.</li>
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">Log everything.</strong> Every tool call, every confirmation, every override. When something goes wrong — and it will — you need to know exactly what happened.</li>
+              </ol>
+
+              <p>The goal isn't to prevent the AI from doing things. It's to make sure it does the right things, and asks before doing the risky ones.</p>
+
+              <div style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.04)">
+                <p style="font-size:0.72rem;color:rgba(255,255,255,0.2);line-height:1.7">Part of a series on building reliable AI applications. Previous: <a href="/blog/ai-memory-systems" style="color:rgba(74,222,128,0.5)">AI Memory Systems</a>.</p>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="lg:w-56 shrink-0 reveal reveal-d1 hidden lg:block">
+            <div style="position:sticky;top:1.5rem" class="flex flex-col gap-5">
+              <div class="sidebar-cta">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Need reliable AI?</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's build it with the right guardrails.</p>
+                <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <script src="/components.js"></script>
+</body>
+</html>

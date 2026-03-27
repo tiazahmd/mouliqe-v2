@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planner, Worker, Synthesizer: The 3-Agent Pattern That Actually Works — Mouliqe</title>
+  <meta name="description" content="How breaking one AI agent into three separate agents eliminated tool call hallucinations and made the system dramatically more reliable.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
+  <div id="site-nav"></div>
+  <div class="main-content">
+
+    <section class="pt-20 pb-10">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <a href="/blog" class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 inline-block anim-fade" style="text-decoration:none">&larr; Back to Blog</a>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 anim-up">Planner, Worker, Synthesizer: The 3-Agent Pattern That Actually Works</h1>
+        <div class="flex items-center gap-4 anim-up anim-d1">
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.25)">February 26, 2026</span>
+          <span style="font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.5);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);padding:0.15rem 0.45rem;border-radius:0.25rem">AI Architecture</span>
+          <span style="font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.5);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);padding:0.15rem 0.45rem;border-radius:0.25rem">Multi-Agent Systems</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-20">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+          <div class="flex-1 min-w-0 reveal">
+            <div class="prose-custom" style="max-width:42rem">
+
+              <div style="border-left:2px solid rgba(34,197,94,0.3);padding-left:1rem;margin:0 0 2rem">
+                <p style="color:rgba(255,255,255,0.65);font-size:0.86rem;font-weight:500;margin:0;font-style:italic">It's just a chatbot.</p>
+              </div>
+
+              <p>That's what most people think when they see a conversational AI assistant. You type something, it responds. How hard can it be?</p>
+
+              <p>I've spent the better part of a year finding out exactly how hard it can be. The answer is: unreasonably hard. Not because the AI isn't smart enough - it is. But because getting it to reliably do what you ask, every single time, without hallucinating results it never actually produced, is an architectural problem that no amount of prompt engineering can solve.</p>
+
+              <p>This is the story of how I broke my AI assistant into three separate agents - and why that decision fixed the single biggest reliability problem I had.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">Meet Mimir</h2>
+
+              <p>Before I get into the architecture, let me give you the full picture. I built an AI personal assistant called Mimir. The name comes from Norse mythology - Mimir is considered the wisest being alive, the keeper of knowledge. If you've played God of War, you know him as the fast-talking severed head strapped to Kratos's belt. That's the personality I was going for - deeply knowledgeable, a little opinionated, and always ready with an answer.</p>
+
+              <p>Mimir is a multi-agent system with a Python/FastAPI backend and a React/TypeScript frontend. It runs on AWS Bedrock using Claude as the underlying model. It communicates over WebSocket, streams responses in real-time, and currently sits at around 46,000 lines of code.</p>
+
+              <p>Here's what it can do: manage my calendar, read and draft emails, create and track todos, take and search notes, read and write files, execute code in a sandboxed REPL, search the web, manage projects with full discovery workflows, run multi-agent research with source verification, and even teach me guitar through AI personas modeled after legends like Hetfield and Petrucci. Over 80 tools across 12 categories.</p>
+
+              <p>It also has a six-layer memory system - session RAM, session memory, semantic memory, persistent memory, conversation store, and project RAM - that gives it the ability to remember things across conversations, track context within a session, resolve references like "those three emails" to actual email IDs, and maintain working context that expires when it's no longer relevant.</p>
+
+              <p>But the memory and context management system is a story for another day. What I really want to talk about is the pillar that holds all of this together - the three-agent pipeline that routes every single user request through Mimir.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">Where It Started</h2>
+
+              <p>Like most people building AI applications, I started simple. One LLM call. User sends a message, the model gets a system prompt with tool definitions, it decides what to do, calls some tools, and responds. Straightforward. And it worked. For a while.</p>
+
+              <p>When the application was small - a handful of tools, short conversations, minimal context - the single-agent approach was perfectly fine. The model would read my message, pick the right tool, call it, get the result, and give me a coherent answer. I was happy. I thought I had it figured out. Then I kept building.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Problem Nobody Warns You About</h2>
+
+              <p>As Mimir grew, so did the context window. More tools meant longer tool definitions. More features meant a longer system prompt. Conversation history accumulated. Memory retrievals got injected. Project state got loaded. The context that the model had to process before even getting to my actual question kept growing and growing. And then the hallucinations started.</p>
+
+              <p>Not the kind where the model makes up facts - I could handle that. These were tool call hallucinations. The model would decide it needed to call a tool, and instead of actually calling it, it would fabricate the result. It would generate a perfectly formatted tool response that looked real but never happened. It would tell me it created a todo, checked my calendar, or sent an email - and none of it actually occurred.</p>
+
+              <div style="border-left:2px solid rgba(34,197,94,0.3);padding-left:1rem;margin:1.15rem 0">
+                <p style="color:rgba(255,255,255,0.65);font-size:0.86rem;font-weight:500;margin:0">The first few times, I thought it was a fluke. Then it became a pattern.</p>
+              </div>
+
+              <p>Here's what made it maddening: when I called it out - "you didn't actually call that tool" - it would apologize, acknowledge the mistake, and then do the exact same thing again. It would generate another fake tool call result. I'd call it out again. Same thing. Over and over.</p>
+
+              <p>I tried everything. I strengthened the system prompt. I added explicit instructions: "You MUST call tools. Do NOT fabricate results." I added validation checks. I reformatted the tool definitions. I tried different temperatures, different models, different prompt structures. Nothing worked. And the reason nothing worked is because the problem wasn't the instructions - it was the noise.</p>
+
+              <p>Think about it. By the time the model gets to my actual request, it has already processed thousands of tokens of system instructions, tool definitions, conversation history, memory context, and session state. My actual message - "create a reminder for tomorrow at 9am" - is buried at the bottom of all of that. The model isn't ignoring my instructions. It's drowning in context, and the signal-to-noise ratio has collapsed.</p>
+
+              <div style="border-left:2px solid rgba(34,197,94,0.3);padding-left:1rem;margin:1.15rem 0">
+                <p style="color:rgba(255,255,255,0.65);font-size:0.86rem;font-weight:500;margin:0">No amount of prompt engineering fixes a structural problem.</p>
+              </div>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Insight</h2>
+
+              <p>The fix wasn't to make the model smarter or the prompts better. It was to give the model less to think about. If the problem is that the tool-calling agent is drowning in context that has nothing to do with tool calling, then the solution is to create an agent whose only job is to call tools - and give it nothing else. No conversation history. No memory retrievals. No session state. No user preferences. Just: here's what you need to do, here are the tools you can use, go. That's how the three-agent pipeline was born.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Three Agents</h2>
+
+              <p>Every single request in Mimir flows through three stages: Plan, Execute, Synthesize.</p>
+
+              <h3 style="font-size:0.95rem;font-weight:700;color:rgba(255,255,255,0.85);margin:1.5rem 0 0.75rem">The Planner</h3>
+
+              <p>The Planner is the brain. It receives the full context - conversation history, memory retrievals, session state, user preferences, everything. Its job is to understand what the user wants and create a precise execution plan.</p>
+
+              <p>But here's the key: the Planner doesn't execute anything. It analyzes intent, identifies which tools are needed, figures out the right sequence, and packages all of that into clear instructions for the next agent. It runs at a low temperature for precision and has access to extended thinking - up to 32,000 tokens of internal reasoning before it even starts its response.</p>
+
+              <p>The Planner also has its own exclusive tools that no other agent can access: it can search my memories, search conversation history, and retrieve playbooks - behavioral rules for specific scenarios. These tools help it understand context and make better routing decisions, but they're read-only. The Planner observes and plans. It doesn't act.</p>
+
+              <p>It gets up to five rounds of tool calls to gather the context it needs before routing the request to an executor. Sometimes it needs to search my memories to understand a reference. Sometimes it needs to check conversation history to resolve ambiguity. But once it has enough context, it hands off a clean, specific instruction set.</p>
+
+              <h3 style="font-size:0.95rem;font-weight:700;color:rgba(255,255,255,0.85);margin:1.5rem 0 0.75rem">The Worker</h3>
+
+              <p>The Worker is the hands. It receives the Planner's instructions and the approved tool list - and nothing else. No conversation history. No memory context. No system state. Just: "Call the calendar tool to create an event titled X on date Y" or "Read the file at this path and analyze its contents."</p>
+
+              <p>This is the agent that was hallucinating before. And the reason it stopped hallucinating is because I removed everything that was causing the hallucinations. The Worker's context is clean. It sees its task, it sees its tools, and it executes. There's no noise to get lost in, no conversation history to confuse it, no accumulated context to degrade its performance.</p>
+
+              <p>The Worker operates in a loop - call a tool, evaluate the result, decide if more tool calls are needed, repeat. When it's done, it passes the raw results forward.</p>
+
+              <h3 style="font-size:0.95rem;font-weight:700;color:rgba(255,255,255,0.85);margin:1.5rem 0 0.75rem">The Synthesizer</h3>
+
+              <p>The Synthesizer is the voice. It takes the Worker's raw tool results and crafts the final response that the user sees. It runs at a higher temperature for more natural, conversational output. It handles formatting, tone, and presentation.</p>
+
+              <p>But here's the part I'm most proud of: the Synthesizer pre-validates. Before it even calls the LLM to generate a response, it checks whether the expected tool calls actually happened. If the Planner said "call the calendar tool" and the Worker's results don't contain a calendar tool response, the Synthesizer catches that before it can become a hallucinated answer.</p>
+
+              <p>This is the safety net. Even if something goes wrong in the Worker stage, the Synthesizer won't confidently present results that don't exist.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">Why This Works</h2>
+
+              <p>The magic isn't in any individual agent. It's in what each agent doesn't see. The Planner sees everything but can't act. It has full context to make good decisions, but it can't execute tools that change state. This means it can't hallucinate tool results because it's not calling execution tools in the first place.</p>
+
+              <p>The Worker can act but sees almost nothing. It has the tools and the instructions, but no context to get confused by. The signal-to-noise ratio is essentially 1:1. Every token in its context is directly relevant to the task at hand.</p>
+
+              <p>The Synthesizer sees results but validates before trusting. It doesn't blindly format whatever it receives. It checks that the work actually happened.</p>
+
+              <div style="border-left:2px solid rgba(34,197,94,0.3);padding-left:1rem;margin:1.15rem 0">
+                <p style="color:rgba(255,255,255,0.65);font-size:0.86rem;font-weight:500;margin:0">Each agent is deliberately limited. And those limitations are the architecture.</p>
+              </div>
+
+              <p>Compare this to the single-agent approach: one model sees everything, decides everything, executes everything, and presents everything. It's like asking one person to simultaneously be the project manager, the engineer, and the communications lead - while also remembering every conversation they've ever had. Of course it breaks down.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Results</h2>
+
+              <p>After implementing this pipeline, tool call hallucinations dropped to effectively zero. Not reduced - eliminated. The Worker calls tools or it doesn't. There's no middle ground where it pretends to call a tool because there's no conversational context pressuring it to appear helpful.</p>
+
+              <p>The system also became significantly easier to debug. When something goes wrong, I know exactly where to look. Bad plan? Planner issue. Tool call failed? Worker issue. Response doesn't match the results? Synthesizer issue. With a single agent, every failure was a mystery — was it the prompt? The context? The tool definition? The conversation history? Now each failure has an address.</p>
+
+              <p>And perhaps most importantly, each agent can be independently tuned. The Planner uses a precise, low-temperature configuration with extended thinking. The Worker uses whatever model and temperature is appropriate for the task. The Synthesizer uses a more creative configuration for natural responses. In a single-agent system, you pick one temperature and one model and hope it works for everything. It doesn't.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">What This Means for You</h2>
+
+              <p>If you're building AI applications - whether it's a customer-facing chatbot, an internal tool, or a product feature - and you're running into reliability issues with tool calling, I'd encourage you to look at your context before you look at your prompts.</p>
+
+              <p>Ask yourself: how much of what the model is processing is actually relevant to the task it's performing right now? If the answer is "maybe 20%," you have a noise problem. And noise problems are architectural problems.</p>
+
+              <p>You don't necessarily need three agents. But you probably need separation between planning and execution. The model that decides what to do should not be the same context that executes it - because the information needed to make good decisions is exactly the information that degrades execution.</p>
+
+              <p>Start simple. One agent is fine when your context is small. But the moment you notice the model "forgetting" to call tools, or fabricating results, or ignoring instructions that are clearly in the prompt - don't reach for a better prompt. Reach for a cleaner architecture.</p>
+
+              <div style="border-left:2px solid rgba(34,197,94,0.3);padding-left:1rem;margin:1.5rem 0">
+                <p style="color:rgba(255,255,255,0.65);font-size:0.86rem;font-weight:500;margin:0">The model is rarely the bottleneck. The architecture is.</p>
+              </div>
+
+              <div style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.04)">
+                <p style="font-size:0.72rem;color:rgba(255,255,255,0.2);line-height:1.7">This is the second article in a series about the architectural decisions behind building reliable AI applications. Read the first: <a href="/blog/costume-change-vs-new-actor" style="color:rgba(74,222,128,0.5)">When Your AI Agent Needs a Costume Change vs. a Whole New Actor</a>. Originally published on <a href="https://www.linkedin.com/pulse/planner-worker-synthesizer-3-agent-pattern-actually-works-ahmed-69ake/" target="_blank" rel="noopener" style="color:rgba(74,222,128,0.5)">LinkedIn</a>.</p>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="lg:w-56 shrink-0 reveal reveal-d1 hidden lg:block">
+            <div style="position:sticky;top:1.5rem" class="flex flex-col gap-5">
+              <div class="sidebar-cta">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Have a similar challenge?</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about your AI architecture.</p>
+                <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="/components.js"></script>
+</body>
+</html>

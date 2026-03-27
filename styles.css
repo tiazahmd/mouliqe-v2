@@ -1,6 +1,7 @@
 /* Mouliqe — Styles v8 */
 
-html { font-size: 14.5px; scroll-behavior: smooth; }
+html { font-size: 14.5px; scroll-behavior: smooth; background: #060a14; }
+body { background: #060a14; }
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -8,8 +9,8 @@ html { font-size: 14.5px; scroll-behavior: smooth; }
 ::selection { background: rgba(34,197,94,0.25); color: #f0fdf4; }
 
 /* ---- PAGE TRANSITION ---- */
-.main-content { animation: pageIn 0.5s ease-out; }
-@keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.main-content { animation: pageIn 0s forwards; }
+@keyframes pageIn { to { transform: none; } }
 
 /* ---- SCROLL PROGRESS ---- */
 .scroll-progress { display: none; }

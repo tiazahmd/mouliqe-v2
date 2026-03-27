@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>When Your AI Agent Needs a Costume Change vs. a Whole New Actor — Mouliqe</title>
+  <meta name="description" content="The architectural decision a lot of AI builders get wrong — when to tune an agent's configuration vs. when to build a specialized one entirely.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
+  <div id="site-nav"></div>
+  <div class="main-content">
+
+    <section class="pt-20 pb-10">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <a href="/blog" class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 inline-block anim-fade" style="text-decoration:none">&larr; Back to Blog</a>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 anim-up">When Your AI Agent Needs a Costume Change vs. a Whole New Actor</h1>
+        <div class="flex items-center gap-4 anim-up anim-d1">
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.25)">February 19, 2026</span>
+          <span style="font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.5);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);padding:0.15rem 0.45rem;border-radius:0.25rem">AI Architecture</span>
+          <span style="font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.5);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);padding:0.15rem 0.45rem;border-radius:0.25rem">Multi-Agent Systems</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-20">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+          <div class="flex-1 min-w-0 reveal">
+            <div class="prose-custom" style="max-width:42rem">
+
+              <p style="font-size:0.92rem;color:rgba(255,255,255,0.55);font-style:italic;margin-bottom:2rem">The architectural decision a lot of AI builders get wrong and how to think about it.</p>
+
+              <p>I've been building a multi-agent AI assistant for a while now. Recently, I hit a problem that I think a lot of people building AI products will eventually face — and the solution turned out to be one of the more interesting architectural decisions I've made. Let me walk you through it.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Situation</h2>
+
+              <p>My assistant has a pipeline: a Planner figures out what to do, an Executor (Worker) does the work using tools, and a Synthesizer crafts the final response. One Worker agent handles 80+ tools — calendar, email, file operations, web search, code execution, you name it.</p>
+
+              <div style="border-left:2px solid rgba(34,197,94,0.3);padding-left:1rem;margin:1.15rem 0">
+                <p style="color:rgba(255,255,255,0.65);font-size:0.84rem;font-weight:500;margin:0">Note: The reason why I implemented this planner -> worker -> synthesizer system is to keep the worker's context clean from unnecessary noise. Bloating an LLM's context with things that it doesn't need created massive hallucination problems, specifically around tool calls. This architecture keeps the worker context clean and has successfully been able to remove tool call hallucinations. This topic requires a whole different article, which I will publish soon, so stay tuned!</p>
+              </div>
+
+              <p>It works. For most things, it works really well. But "most things" isn't good enough when you're trying to build something reliable.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Problem</h2>
+
+              <p>I asked my assistant to review my resume. It read the file, analyzed it, and told me to change "Jan 2026 to Present" because it was inaccurate. Its suggestion? Change it to "Jan 2026 to Present." The exact same text. The model misread the content, hallucinated an issue, and confidently recommended changing something to what it already was. This wasn't a one-off. Every time I asked it to do something that required precision - reviewing a document, comparing two files, analyzing data - the same class of errors showed up. The agent was treating "review my resume" with the same configuration as "what's the weather." Same model, same temperature, same level of attention to detail.</p>
+
+              <p>Think about that for a second. In what world would you assign the same person, with the same instructions, to both check the weather and audit a legal document?</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Insight</h2>
+
+              <p>When I dug into why this was happening, I found three root causes:</p>
+
+              <ol style="padding-left:1.25rem;margin:1rem 0">
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">Wrong model for the job:</strong> The Worker used a fast, cheap model (Haiku) for everything. Great for "create a todo," terrible for "find inconsistencies in this 3-page document."</li>
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">Context degradation:</strong> My pipeline has three stages. By the time the Synthesizer - the agent that actually writes the response - gets the document content, it's been summarized and truncated. The agent writing the feedback has never seen the exact text it's commenting on.</li>
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">No task-appropriate behavior:</strong> There was no mechanism to say "for this specific task, be more careful, quote the source text before commenting, and use a smarter model."</li>
+              </ol>
+
+              <p>The fix seemed obvious: specialize. But how you specialize matters enormously.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">Two Approaches to Specialization</h2>
+
+              <p>I landed on a two-tier system, and I think this framework applies to almost any AI product that uses agents.</p>
+
+              <h3 style="font-size:0.95rem;font-weight:700;color:rgba(255,255,255,0.85);margin:1.5rem 0 0.75rem">Tier 1 — Specialized Profiles (Configuration-driven)</h3>
+
+              <p>Same agent, different settings. Think of it like giving the same employee different checklists for different tasks. The Worker agent's execution loop - call tools, evaluate results, decide next step - works fine for most tasks. What needed to change was the configuration: which model to use, how creative to be, how much context to preserve, and what domain-specific instructions to follow.</p>
+
+              <p>So I created profiles. A "document review" profile uses a smarter model at low temperature with instructions to quote text before critiquing it. An "email" profile uses a fast model with instructions about threading and batch operations. A "data ops" profile uses minimal context — when you create a todo, the Synthesizer doesn't need the full tool response, just a confirmation.</p>
+
+              <p>Ten profiles. Same Worker code. Each one tuned for its task category. This covers roughly 80% of requests. The execution pattern is identical — the agent calls tools in a loop. Only the configuration changes.</p>
+
+              <h3 style="font-size:0.95rem;font-weight:700;color:rgba(255,255,255,0.85);margin:1.5rem 0 0.75rem">Tier 2 — Specialized Agents (Code-driven)</h3>
+
+              <p>Different agent, different execution loop entirely. This is when the task fundamentally cannot be handled by the generic "call tools and evaluate" pattern.</p>
+
+              <p>Take data analysis. The generic Worker would read a CSV file and try to analyze it in one shot — sending raw data to the LLM and hoping for insights. That's not how data analysis works. You need to load the data into pandas, explore the structure, run computations, notice something interesting, drill deeper, maybe create a visualization, iterate. That's a fundamentally different execution pattern — not just different settings.</p>
+
+              <p>So I built a DataAnalysisAgent with its own tool-call loop. It starts a Python REPL session, executes code iteratively, reads outputs, decides what to investigate next, and can run up to 30 iterations of exploration before producing its final report.</p>
+
+              <p>Same for document review. The generic Worker reads a file and analyzes everything at once. A dedicated DocumentReviewAgent reads the file, enforces a quote-first protocol (you must quote the exact text before commenting on it), and structures feedback by category. The execution pattern is different — not just the configuration.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Decision Framework</h2>
+
+              <p>Here's how I decide which tier a task belongs to:</p>
+
+              <p><strong style="color:rgba(255,255,255,0.7)">Can the generic tool-call loop handle this if I just change the settings?</strong> → Profile.</p>
+
+              <ul style="padding-left:1.25rem;margin:0.75rem 0">
+                <li style="margin-bottom:0.35rem">Checking the weather with a fast model → Profile</li>
+                <li style="margin-bottom:0.35rem">Drafting an email with a creative temperature → Profile</li>
+                <li style="margin-bottom:0.35rem">Creating a todo with minimal confirmation context → Profile</li>
+              </ul>
+
+              <p><strong style="color:rgba(255,255,255,0.7)">Does this task need a fundamentally different execution pattern?</strong> → Specialized Agent.</p>
+
+              <ul style="padding-left:1.25rem;margin:0.75rem 0">
+                <li style="margin-bottom:0.35rem">Iterative data analysis with REPL computation → Agent</li>
+                <li style="margin-bottom:0.35rem">Section-by-section document review with structured output → Agent</li>
+                <li style="margin-bottom:0.35rem">Side-by-side comparison requiring both texts in context simultaneously → Agent</li>
+                <li style="margin-bottom:0.35rem">Multi-source research with parallel sub-agents and verification → Agent</li>
+              </ul>
+
+              <p>The key question is about the loop, not the content. If the task fits "call tool → evaluate → repeat," it's a profile. If the task needs its own choreography, it's an agent.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">The Glue: Context Fidelity</h2>
+
+              <p>One thing I haven't seen discussed much in the AI architecture space is what I call context fidelity — how much of the raw tool output should reach the final response generator.</p>
+
+              <p>When you review a document, the Synthesizer needs the full verbatim text to generate accurate feedback. When you create a todo, the Synthesizer just needs "todo created: Buy groceries." Sending the full tool response for a todo creation is wasteful. Sending a truncated document for a review is destructive.</p>
+
+              <p>So each profile and agent declares its fidelity level:</p>
+
+              <ul style="padding-left:1.25rem;margin:0.75rem 0">
+                <li style="margin-bottom:0.35rem"><strong style="color:rgba(255,255,255,0.7)">Verbatim:</strong> No truncation. The Synthesizer sees exactly what the executor saw. Used for document review, code review, comparisons.</li>
+                <li style="margin-bottom:0.35rem"><strong style="color:rgba(255,255,255,0.7)">Standard:</strong> Reasonable truncation. Current behavior. Used for most tasks.</li>
+                <li style="margin-bottom:0.35rem"><strong style="color:rgba(255,255,255,0.7)">Compact:</strong> Aggressive summarization. Just confirmations. Used for CRUD operations.</li>
+              </ul>
+
+              <p>This single setting fixed the "telephone game" problem. The resume review now works because the Synthesizer actually sees the resume text, not a summary of it.</p>
+
+              <h2 style="font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 1rem">How This May Apply to Your AI Product</h2>
+
+              <p>If you're building anything with AI agents — whether it's a customer service bot, an internal tool, or a product feature — you'll eventually hit this same wall. Your one-size-fits-all agent will fail on tasks that need precision, or it'll be overkill for tasks that need speed.</p>
+
+              <p>Here's what I'd suggest:</p>
+
+              <ol style="padding-left:1.25rem;margin:1rem 0">
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">Start with one agent.</strong> Don't over-engineer. Get the generic loop working well.</li>
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">When failures cluster around a task type, create a profile first.</strong> Nine times out of ten, the execution pattern is fine — you just need different settings. This is cheap and fast to implement.</li>
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">When a profile isn't enough</strong> — when the task needs a different choreography — build a specialized agent. But make it extend a common base class so your orchestrator doesn't need to know the difference.</li>
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">Control context fidelity.</strong> This is the one most people miss. Your response generator's quality is bounded by the quality of what it receives. If you're truncating everything uniformly, you're silently degrading your precision tasks.</li>
+                <li style="margin-bottom:0.5rem"><strong style="color:rgba(255,255,255,0.7)">Keep your executor blind.</strong> The Worker should only see its instructions and approved tools. Session state, conversation history, user preferences — that stays at the orchestrator level. The moment your executor starts seeing everything, it starts hallucinating based on context that has nothing to do with the current task.</li>
+              </ol>
+
+              <p>The resume review works now. The model quotes the exact text, verifies its suggestion is actually different from the original, and organizes feedback by category. Not because I switched to a better model — but because the architecture now gives the right configuration to the right task.</p>
+
+              <div style="border-left:2px solid rgba(34,197,94,0.3);padding-left:1rem;margin:1.5rem 0">
+                <p style="color:rgba(255,255,255,0.65);font-size:0.86rem;font-weight:500;margin:0">That's the thing about AI products. The model is rarely the bottleneck. The architecture is.</p>
+              </div>
+
+              <div style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.04)">
+                <p style="font-size:0.72rem;color:rgba(255,255,255,0.2);line-height:1.7">This is the first article in a series about the architectural decisions behind building reliable AI applications. Originally published on <a href="https://www.linkedin.com/pulse/when-your-ai-agent-needs-costume-change-vs-whole-new-actor-ahmed-nd2pe/" target="_blank" rel="noopener" style="color:rgba(74,222,128,0.5)">LinkedIn</a>.</p>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="lg:w-56 shrink-0 reveal reveal-d1 hidden lg:block">
+            <div style="position:sticky;top:1.5rem" class="flex flex-col gap-5">
+              <div class="sidebar-cta">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Have a similar challenge?</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about your AI architecture.</p>
+                <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="/components.js"></script>
+</body>
+</html>

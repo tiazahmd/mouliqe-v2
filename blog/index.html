@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Mouliqe</title>
+  <meta name="description" content="Insights on AI architecture, data engineering, and building reliable AI systems — from real-world experience.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
+  <div id="site-nav"></div>
+  <div class="main-content">
+
+    <section class="pt-20 pb-10">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 anim-fade">Blog</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-5 anim-up">Thinking out loud.</h1>
+        <p class="anim-up anim-d1" style="color:rgba(255,255,255,0.55);line-height:1.85;font-size:0.84rem;max-width:36rem">Notes on AI architecture, data engineering, and the lessons learned from building systems that actually work.</p>
+      </div>
+    </section>
+
+    <section class="pb-20">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+          <div class="flex-1 min-w-0">
+            <div id="posts-grid" class="flex flex-col gap-5"></div>
+          </div>
+          <div class="lg:w-56 shrink-0 hidden lg:block">
+            <div style="position:sticky;top:1.5rem">
+              <div class="sidebar-cta">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Have a challenge?</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about your AI architecture.</p>
+                <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="/components.js"></script>
+  <script>
+    fetch('/blog/posts.json')
+      .then(r => r.json())
+      .then(posts => {
+        const grid = document.getElementById('posts-grid');
+        grid.innerHTML = posts.map((p, i) => {
+          const d = new Date(p.date + 'T12:00:00');
+          const dateStr = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+          const tags = p.tags.map(t => `<span style="font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.5);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);padding:0.15rem 0.45rem;border-radius:0.25rem">${t}</span>`).join('');
+          return `<a href="/blog/${p.slug}" class="card group" style="text-decoration:none;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.04);border-radius:0;padding:1.5rem 0">
+            <div class="flex items-center gap-3 mb-3">${tags}</div>
+            <h2 style="font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:0.5rem;transition:color 0.3s">${p.title}</h2>
+            <p style="color:rgba(255,255,255,0.40);font-size:0.78rem;line-height:1.75;margin-bottom:0.75rem">${p.excerpt}</p>
+            <div class="flex items-center justify-between">
+              <span style="font-size:0.65rem;color:rgba(255,255,255,0.15)">${dateStr}</span>
+              <span class="text-forest-400 text-[0.65rem] font-semibold tracking-wider uppercase">Read <span class="learn-more-arrow">&rarr;</span></span>
+            </div>
+          </a>`;
+        }).join('');
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+[
+  {
+    "slug": "stop-building-ai-features",
+    "title": "Stop Building AI Features. Start Solving Problems.",
+    "date": "2026-03-26",
+    "excerpt": "Most businesses don't need AI. They need a solution to a problem. Sometimes AI is that solution. Often it isn't.",
+    "tags": ["AI Strategy", "Business"],
+    "linkedin": ""
+  },
+  {
+    "slug": "poc-to-production",
+    "title": "Why Your AI Proof of Concept Worked but Your Production System Doesn't",
+    "date": "2026-03-19",
+    "excerpt": "The gap between a working demo and a reliable production AI system is wider than most teams expect. Here's where it breaks.",
+    "tags": ["AI Strategy", "Production Systems"],
+    "linkedin": ""
+  },
+  {
+    "slug": "data-problem-not-ai-problem",
+    "title": "You Don't Have an AI Problem. You Have a Data Problem.",
+    "date": "2026-03-16",
+    "excerpt": "Most AI initiatives fail not because of the model but because the data underneath it is a mess. Fix the foundation first.",
+    "tags": ["Data Engineering", "AI Strategy"],
+    "linkedin": ""
+  },
+  {
+    "slug": "context-windows-are-a-lie",
+    "title": "Context Windows Are a Lie (Sort Of)",
+    "date": "2026-03-12",
+    "excerpt": "Why a 200K token context window doesn't mean your AI can actually use 200K tokens of information effectively.",
+    "tags": ["AI Architecture", "Context Management"],
+    "linkedin": ""
+  },
+  {
+    "slug": "guardrails-problem",
+    "title": "The Guardrails Problem: When Your AI Needs to Be Told No",
+    "date": "2026-03-09",
+    "excerpt": "AI without guardrails is a liability. But most guardrail implementations are either too loose or too restrictive. Here's how to get it right.",
+    "tags": ["AI Architecture", "Reliability"],
+    "linkedin": ""
+  },
+  {
+    "slug": "ai-memory-systems",
+    "title": "Your AI Doesn't Remember You. Here's Why That Matters.",
+    "date": "2026-03-05",
+    "excerpt": "Why most AI assistants forget everything between sessions, and how a six-layer memory system changes the game.",
+    "tags": ["AI Architecture", "Memory Systems"],
+    "linkedin": ""
+  },
+  {
+    "slug": "planner-worker-synthesizer",
+    "title": "Planner, Worker, Synthesizer: The 3-Agent Pattern That Actually Works",
+    "date": "2026-02-26",
+    "excerpt": "How breaking one AI agent into three separate agents eliminated tool call hallucinations and made the system dramatically more reliable.",
+    "tags": ["AI Architecture", "Multi-Agent Systems"],
+    "linkedin": "https://www.linkedin.com/pulse/planner-worker-synthesizer-3-agent-pattern-actually-works-ahmed-69ake/"
+  },
+  {
+    "slug": "costume-change-vs-new-actor",
+    "title": "When Your AI Agent Needs a Costume Change vs. a Whole New Actor",
+    "date": "2026-02-19",
+    "excerpt": "The architectural decision a lot of AI builders get wrong — when to tune an agent's configuration vs. when to build a specialized one entirely.",
+    "tags": ["AI Architecture", "Multi-Agent Systems"],
+    "linkedin": "https://www.linkedin.com/pulse/when-your-ai-agent-needs-costume-change-vs-whole-new-actor-ahmed-nd2pe/"
+  }
+]

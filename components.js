@@ -5,6 +5,7 @@ const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/services', label: 'Services' },
   { href: '/process', label: 'Process' },
+  { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -17,6 +18,7 @@ const path = window.location.pathname.replace(/\/+$/, '') || '/';
 
 function isActive(href) {
   if (href === '/') return path === '/' || path === '' || path === '/index' || path === '/index.html';
+  if (href === '/blog') return path.startsWith('/blog');
   return path === href || path === href + '.html';
 }
 
