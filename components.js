@@ -1,10 +1,17 @@
-// Mouliqe — Components v3
+// Mouliqe — Components v4
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/services', label: 'Services' },
   { href: '/process', label: 'Process' },
+  { label: 'Demo', children: [
+    { href: '/tools/data-quality', label: 'Data Quality', tag: 'ai' },
+    { href: '/tools/rag-pipeline', label: 'RAG Pipeline', tag: 'ai' },
+    { href: '/tools/agent-workflow', label: 'Agent Workflow', tag: 'ai' },
+    { href: '/tools/kpi-dashboard', label: 'KPI Dashboard', tag: 'local' },
+    { href: '/tools/etl-pipeline', label: 'ETL Pipeline', tag: 'local' },
+  ]},
   { href: '/explore', label: 'Explore' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
@@ -15,18 +22,37 @@ const LOGO_HTML = `<div style="display:flex;flex-direction:column;align-items:ce
   <span style="font-size:0.68rem;color:rgba(255,255,255,0.4);letter-spacing:0.06em;margin-top:0.35rem">fundamental &middot; /moʊ.liːk/</span>
 </div>`;
 const CHEVRON = `<svg class="chevron" width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>`;
+const EXPAND_ARROW = `<svg class="expand-arrow" width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>`;
 const path = window.location.pathname.replace(/\/+$/, '') || '/';
 
 function isActive(href) {
   if (href === '/') return path === '/' || path === '' || path === '/index' || path === '/index.html';
   if (href === '/blog') return path.startsWith('/blog');
+  if (href === '/tools') return path.startsWith('/tools');
   return path === href || path === href + '.html';
 }
 
+function isToolsActive() {
+  return path.startsWith('/tools');
+}
+
 function buildLinks() {
-  return NAV_LINKS.map(l =>
-    `<a href="${l.href}" class="sidebar-link${isActive(l.href) ? ' active' : ''}">${isActive(l.href) ? CHEVRON : ''}<span>${l.label}</span></a>`
-  ).join('');
+  return NAV_LINKS.map(l => {
+    if (l.children) {
+      const toolsOpen = isToolsActive();
+      const childLinks = l.children.map(c => {
+        const tagHtml = c.tag ? `<span class="nav-tag nav-tag-${c.tag}">${c.tag === 'ai' ? 'AI' : 'Local'}</span>` : '';
+        return `<a href="${c.href}" class="sidebar-link sidebar-sublink${isActive(c.href) ? ' active' : ''}">${isActive(c.href) ? CHEVRON : ''}<span>${c.label}</span>${tagHtml}</a>`;
+      }).join('');
+      return `<div class="sidebar-group${toolsOpen ? ' open' : ''}">
+        <button class="sidebar-link sidebar-group-toggle${toolsOpen ? ' active' : ''}" type="button">
+          ${toolsOpen ? CHEVRON : ''}<span>${l.label}</span>${EXPAND_ARROW}
+        </button>
+        <div class="sidebar-children">${childLinks}</div>
+      </div>`;
+    }
+    return `<a href="${l.href}" class="sidebar-link${isActive(l.href) ? ' active' : ''}">${isActive(l.href) ? CHEVRON : ''}<span>${l.label}</span></a>`;
+  }).join('');
 }
 
 function injectNav() {
@@ -65,6 +91,14 @@ function initMobileMenu() {
   toggle.addEventListener('click', () => { menu.classList.toggle('open'); overlay.classList.toggle('open'); });
   overlay.addEventListener('click', () => { menu.classList.remove('open'); overlay.classList.remove('open'); });
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menu.classList.remove('open'); overlay.classList.remove('open'); }));
+}
+
+function initToolsToggle() {
+  document.querySelectorAll('.sidebar-group-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.parentElement.classList.toggle('open');
+    });
+  });
 }
 
 function initScrollReveal() {
@@ -146,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
   injectNav();
   injectFooter();
   initMobileMenu();
+  initToolsToggle();
   initScrollReveal();
   initScrollProgress();
   initProcessHover();

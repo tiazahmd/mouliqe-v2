@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAG Pipeline Explorer — Mouliqe Tools</title>
+  <meta name="description" content="Pick a sample document or paste your own text, ask a question, and watch a full Retrieval-Augmented Generation pipeline run step by step — chunking, embedding, search, retrieval, and answer generation.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="RAG Pipeline Explorer — Mouliqe Tools">
+  <meta property="og:description" content="Pick a sample document or paste your own text, ask a question, and watch a full Retrieval-Augmented Generation pipeline run step by step.">
+  <meta property="og:url" content="https://mouliqe.com/tools/rag-pipeline">
+  <link rel="canonical" href="https://mouliqe.com/tools/rag-pipeline">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="RAG Pipeline Explorer — Mouliqe Tools">
+  <meta name="twitter:description" content="Pick a sample document or paste your own text, ask a question, and watch a full Retrieval-Augmented Generation pipeline run step by step.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
+  <div id="site-nav"></div>
+  <div class="main-content">
+
+    <!-- Hero -->
+    <section class="pt-20 pb-6">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 anim-fade">Tools</p>
+        <div class="flex items-center gap-3 mb-3 anim-up">
+          <h1 class="text-3xl md:text-4xl font-bold text-white">RAG Pipeline Explorer</h1>
+          <span style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.15rem 0.45rem;border-radius:0.25rem;color:rgba(192,132,252,0.7);background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15);white-space:nowrap;margin-top:0.3rem">AI-Powered</span>
+        </div>
+        <p class="text-[0.84rem] text-white/45 max-w-xl anim-up anim-d1">Pick a sample document or paste your own text, ask a question, and watch every stage of a Retrieval-Augmented Generation pipeline unfold — from chunking to answer generation.</p>
+      </div>
+    </section>
+
+    <!-- Tool + Sidebar -->
+    <section class="pb-20">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+          <!-- TOOL AREA (70%) -->
+          <div class="flex-1 min-w-0 reveal">
+
+            <!-- Input Section -->
+            <div class="card" id="input-section">
+              <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1rem">Step 1 — Choose a Document</p>
+
+              <div class="flex flex-col md:flex-row md:items-stretch gap-0">
+                <!-- Sample documents -->
+                <div>
+                  <p style="font-size:0.65rem;color:rgba(255,255,255,0.3);margin-bottom:0.5rem;font-weight:600">Pick a sample document:</p>
+                  <div class="flex flex-wrap gap-2" id="sample-btns">
+                    <button class="sample-btn slot-btn" data-sample="policy" style="padding:0.5rem 0.75rem">
+                      <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">Company Policy</span>
+                      <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">PTO, Remote Work, Expenses</span>
+                    </button>
+                    <button class="sample-btn slot-btn" data-sample="faq" style="padding:0.5rem 0.75rem">
+                      <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">Product FAQ</span>
+                      <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">Pricing, Features, Support</span>
+                    </button>
+                    <button class="sample-btn slot-btn" data-sample="legal" style="padding:0.5rem 0.75rem">
+                      <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">Legal Contract</span>
+                      <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">SLA, Liability, Termination</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="hidden md:flex" style="width:1px;background:rgba(255,255,255,0.06);margin:0 1.5rem;align-self:stretch"></div>
+                <div class="md:hidden" style="height:1px;background:rgba(255,255,255,0.04);margin:1rem 0"></div>
+
+                <!-- Paste your own -->
+                <div style="display:flex;flex-direction:column;justify-content:center;flex:1;min-width:0">
+                  <p style="font-size:0.65rem;color:rgba(255,255,255,0.3);margin-bottom:0.5rem;font-weight:600">Or paste your own text:</p>
+                  <div style="position:relative">
+                    <textarea id="custom-text" class="form-input" rows="4" maxlength="2000" placeholder="Paste up to 2,000 characters..." style="font-size:0.72rem;line-height:1.6;min-height:5rem"></textarea>
+                    <span id="char-count" style="position:absolute;bottom:0.4rem;right:0.6rem;font-size:0.55rem;color:rgba(255,255,255,0.12)">0 / 2,000</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question input -->
+              <div style="margin-top:1.25rem">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Step 2 — Ask a Question</p>
+                <div style="display:flex;gap:0.5rem;align-items:stretch">
+                  <input type="text" id="question-input" class="form-input" placeholder="e.g. What is the PTO policy?" style="flex:1;font-size:0.78rem">
+                  <button id="run-btn" class="btn-primary" style="padding:0.6rem 1.25rem;white-space:nowrap" disabled>Run Pipeline</button>
+                </div>
+                <div id="sample-questions" style="margin-top:0.5rem;display:none">
+                  <p style="font-size:0.55rem;color:rgba(255,255,255,0.2);margin-bottom:0.3rem">Try one of these:</p>
+                  <div style="display:flex;flex-wrap:wrap;gap:0.35rem" id="question-chips"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pipeline visualization -->
+            <div class="tool-pipeline" id="pipeline" style="display:none">
+              <div class="tool-stage pending" data-stage="chunk">
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Chunk</span>
+              </div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="embed" data-ai>
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Embed</span>
+              </div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="search">
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Search</span>
+              </div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="retrieve" data-ai>
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Retrieve</span>
+              </div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="generate" data-ai>
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Generate</span>
+              </div>
+            </div>
+
+            <!-- Dynamic context panel -->
+            <div class="tool-context" id="context-panel" style="display:none">
+              <div id="context-log"></div>
+            </div>
+
+            <!-- RAG Output -->
+            <div id="rag-output" style="display:none;margin-top:1.25rem">
+
+              <!-- Chunk visualization -->
+              <div id="chunk-viz" style="display:none"></div>
+
+              <!-- Embedding visualization -->
+              <div id="embed-viz" style="display:none"></div>
+
+              <!-- Search visualization -->
+              <div id="search-viz" style="display:none"></div>
+
+              <!-- Retrieve visualization -->
+              <div id="retrieve-viz" style="display:none"></div>
+
+              <!-- Generate visualization -->
+              <div id="generate-viz" style="display:none"></div>
+
+            </div>
+
+          </div>
+
+          <!-- SIDEBAR (30%) -->
+          <div class="lg:w-64 shrink-0 reveal reveal-d1 hidden lg:block">
+            <div style="position:sticky;top:1.5rem" class="flex flex-col gap-5">
+
+              <div class="sidebar-card">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">What This Demonstrates</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">This is a simplified single-document RAG pipeline running entirely in your browser. It visualizes each step so you can see how questions get answered from unstructured text.</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">A production RAG system adds:</p>
+                <div style="display:flex;flex-direction:column;gap:0.3rem">
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Vector databases (Pinecone, Weaviate, Qdrant)</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Chunking strategy optimization</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Hybrid search (semantic + keyword)</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Re-ranking models for precision</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Hallucination detection guardrails</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Citation verification and source linking</p>
+                </div>
+              </div>
+
+              <div class="sidebar-cta">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Building a RAG system?</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about retrieval architecture, chunking strategies, and getting accurate answers from your documents.</p>
+                <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+                <div style="height:1px;background:rgba(255,255,255,0.05);margin:1.25rem 0"></div>
+                <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:block;flex-shrink:0"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  <span style="line-height:1">Follow on LinkedIn</span>
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Mobile CTA -->
+        <div class="lg:hidden" style="margin-top:2rem">
+          <div class="sidebar-cta">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Building a RAG system?</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about retrieval architecture, chunking strategies, and getting accurate answers from your documents.</p>
+            <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+            <div style="height:1px;background:rgba(255,255,255,0.05);margin:1.25rem 0"></div>
+            <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:block;flex-shrink:0"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              <span style="line-height:1">Follow on LinkedIn</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+  <script src="/components.js"></script>
+  <script>
+  // ══════════════════════════════════════════════════
+  // RAG Pipeline Explorer — Pure Client-Side (Simulated)
+  // ══════════════════════════════════════════════════
+
+  // ── Sample Documents ──
+  const DOCS = {
+    policy: {
+      title: 'Company Policy',
+      text: `Paid Time Off (PTO) Policy. All full-time employees accrue 20 days of paid time off per calendar year, prorated for mid-year hires. PTO accrues at a rate of 1.67 days per month and begins accruing on your first day of employment. Unused PTO may be carried over to the following year, up to a maximum balance of 30 days. Any balance exceeding 30 days will be forfeited on January 1st. Employees must submit PTO requests at least two weeks in advance for absences of three or more consecutive days. Requests of one to two days require at least 48 hours' notice. All requests are subject to manager approval based on team coverage needs.
+
+Remote Work Policy. Employees may work remotely up to three days per week, with at least two days per week spent in the office. Remote work days must be agreed upon with your direct manager and logged in the scheduling system by Friday of the preceding week. During remote work days, employees must be available on Slack and responsive to messages within 30 minutes during core hours (10:00 AM to 3:00 PM local time). Home office setups must meet ergonomic standards outlined in the IT handbook. The company provides a one-time $500 stipend for home office equipment upon approval of your remote work arrangement.
+
+Expense Reimbursement Policy. Business-related expenses must be submitted through the expense management portal within 30 days of the transaction. All expenses over $50 require an itemized receipt. Meal expenses during business travel are reimbursed up to $75 per day. Client entertainment expenses require pre-approval from a director-level manager and are capped at $200 per event. Mileage reimbursement for personal vehicle use on company business is calculated at the current IRS standard rate of $0.67 per mile. Air travel must be booked at economy class rates unless the flight duration exceeds six hours, in which case premium economy may be approved. Hotel accommodations should not exceed $250 per night in standard markets or $350 per night in high-cost cities (New York, San Francisco, London, Tokyo). Expense reports not submitted within the 30-day window may be denied at the discretion of the finance department.`,
+      questions: [
+        'How many PTO days do employees get per year?',
+        'What are the rules for working remotely?',
+        'What is the daily meal reimbursement limit during travel?'
+      ]
+    },
+    faq: {
+      title: 'Product FAQ',
+      text: `What is NovaCRM? NovaCRM is a cloud-based customer relationship management platform designed for mid-market B2B companies. It combines contact management, deal pipeline tracking, email automation, and analytics in a single unified workspace. NovaCRM integrates natively with over 150 tools including Salesforce, HubSpot, Slack, Gmail, Outlook, Zapier, and most major marketing automation platforms.
+
+Pricing and Plans. NovaCRM offers three plans: Starter at $29 per user per month (up to 10 users, 5,000 contacts, basic pipeline), Professional at $79 per user per month (unlimited users, 50,000 contacts, advanced automation, custom fields, API access), and Enterprise at $149 per user per month (unlimited everything, dedicated account manager, SSO/SAML, audit logs, custom SLA). All plans include a 14-day free trial with no credit card required. Annual billing saves 20% compared to monthly billing. Volume discounts are available for teams of 50 or more users.
+
+Key Features. The deal pipeline supports unlimited custom stages with drag-and-drop movement, weighted probability scoring, and automated stage progression triggers. Email automation includes sequence builders, A/B testing, open and click tracking, and smart send-time optimization. The analytics dashboard provides real-time revenue forecasting, win-rate analysis by rep, pipeline velocity metrics, and custom report builders with scheduled delivery.
+
+Integrations and API. NovaCRM's REST API supports full CRUD operations on all objects (contacts, companies, deals, activities, notes). Rate limits are 100 requests per minute on Starter, 500 on Professional, and 2,000 on Enterprise. Webhook support is available on Professional and Enterprise plans. The API documentation is available at docs.novacrm.io and includes SDKs for Python, Node.js, Ruby, and Go.
+
+Support and Uptime. All plans include email support with a 24-hour response time. Professional plans add live chat support during business hours (Mon-Fri, 8 AM to 8 PM EST). Enterprise plans include 24/7 phone support with a dedicated support engineer and a guaranteed 4-hour response time for critical issues. NovaCRM maintains a 99.95% uptime SLA for Enterprise customers, backed by service credits. Status updates are published in real time at status.novacrm.io.`,
+      questions: [
+        'How much does the Professional plan cost?',
+        'What integrations does NovaCRM support?',
+        'What is the API rate limit for Enterprise users?'
+      ]
+    },
+    legal: {
+      title: 'Legal Contract',
+      text: `Service Agreement between Acme Solutions Ltd. ("Provider") and the undersigned client ("Client"). This agreement governs the provision of data engineering and analytics consulting services as outlined in the attached Statement of Work (SOW).
+
+Term and Renewal. This agreement is effective for an initial term of twelve (12) months from the date of execution. The agreement will automatically renew for successive twelve-month periods unless either party provides written notice of non-renewal at least sixty (60) days prior to the end of the current term. Either party may terminate this agreement for convenience upon ninety (90) days' written notice to the other party.
+
+Service Level Agreement (SLA). Provider commits to the following service levels: system availability of 99.9% measured monthly (excluding scheduled maintenance windows announced at least 48 hours in advance), incident response time of 15 minutes for Severity 1 (complete service outage), 1 hour for Severity 2 (major feature degradation), and 4 hours for Severity 3 (minor issues). If Provider fails to meet the availability SLA in any calendar month, Client is entitled to a service credit equal to 5% of that month's fees for each 0.1% below the 99.9% threshold, up to a maximum credit of 30% of monthly fees.
+
+Limitation of Liability. In no event shall either party's total cumulative liability under this agreement exceed the total fees paid by Client during the twelve (12) months immediately preceding the claim. Neither party shall be liable for any indirect, incidental, consequential, special, or punitive damages, including but not limited to loss of profits, revenue, data, or business opportunity, regardless of whether such damages were foreseeable. This limitation does not apply to (a) breaches of confidentiality obligations, (b) willful misconduct or gross negligence, or (c) indemnification obligations under Section 9 of this agreement.
+
+Intellectual Property. All pre-existing intellectual property remains the property of the respective party. Work product created by Provider specifically for Client under a SOW shall be assigned to Client upon full payment of all associated fees. Provider retains the right to use general knowledge, skills, techniques, and methodologies (including reusable code components, frameworks, and tools) developed or refined during the engagement, provided such use does not disclose Client's confidential information.
+
+Termination for Cause. Either party may terminate this agreement immediately upon written notice if the other party (a) commits a material breach that remains uncured for thirty (30) days after written notice specifying the breach, (b) becomes insolvent, files for bankruptcy, or makes an assignment for the benefit of creditors, or (c) fails to pay undisputed invoices within forty-five (45) days of the due date. Upon termination, Client shall pay for all services rendered through the termination date, and Provider shall deliver all work product completed to date.`,
+      questions: [
+        'What are the SLA response times for critical incidents?',
+        'How can either party terminate this agreement?',
+        'Who owns the intellectual property created during the engagement?'
+      ]
+    }
+  };
+
+  // ── Pre-built Results ──
+  // Each sample doc + question combo has pre-built chunk scores and an answer
+  const RESULTS = {
+    policy: [
+      {
+        question: 'How many PTO days do employees get per year?',
+        topChunks: [0, 1],
+        scores: null, // will be generated
+        answer: 'Full-time employees receive 20 days of paid time off per calendar year. This is prorated for mid-year hires, with PTO accruing at a rate of 1.67 days per month starting from the first day of employment. Unused PTO can be carried over up to a maximum balance of 30 days.'
+      },
+      {
+        question: 'What are the rules for working remotely?',
+        topChunks: [2, 3],
+        scores: null,
+        answer: 'Employees may work remotely up to three days per week, with at least two in-office days required. Remote days must be agreed upon with your manager and logged by Friday of the preceding week. During remote work, you must be available on Slack and respond within 30 minutes during core hours (10 AM to 3 PM). The company provides a one-time $500 stipend for home office equipment.'
+      },
+      {
+        question: 'What is the daily meal reimbursement limit during travel?',
+        topChunks: [4, 5],
+        scores: null,
+        answer: 'Meal expenses during business travel are reimbursed up to $75 per day. All expenses over $50 require an itemized receipt, and expense reports must be submitted through the expense management portal within 30 days of the transaction. Reports submitted after the 30-day window may be denied by the finance department.'
+      }
+    ],
+    faq: [
+      {
+        question: 'How much does the Professional plan cost?',
+        topChunks: [2, 3],
+        scores: null,
+        answer: 'The NovaCRM Professional plan costs $79 per user per month. It includes unlimited users, up to 50,000 contacts, advanced automation, custom fields, and API access. Annual billing saves 20% compared to monthly billing, and volume discounts are available for teams of 50 or more users.'
+      },
+      {
+        question: 'What integrations does NovaCRM support?',
+        topChunks: [0, 1, 6],
+        scores: null,
+        answer: 'NovaCRM integrates natively with over 150 tools, including Salesforce, HubSpot, Slack, Gmail, Outlook, Zapier, and most major marketing automation platforms. The platform also offers a REST API with full CRUD operations on all objects, with SDKs available for Python, Node.js, Ruby, and Go.'
+      },
+      {
+        question: 'What is the API rate limit for Enterprise users?',
+        topChunks: [6, 7],
+        scores: null,
+        answer: 'Enterprise users have an API rate limit of 2,000 requests per minute. For comparison, Starter plans allow 100 requests per minute and Professional plans allow 500. Enterprise plans also include webhook support and full API documentation with SDKs at docs.novacrm.io.'
+      }
+    ],
+    legal: [
+      {
+        question: 'What are the SLA response times for critical incidents?',
+        topChunks: [3, 4],
+        scores: null,
+        answer: 'For Severity 1 incidents (complete service outage), the response time is 15 minutes. Severity 2 incidents (major feature degradation) have a 1-hour response time, and Severity 3 (minor issues) have a 4-hour response time. The Provider also commits to 99.9% monthly system availability, with service credits of 5% per 0.1% shortfall, up to 30% of monthly fees.'
+      },
+      {
+        question: 'How can either party terminate this agreement?',
+        topChunks: [1, 2, 8],
+        scores: null,
+        answer: 'There are three termination paths: (1) for convenience, with 90 days written notice; (2) non-renewal, by providing written notice at least 60 days before the current term ends; or (3) for cause, effective immediately if the other party commits an uncured material breach (30-day cure period), becomes insolvent, or fails to pay undisputed invoices within 45 days. Upon termination, the Client pays for services rendered and the Provider delivers all completed work product.'
+      },
+      {
+        question: 'Who owns the intellectual property created during the engagement?',
+        topChunks: [7, 8],
+        scores: null,
+        answer: 'Work product created specifically for the Client under a Statement of Work is assigned to the Client upon full payment of all associated fees. However, the Provider retains the right to use general knowledge, skills, techniques, and reusable code components developed during the engagement, as long as this does not disclose the Client\'s confidential information. All pre-existing IP remains with its original owner.'
+      }
+    ]
+  };
+
+  // ── State ──
+  let currentDoc = null;     // 'policy' | 'faq' | 'legal' | 'custom'
+  let currentText = '';
+  let chunks = [];
+  let running = false;
+
+  // ── Pipeline Stages ──
+  const STAGES = ['chunk','embed','search','retrieve','generate'];
+  const STAGE_CONTEXT = {
+    chunk: {
+      title: 'Splitting into Chunks',
+      text: 'Splitting the document into overlapping chunks of approximately 200 characters with a 50-character overlap. Chunk boundaries are placed at sentence breaks to preserve meaning. Overlap ensures that information spanning two chunks is captured in at least one.'
+    },
+    embed: {
+      title: 'AI: Computing Embeddings',
+      text: 'An embedding model converts each text chunk into a high-dimensional vector that captures semantic meaning. Similar concepts produce similar vectors, even when different words are used. The AI model learns these representations from billions of text examples.'
+    },
+    search: {
+      title: 'Semantic Search',
+      text: 'Computing the embedding of your question, then calculating cosine similarity between the query vector and every chunk vector. Chunks with higher similarity scores are more likely to contain the answer. This replaces keyword matching with meaning-based retrieval.'
+    },
+    retrieve: {
+      title: 'AI: Re-Ranking & Retrieving',
+      text: 'A re-ranking agent evaluates the top candidate chunks for relevance, coherence, and answer coverage. Unlike the initial vector search, re-ranking uses a cross-encoder model that reads the query and each chunk together — slower but significantly more accurate.'
+    },
+    generate: {
+      title: 'AI: Generating Answer',
+      text: 'A language model synthesizes an answer grounded in the retrieved chunks. The AI agent reasons across multiple source passages, resolves any conflicts between them, and produces a coherent response. Grounding in retrieved text is what reduces hallucination.'
+    }
+  };
+
+  function setStage(stageId) {
+    const stages = document.querySelectorAll('.tool-stage');
+    const connectors = document.querySelectorAll('.tool-stage-connector');
+    const stageIdx = STAGES.indexOf(stageId);
+
+    stages.forEach((s, i) => {
+      s.className = 'tool-stage ' + (i < stageIdx ? 'done' : i === stageIdx ? 'active' : 'pending');
+    });
+    connectors.forEach((c, i) => {
+      c.className = 'tool-stage-connector ' + (i < stageIdx ? 'done' : i === stageIdx ? 'active' : '');
+    });
+
+    const ctx = STAGE_CONTEXT[stageId];
+    const panel = document.getElementById('context-panel');
+    const log = document.getElementById('context-log');
+    panel.style.display = 'block';
+    panel.classList.add('pulsing');
+
+    // Mark previous active entry as done
+    const prev = log.querySelector('.context-entry.active');
+    if (prev) {
+      prev.classList.remove('active');
+      prev.classList.add('done');
+      const dot = prev.querySelector('.context-dot');
+      if (dot) { dot.style.background = 'rgba(74,222,128,0.5)'; dot.style.boxShadow = 'none'; }
+      const title = prev.querySelector('.context-title-text');
+      if (title) title.style.color = 'rgba(74,222,128,0.5)';
+    }
+
+    // Add new entry
+    const entry = document.createElement('div');
+    entry.className = 'context-entry active';
+    entry.style.cssText = 'display:flex;gap:0.6rem;align-items:flex-start;margin-bottom:0.75rem;animation:fadeInUp 0.3s ease-out forwards';
+    entry.innerHTML = `
+      <div class="context-dot" style="width:6px;height:6px;border-radius:50%;background:#fbbf24;box-shadow:0 0 8px rgba(251,191,36,0.4);margin-top:0.35rem;flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <p class="context-title-text" style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(251,191,36,0.6);margin-bottom:0.2rem">${ctx.title}</p>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.45);line-height:1.65;margin:0">${ctx.text}</p>
+      </div>`;
+    log.appendChild(entry);
+    panel.scrollTop = panel.scrollHeight;
+  }
+
+  function finishPipeline() {
+    const stages = document.querySelectorAll('.tool-stage');
+    const connectors = document.querySelectorAll('.tool-stage-connector');
+    stages.forEach(s => s.className = 'tool-stage done');
+    connectors.forEach(c => c.className = 'tool-stage-connector done');
+
+    const panel = document.getElementById('context-panel');
+    const log = document.getElementById('context-log');
+    panel.classList.remove('pulsing');
+
+    const prev = log.querySelector('.context-entry.active');
+    if (prev) {
+      prev.classList.remove('active');
+      prev.classList.add('done');
+      const dot = prev.querySelector('.context-dot');
+      if (dot) { dot.style.background = 'rgba(74,222,128,0.5)'; dot.style.boxShadow = 'none'; }
+      const title = prev.querySelector('.context-title-text');
+      if (title) title.style.color = 'rgba(74,222,128,0.5)';
+    }
+
+    const entry = document.createElement('div');
+    entry.className = 'context-entry done';
+    entry.style.cssText = 'display:flex;gap:0.6rem;align-items:flex-start;animation:fadeInUp 0.3s ease-out forwards';
+    entry.innerHTML = `
+      <div style="width:6px;height:6px;border-radius:50%;background:rgba(74,222,128,0.5);margin-top:0.35rem;flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <p style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(74,222,128,0.5);margin-bottom:0.2rem">Pipeline Complete</p>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.45);line-height:1.65;margin:0">All stages complete. The answer has been generated from retrieved context. Scroll down to see the full pipeline output with sources.</p>
+      </div>`;
+    log.appendChild(entry);
+  }
+
+  // ── Chunking ──
+  function chunkText(text, chunkSize, overlap) {
+    chunkSize = chunkSize || 200;
+    overlap = overlap || 50;
+    const sentences = text.match(/[^.!?]+[.!?]+[\s]*/g) || [text];
+    const result = [];
+    let current = '';
+    let currentStart = 0;
+    let charPos = 0;
+
+    for (let i = 0; i < sentences.length; i++) {
+      const s = sentences[i];
+      if (current.length + s.length > chunkSize && current.length > 0) {
+        result.push({ text: current.trim(), start: currentStart, end: charPos });
+        // Overlap: go back to find a good overlap point
+        const overlapText = current.slice(-overlap);
+        current = overlapText + s;
+        currentStart = charPos - overlapText.length;
+      } else {
+        current += s;
+      }
+      charPos += s.length;
+    }
+    if (current.trim().length > 0) {
+      result.push({ text: current.trim(), start: currentStart, end: charPos });
+    }
+    return result;
+  }
+
+  // ── Fake Embedding Vector ──
+  function fakeVector(seed) {
+    const v = [];
+    let x = Math.sin(seed * 127.1) * 43758.5453;
+    for (let i = 0; i < 8; i++) {
+      x = Math.sin(x * 12.9898 + i * 78.233) * 43758.5453;
+      v.push(parseFloat((x - Math.floor(x) - 0.5).toFixed(3)));
+    }
+    return v;
+  }
+
+  // ── Generate Scores for Chunks ──
+  function generateScores(numChunks, topChunkIndices) {
+    const scores = [];
+    for (let i = 0; i < numChunks; i++) {
+      if (topChunkIndices.includes(i)) {
+        scores.push(parseFloat((0.72 + Math.random() * 0.22).toFixed(3)));
+      } else {
+        // Some medium, some low
+        const r = Math.random();
+        if (r < 0.3) {
+          scores.push(parseFloat((0.4 + Math.random() * 0.25).toFixed(3)));
+        } else {
+          scores.push(parseFloat((0.05 + Math.random() * 0.3).toFixed(3)));
+        }
+      }
+    }
+    return scores;
+  }
+
+  // ── Find Best Match for Free-Form Questions ──
+  function findBestResult(docKey, question) {
+    if (!RESULTS[docKey]) return null;
+    const q = question.toLowerCase();
+    let best = null, bestScore = -1;
+    RESULTS[docKey].forEach(r => {
+      // Simple keyword overlap
+      const rWords = r.question.toLowerCase().split(/\s+/);
+      const qWords = q.split(/\s+/);
+      let score = 0;
+      qWords.forEach(w => { if (w.length > 3 && rWords.some(rw => rw.includes(w) || w.includes(rw))) score++; });
+      if (score > bestScore) { bestScore = score; best = r; }
+    });
+    return best;
+  }
+
+  // ── Render Chunk Visualization ──
+  function renderChunks(chunkList) {
+    const el = document.getElementById('chunk-viz');
+    el.style.display = 'block';
+    let html = `<div class="tool-result-card">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Document Chunks</span>
+        <span style="font-size:0.6rem;color:rgba(255,255,255,0.2)">${chunkList.length} chunks created</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.75rem">`;
+
+    chunkList.forEach((chunk, i) => {
+      // Determine overlap region with next chunk
+      let overlapStart = -1;
+      if (i < chunkList.length - 1) {
+        const nextChunk = chunkList[i + 1];
+        if (nextChunk.start < chunk.end) {
+          overlapStart = nextChunk.start - chunk.start;
+        }
+      }
+
+      let displayText = escapeHtml(chunk.text);
+      // Highlight overlap at end of chunk
+      if (overlapStart > 0 && overlapStart < chunk.text.length) {
+        const before = escapeHtml(chunk.text.slice(0, overlapStart));
+        const overlap = escapeHtml(chunk.text.slice(overlapStart));
+        displayText = before + `<span style="background:rgba(251,191,36,0.08);border-radius:2px;padding:0 2px">${overlap}</span>`;
+      }
+
+      html += `<div class="rag-chunk" data-chunk="${i}" style="border-radius:0.5rem;padding:0.75rem 1rem;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);transition:all 0.4s;position:relative">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem">
+          <span style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.4)">Chunk ${i + 1}</span>
+          <span style="font-size:0.52rem;color:rgba(255,255,255,0.12)">${chunk.text.length} chars</span>
+        </div>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.65;margin:0;word-break:break-word">${displayText}</p>
+        ${overlapStart > 0 ? `<div style="margin-top:0.4rem;display:flex;align-items:center;gap:0.35rem"><div style="width:8px;height:2px;background:rgba(251,191,36,0.3);border-radius:1px"></div><span style="font-size:0.5rem;color:rgba(251,191,36,0.35)">Overlap region with Chunk ${i + 2}</span></div>` : ''}
+      </div>`;
+    });
+
+    html += '</div></div>';
+    el.innerHTML = html;
+  }
+
+  // ── Render Embedding Visualization ──
+  function renderEmbeddings(chunkList) {
+    const el = document.getElementById('embed-viz');
+    el.style.display = 'block';
+    let html = `<div class="tool-result-card">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Chunk Embeddings</span>
+        <span style="font-size:0.6rem;color:rgba(255,255,255,0.2)">768-dim vectors (truncated)</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.75rem">`;
+
+    chunkList.forEach((chunk, i) => {
+      const vec = fakeVector(i + 1);
+      const vecStr = `[${vec.slice(0, 4).join(', ')}, ...]`;
+      const preview = chunk.text.slice(0, 60) + (chunk.text.length > 60 ? '...' : '');
+
+      html += `<div class="rag-chunk" data-chunk="${i}" style="border-radius:0.4rem;padding:0.6rem 0.85rem;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;transition:all 0.4s">
+        <span style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);flex-shrink:0;min-width:3.5rem">Chunk ${i + 1}</span>
+        <span style="font-size:0.65rem;color:rgba(255,255,255,0.25);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(preview)}</span>
+        <code style="font-size:0.6rem;color:rgba(251,191,36,0.5);background:rgba(251,191,36,0.04);padding:0.2rem 0.5rem;border-radius:0.25rem;border:1px solid rgba(251,191,36,0.08);white-space:nowrap;font-family:monospace">${vecStr}</code>
+      </div>`;
+    });
+
+    html += '</div></div>';
+    el.innerHTML = html;
+  }
+
+  // ── Render Search Visualization ──
+  function renderSearch(chunkList, scores, question) {
+    const el = document.getElementById('search-viz');
+    el.style.display = 'block';
+
+    // Create sorted indices by score (descending)
+    const indexed = scores.map((s, i) => ({ score: s, idx: i }));
+    indexed.sort((a, b) => b.score - a.score);
+
+    const queryVec = fakeVector(42);
+    const queryVecStr = `[${queryVec.slice(0, 4).join(', ')}, ...]`;
+
+    let html = `<div class="tool-result-card">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Similarity Search</span>
+      </div>
+      <div style="margin:0.6rem 0;padding:0.5rem 0.75rem;border-radius:0.35rem;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.03)">
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+          <span style="font-size:0.55rem;font-weight:600;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.08em">Query</span>
+          <span style="font-size:0.68rem;color:rgba(255,255,255,0.45);flex:1;min-width:0">"${escapeHtml(question)}"</span>
+          <code style="font-size:0.58rem;color:rgba(251,191,36,0.4);font-family:monospace">${queryVecStr}</code>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.35rem;margin-top:0.5rem">`;
+
+    indexed.forEach(({ score, idx }) => {
+      const chunk = chunkList[idx];
+      const preview = chunk.text.slice(0, 80) + (chunk.text.length > 80 ? '...' : '');
+      let scoreClass, scoreColor, barColor, bgColor, borderColor;
+      if (score > 0.7) {
+        scoreClass = 'high';
+        scoreColor = '#4ade80';
+        barColor = 'rgba(74,222,128,0.5)';
+        bgColor = 'rgba(74,222,128,0.015)';
+        borderColor = 'rgba(74,222,128,0.08)';
+      } else if (score >= 0.4) {
+        scoreClass = 'medium';
+        scoreColor = '#fbbf24';
+        barColor = 'rgba(251,191,36,0.4)';
+        bgColor = 'rgba(251,191,36,0.01)';
+        borderColor = 'rgba(251,191,36,0.06)';
+      } else {
+        scoreClass = 'low';
+        scoreColor = 'rgba(255,255,255,0.15)';
+        barColor = 'rgba(255,255,255,0.06)';
+        bgColor = 'rgba(255,255,255,0.008)';
+        borderColor = 'rgba(255,255,255,0.03)';
+      }
+
+      html += `<div class="rag-chunk" data-chunk="${idx}" style="border-radius:0.4rem;padding:0.6rem 0.85rem;background:${bgColor};border:1px solid ${borderColor};transition:all 0.4s">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.35rem">
+          <span style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);flex-shrink:0">Chunk ${idx + 1}</span>
+          <div style="flex:1;height:3px;background:rgba(255,255,255,0.03);border-radius:2px;overflow:hidden">
+            <div style="width:${score * 100}%;height:100%;background:${barColor};border-radius:2px;transition:width 0.6s ease"></div>
+          </div>
+          <span class="tool-score ${scoreClass}" style="font-size:0.68rem;font-weight:700;flex-shrink:0">${score.toFixed(3)}</span>
+        </div>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,${score > 0.4 ? '0.4' : '0.18'});line-height:1.55;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(preview)}</p>
+      </div>`;
+    });
+
+    html += '</div></div>';
+    el.innerHTML = html;
+  }
+
+  // ── Render Retrieve Visualization ──
+  function renderRetrieve(chunkList, scores, topIndices) {
+    const el = document.getElementById('retrieve-viz');
+    el.style.display = 'block';
+
+    let html = `<div class="tool-result-card">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Retrieved Context</span>
+        <span style="font-size:0.6rem;color:rgba(74,222,128,0.4);font-weight:600">Retrieved ${topIndices.length} of ${chunkList.length} chunks</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.75rem">`;
+
+    // Show all chunks, but highlight the retrieved ones
+    chunkList.forEach((chunk, i) => {
+      const isRetrieved = topIndices.includes(i);
+      const score = scores[i];
+
+      if (isRetrieved) {
+        html += `<div class="rag-chunk retrieved" data-chunk="${i}" style="border-radius:0.5rem;padding:0.75rem 1rem;background:rgba(74,222,128,0.025);border:1px solid rgba(74,222,128,0.15);box-shadow:0 0 20px rgba(74,222,128,0.03);position:relative;transition:all 0.4s">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem">
+            <div style="display:flex;align-items:center;gap:0.5rem">
+              <span style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.6)">Chunk ${i + 1}</span>
+              <span style="font-size:0.48rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#4ade80;background:rgba(74,222,128,0.08);padding:0.15rem 0.4rem;border-radius:0.2rem;border:1px solid rgba(74,222,128,0.15)">Retrieved</span>
+            </div>
+            <span class="tool-score high">${score.toFixed(3)}</span>
+          </div>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.5);line-height:1.65;margin:0;word-break:break-word">${escapeHtml(chunk.text)}</p>
+        </div>`;
+      } else {
+        html += `<div class="rag-chunk" data-chunk="${i}" style="border-radius:0.5rem;padding:0.5rem 1rem;background:rgba(255,255,255,0.008);border:1px solid rgba(255,255,255,0.02);opacity:0.4;transition:all 0.4s">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:0.55rem;font-weight:600;color:rgba(255,255,255,0.15)">Chunk ${i + 1}</span>
+            <span style="font-size:0.6rem;color:rgba(255,255,255,0.1)">${score.toFixed(3)}</span>
+          </div>
+        </div>`;
+      }
+    });
+
+    html += '</div></div>';
+    el.innerHTML = html;
+  }
+
+  // ── Render Generate Visualization (streaming) ──
+  async function renderGenerate(answer, topIndices) {
+    const el = document.getElementById('generate-viz');
+    el.style.display = 'block';
+
+    el.innerHTML = `<div class="tool-result-card">
+      <div class="tool-result-header">
+        <span class="tool-result-label">Generated Answer</span>
+      </div>
+      <div id="answer-stream" style="font-size:0.82rem;color:rgba(255,255,255,0.65);line-height:1.8;margin-top:0.5rem;min-height:3rem"></div>
+      <div id="answer-sources" style="display:none;margin-top:1rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.04)">
+        <p style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(74,222,128,0.4);margin-bottom:0.4rem">Sources</p>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap">
+          ${topIndices.map(i => `<span style="font-size:0.62rem;font-weight:600;color:rgba(74,222,128,0.5);background:rgba(74,222,128,0.06);padding:0.2rem 0.5rem;border-radius:0.25rem;border:1px solid rgba(74,222,128,0.1)">Chunk ${i + 1}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+    // Stream the answer word by word
+    const streamEl = document.getElementById('answer-stream');
+    const words = answer.split(' ');
+    for (let i = 0; i < words.length; i++) {
+      streamEl.textContent += (i > 0 ? ' ' : '') + words[i];
+      await delay(30 + Math.random() * 40);
+    }
+
+    // Show sources
+    document.getElementById('answer-sources').style.display = 'block';
+  }
+
+  // ── Utilities ──
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ── Update Run Button State ──
+  function updateRunBtn() {
+    const q = document.getElementById('question-input').value.trim();
+    const hasDoc = currentText.length > 0;
+    document.getElementById('run-btn').disabled = !(hasDoc && q.length > 0) || running;
+  }
+
+  // ── Pipeline Runner ──
+  async function runPipeline() {
+    if (running) return;
+    running = true;
+    updateRunBtn();
+
+    const question = document.getElementById('question-input').value.trim();
+    const pipeline = document.getElementById('pipeline');
+    const output = document.getElementById('rag-output');
+
+    // Reset
+    pipeline.style.display = 'flex';
+    output.style.display = 'block';
+    document.getElementById('context-log').innerHTML = '';
+    document.getElementById('context-panel').style.display = 'none';
+    ['chunk-viz','embed-viz','search-viz','retrieve-viz','generate-viz'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+      document.getElementById(id).innerHTML = '';
+    });
+
+    // Get or generate result data
+    let result = null;
+    if (currentDoc && RESULTS[currentDoc]) {
+      result = findBestResult(currentDoc, question);
+    }
+
+    // Stage 1: Chunk
+    setStage('chunk');
+    await delay(1800);
+    chunks = chunkText(currentText);
+    renderChunks(chunks);
+
+    // Stage 2: Embed
+    setStage('embed');
+    await delay(2000);
+    renderEmbeddings(chunks);
+
+    // Stage 3: Search
+    setStage('search');
+    await delay(2200);
+    const topChunks = result ? result.topChunks.filter(i => i < chunks.length) : getDefaultTopChunks(chunks.length);
+    const scores = generateScores(chunks.length, topChunks);
+    renderSearch(chunks, scores, question);
+
+    // Stage 4: Retrieve
+    setStage('retrieve');
+    await delay(1500);
+    renderRetrieve(chunks, scores, topChunks);
+
+    // Stage 5: Generate
+    setStage('generate');
+    await delay(800);
+    const answer = result ? result.answer : generateFallbackAnswer(question, chunks, topChunks);
+    await renderGenerate(answer, topChunks);
+
+    finishPipeline();
+    running = false;
+    updateRunBtn();
+  }
+
+  function getDefaultTopChunks(numChunks) {
+    // Pick 2-3 chunks from the middle and beginning
+    if (numChunks <= 2) return [0];
+    if (numChunks <= 4) return [0, 1];
+    return [0, Math.floor(numChunks / 2), Math.min(numChunks - 1, Math.floor(numChunks / 2) + 1)];
+  }
+
+  function generateFallbackAnswer(question, chunkList, topIndices) {
+    const context = topIndices.map(i => chunkList[i] ? chunkList[i].text : '').join(' ');
+    const preview = context.slice(0, 200);
+    return `Based on the retrieved context, the document discusses: "${preview}..." The retrieved chunks (${topIndices.map(i => 'Chunk ' + (i + 1)).join(', ')}) contain the most relevant information for answering this question. In a production RAG system, a language model would synthesize a precise answer from these passages.`;
+  }
+
+  // ── Event Handlers ──
+
+  // Sample document buttons
+  document.getElementById('sample-btns').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-sample]');
+    if (!btn || running) return;
+    const key = btn.dataset.sample;
+    const doc = DOCS[key];
+    if (!doc) return;
+
+    currentDoc = key;
+    currentText = doc.text;
+
+    // Highlight selected
+    document.querySelectorAll('.sample-btn').forEach(b => b.style.borderColor = '');
+    btn.style.borderColor = 'rgba(34,197,94,0.3)';
+    document.getElementById('custom-text').value = '';
+    document.getElementById('char-count').textContent = '0 / 2,000';
+
+    // Show sample questions
+    const qContainer = document.getElementById('sample-questions');
+    const chips = document.getElementById('question-chips');
+    qContainer.style.display = 'block';
+    chips.innerHTML = doc.questions.map(q =>
+      `<button class="q-chip" style="font-size:0.62rem;color:rgba(255,255,255,0.35);background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:0.3rem 0.6rem;border-radius:0.35rem;cursor:pointer;transition:all 0.3s;font-family:inherit" onmouseover="this.style.borderColor='rgba(34,197,94,0.2)';this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='rgba(255,255,255,0.35)'">${escapeHtml(q)}</button>`
+    ).join('');
+
+    // Pre-fill first question
+    document.getElementById('question-input').value = doc.questions[0];
+    updateRunBtn();
+  });
+
+  // Question chips
+  document.getElementById('question-chips').addEventListener('click', (e) => {
+    const chip = e.target.closest('.q-chip');
+    if (!chip || running) return;
+    document.getElementById('question-input').value = chip.textContent;
+    updateRunBtn();
+  });
+
+  // Custom text
+  document.getElementById('custom-text').addEventListener('input', (e) => {
+    const text = e.target.value;
+    document.getElementById('char-count').textContent = `${text.length.toLocaleString()} / 2,000`;
+    if (text.trim().length > 50) {
+      currentDoc = 'custom';
+      currentText = text;
+      document.querySelectorAll('.sample-btn').forEach(b => b.style.borderColor = '');
+      document.getElementById('sample-questions').style.display = 'none';
+    } else if (text.trim().length === 0 && !currentDoc) {
+      currentText = '';
+    }
+    updateRunBtn();
+  });
+
+  // Question input
+  document.getElementById('question-input').addEventListener('input', updateRunBtn);
+  document.getElementById('question-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !document.getElementById('run-btn').disabled) {
+      runPipeline();
+    }
+  });
+
+  // Run button
+  document.getElementById('run-btn').addEventListener('click', () => {
+    if (!document.getElementById('run-btn').disabled) runPipeline();
+  });
+  </script>
+</body>
+</html>
