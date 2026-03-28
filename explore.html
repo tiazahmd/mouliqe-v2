@@ -25,7 +25,7 @@
     .q-block { margin-bottom: 0; }
     .q-label { display:flex; align-items:center; gap:0.65rem; margin-bottom:0.75rem; }
     .q-num   { font-size:0.58rem; font-weight:700; color:rgba(74,222,128,0.4); text-transform:uppercase; letter-spacing:0.18em; }
-    .q-text  { font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.45); letter-spacing:0.02em; }
+    .q-text  { font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.85); letter-spacing:0.02em; }
 
     .q-tile {
       border:1px solid rgba(255,255,255,0.07);
@@ -41,14 +41,14 @@
       flex-direction:column;
       gap:0.2rem;
     }
-    .q-tile strong { font-size:0.78rem; font-weight:600; color:rgba(255,255,255,0.5); display:block; transition:color 0.2s; }
-    .q-tile span   { font-size:0.68rem; color:rgba(255,255,255,0.2); display:block; line-height:1.5; transition:color 0.2s; }
+    .q-tile strong { font-size:0.78rem; font-weight:600; color:rgba(255,255,255,0.85); display:block; transition:color 0.2s; }
+    .q-tile span   { font-size:0.68rem; color:rgba(255,255,255,0.4); display:block; line-height:1.5; transition:color 0.2s; }
     .q-tile:hover  { border-color:rgba(74,222,128,0.25); background:rgba(34,197,94,0.03); }
-    .q-tile:hover strong { color:rgba(255,255,255,0.7); }
-    .q-tile:hover span   { color:rgba(255,255,255,0.35); }
+    .q-tile:hover strong { color:rgba(255,255,255,0.85); }
+    .q-tile:hover span   { color:rgba(255,255,255,0.7); }
     .q-tile.selected { border-color:rgba(74,222,128,0.45); background:rgba(34,197,94,0.06); }
     .q-tile.selected strong { color:rgba(74,222,128,0.9); }
-    .q-tile.selected span   { color:rgba(255,255,255,0.4); }
+    .q-tile.selected span   { color:rgba(255,255,255,0.8); }
 
     /* ── Sequential reveal ──────────────────────────────── */
     .q-reveal {
@@ -71,24 +71,26 @@
       border:1px solid rgba(255,255,255,0.07);
       border-radius:0.75rem;
       padding:1rem 1.1rem;
-      transition:border-color 0.45s ease, background 0.45s ease, opacity 0.45s ease;
+      transition:border-color 0.45s ease, background 0.45s ease, opacity 0.45s ease, outline-color 0.2s;
+      cursor:pointer;
     }
     .pipeline-node.level-critical  { border-color:rgba(74,222,128,0.5);  background:rgba(34,197,94,0.07); }
     .pipeline-node.level-active    { border-color:rgba(74,222,128,0.22); background:rgba(34,197,94,0.03); }
     .pipeline-node.level-secondary { border-color:rgba(74,222,128,0.1);  background:transparent; }
-    .pipeline-node.level-future    { border-color:rgba(255,255,255,0.05);background:transparent; opacity:0.4; }
+    .pipeline-node.level-future    { border-color:rgba(255,255,255,0.1);background:transparent; opacity:0.4; }
     .pipeline-node.level-warning   { border-color:rgba(239,68,68,0.4);   background:rgba(239,68,68,0.04); }
     .pipeline-node.level-at-risk   { border-color:rgba(251,146,60,0.35); background:rgba(251,146,60,0.03); }
-    .pipeline-node.level-default   { border-color:rgba(255,255,255,0.07);background:transparent; }
+    .pipeline-node.level-default   { border-color:rgba(255,255,255,0.14);background:transparent; }
+    .pipeline-node.node-active-dd  { outline:1px solid rgba(74,222,128,0.35); outline-offset:2px; }
 
     .node-icon { width:1.4rem; height:1.4rem; margin-bottom:0.65rem; transition:color 0.45s; }
     .level-critical  .node-icon { color:rgba(74,222,128,0.95); }
     .level-active    .node-icon { color:rgba(74,222,128,0.65); }
     .level-secondary .node-icon { color:rgba(74,222,128,0.4); }
-    .level-future    .node-icon { color:rgba(255,255,255,0.18); }
+    .level-future    .node-icon { color:rgba(255,255,255,0.36); }
     .level-warning   .node-icon { color:rgba(239,68,68,0.75); }
     .level-at-risk   .node-icon { color:rgba(251,146,60,0.75); }
-    .level-default   .node-icon { color:rgba(255,255,255,0.15); }
+    .level-default   .node-icon { color:rgba(255,255,255,0.3); }
 
     .node-badge {
       display:inline-block;
@@ -103,24 +105,23 @@
     .badge-critical  { color:rgba(74,222,128,0.9);  background:rgba(34,197,94,0.1);  border-color:rgba(74,222,128,0.2); }
     .badge-active    { color:rgba(74,222,128,0.6);  background:rgba(34,197,94,0.06); border-color:rgba(74,222,128,0.12); }
     .badge-secondary { color:rgba(74,222,128,0.4);  background:transparent;          border-color:rgba(74,222,128,0.08); }
-    .badge-future    { color:rgba(255,255,255,0.2); background:transparent;          border-color:rgba(255,255,255,0.07); }
+    .badge-future    { color:rgba(255,255,255,0.4); background:transparent;          border-color:rgba(255,255,255,0.14); }
     .badge-warning   { color:rgba(239,68,68,0.85);  background:rgba(239,68,68,0.07); border-color:rgba(239,68,68,0.2); }
     .badge-at-risk   { color:rgba(251,146,60,0.85); background:rgba(251,146,60,0.06);border-color:rgba(251,146,60,0.2); }
-    .badge-default   { color:rgba(255,255,255,0.15);background:transparent;          border-color:rgba(255,255,255,0.06); }
+    .badge-default   { color:rgba(255,255,255,0.3);background:transparent;          border-color:rgba(255,255,255,0.12); }
 
-    .node-title    { font-size:0.76rem; font-weight:700; color:rgba(255,255,255,0.7); margin-bottom:0.2rem; }
-    .node-examples { font-size:0.6rem;  color:rgba(255,255,255,0.16); line-height:1.5; margin-bottom:0.55rem; }
-    .node-desc     { font-size:0.7rem;  color:rgba(255,255,255,0.35); line-height:1.65; min-height:3.2rem; transition:color 0.45s; }
-    .level-critical  .node-desc { color:rgba(255,255,255,0.55); }
+    .node-title    { font-size:0.76rem; font-weight:700; color:rgba(255,255,255,0.85); margin-bottom:0.2rem; }
+    .node-examples { font-size:0.6rem;  color:rgba(255,255,255,0.32); line-height:1.5; margin-bottom:0.55rem; }
+    .node-desc     { font-size:0.7rem;  color:rgba(255,255,255,0.7); line-height:1.65; min-height:3.2rem; transition:color 0.45s; }
+    .level-critical  .node-desc { color:rgba(255,255,255,0.85); }
     .level-warning   .node-desc { color:rgba(239,68,68,0.65); }
     .level-at-risk   .node-desc { color:rgba(251,146,60,0.6); }
 
     /* ── Connectors ─────────────────────────────────────── */
     .pipe-connector {
       display:flex; align-items:center; justify-content:center;
-      flex-shrink:0; color:rgba(255,255,255,0.1);
+      flex-shrink:0; color:rgba(255,255,255,0.2);
       transition:color 0.45s;
-      /* mobile: vertical gap */
       padding:0.15rem 0;
     }
     @media (min-width:768px) {
@@ -134,10 +135,10 @@
     .conn-critical  { color:rgba(74,222,128,0.45); }
     .conn-active    { color:rgba(74,222,128,0.25); }
     .conn-secondary { color:rgba(74,222,128,0.12); }
-    .conn-future    { color:rgba(255,255,255,0.08); }
+    .conn-future    { color:rgba(255,255,255,0.16); }
     .conn-warning   { color:rgba(239,68,68,0.35); }
     .conn-at-risk   { color:rgba(251,146,60,0.3); }
-    .conn-default   { color:rgba(255,255,255,0.08); }
+    .conn-default   { color:rgba(255,255,255,0.16); }
 
     /* ── Toggles ─────────────────────────────────────────── */
     .toggle-row {
@@ -148,7 +149,7 @@
       transition:border-color 0.2s, background 0.2s;
       cursor:pointer;
     }
-    .toggle-row:hover        { border-color:rgba(255,255,255,0.1); }
+    .toggle-row:hover        { border-color:rgba(255,255,255,0.2); }
     .toggle-row.toggled      { border-color:rgba(239,68,68,0.2); background:rgba(239,68,68,0.03); }
     .toggle-row.t-disabled   { opacity:0.3; pointer-events:none; }
 
@@ -173,8 +174,8 @@
     .toggle-input:checked + .toggle-label              { background:rgba(239,68,68,0.5); }
     .toggle-input:checked + .toggle-label::after       { transform:translateX(0.9rem); background:#fff; }
 
-    .toggle-title { font-size:0.76rem; font-weight:600; color:rgba(255,255,255,0.5); margin-bottom:0.15rem; }
-    .toggle-desc  { font-size:0.67rem; color:rgba(255,255,255,0.2); line-height:1.5; }
+    .toggle-title { font-size:0.76rem; font-weight:600; color:rgba(255,255,255,0.85); margin-bottom:0.15rem; }
+    .toggle-desc  { font-size:0.67rem; color:rgba(255,255,255,0.4); line-height:1.5; }
 
     /* ── Architecture reveal ─────────────────────────────── */
     #architecture { opacity:0; transition:opacity 0.5s ease; }
@@ -184,24 +185,125 @@
       from { opacity:0; transform:translateY(10px); }
       to   { opacity:1; transform:translateY(0); }
     }
+
+    /* ── Presets ─────────────────────────────────────────── */
+    #preset-row {
+      display:flex; flex-wrap:wrap; gap:0.5rem;
+      margin-bottom:1.75rem;
+    }
+    .preset-pill {
+      display:inline-flex; align-items:center;
+      font-size:0.62rem; font-weight:600;
+      color:rgba(255,255,255,0.56);
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.07);
+      border-radius:999px;
+      padding:0.28rem 0.75rem;
+      cursor:pointer; font-family:inherit;
+      transition:color 0.2s, border-color 0.2s, background 0.2s;
+      white-space:nowrap;
+    }
+    .preset-pill:hover { color:rgba(74,222,128,0.8); border-color:rgba(74,222,128,0.2); background:rgba(34,197,94,0.04); }
+
+    /* ── Timeline block ──────────────────────────────────── */
+    #timeline-block {
+      background:rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:0.6rem;
+      padding:1rem 1.15rem;
+      margin-bottom:2rem;
+      display:none;
+    }
+    .phase-item {
+      display:flex; align-items:baseline; gap:0.6rem;
+      font-size:0.72rem; color:rgba(255,255,255,0.7);
+      padding:0.28rem 0;
+    }
+    .phase-dot {
+      width:0.32rem; height:0.32rem;
+      background:rgba(74,222,128,0.35);
+      border-radius:50%; flex-shrink:0; margin-top:0.35rem;
+    }
+    .cost-badge {
+      display:inline-flex; align-items:center;
+      font-size:0.5rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:0.12em;
+      padding:0.15rem 0.5rem;
+      border-radius:0.25rem;
+      border:1px solid transparent;
+    }
+    .cost-medium  { color:rgba(74,222,128,0.8);  background:rgba(34,197,94,0.08);  border-color:rgba(74,222,128,0.15); }
+    .cost-high    { color:rgba(251,146,60,0.85); background:rgba(251,146,60,0.07); border-color:rgba(251,146,60,0.18); }
+    .cost-complex { color:rgba(239,68,68,0.8);   background:rgba(239,68,68,0.06);  border-color:rgba(239,68,68,0.15); }
+
+    /* ── Node drill-down ─────────────────────────────────── */
+    #node-drilldown {
+      display:none;
+      background:rgba(34,197,94,0.03);
+      border:1px solid rgba(34,197,94,0.12);
+      border-radius:0.6rem;
+      padding:1.1rem 1.25rem;
+      margin-top:1.25rem;
+      animation: fadeUp 0.25s ease;
+    }
+    .dd-row { display:flex; flex-wrap:wrap; gap:1.25rem; margin-top:0.9rem; }
+    .dd-col { flex:1; min-width:9rem; }
+    .dd-label { font-size:0.52rem; font-weight:700; color:rgba(74,222,128,0.4); text-transform:uppercase; letter-spacing:0.15em; margin-bottom:0.4rem; }
+    .dd-text  { font-size:0.7rem; color:rgba(255,255,255,0.64); line-height:1.65; }
+
+    /* ── Sticky action bar ───────────────────────────────── */
+    #explore-sticky-bar {
+      display:none;
+      position:fixed; top:0; left:200px; right:0; z-index:40;
+      background:rgba(6,10,20,0.88);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      padding:0.45rem 1.5rem;
+      align-items:center; justify-content:flex-end; gap:1rem;
+    }
+    @media (max-width:767px) {
+      #explore-sticky-bar { left:0; top:56px; }
+    }
+    #explore-sticky-bar.visible { display:flex; }
+
+    .sticky-bar-btn {
+      font-size:0.65rem; color:rgba(255,255,255,0.7);
+      background:none; border:none; font-family:inherit;
+      cursor:pointer; transition:color 0.2s; letter-spacing:0.05em;
+      padding:0;
+    }
+    .sticky-bar-btn:hover { color:rgba(255,255,255,0.85); }
   </style>
 </head>
 <body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
   <div id="site-nav"></div>
   <div class="main-content">
 
+    <!-- Sticky action bar -->
+    <div id="explore-sticky-bar">
+      <button id="copy-link-btn" class="sticky-bar-btn" aria-label="Copy shareable link">⎘ Copy link</button>
+      <button id="reset-btn" class="sticky-bar-btn">↺ Start over</button>
+    </div>
+
     <!-- Hero -->
     <section class="pt-20 pb-10">
       <div class="max-w-6xl mx-auto px-6 md:px-10">
         <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 anim-fade">Explore</p>
         <h1 class="text-3xl md:text-4xl font-bold text-white mb-3 anim-up">What would Mouliqe build for you?</h1>
-        <p class="anim-up anim-d1" style="color:rgba(255,255,255,0.4);font-size:0.84rem;line-height:1.85;max-width:38rem">Answer three questions. Get a real architecture mapped to your situation — then explore what happens when you cut corners.</p>
+        <p class="anim-up anim-d1" style="color:rgba(255,255,255,0.8);font-size:0.84rem;line-height:1.85;max-width:38rem">Answer three questions. Get a real architecture mapped to your situation — then explore what happens when you cut corners.</p>
       </div>
     </section>
 
     <!-- Main -->
     <section class="pb-24">
       <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+        <!-- ── Scenario presets ───────────────────────────── -->
+        <div style="margin-bottom:0.35rem">
+          <p style="font-size:0.52rem;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:0.65rem">Quick start</p>
+          <div id="preset-row"></div>
+        </div>
 
         <!-- ── Questions ─────────────────────────────────── -->
         <div id="questions-section" class="mb-12">
@@ -285,21 +387,24 @@
         <!-- ── Architecture ──────────────────────────────── -->
         <div id="architecture" style="display:none">
 
-          <!-- Divider + reset -->
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem">
-            <div style="height:1px;flex:1;background:rgba(255,255,255,0.05)"></div>
-            <button id="reset-btn" style="font-size:0.65rem;color:rgba(255,255,255,0.18);background:none;border:none;font-family:inherit;cursor:pointer;transition:color 0.2s;letter-spacing:0.05em" onmouseover="this.style.color='rgba(255,255,255,0.45)'" onmouseout="this.style.color='rgba(255,255,255,0.18)'">↺ Start over</button>
-          </div>
-
           <!-- Summary -->
-          <div id="arch-summary" style="display:none;background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.1);border-radius:0.6rem;padding:0.9rem 1.15rem;margin-bottom:2rem;font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.75"></div>
+          <div id="arch-summary" style="display:none;background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.1);border-radius:0.6rem;padding:0.9rem 1.15rem;margin-bottom:1.25rem;font-size:0.8rem;color:rgba(255,255,255,0.85);line-height:1.75"></div>
+
+          <!-- Timeline + cost -->
+          <div id="timeline-block"></div>
+
+          <!-- Disclaimer -->
+          <p id="estimate-disclaimer" style="display:none;font-size:0.65rem;color:rgba(255,255,255,0.3);line-height:1.7;margin-top:-1.25rem;margin-bottom:2rem">These are high-level estimates based on typical engagements. Actual cost and timeline depend heavily on your existing infrastructure, team size, data quality, and scope. That's exactly what the discovery call is for.</p>
 
           <!-- Pipeline -->
           <div id="pipeline" class="flex flex-col md:flex-row md:items-stretch" style="gap:0"></div>
 
+          <!-- Node drill-down panel -->
+          <div id="node-drilldown"></div>
+
           <!-- Toggles -->
           <div style="margin-top:2.75rem">
-            <p style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.18);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:1rem">What happens if you cut corners?</p>
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.36);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:1rem">What happens if you cut corners?</p>
             <div class="flex flex-col gap-2.5">
 
               <label class="toggle-row" for="t-skipData">
@@ -341,10 +446,110 @@
           <!-- Warning callout -->
           <div id="toggle-warning" style="display:none;margin-top:1.25rem;background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.15);border-radius:0.6rem;padding:0.85rem 1.1rem;font-size:0.76rem;color:rgba(239,68,68,0.65);line-height:1.75"></div>
 
-          <!-- CTA -->
-          <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.05)" class="flex flex-col md:flex-row md:items-center gap-4">
-            <p style="font-size:0.78rem;color:rgba(255,255,255,0.35);line-height:1.8;max-width:34rem;flex:1">This is a starting point. Your actual situation has details that shape the architecture — timeline, budget, team, and existing systems. A discovery call takes 30 minutes and costs nothing.</p>
-            <a href="/contact" class="btn-primary" style="white-space:nowrap;flex-shrink:0;justify-content:center">Book a Discovery Call</a>
+          <!-- Booking form -->
+          <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.05)">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.5rem">Book a Discovery Call</p>
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.7);line-height:1.75;margin-bottom:1.5rem">This is a starting point. A 30-minute call maps this to your actual systems, team, and timeline — at no cost.</p>
+
+            <div class="card" id="eb-booking-card">
+
+              <!-- Step indicator -->
+              <div class="flex items-center gap-3 mb-6" id="eb-step-indicator">
+                <div class="step-item active" data-step="1">
+                  <span class="step-dot active">1</span>
+                  <span class="step-label">Date</span>
+                </div>
+                <div class="step-connector" id="eb-conn-1-2"><div class="step-connector-fill"></div></div>
+                <div class="step-item" data-step="2">
+                  <span class="step-dot">2</span>
+                  <span class="step-label">Time</span>
+                </div>
+                <div class="step-connector" id="eb-conn-2-3"><div class="step-connector-fill"></div></div>
+                <div class="step-item" data-step="3">
+                  <span class="step-dot">3</span>
+                  <span class="step-label">Details</span>
+                </div>
+              </div>
+
+              <!-- Step 1: Pick a date -->
+              <div id="eb-step-1" class="eb-booking-step">
+                <div class="form-label" style="margin-bottom:1rem">Select a date</div>
+                <div id="eb-date-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                  <div class="skeleton-slot"></div>
+                  <div class="skeleton-slot"></div>
+                  <div class="skeleton-slot"></div>
+                  <div class="skeleton-slot"></div>
+                  <div class="skeleton-slot"></div>
+                  <div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:0.6rem;padding:0.5rem 0">
+                    <div class="spinner"></div>
+                    <span style="color:rgba(255,255,255,0.24);font-size:0.68rem">Loading availability...</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 2: Pick a time -->
+              <div id="eb-step-2" class="eb-booking-step" style="display:none">
+                <div class="flex items-center gap-3 mb-4">
+                  <button id="eb-back-to-dates" style="color:rgba(255,255,255,0.6);font-size:0.72rem;cursor:pointer;background:none;border:none;font-family:inherit;padding:0">&larr; Back</button>
+                  <div class="form-label" style="margin:0">Pick a time on <span id="eb-selected-date-label" style="color:rgba(255,255,255,0.85)"></span></div>
+                </div>
+                <div id="eb-time-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2"></div>
+              </div>
+
+              <!-- Step 3: Details + submit -->
+              <div id="eb-step-3" class="eb-booking-step" style="display:none">
+                <div class="flex items-center gap-3 mb-4">
+                  <button id="eb-back-to-times" style="color:rgba(255,255,255,0.6);font-size:0.72rem;cursor:pointer;background:none;border:none;font-family:inherit;padding:0">&larr; Back</button>
+                  <div class="form-label" style="margin:0">Your details</div>
+                </div>
+                <div id="eb-slot-summary" style="background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.1);border-radius:0.5rem;padding:0.6rem 0.85rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem">
+                  <svg width="14" height="14" fill="none" stroke="rgba(74,222,128,0.6)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  <span id="eb-slot-summary-text" style="font-size:0.78rem;color:rgba(255,255,255,0.85)"></span>
+                </div>
+                <form id="eb-booking-form">
+                  <div class="form-group">
+                    <label for="eb-name" class="form-label">Name</label>
+                    <input type="text" id="eb-name" class="form-input" placeholder="Your name" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="eb-email" class="form-label">Email</label>
+                    <input type="email" id="eb-email" class="form-input" placeholder="you@company.com" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="eb-company" class="form-label">Company <span style="color:rgba(255,255,255,0.2)">(optional)</span></label>
+                    <input type="text" id="eb-company" class="form-input" placeholder="Your company">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Interested in</label>
+                    <div class="custom-select" id="eb-interest-select">
+                      <div class="custom-select-trigger" id="eb-interest-trigger">Select an option</div>
+                      <div class="custom-select-options">
+                        <div class="custom-select-option" data-value="AI Solutions & Architecture">AI Solutions & Architecture</div>
+                        <div class="custom-select-option" data-value="Data Engineering & Infrastructure">Data Engineering & Infrastructure</div>
+                        <div class="custom-select-option" data-value="Analytics & Business Intelligence">Analytics & Business Intelligence</div>
+                        <div class="custom-select-option" data-value="Not sure yet">Not sure yet — let's talk</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="eb-message" class="form-label">Tell me about your situation <span style="color:rgba(255,255,255,0.2)">(optional)</span></label>
+                    <textarea id="eb-message" rows="2" class="form-input" placeholder="What challenges are you facing?"></textarea>
+                  </div>
+                  <div style="padding-top:0.4rem">
+                    <button type="submit" id="eb-submit-btn" class="btn-primary">Confirm Booking</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Success -->
+              <div id="eb-step-success" class="eb-booking-step" style="display:none;text-align:center;padding:2.5rem 1rem">
+                <svg width="36" height="36" fill="none" stroke="#4ade80" viewBox="0 0 24 24" style="margin:0 auto 1rem"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <p style="font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:0.5rem">You're booked.</p>
+                <p id="eb-success-detail" style="font-size:0.78rem;color:rgba(255,255,255,0.7);line-height:1.7"></p>
+                <p style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:1rem">A calendar invite has been sent to your email.</p>
+              </div>
+
+            </div>
           </div>
 
         </div>
@@ -475,16 +680,82 @@
 
   const AI_ONLY_TOGGLES = ['noGuardrails','singleAgent'];
 
+  // Node drill-down data
+  const DRILLDOWN = {
+    sources: {
+      stack:   'PostgreSQL · MySQL · REST & GraphQL APIs · S3 · Salesforce · HubSpot · CSV / Excel exports',
+      breaks:  'Undocumented APIs that change without notice. Missing credentials. Sources with no clear owner. Inconsistent field names across systems causing silent join failures.',
+      mouliqe: 'Integration design, connector implementation, monitoring & alerting',
+      client:  'Access credentials, data ownership decisions, stakeholder sign-off on source priority',
+    },
+    ingestion: {
+      stack:   'Apache Airflow · dbt · Fivetran · Airbyte · Python ETL scripts · Great Expectations · AWS Glue',
+      breaks:  'Schema changes upstream breaking pipelines silently. No data quality checks. Manual hotfixes becoming permanent. Pipelines without alerting failing for hours undetected.',
+      mouliqe: 'Pipeline design, ETL code, data quality rules, alerting setup, documentation',
+      client:  'Business rules validation, acceptance testing, cadence & scheduling requirements',
+    },
+    warehouse: {
+      stack:   'Snowflake · BigQuery · Redshift · DuckDB · dbt for transformations · data lineage tooling',
+      breaks:  'Multiple conflicting definitions of the same metric. No lineage documentation. Schema drift over time. Access controls not enforced — any query can read any table.',
+      mouliqe: 'Schema design, implementation, dbt models, query optimization, lineage docs',
+      client:  'Data governance decisions, metric definitions sign-off, access policy approval',
+    },
+    ai: {
+      stack:   'OpenAI · Anthropic · LangChain · LlamaIndex · Pinecone · Redis · custom eval frameworks · LangSmith',
+      breaks:  'Context window overflow as usage scales. Guardrails bypassed by edge-case inputs. No evals — regressions are invisible until users complain. Single-model bottleneck under load.',
+      mouliqe: 'Model selection & architecture, orchestration, guardrails, eval framework, cost optimization',
+      client:  'Domain knowledge & edge cases, acceptable-use policy, human-in-the-loop review process',
+    },
+    output: {
+      stack:   'FastAPI · Next.js · Retool · Metabase · Grafana · Slack & email webhooks · custom UI components',
+      breaks:  'Dashboards disconnected from the live data model. APIs with no rate limiting. No error states shown to users. Outputs delivered without provenance or trust signals.',
+      mouliqe: 'Build, deployment, performance tuning, error handling, monitoring',
+      client:  'Requirements definition, UX decisions, user acceptance testing & sign-off',
+    },
+  };
+
+  // Timeline + cost tiers per challenge × maturity
+  const TIMELINE = {
+    'automation-scattered':  { phases:['Data audit & source mapping','ETL pipeline build','Automation layer'], weeks:['2–3w','3–4w','2–3w'], total:'7–10 weeks', cost:'High',    costReason:'Data foundation required before automation is viable' },
+    'automation-siloed':     { phases:['Source consolidation','Warehouse setup','Automation pipelines'],    weeks:['2–3w','1–2w','2–3w'], total:'5–8 weeks',  cost:'Medium',  costReason:'Data mostly available — integration & pipeline work' },
+    'automation-clean':      { phases:['Quick data audit','Automation pipeline build','Testing & deploy'],  weeks:['1w','2–3w','1–2w'],   total:'4–6 weeks',  cost:'Medium',  costReason:'Clean data means focused scope and faster delivery' },
+    'reliability-scattered': { phases:['Data audit & cleanup','Reliability architecture redesign','Guardrails & validation'], weeks:['3–4w','2–3w','2w'], total:'7–9 weeks', cost:'High', costReason:'Data quality must be addressed before AI reliability is fixable' },
+    'reliability-siloed':    { phases:['Data unification','AI architecture refactor','Guardrails & monitoring'], weeks:['2–3w','2–3w','1–2w'], total:'5–8 weeks', cost:'High', costReason:'Multi-agent refactor with data consolidation in parallel' },
+    'reliability-clean':     { phases:['AI architecture redesign','Guardrails & output validation','Load testing & monitoring'], weeks:['2–3w','1–2w','1w'], total:'4–6 weeks', cost:'Medium', costReason:'Pure architecture problem — no upstream data work needed' },
+    'data-scattered':        { phases:['Audit & source mapping','Schema design & ETL build','Warehouse delivery & docs'], weeks:['2–3w','3–4w','1–2w'], total:'6–9 weeks', cost:'High', costReason:'Extensive consolidation and standardization from scratch' },
+    'data-siloed':           { phases:['Source mapping & gap analysis','Warehouse consolidation','Validation & handoff'], weeks:['1–2w','2–3w','1w'], total:'4–6 weeks', cost:'Medium', costReason:'Structure exists — consolidation is the primary workstream' },
+    'data-clean':            { phases:['Gap analysis & AI-readiness audit','Optimization & lineage','Docs & handoff'], weeks:['1w','2–3w','1w'], total:'4–5 weeks', cost:'Medium', costReason:'Incremental improvement on an already-solid foundation' },
+    'ai-product-scattered':  { phases:['Data foundation build','AI architecture & guardrails','Product build & deployment'], weeks:['3–4w','3–4w','2–3w'], total:'8–11 weeks', cost:'Complex', costReason:'Full-stack engagement: data layer + AI architecture + product' },
+    'ai-product-siloed':     { phases:['Data consolidation','AI architecture & guardrails','Product build & deployment'], weeks:['2–3w','2–3w','2–3w'], total:'6–9 weeks', cost:'Complex', costReason:'AI product build with upstream data consolidation required' },
+    'ai-product-clean':      { phases:['AI architecture & guardrails','Product build','Testing & deployment'], weeks:['2–3w','2–4w','1–2w'], total:'5–9 weeks', cost:'High', costReason:'Focused AI product build on an already-solid data foundation' },
+  };
+
+  // Scenario presets
+  const PRESETS = [
+    { label:'E-commerce analytics',   c:'data',        m:'siloed',    s:'insights'            },
+    { label:'Internal AI assistant',  c:'ai-product',  m:'clean',     s:'reliable-production' },
+    { label:'Support automation',     c:'automation',  m:'siloed',    s:'save-time'           },
+    { label:'Fix AI in production',   c:'reliability', m:'clean',     s:'reliable-production' },
+    { label:'Data mess first',        c:'data',        m:'scattered', s:'insights'            },
+  ];
+
   // ─────────────────────────────────────────────────────────
   // STATE
   // ─────────────────────────────────────────────────────────
 
   const state = {
-    challenge: null,
-    maturity:  null,
-    success:   null,
-    toggles: { skipData:false, noGuardrails:false, singleAgent:false },
+    challenge:  null,
+    maturity:   null,
+    success:    null,
+    toggles:    { skipData:false, noGuardrails:false, singleAgent:false },
+    activeNode: null,
   };
+
+  // Booking form state (separate from configurator state)
+  let ebSlots = {};
+  let ebSelectedDate = '';
+  let ebSelectedTime = '';
+  let ebSelectedInterest = '';
 
   // ─────────────────────────────────────────────────────────
   // COMPUTE
@@ -503,7 +774,6 @@
 
     let lv = { ...BASE[state.challenge] };
 
-    // Maturity modifiers
     if (state.maturity === 'scattered') {
       if (lv.sources   !== 'critical') lv.sources   = promoteLevel(lv.sources);
       if (lv.ingestion !== 'critical') lv.ingestion = promoteLevel(lv.ingestion);
@@ -512,7 +782,6 @@
       if (lv.ingestion === 'active') lv.ingestion = 'secondary';
     }
 
-    // Success modifiers
     if (state.success === 'save-time') {
       if (lv.output !== 'critical') lv.output = promoteLevel(lv.output);
     } else if (state.success === 'reliable-production') {
@@ -522,7 +791,6 @@
       if (lv.output    !== 'critical') lv.output    = promoteLevel(lv.output);
     }
 
-    // Toggle overrides
     if (state.toggles.skipData) {
       lv.sources   = 'warning';
       lv.ingestion = 'warning';
@@ -540,7 +808,6 @@
   function getDescriptions(lv) {
     return Object.fromEntries(NODES.map(id => {
       let d = (DESC[id] && DESC[id][state.challenge]) || '';
-      // Apply toggle overrides (last one wins)
       ['skipData','noGuardrails','singleAgent'].forEach(t => {
         if (state.toggles[t] && TOGGLE_DESC[t] && TOGGLE_DESC[t][id]) d = TOGGLE_DESC[t][id];
       });
@@ -564,21 +831,19 @@
     NODES.forEach(id => {
       const node = document.getElementById('node-' + id);
       if (!node) return;
-      node.className = 'pipeline-node level-' + lv[id];
+      node.className = 'pipeline-node level-' + lv[id] + (state.activeNode === id ? ' node-active-dd' : '');
       const badge = node.querySelector('.node-badge');
       badge.className   = 'node-badge badge-' + lv[id];
       badge.textContent = BADGE[lv[id]] || '—';
       node.querySelector('.node-desc').textContent = desc[id] || '';
     });
 
-    // Connectors
     const pairs = [['sources','ingestion'],['ingestion','warehouse'],['warehouse','ai'],['ai','output']];
     pairs.forEach(([a, b], i) => {
       const c = document.getElementById('conn-' + i);
       if (c) c.className = 'pipe-connector conn-' + connLevel(lv[a], lv[b]);
     });
 
-    // Summary
     const key  = state.challenge + '-' + state.maturity;
     const sumEl = document.getElementById('arch-summary');
     if (state.challenge && state.maturity && SUMMARY[key]) {
@@ -586,7 +851,6 @@
       sumEl.style.display = 'block';
     }
 
-    // Disable AI-dependent toggles when AI is "future"
     const aiIsFuture = lv.ai === 'future';
     AI_ONLY_TOGGLES.forEach(t => {
       const row = document.getElementById('tr-' + t);
@@ -600,7 +864,6 @@
       }
     });
 
-    // Warning callout
     const warns = Object.entries(state.toggles)
       .filter(([,v]) => v)
       .map(([k]) => TOGGLE_WARN[k])
@@ -612,6 +875,83 @@
     } else {
       warnEl.style.display = 'none';
     }
+
+    renderTimeline();
+    renderDrilldown(state.activeNode);
+    setBookingInterest();
+  }
+
+  function renderTimeline() {
+    const block = document.getElementById('timeline-block');
+    if (!block) return;
+    if (!state.challenge || !state.maturity) { block.style.display = 'none'; return; }
+    const key = state.challenge + '-' + state.maturity;
+    const t = TIMELINE[key];
+    if (!t) { block.style.display = 'none'; return; }
+
+    const costClass = { Medium:'cost-medium', High:'cost-high', Complex:'cost-complex' }[t.cost] || 'cost-medium';
+    const phasesHtml = t.phases.map((p, i) =>
+      `<div class="phase-item"><span class="phase-dot"></span><span>${p} <span style="color:rgba(255,255,255,0.36)">(${t.weeks[i]})</span></span></div>`
+    ).join('');
+
+    block.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.8rem">
+        <div style="display:flex;align-items:center;gap:0.65rem">
+          <span style="font-size:0.52rem;font-weight:700;color:rgba(255,255,255,0.36);text-transform:uppercase;letter-spacing:0.18em">Timeline estimate</span>
+          <span style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.85)">${t.total}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+          <span class="cost-badge ${costClass}">${t.cost}</span>
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.4)">${t.costReason}</span>
+        </div>
+      </div>
+      ${phasesHtml}
+    `;
+    block.style.display = 'block';
+    const disc = document.getElementById('estimate-disclaimer');
+    if (disc) disc.style.display = 'block';
+  }
+
+  function renderDrilldown(nodeId) {
+    const panel = document.getElementById('node-drilldown');
+    if (!panel) return;
+    if (!nodeId || !state.challenge) { panel.style.display = 'none'; return; }
+
+    const d = DRILLDOWN[nodeId];
+    const m = NODE_META[nodeId];
+
+    panel.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.2rem">
+        <span style="font-size:0.76rem;font-weight:700;color:rgba(255,255,255,0.85)">${m.label} — details</span>
+        <button id="dd-close" style="font-size:0.65rem;color:rgba(255,255,255,0.4);background:none;border:none;font-family:inherit;cursor:pointer;padding:0;transition:color 0.2s" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.2)'">✕ close</button>
+      </div>
+      <div class="dd-row">
+        <div class="dd-col">
+          <p class="dd-label">Tech stack</p>
+          <p class="dd-text">${d.stack}</p>
+        </div>
+        <div class="dd-col">
+          <p class="dd-label">What breaks</p>
+          <p class="dd-text">${d.breaks}</p>
+        </div>
+        <div class="dd-col">
+          <p class="dd-label">Mouliqe handles</p>
+          <p class="dd-text">${d.mouliqe}</p>
+        </div>
+        <div class="dd-col">
+          <p class="dd-label">Client provides</p>
+          <p class="dd-text">${d.client}</p>
+        </div>
+      </div>
+    `;
+    panel.style.display = 'block';
+
+    document.getElementById('dd-close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.activeNode = null;
+      panel.style.display = 'none';
+      document.querySelectorAll('.pipeline-node').forEach(n => n.classList.remove('node-active-dd'));
+    });
   }
 
   // ─────────────────────────────────────────────────────────
@@ -625,7 +965,7 @@
     let html = '';
     NODES.forEach((id, i) => {
       const m = NODE_META[id];
-      html += `<div id="node-${id}" class="pipeline-node level-default">
+      html += `<div id="node-${id}" class="pipeline-node level-default" title="Click for details">
         <div class="node-icon">${m.icon}</div>
         <span class="node-badge badge-default">—</span>
         <h3 class="node-title">${m.label}</h3>
@@ -650,7 +990,6 @@
 
     if (q === 'challenge') {
       document.getElementById('q2-reveal').classList.add('visible');
-      // Reset downstream
       state.maturity = null; state.success = null;
       document.querySelectorAll('[data-q="maturity"],[data-q="success"]').forEach(t => t.classList.remove('selected'));
       document.getElementById('q3-reveal').classList.remove('visible');
@@ -659,19 +998,23 @@
       setTimeout(() => { if (!arch.classList.contains('visible')) arch.style.display = 'none'; }, 500);
     } else if (q === 'maturity') {
       document.getElementById('q3-reveal').classList.add('visible');
-      // Reset downstream
       state.success = null;
       document.querySelectorAll('[data-q="success"]').forEach(t => t.classList.remove('selected'));
       if (document.getElementById('architecture').classList.contains('visible')) renderDiagram();
     } else if (q === 'success') {
       const arch = document.getElementById('architecture');
       arch.style.display = 'block';
-      requestAnimationFrame(() => requestAnimationFrame(() => arch.classList.add('visible')));
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        arch.classList.add('visible');
+        document.getElementById('explore-sticky-bar').classList.add('visible');
+      }));
       renderDiagram();
     }
 
-    // Re-render if already visible and all answers present
-    if (state.challenge && state.maturity && state.success) renderDiagram();
+    if (state.challenge && state.maturity && state.success) {
+      renderDiagram();
+      updateURL();
+    }
   }
 
   function initTiles() {
@@ -687,15 +1030,16 @@
         const row = inp.closest('.toggle-row');
         row.classList.toggle('toggled', inp.checked);
         renderDiagram();
+        updateURL();
       });
     });
-    // Clicking the label row also fires toggle (label click → input change)
   }
 
   function initReset() {
     document.getElementById('reset-btn').addEventListener('click', () => {
       state.challenge = null; state.maturity = null; state.success = null;
-      state.toggles = { skipData:false, noGuardrails:false, singleAgent:false };
+      state.toggles   = { skipData:false, noGuardrails:false, singleAgent:false };
+      state.activeNode = null;
 
       document.querySelectorAll('.q-tile').forEach(t => t.classList.remove('selected'));
       document.querySelectorAll('.toggle-input').forEach(i => { i.checked = false; });
@@ -706,10 +1050,14 @@
 
       const arch = document.getElementById('architecture');
       arch.classList.remove('visible');
+      document.getElementById('explore-sticky-bar').classList.remove('visible');
       setTimeout(() => { arch.style.display = 'none'; }, 500);
 
-      document.getElementById('toggle-warning').style.display = 'none';
-      document.getElementById('arch-summary').style.display   = 'none';
+      document.getElementById('toggle-warning').style.display     = 'none';
+      document.getElementById('arch-summary').style.display       = 'none';
+      document.getElementById('timeline-block').style.display     = 'none';
+      document.getElementById('estimate-disclaimer').style.display = 'none';
+      document.getElementById('node-drilldown').style.display     = 'none';
 
       NODES.forEach(id => {
         const n = document.getElementById('node-' + id); if (!n) return;
@@ -723,7 +1071,318 @@
         if (c) c.className = 'pipe-connector conn-default';
       }
 
+      history.replaceState(null, '', window.location.pathname);
       document.getElementById('questions-section').scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  }
+
+  function initDrilldown() {
+    document.getElementById('pipeline').addEventListener('click', (e) => {
+      const node = e.target.closest('[id^="node-"]');
+      if (!node || !state.challenge) return;
+      const nodeId = node.id.replace('node-', '');
+      if (state.activeNode === nodeId) {
+        state.activeNode = null;
+        document.getElementById('node-drilldown').style.display = 'none';
+        document.querySelectorAll('.pipeline-node').forEach(n => n.classList.remove('node-active-dd'));
+      } else {
+        state.activeNode = nodeId;
+        document.querySelectorAll('.pipeline-node').forEach(n => n.classList.remove('node-active-dd'));
+        node.classList.add('node-active-dd');
+        renderDrilldown(nodeId);
+      }
+    });
+  }
+
+  function buildPresets() {
+    const row = document.getElementById('preset-row');
+    if (!row) return;
+    row.innerHTML = PRESETS.map((p, i) =>
+      `<button class="preset-pill" data-idx="${i}">${p.label}</button>`
+    ).join('');
+    row.querySelectorAll('.preset-pill').forEach(btn => {
+      btn.addEventListener('click', () => applyPreset(PRESETS[+btn.dataset.idx]));
+    });
+  }
+
+  function applyPreset(p) {
+    state.challenge  = p.c;
+    state.maturity   = p.m;
+    state.success    = p.s;
+    state.toggles    = { skipData:false, noGuardrails:false, singleAgent:false };
+    state.activeNode = null;
+
+    document.querySelectorAll('.q-tile').forEach(t => {
+      const match = (t.dataset.q === 'challenge' && t.dataset.v === p.c) ||
+                    (t.dataset.q === 'maturity'  && t.dataset.v === p.m) ||
+                    (t.dataset.q === 'success'   && t.dataset.v === p.s);
+      t.classList.toggle('selected', match);
+    });
+
+    document.querySelectorAll('.toggle-input').forEach(i => { i.checked = false; });
+    document.querySelectorAll('.toggle-row').forEach(r => { r.classList.remove('toggled','t-disabled'); });
+
+    document.getElementById('q2-reveal').classList.add('visible');
+    document.getElementById('q3-reveal').classList.add('visible');
+    document.getElementById('node-drilldown').style.display = 'none';
+    document.querySelectorAll('.pipeline-node').forEach(n => n.classList.remove('node-active-dd'));
+
+    const arch = document.getElementById('architecture');
+    arch.style.display = 'block';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      arch.classList.add('visible');
+      document.getElementById('explore-sticky-bar').classList.add('visible');
+    }));
+
+    renderDiagram();
+    updateURL();
+
+    setTimeout(() => arch.scrollIntoView({ behavior:'smooth', block:'start' }), 80);
+  }
+
+  function updateURL() {
+    if (!state.challenge) return;
+    const params = new URLSearchParams();
+    params.set('c', state.challenge);
+    if (state.maturity) params.set('m', state.maturity);
+    if (state.success)  params.set('s', state.success);
+    const t = Object.entries(state.toggles).filter(([,v]) => v).map(([k]) => k).join(',');
+    if (t) params.set('t', t);
+    history.replaceState(null, '', '?' + params.toString());
+  }
+
+  function restoreFromURL() {
+    const params  = new URLSearchParams(window.location.search);
+    const c = params.get('c'), m = params.get('m'), s = params.get('s'), t = params.get('t');
+    if (!c) return;
+
+    const validC = ['automation','reliability','data','ai-product'];
+    const validM = ['scattered','siloed','clean'];
+    const validS = ['save-time','reliable-production','insights'];
+    if (!validC.includes(c)) return;
+
+    state.challenge = c;
+    document.querySelector(`.q-tile[data-q="challenge"][data-v="${c}"]`)?.classList.add('selected');
+    document.getElementById('q2-reveal').classList.add('visible');
+
+    if (m && validM.includes(m)) {
+      state.maturity = m;
+      document.querySelector(`.q-tile[data-q="maturity"][data-v="${m}"]`)?.classList.add('selected');
+      document.getElementById('q3-reveal').classList.add('visible');
+    }
+
+    if (s && validS.includes(s)) {
+      state.success = s;
+      document.querySelector(`.q-tile[data-q="success"][data-v="${s}"]`)?.classList.add('selected');
+    }
+
+    if (t) {
+      t.split(',').forEach(key => {
+        if (Object.prototype.hasOwnProperty.call(state.toggles, key)) {
+          state.toggles[key] = true;
+          const inp = document.querySelector(`.toggle-input[data-toggle="${key}"]`);
+          if (inp) { inp.checked = true; inp.closest('.toggle-row').classList.add('toggled'); }
+        }
+      });
+    }
+
+    if (state.challenge && state.maturity && state.success) {
+      const arch = document.getElementById('architecture');
+      arch.style.display = 'block';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        arch.classList.add('visible');
+        document.getElementById('explore-sticky-bar').classList.add('visible');
+      }));
+      renderDiagram();
+    }
+  }
+
+  function initCopyLink() {
+    const btn = document.getElementById('copy-link-btn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      updateURL();
+      const url = window.location.href;
+      const reset = () => setTimeout(() => { btn.textContent = '⎘ Copy link'; }, 2000);
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => { btn.textContent = '✓ Copied'; reset(); });
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = url; ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✓ Copied'; reset();
+      }
+    });
+  }
+
+  const INTEREST_MAP = {
+    automation:   'AI Solutions & Architecture',
+    reliability:  'AI Solutions & Architecture',
+    data:         'Data Engineering & Infrastructure',
+    'ai-product': 'AI Solutions & Architecture',
+  };
+
+  function setBookingInterest() {
+    if (!state.challenge) return;
+    const trigger = document.getElementById('eb-interest-trigger');
+    if (!trigger || trigger.classList.contains('has-value')) return;
+    const value = INTEREST_MAP[state.challenge];
+    if (!value) return;
+    trigger.textContent = value;
+    trigger.classList.add('has-value');
+    ebSelectedInterest = value;
+    document.querySelectorAll('#eb-interest-select .custom-select-option').forEach(o => {
+      o.classList.toggle('selected', o.dataset.value === value);
+    });
+  }
+
+  function initBookingForm() {
+    const API = 'https://script.google.com/macros/s/AKfycbzg3YyUhQGz-DSj966ma53mP79g5-u00OIjv8WUtW4cJOTcHu387uMbKpPNpS_kMoE/exec';
+
+    function ebShowStep(n) {
+      document.querySelectorAll('.eb-booking-step').forEach(s => s.style.display = 'none');
+      const target = n === 'success' ? 'eb-step-success' : 'eb-step-' + n;
+      document.getElementById(target).style.display = 'block';
+      const stepNum = n === 'success' ? 4 : n;
+      document.querySelectorAll('#eb-step-indicator .step-item').forEach(item => {
+        const s = parseInt(item.dataset.step);
+        item.classList.toggle('active', s <= stepNum);
+        item.querySelector('.step-dot').classList.toggle('active', s <= stepNum);
+      });
+      document.getElementById('eb-conn-1-2').classList.toggle('filled', stepNum >= 2);
+      document.getElementById('eb-conn-2-3').classList.toggle('filled', stepNum >= 3);
+    }
+
+    function fmtDate(dateStr) {
+      return new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+    }
+    function fmtTime(t) {
+      const [h, m] = t.split(':').map(Number);
+      return ((h % 12) || 12) + ':' + String(m).padStart(2, '0') + (h >= 12 ? ' PM' : ' AM');
+    }
+
+    // Load availability
+    fetch(API, { redirect:'follow' })
+      .then(r => r.text())
+      .then(text => {
+        try { return JSON.parse(text); } catch (_) {
+          const match = text.match(/href="([^"]+)"/);
+          if (match) return fetch(match[1]).then(r => r.json());
+          throw new Error('parse error');
+        }
+      })
+      .then(data => {
+        if (!data.success) return;
+        ebSlots = data.slots;
+        const grid  = document.getElementById('eb-date-grid');
+        const dates = Object.keys(ebSlots);
+        if (!dates.length) {
+          grid.innerHTML = '<div style="grid-column:1/-1;padding:2rem 0;text-align:center;color:rgba(255,255,255,0.4);font-size:0.78rem">No available slots in the next 2 weeks. Please <a href="mailto:imtiaz@mouliqe.com" style="color:#4ade80">email me</a> directly.</div>';
+          return;
+        }
+        grid.innerHTML = dates.map(d => {
+          const dt    = new Date(d + 'T12:00:00');
+          const today = new Date();
+          const isToday = dt.toDateString() === today.toDateString();
+          const day   = dt.toLocaleDateString('en-US', { weekday:'short' });
+          const num   = dt.getDate();
+          const mon   = dt.toLocaleDateString('en-US', { month:'short' });
+          const count = ebSlots[d].length;
+          return `<button class="slot-btn date-btn" data-date="${d}">
+            ${isToday ? '<span class="today-badge">Today</span>' : `<span style="font-size:0.6rem;color:rgba(255,255,255,0.4);text-transform:uppercase">${day}</span>`}
+            <span style="font-size:1.1rem;font-weight:600;color:rgba(255,255,255,0.85)">${num}</span>
+            <span style="font-size:0.6rem;color:rgba(255,255,255,0.4)">${mon}</span>
+            <span style="font-size:0.5rem;color:rgba(255,255,255,0.24);margin-top:0.1rem">${count} slot${count !== 1 ? 's' : ''}</span>
+          </button>`;
+        }).join('');
+
+        grid.querySelectorAll('.date-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            ebSelectedDate = btn.dataset.date;
+            document.getElementById('eb-selected-date-label').textContent = fmtDate(ebSelectedDate);
+            const tg = document.getElementById('eb-time-grid');
+            tg.innerHTML = ebSlots[ebSelectedDate].map(t =>
+              `<button class="slot-btn time-btn" data-time="${t}">${fmtTime(t)}</button>`
+            ).join('');
+            tg.querySelectorAll('.time-btn').forEach(tb => {
+              tb.addEventListener('click', () => {
+                ebSelectedTime = tb.dataset.time;
+                document.getElementById('eb-slot-summary-text').textContent = fmtDate(ebSelectedDate) + ' at ' + fmtTime(ebSelectedTime) + ' ET — 30 min';
+                setBookingInterest();
+                ebShowStep(3);
+              });
+            });
+            ebShowStep(2);
+          });
+        });
+      })
+      .catch(() => {
+        document.getElementById('eb-date-grid').innerHTML = '<div style="grid-column:1/-1;padding:2rem 0;text-align:center;color:rgba(255,255,255,0.4);font-size:0.78rem">Could not load availability. Please <a href="mailto:imtiaz@mouliqe.com" style="color:#4ade80">email me</a> directly.</div>';
+      });
+
+    document.getElementById('eb-back-to-dates').addEventListener('click', () => ebShowStep(1));
+    document.getElementById('eb-back-to-times').addEventListener('click', () => ebShowStep(2));
+
+    // Interest dropdown
+    const sel     = document.getElementById('eb-interest-select');
+    const trigger = document.getElementById('eb-interest-trigger');
+    trigger.addEventListener('click', (e) => { e.stopPropagation(); sel.classList.toggle('open'); });
+    sel.querySelectorAll('.custom-select-option').forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        ebSelectedInterest = opt.dataset.value;
+        trigger.textContent = opt.textContent;
+        trigger.classList.add('has-value');
+        sel.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        sel.classList.remove('open');
+      });
+    });
+    document.addEventListener('click', () => sel.classList.remove('open'));
+
+    // Submit
+    document.getElementById('eb-booking-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('eb-submit-btn');
+      btn.textContent = 'Booking...';
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+
+      const payload = {
+        date:    ebSelectedDate,
+        time:    ebSelectedTime,
+        name:    document.getElementById('eb-name').value,
+        email:   document.getElementById('eb-email').value,
+        company: document.getElementById('eb-company').value,
+        interest: ebSelectedInterest,
+        message: document.getElementById('eb-message').value,
+      };
+
+      try {
+        const res  = await fetch(API, { method:'POST', redirect:'follow', body: JSON.stringify(payload) });
+        const text = await res.text();
+        let data;
+        try { data = JSON.parse(text); } catch (_) {
+          const match = text.match(/href="([^"]+)"/);
+          if (match) { const r2 = await fetch(match[1]); data = await r2.json(); }
+          else throw new Error('parse error');
+        }
+        if (data.success) {
+          document.getElementById('eb-success-detail').textContent = fmtDate(ebSelectedDate) + ' at ' + fmtTime(ebSelectedTime) + ' ET with Imtiaz Ahmed';
+          ebShowStep('success');
+        } else {
+          alert(data.error || 'Something went wrong. Please try again.');
+          btn.textContent = 'Confirm Booking';
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        }
+      } catch (_) {
+        alert('Connection error. Please try again.');
+        btn.textContent = 'Confirm Booking';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
     });
   }
 
@@ -731,9 +1390,14 @@
   // INIT
   // ─────────────────────────────────────────────────────────
   buildPipeline();
+  buildPresets();
   initTiles();
   initToggles();
   initReset();
+  initDrilldown();
+  initCopyLink();
+  initBookingForm();
+  restoreFromURL();
   </script>
 </body>
 </html>
