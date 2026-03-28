@@ -26,7 +26,25 @@ Serves on port 8000 with clean URL routing (`/about` → `about.html`).
 ### Layout Pattern
 - **Desktop**: Fixed 200px left sidebar (nav) + main content with left margin
 - **Mobile**: Sidebar becomes top bar with hamburger menu (breakpoint: 768px / Tailwind `md:`)
-- Navigation links and active state detection live in `components.js` (`NAV_LINKS` array, `isActive()` function)
+- Navigation links and active state detection live in `components.js` (`NAV_LINKS` array, `isActive()`, `isToolsActive()`)
+- The "Demo" nav item is a collapsible group (`.sidebar-group`) with child links tagged `ai` or `local`
+
+### Demo Section (`/tools/*`)
+
+Five interactive tool pages: 3 AI-powered (`data-quality`, `rag-pipeline`, `agent-workflow`) and 2 local (`kpi-dashboard`, `etl-pipeline`). All use a **70/30 layout**: 70% tool area (pipeline + context + output), 30% sticky right sidebar (explanation + CTA).
+
+**Pipeline visualization** (shared across all 5): `.tool-pipeline` with `.tool-stage` elements. Regular stages: amber when active. AI stages marked with `data-ai` attribute: purple color scheme + "AI" micro-badge via CSS `::after`. The context panel (`.tool-context`) accumulates log entries — never replaces them.
+
+**Agent Workflow Simulator** has 5 distinct agentic patterns, one per preset:
+- `fan-out` (invoices) — Planner → parallel Workers → Synthesizer
+- `router` (tickets) — Router classifies → dispatches to one Specialist (others dimmed)
+- `map-reduce` (reports) — Parallel Mappers → Reducer
+- `chain` (onboard) — Sequential agents with `.checkpoint-gate` validation gates
+- `react` (monitor) — Single agent iterating Observe→Think→Act cycles
+
+The `#agent-graph` container is fully dynamic — pattern-specific `run*()` functions build the DOM. Pattern badge shown in analysis card (color-coded per pattern).
+
+**Chart.js** (KPI dashboard): wrap `<canvas>` in `<div style="position:relative;height:180px">` — required to prevent infinite resize loop with `maintainAspectRatio:false`.
 
 ### Sidebar CTA Pattern
 Every content page has a sticky right sidebar with a `.sidebar-cta` card containing:
@@ -92,7 +110,7 @@ The desktop version is `hidden md:flex` (horizontal flow with arrows). The mobil
 **Important**: Mobile display uses `class="grid md:hidden"` — do NOT put `display:grid` in inline styles or it will override Tailwind's `md:hidden` and show on desktop.
 
 ### SEO
-All pages have OG + Twitter Card tags, canonical URLs, and descriptive `<title>` / `<meta name="description">` tags. `sitemap.xml` in the repo root lists all 14 URLs and is submitted to Google Search Console.
+All pages have OG + Twitter Card tags, canonical URLs, and descriptive `<title>` / `<meta name="description">` tags. `sitemap.xml` in the repo root lists all URLs and is submitted to Google Search Console.
 
 ## Full Documentation
 

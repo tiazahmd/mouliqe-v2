@@ -48,8 +48,8 @@ site/
 ├── process.html                        # The Mouliqe Way (6-stage process)
 ├── explore.html                        # Interactive AI architecture configurator
 ├── contact.html                        # Booking system (3-step flow)
-├── styles.css                          # All styles (v8)
-├── components.js                       # Nav/footer injection, scroll effects (v3)
+├── styles.css                          # All styles (v9)
+├── components.js                       # Nav/footer injection, scroll effects (v4)
 ├── favicon.svg                         # SVG favicon (green "M")
 ├── serve.py                            # Local dev server with clean URL routing
 ├── sitemap.xml                         # XML sitemap (submitted to Google Search Console)
@@ -64,6 +64,14 @@ site/
 │   ├── ai-memory-systems.html
 │   ├── planner-worker-synthesizer.html
 │   └── costume-change-vs-new-actor.html
+├── tools/
+│   ├── data-quality.html               # AI: Data Quality Scanner
+│   ├── rag-pipeline.html               # AI: RAG Pipeline Explorer
+│   ├── agent-workflow.html             # AI: Agent Workflow Simulator (5 agentic patterns)
+│   ├── kpi-dashboard.html              # Local: KPI Dashboard Builder
+│   └── etl-pipeline.html              # Local: ETL Pipeline Simulator
+├── worker/
+│   └── index.js                        # Cloudflare Worker script (unused — tools use simulation)
 └── .git/
 ```
 
@@ -183,11 +191,20 @@ const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/services', label: 'Services' },
   { href: '/process', label: 'Process' },
+  { label: 'Demo', children: [
+    { href: '/tools/data-quality', label: 'Data Quality', tag: 'ai' },
+    { href: '/tools/rag-pipeline', label: 'RAG Pipeline', tag: 'ai' },
+    { href: '/tools/agent-workflow', label: 'Agent Workflow', tag: 'ai' },
+    { href: '/tools/kpi-dashboard', label: 'KPI Dashboard', tag: 'local' },
+    { href: '/tools/etl-pipeline', label: 'ETL Pipeline', tag: 'local' },
+  ]},
   { href: '/explore', label: 'Explore' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
 ```
+
+The Demo group is a collapsible sidebar section (`.sidebar-group`, `.sidebar-children` with `max-height` transition). Tags render as colored badges: `.nav-tag-ai` (amber `#fbbf24`) and `.nav-tag-local` (blue `#38bdf8`). The group auto-opens when on any `/tools/*` path via `isToolsActive()`.
 
 ### Active State Logic
 
@@ -461,7 +478,134 @@ kill <PID>
 
 ---
 
+## Demo Section (Tools)
+
+Five interactive tool pages at `/tools/*`. Designed as LinkedIn-shareable demos that showcase Mouliqe's AI/data capabilities. All tools use simulated responses with realistic delays — no real API calls required.
+
+### Layout Pattern
+
+Each tool page uses a 70/30 layout:
+- **70% tool area**: pipeline visualization + dynamic context panel + output/results
+- **30% right sidebar**: explanation card + discovery call CTA
+
+### Pipeline Visualization (shared pattern)
+
+All 5 tools use the same pipeline stage component (`.tool-pipeline`, `.tool-stage`):
+- States: `pending` → `active` → `done`
+- Regular active stages: amber dot + amber label (`#fbbf24`)
+- AI-powered stages marked with `data-ai` attribute: purple dot + purple label (`#c084fc`) + "AI" micro-badge on label
+- Context panel (`.tool-context`) accumulates log entries (each stage appends, never replaces); pulses with amber animation while processing, stops when complete
+
+### AI vs Deterministic Visual Distinction
+
+In pipeline stages: `data-ai` attribute triggers CSS overrides — purple color scheme instead of amber/green for all active/done states. Each AI stage also gets an "AI" micro-badge rendered via CSS `::after` on `.tool-stage-label`.
+
+Within tool output, log entries use `→` (amber, outgoing) and `←` (green, incoming) arrows for tool calls.
+
+### Tool Pages
+
+#### Data Quality Scanner (`tools/data-quality.html`) — AI-Powered
+- 3 sample datasets: HR Employee Data, Product Inventory, Transaction Log
+- Pipeline: **Parse** → **Profile** → **Detect** (AI) → **Score** (AI) → **Report**
+- AI Detect stage: coordinator dispatches specialist detector agents (Null Detector, Format Validator, Outlier Detector, Duplicate Checker, Pattern Analyzer)
+- AI Score stage: context-aware quality scoring considering cross-column dependencies
+- Output: overall quality score, per-column scores + type + issues, expandable issue list with fix suggestions, data preview with flagged cells
+- Accepts CSV upload (max 1MB) with client-side analysis
+
+#### RAG Pipeline Explorer (`tools/rag-pipeline.html`) — AI-Powered
+- 3 sample documents: Company Policy, Product FAQ, Legal Contract
+- Pipeline: **Chunk** → **Embed** (AI) → **Search** → **Retrieve** (AI) → **Generate** (AI)
+- AI Embed: embedding model converts chunks to 8D fake vectors (seeded, deterministic)
+- AI Retrieve: re-ranking agent uses cross-encoder to refine initial vector search results
+- AI Generate: LLM synthesizes answer from retrieved chunks, streamed word-by-word (30–70ms delays)
+- Visualizations: chunk overlap regions (amber highlight), vector displays, similarity score bars (green/amber/gray), retrieved vs non-retrieved distinction
+
+#### Agent Workflow Simulator (`tools/agent-workflow.html`) — AI-Powered
+- 5 presets demonstrating 5 distinct agentic architecture patterns
+- All stages marked `data-ai` except Deliver
+- Pattern badge shown in analysis card; pattern description explains architecture choice
+
+| Preset | Pattern | Badge Color | Architecture |
+|--------|---------|-------------|--------------|
+| Process Invoices | Fan-Out / Fan-In | Purple | Planner → parallel Workers → Synthesizer |
+| Triage Tickets | Router → Specialist | Amber | Router classifies → dispatches to 1 specialist (others dimmed) |
+| Weekly Reports | Map-Reduce | Blue | Parallel Mappers collect data → Reducer aggregates |
+| Onboard Customer | Sequential Chain | Green | Agents in strict order with validation gates between steps |
+| Monitor Health | ReAct Loop | Orange | Single agent: Observe→Think→Act cycles (3 iterations) |
+
+The graph visualization area (`#agent-graph`) is fully dynamic — each pattern's `run*()` function builds its own DOM. Patterns: `runFanOut()`, `runRouter()`, `runMapReduce()`, `runChain()`, `runReAct()`.
+
+**Router pattern**: Active specialist executes, non-active specialists get `.dimmed` class (`.skip-icon` shows "—"). Router decision rendered as a `.router-decision` callout.
+
+**Chain pattern**: `.checkpoint-gate` dividers between agents; gate transitions to `.passed` state (green) after each agent completes.
+
+**ReAct pattern**: `.iteration-header` per cycle; phases use icons: 👁 Observe (blue), 💡 Think (amber), ⚡ Act (orange), ← Result (green). "next cycle" arrow between iterations.
+
+#### KPI Dashboard Builder (`tools/kpi-dashboard.html`) — Runs Locally
+- 3 sample datasets: SaaS Metrics, E-commerce, Marketing
+- Pipeline: **Parse** → **Profile** → **Classify** → **Select Charts** → **Render** (all deterministic, no `data-ai`)
+- Renders Chart.js charts (Bar, Line, Doughnut) in fixed 180px containers to prevent infinite resize loop
+- CSV upload (max 1MB); samples and upload on same row separated by a vertical divider
+
+#### ETL Pipeline Simulator (`tools/etl-pipeline.html`) — Runs Locally
+- 3 scenarios: Merge Customer Data (3 sources), Clean Sales Pipeline, Build Reporting Table
+- Pipeline: **Extract** → **Validate** → **Clean** → **Transform** → **Load** (all deterministic)
+- Live data table updates at each stage with visual cell badges: `.cell-badge.warn`, `.error`, `.fixed`, `.dup`
+- Strikethrough styling for removed rows; source color tags per data origin
+- Final quality score card with score/rows/issues metrics
+
+### New CSS Classes (styles.css)
+
+**Nav:**
+- `.sidebar-group` / `.sidebar-group.open` — collapsible nav group with `max-height` transition on `.sidebar-children`
+- `.sidebar-group-toggle` — toggle button for the group
+- `.sidebar-sublink` — indented child link
+- `.nav-tag` / `.nav-tag-ai` (amber) / `.nav-tag-local` (blue) — tool type badges
+
+**Tool pipeline:**
+- `.tool-pipeline` — horizontal flex container for stages
+- `.tool-stage` — individual stage (states: `pending`, `active`, `done`)
+- `.tool-stage[data-ai]` — purple color scheme overrides for AI stages
+- `.tool-stage-dot` / `.tool-stage-label` / `.tool-stage-connector` — stage subcomponents
+- `.tool-context` / `.tool-context.pulsing` — context log panel with amber pulse animation
+- `.tool-result-card` / `.tool-result-header` / `.tool-result-label` — result card components
+- `.tool-score.high` (green) / `.tool-score.medium` (amber) / `.tool-score.low` (red) — score badges
+
+**Agent workflow specific (inline `<style>`):**
+- `.agent-node` / `.agent-node.executing` (amber border) / `.agent-node.complete` (green border) / `.agent-node.dimmed` — agent graph nodes
+- `.tool-pill` — tool badge inside agent node
+- `.flow-arrow` / `.flow-arrow.active` / `.flow-arrow.done` — directional connectors
+- `.tool-log` / `.tool-log-line` — tool call log container; `.arrow-out` (amber) / `.arrow-in` (green)
+- `.pattern-badge.fan-out/.router/.map-reduce/.chain/.react` — per-pattern color badges
+- `.checkpoint-gate` / `.checkpoint-gate.passed` — sequential chain validation gates
+- `.iteration-header` — ReAct cycle header
+- `.router-decision` — routing dispatch callout
+
+---
+
 ## Change Log
+
+### Session: March 28, 2026 (Claude Code) — Demo section (5 tool pages)
+
+**New: Demo Section (`/tools/*`)**
+- Added collapsible "Demo" nav group in `components.js` with 5 sub-links (3 AI, 2 Local)
+- Nav tags: `.nav-tag-ai` (amber) and `.nav-tag-local` (blue) — rendered from `tag` property on NAV_LINKS children
+- All 5 tool pages built with the shared pipeline visualization pattern (see Demo Section docs above)
+- `components.js` updated to v4; `styles.css` updated to v9
+
+**New: Tool Pages**
+- `tools/data-quality.html` — AI Data Quality Scanner with multi-agent detector visualization
+- `tools/rag-pipeline.html` — RAG Pipeline Explorer with embedding/re-ranking/streaming
+- `tools/agent-workflow.html` — Agent Workflow Simulator with 5 architecture patterns (Fan-Out, Router, Map-Reduce, Sequential Chain, ReAct Loop)
+- `tools/kpi-dashboard.html` — KPI Dashboard Builder with Chart.js (runs locally)
+- `tools/etl-pipeline.html` — ETL Pipeline Simulator with live table updates (runs locally)
+
+**Cloudflare Workers Setup (partial)**
+- `worker/index.js` created for `/api/*` endpoints using Cloudflare Workers AI
+- Worker registered in Cloudflare dashboard (mouliqe-tools-api) with AI binding
+- Currently unused — all tools use simulated responses with `setTimeout` delays
+
+---
 
 ### Session: March 28, 2026 (Claude Code) — Explore page, SEO, booking fix
 
