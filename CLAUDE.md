@@ -43,8 +43,12 @@ Each post requires two things:
 
 The listing page renders from JSON; individual posts are standalone HTML files. Each post has a per-post contextual CTA headline in the sidebar (and mobile card).
 
-### Booking System (contact.html)
+### Booking System (contact.html + explore.html)
 3-step flow: date → time slot → details form. Availability is fetched live from a Google Apps Script endpoint that reads the owner's Google Calendar. The Apps Script source is in `cons/mouliqe-booking.gs`.
+
+The same booking form is also embedded at the bottom of `explore.html`. All IDs in that copy are prefixed `eb-` to avoid conflicts with the pipeline's `conn-*` IDs. The `ebSelectedInterest` variable is auto-populated from `state.challenge` via `setBookingInterest()` when the architecture reveals.
+
+**Known Apps Script fix**: `Session.getActiveUser().getEmail()` returns empty for anonymous callers — the recipient must be hardcoded as `to: 'imtiaz@mouliqe.com'`.
 
 ### Clean URL Routing
 `serve.py` maps `/page` → `page.html` and `/blog` → `blog/index.html` for local dev. Cloudflare Pages handles this natively in production.
@@ -63,6 +67,20 @@ The listing page renders from JSON; individual posts are standalone HTML files. 
 - `.card` / `.card-highlight` — Main content cards with border and hover state.
 - `.reveal` — Scroll-triggered fade-in (IntersectionObserver in `components.js`).
 
+### Explore Page (`explore.html`)
+Interactive configurator — 3 questions reveal a dynamic AI pipeline architecture. Key concepts:
+
+- **State machine**: `state = { challenge, maturity, success, toggles, activeNode }` drives everything. `computeLevels()` combines base levels + maturity/success modifiers + toggle overrides.
+- **Node levels**: `critical → active → secondary → future` (good) and `warning → at-risk` (bad). Each maps to a CSS class (`level-critical`, etc.) and badge class (`badge-critical`, etc.).
+- **Data constants**: `BASE` (base levels per challenge), `DESC` (per-node per-challenge descriptions), `SUMMARY` (per challenge×maturity), `TOGGLE_DESC`/`TOGGLE_WARN` (toggle overrides), `TIMELINE` (phase breakdown + cost tier per challenge×maturity), `DRILLDOWN` (tech stack, what breaks, responsibility split per node), `PRESETS` (5 scenario quick-starts).
+- **Sticky bar**: `#explore-sticky-bar` is `position:fixed; top:0; left:200px` (desktop) / `top:56px; left:0` (mobile). Shows when architecture reveals, hides on reset.
+- **Node drill-down**: Click any pipeline node → `#node-drilldown` panel appears below pipeline with 4 columns (tech stack, what breaks, Mouliqe handles, client provides). `state.activeNode` tracks which node is open.
+- **Share URL**: `updateURL()` encodes `?c=&m=&s=&t=` on every interaction. `restoreFromURL()` runs at init to restore state from params.
+- **Presets**: `applyPreset(p)` sets all 3 state values, updates tile selections, and triggers full render + URL update.
+- **Interest auto-fill**: `setBookingInterest()` maps `state.challenge` → interest dropdown value; skips if user already picked manually (`has-value` class check).
+
+**ID conflict note**: The explore page has pipeline connectors `conn-0` through `conn-3` AND step indicator connectors in the embedded booking form. The booking form uses `eb-conn-1-2` / `eb-conn-2-3` to avoid collision.
+
 ### Mobile "How I Work" (index.html)
 The desktop version is `hidden md:flex` (horizontal flow with arrows). The mobile version is `grid md:hidden` — a 3-column CSS grid (`1fr auto 1fr`) with a snake-flow layout:
 - Row 1: Discovery → Diagnosis (right arrow)
@@ -72,6 +90,9 @@ The desktop version is `hidden md:flex` (horizontal flow with arrows). The mobil
 - Row 3: Refine → Support (right arrow)
 
 **Important**: Mobile display uses `class="grid md:hidden"` — do NOT put `display:grid` in inline styles or it will override Tailwind's `md:hidden` and show on desktop.
+
+### SEO
+All pages have OG + Twitter Card tags, canonical URLs, and descriptive `<title>` / `<meta name="description">` tags. `sitemap.xml` in the repo root lists all 14 URLs and is submitted to Google Search Console.
 
 ## Full Documentation
 

@@ -2,7 +2,7 @@
 
 > Complete documentation of every decision, change, and architectural detail.
 > Written by Mimir (AI assistant) during build sessions with Imtiaz via Kiro CLI.
-> Last updated: March 27, 2026
+> Last updated: March 28, 2026
 
 ---
 
@@ -46,16 +46,24 @@ site/
 ├── about.html                          # About page (background, experience)
 ├── services.html                       # Services page (3 service areas)
 ├── process.html                        # The Mouliqe Way (6-stage process)
+├── explore.html                        # Interactive AI architecture configurator
 ├── contact.html                        # Booking system (3-step flow)
 ├── styles.css                          # All styles (v8)
 ├── components.js                       # Nav/footer injection, scroll effects (v3)
 ├── favicon.svg                         # SVG favicon (green "M")
 ├── serve.py                            # Local dev server with clean URL routing
+├── sitemap.xml                         # XML sitemap (submitted to Google Search Console)
 ├── blog/
 │   ├── index.html                      # Blog listing page (reads posts.json)
 │   ├── posts.json                      # Blog post metadata (drives listing)
-│   ├── costume-change-vs-new-actor.html    # Post: Costume Change vs New Actor
-│   └── planner-worker-synthesizer.html     # Post: 3-Agent Pattern
+│   ├── stop-building-ai-features.html
+│   ├── poc-to-production.html
+│   ├── data-problem-not-ai-problem.html
+│   ├── context-windows-are-a-lie.html
+│   ├── guardrails-problem.html
+│   ├── ai-memory-systems.html
+│   ├── planner-worker-synthesizer.html
+│   └── costume-change-vs-new-actor.html
 └── .git/
 ```
 
@@ -175,6 +183,7 @@ const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/services', label: 'Services' },
   { href: '/process', label: 'Process' },
+  { href: '/explore', label: 'Explore' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -291,6 +300,10 @@ Cloudflare Pages handles clean URLs natively — no config needed. It automatica
 - Alternating left/right card layout with detailed descriptions
 - Right sidebar: sticky CTA ("Every good solution starts with the right conversation.") + process tracker
 - Process tracker highlights steps on scroll
+
+### Explore (`explore.html`)
+
+Interactive AI architecture configurator — see the March 28, 2026 changelog entry for the full architectural breakdown.
 
 ### Contact (`contact.html`)
 
@@ -449,6 +462,56 @@ kill <PID>
 ---
 
 ## Change Log
+
+### Session: March 28, 2026 (Claude Code) — Explore page, SEO, booking fix
+
+**Booking System Fix**
+- `Session.getActiveUser().getEmail()` returns empty string for anonymous web app callers — replaced with hardcoded `to: 'imtiaz@mouliqe.com'` in Apps Script `doPost()`. Must redeploy as new version after any script changes.
+
+**Site-wide: SEO**
+- Added Open Graph + Twitter Card meta tags to all 14 HTML files (batch Python script)
+- Added `<link rel="canonical">` to all pages
+- Improved `<title>` on about, services, process, contact, blog/index
+- Added internal cross-links to blog post footers (two clusters: architecture series and strategy series)
+- Created `sitemap.xml` with all 14 URLs; submitted to Google Search Console
+
+**New Page: `/explore` (`explore.html`)**
+
+Interactive AI architecture configurator. Full architecture:
+
+*Configurator (3 sequential questions):*
+- Q1: challenge (`automation` / `reliability` / `data` / `ai-product`)
+- Q2: maturity (`scattered` / `siloed` / `clean`)
+- Q3: success (`save-time` / `reliable-production` / `insights`)
+- Questions reveal sequentially; architecture section hidden until Q3 answered
+
+*Pipeline diagram:*
+- 5 nodes: Sources → Ingestion → Warehouse → AI → Output
+- 7 level states: `critical`, `active`, `secondary`, `future`, `warning`, `at-risk`, `default`
+- `computeLevels()`: BASE[challenge] + maturity modifier + success modifier + toggle overrides
+- 3 toggles show degradation: "Skip data foundation" (sources/ingestion/warehouse → warning, ai/output → at-risk), "Remove guardrails" (ai → warning), "Single agent" (cosmetic on ai node)
+- Connectors color = minimum priority of the two adjacent nodes
+
+*6 additional features:*
+1. **Timeline + cost estimate** — phase breakdown with week ranges per challenge×maturity; cost badge (Medium/High/Complex) with one-line reason; disclaimer text below
+2. **Node drill-down** — click any node → panel with tech stack, what breaks, Mouliqe handles, client provides; `state.activeNode` tracks open node; re-renders on toggle change
+3. **Scenario presets** — 5 pill buttons: E-commerce analytics, Internal AI assistant, Support automation, Fix AI in production, Data mess first
+4. **Share URL** — `?c=&m=&s=&t=` params; `updateURL()` called on every answer/toggle; `restoreFromURL()` at init; "⎘ Copy link" in sticky bar
+5. **Cost tier** — Medium / High / Complex badge rendered alongside timeline
+6. **Mouliqe vs client split** — inside drill-down panel
+
+*Sticky action bar (`#explore-sticky-bar`):*
+- `position:fixed; top:0; left:200px` desktop / `top:56px; left:0` mobile
+- Shows when architecture reveals, hides on reset
+- Contains "⎘ Copy link" and "↺ Start over" — removed from mid-page divider
+
+*Embedded full booking form:*
+- Same 3-step flow as `contact.html`, embedded at page bottom in a `.card`
+- All IDs prefixed `eb-` to avoid pipeline connector ID conflicts
+- `setBookingInterest()` auto-fills interest dropdown from `state.challenge` on reveal
+- Booking state variables (`ebSlots`, `ebSelectedDate`, etc.) are separate from configurator state
+
+---
 
 ### Session: March 27–28, 2026 (Claude Code)
 
