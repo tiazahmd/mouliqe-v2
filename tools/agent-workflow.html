@@ -257,7 +257,24 @@
         </div>
 
         <!-- Mobile CTA -->
-        <div class="lg:hidden" style="margin-top:2rem">
+        <div class="lg:hidden" style="margin-top:2rem;display:flex;flex-direction:column;gap:1.25rem">
+          <div class="sidebar-card">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">What This Demonstrates</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">This simulator showcases five distinct multi-agent architecture patterns. Each preset uses a different approach to decompose and execute tasks:</p>
+            <div style="display:flex;flex-direction:column;gap:0.3rem">
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(192,132,252,0.5);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.45)">Fan-Out</strong> — parallel workers, merged result</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(251,191,36,0.5);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.45)">Router</strong> — classify, dispatch to specialist</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(56,189,248,0.5);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.45)">Map-Reduce</strong> — gather in parallel, aggregate</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.5);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.45)">Sequential Chain</strong> — ordered steps with gates</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(251,146,60,0.5);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.45)">ReAct Loop</strong> — reason-act-observe cycles</p>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,0.05);margin:1rem 0"></div>
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.5rem">Read More</p>
+            <div style="display:flex;flex-direction:column;gap:0.35rem">
+              <a href="/blog/planner-worker-synthesizer" style="font-size:0.72rem;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.3s;line-height:1.5" onmouseover="this.style.color='rgba(74,222,128,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Planner, Worker, Synthesizer pattern</a>
+              <a href="/blog/costume-change-vs-new-actor" style="font-size:0.72rem;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.3s;line-height:1.5" onmouseover="this.style.color='rgba(74,222,128,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>When to use multiple agents</a>
+            </div>
+          </div>
           <div class="sidebar-cta">
             <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Building AI agents?</p>
             <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about designing agent architectures that are reliable, cost-efficient, and production-ready.</p>

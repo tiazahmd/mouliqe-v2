@@ -180,7 +180,20 @@
         </div>
 
         <!-- Mobile sidebar -->
-        <div class="lg:hidden" style="margin-top:2rem">
+        <div class="lg:hidden" style="margin-top:2rem;display:flex;flex-direction:column;gap:1.25rem">
+          <div class="sidebar-card">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">What This Demonstrates</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">This simulator runs pre-built transformations on sample data so you can see each ETL stage in action. In production, these pipelines run continuously on live data.</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">A production data pipeline adds:</p>
+            <div style="display:flex;flex-direction:column;gap:0.3rem">
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Orchestration (Airflow, Dagster, Prefect)</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Incremental loads and CDC</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Schema evolution and versioning</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Data quality monitoring and alerts</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Lineage tracking and audit logs</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Retry logic and dead-letter queues</p>
+            </div>
+          </div>
           <div class="sidebar-cta">
             <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Messy data slowing you down?</p>
             <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about building pipelines that clean, transform, and deliver your data reliably.</p>
