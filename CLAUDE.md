@@ -19,7 +19,7 @@ Serves on port 8000 with clean URL routing (`/about` → `about.html`).
 ## Architecture
 
 ### Key Files
-- `styles.css` — all custom CSS (v8); Tailwind is loaded from CDN in each HTML file's `<head>`
+- `styles.css` — all custom CSS; Tailwind is loaded from CDN in each HTML file's `<head>`
 - `components.js` — injected into every page; handles sidebar nav, mobile menu, scroll effects, back-to-top, and progress bar
 - `blog/posts.json` — drives the blog listing page; `blog/index.html` fetches and renders it client-side
 
@@ -28,12 +28,20 @@ Serves on port 8000 with clean URL routing (`/about` → `about.html`).
 - **Mobile**: Sidebar becomes top bar with hamburger menu (breakpoint: 768px / Tailwind `md:`)
 - Navigation links and active state detection live in `components.js` (`NAV_LINKS` array, `isActive()` function)
 
+### Sidebar CTA Pattern
+Every content page has a sticky right sidebar with a `.sidebar-cta` card containing:
+1. A contextual headline + description
+2. "Book a Discovery Call" button (`/contact`)
+3. A subtle divider + "Follow on LinkedIn" link
+
+On mobile, pages where the sidebar is `hidden lg:block` (blog posts, process page) have a `lg:hidden` version of this card appended after the main content. Pages without `hidden lg:block` (about, services) naturally stack the sidebar below content on mobile.
+
 ### Blog System
 Each post requires two things:
 1. An entry in `blog/posts.json` (slug, title, date, excerpt, tags, linkedinUrl)
 2. A static HTML file at `blog/<slug>.html`
 
-The listing page renders from JSON; individual posts are standalone HTML files.
+The listing page renders from JSON; individual posts are standalone HTML files. Each post has a per-post contextual CTA headline in the sidebar (and mobile card).
 
 ### Booking System (contact.html)
 3-step flow: date → time slot → details form. Availability is fetched live from a Google Apps Script endpoint that reads the owner's Google Calendar. The Apps Script source is in `cons/mouliqe-booking.gs`.
@@ -47,6 +55,23 @@ The listing page renders from JSON; individual posts are standalone HTML files.
 - **Primary accent**: `#4ade80` (forest-400 green)
 - **Font**: Oxanium (Google Fonts, weights 300–700)
 - **Tailwind config**: Defined inline in each HTML `<head>` — custom `forest` palette (50–950 shades) and Oxanium font family override
+
+### Key CSS Classes
+- `.sidebar-cta` — Green-tinted card with top gradient line. Used for all CTAs sitewide. Contains Discovery Call button + LinkedIn link.
+- `.sidebar-card` — Same green treatment as `.sidebar-cta` (green bg, border, top gradient line). Used for the process tracker on process.html.
+- `.process-track-icon` — Icon container for the process tracker sidebar. Uses `background:#060a14` to mask the vertical timeline line behind each icon. No border/circle — just the icon itself.
+- `.card` / `.card-highlight` — Main content cards with border and hover state.
+- `.reveal` — Scroll-triggered fade-in (IntersectionObserver in `components.js`).
+
+### Mobile "How I Work" (index.html)
+The desktop version is `hidden md:flex` (horizontal flow with arrows). The mobile version is `grid md:hidden` — a 3-column CSS grid (`1fr auto 1fr`) with a snake-flow layout:
+- Row 1: Discovery → Diagnosis (right arrow)
+- Down connector on the RIGHT (Diagnosis → Blueprint)
+- Row 2: Build ← Blueprint (left arrow, reversed)
+- Down connector on the LEFT (Build → Refine)
+- Row 3: Refine → Support (right arrow)
+
+**Important**: Mobile display uses `class="grid md:hidden"` — do NOT put `display:grid` in inline styles or it will override Tailwind's `md:hidden` and show on desktop.
 
 ## Full Documentation
 

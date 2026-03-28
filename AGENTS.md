@@ -450,6 +450,40 @@ kill <PID>
 
 ## Change Log
 
+### Session: March 27–28, 2026 (Claude Code)
+
+**Process Page: Tracker Sidebar Redesign**
+- Replaced numbered circle badges (00–05) with contextual SVG icons per step: magnifying glass (Discovery), document (Diagnosis), pencil (Blueprint), code brackets (Build), sliders (Refine), shield-check (Support)
+- Added vertical timeline connecting line threading through icons via CSS `::after` on `.process-track-item`
+- Icon container (`.process-track-icon`) uses `background:#060a14` to mask the line behind icons; no border or circle
+- Active step: icon turns green (`rgba(74,222,128,0.9)`), label goes semibold/80% white, connector line lights up brighter green
+- Upgraded `.sidebar-card` to match `.sidebar-cta` treatment: green-tinted background, green border, top gradient line
+
+**Home Page: Mobile "How I Work" Redesign**
+- Replaced bare vertical list with a snake-flow 2-column grid (`grid md:hidden`, `grid-template-columns:1fr auto 1fr`)
+- Flow order: Discovery→Diagnosis (row 1, right arrow), down connector on RIGHT, Build←Blueprint (row 2, left arrow reversed), down connector on LEFT, Refine→Support (row 3, right arrow)
+- Each step is a tile (subtle bg, border, border-radius)
+- Icons match the process page tracker SVGs
+- **Key**: `display:grid` must be a Tailwind class (`grid`), NOT inline style — inline style overrides `md:hidden`
+
+**Site-wide: Merged Sidebar CTA + LinkedIn Card**
+- All `.sidebar-cta` cards now include a divider and "Follow on LinkedIn" link below the button
+- Updated on 12 files: about.html, services.html, process.html, blog/index.html, and all 8 blog posts
+- LinkedIn link uses `display:flex;justify-content:center;align-items:center;line-height:1` for correct icon/text alignment
+
+**Mobile CTA Cards for Blog Posts and Process Page**
+- Blog posts had `hidden lg:block` on their sidebar — no mobile CTA existed
+- Added `lg:hidden` card after main content on all 8 blog posts, preserving each post's contextual headline
+- Process page: replaced minimal `lg:hidden` button with full merged card
+
+**About Page: Description Copy Update**
+- Sidebar CTA description: "30-minute conversation about your business." → "30 min on Google Meet. No prep needed, no pitch — just an honest conversation."
+
+**New Files**
+- `CLAUDE.md` — Claude Code guidance file
+
+---
+
 ### Session: March 27, 2026 (Kiro CLI + Mimir)
 
 Changes made since initial commit (all relative to the initial commit):
