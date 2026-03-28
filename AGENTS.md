@@ -500,10 +500,11 @@ Interactive AI architecture configurator. Full architecture:
 5. **Cost tier** — Medium / High / Complex badge rendered alongside timeline
 6. **Mouliqe vs client split** — inside drill-down panel
 
-*Sticky action bar (`#explore-sticky-bar`):*
-- `position:fixed; top:0; left:200px` desktop / `top:56px; left:0` mobile
-- Shows when architecture reveals, hides on reset
-- Contains "⎘ Copy link" and "↺ Start over" — removed from mid-page divider
+*Inline action row (`#explore-actions`):*
+- `display:flex; justify-content:flex-end` — sits right above the Quick Start preset pills, inside the normal content width
+- Hidden (`display:none`) until architecture reveals; removed on reset
+- Contains "⎘ Copy link" (`#copy-link-btn`) and "↺ Start over" (`#reset-btn`)
+- Inline placement ensures it works identically on mobile and desktop
 
 *Embedded full booking form:*
 - Same 3-step flow as `contact.html`, embedded at page bottom in a `.card`
