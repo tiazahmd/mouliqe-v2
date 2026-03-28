@@ -251,40 +251,28 @@
     .dd-label { font-size:0.52rem; font-weight:700; color:rgba(74,222,128,0.4); text-transform:uppercase; letter-spacing:0.15em; margin-bottom:0.4rem; }
     .dd-text  { font-size:0.7rem; color:rgba(255,255,255,0.64); line-height:1.65; }
 
-    /* ── Sticky action bar ───────────────────────────────── */
-    #explore-sticky-bar {
+    /* ── Inline action row ───────────────────────────────── */
+    #explore-actions {
       display:none;
-      position:fixed; top:0; left:200px; right:0; z-index:40;
-      background:rgba(6,10,20,0.88);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
-      border-bottom:1px solid rgba(255,255,255,0.06);
-      padding:0.45rem 1.5rem;
-      align-items:center; justify-content:flex-end; gap:1rem;
+      justify-content:flex-end;
+      align-items:center;
+      gap:1rem;
+      margin-bottom:1.25rem;
     }
-    @media (max-width:767px) {
-      #explore-sticky-bar { left:0; top:56px; }
-    }
-    #explore-sticky-bar.visible { display:flex; }
+    #explore-actions.visible { display:flex; }
 
-    .sticky-bar-btn {
-      font-size:0.65rem; color:rgba(255,255,255,0.7);
+    .action-btn {
+      font-size:0.65rem; color:rgba(255,255,255,0.4);
       background:none; border:none; font-family:inherit;
       cursor:pointer; transition:color 0.2s; letter-spacing:0.05em;
       padding:0;
     }
-    .sticky-bar-btn:hover { color:rgba(255,255,255,0.85); }
+    .action-btn:hover { color:rgba(255,255,255,0.75); }
   </style>
 </head>
 <body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
   <div id="site-nav"></div>
   <div class="main-content">
-
-    <!-- Sticky action bar -->
-    <div id="explore-sticky-bar">
-      <button id="copy-link-btn" class="sticky-bar-btn" aria-label="Copy shareable link">⎘ Copy link</button>
-      <button id="reset-btn" class="sticky-bar-btn">↺ Start over</button>
-    </div>
 
     <!-- Hero -->
     <section class="pt-20 pb-10">
@@ -298,6 +286,12 @@
     <!-- Main -->
     <section class="pb-24">
       <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+        <!-- ── Actions row (shown after architecture reveals) ── -->
+        <div id="explore-actions">
+          <button id="copy-link-btn" class="action-btn" aria-label="Copy shareable link">⎘ Copy link</button>
+          <button id="reset-btn" class="action-btn">↺ Start over</button>
+        </div>
 
         <!-- ── Scenario presets ───────────────────────────── -->
         <div style="margin-bottom:0.35rem">
@@ -1006,7 +1000,7 @@
       arch.style.display = 'block';
       requestAnimationFrame(() => requestAnimationFrame(() => {
         arch.classList.add('visible');
-        document.getElementById('explore-sticky-bar').classList.add('visible');
+        document.getElementById('explore-actions').classList.add('visible');
       }));
       renderDiagram();
     }
@@ -1050,7 +1044,7 @@
 
       const arch = document.getElementById('architecture');
       arch.classList.remove('visible');
-      document.getElementById('explore-sticky-bar').classList.remove('visible');
+      document.getElementById('explore-actions').classList.remove('visible');
       setTimeout(() => { arch.style.display = 'none'; }, 500);
 
       document.getElementById('toggle-warning').style.display     = 'none';
@@ -1131,7 +1125,7 @@
     arch.style.display = 'block';
     requestAnimationFrame(() => requestAnimationFrame(() => {
       arch.classList.add('visible');
-      document.getElementById('explore-sticky-bar').classList.add('visible');
+      document.getElementById('explore-actions').classList.add('visible');
     }));
 
     renderDiagram();
@@ -1191,7 +1185,7 @@
       arch.style.display = 'block';
       requestAnimationFrame(() => requestAnimationFrame(() => {
         arch.classList.add('visible');
-        document.getElementById('explore-sticky-bar').classList.add('visible');
+        document.getElementById('explore-actions').classList.add('visible');
       }));
       renderDiagram();
     }
