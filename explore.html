@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore — What Would Mouliqe Build For You?</title>
+  <meta name="description" content="Answer three questions and see a real AI architecture mapped to your situation — with interactive toggles showing what happens when you cut corners.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="Explore — What Would Mouliqe Build For You?">
+  <meta property="og:description" content="Answer three questions and see a real AI architecture mapped to your situation — with interactive toggles showing what happens when you cut corners.">
+  <meta property="og:url" content="https://mouliqe.com/explore">
+  <link rel="canonical" href="https://mouliqe.com/explore">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Explore — What Would Mouliqe Build For You?">
+  <meta name="twitter:description" content="Answer three questions and see a real AI architecture mapped to your situation.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* ── Question tiles ─────────────────────────────────── */
+    .q-block { margin-bottom: 0; }
+    .q-label { display:flex; align-items:center; gap:0.65rem; margin-bottom:0.75rem; }
+    .q-num   { font-size:0.58rem; font-weight:700; color:rgba(74,222,128,0.4); text-transform:uppercase; letter-spacing:0.18em; }
+    .q-text  { font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.45); letter-spacing:0.02em; }
+
+    .q-tile {
+      border:1px solid rgba(255,255,255,0.07);
+      border-radius:0.5rem;
+      padding:0.85rem 1rem;
+      cursor:pointer;
+      transition:border-color 0.2s,background 0.2s;
+      background:transparent;
+      text-align:left;
+      font-family:inherit;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:0.2rem;
+    }
+    .q-tile strong { font-size:0.78rem; font-weight:600; color:rgba(255,255,255,0.5); display:block; transition:color 0.2s; }
+    .q-tile span   { font-size:0.68rem; color:rgba(255,255,255,0.2); display:block; line-height:1.5; transition:color 0.2s; }
+    .q-tile:hover  { border-color:rgba(74,222,128,0.25); background:rgba(34,197,94,0.03); }
+    .q-tile:hover strong { color:rgba(255,255,255,0.7); }
+    .q-tile:hover span   { color:rgba(255,255,255,0.35); }
+    .q-tile.selected { border-color:rgba(74,222,128,0.45); background:rgba(34,197,94,0.06); }
+    .q-tile.selected strong { color:rgba(74,222,128,0.9); }
+    .q-tile.selected span   { color:rgba(255,255,255,0.4); }
+
+    /* ── Sequential reveal ──────────────────────────────── */
+    .q-reveal {
+      opacity:0;
+      max-height:0;
+      overflow:hidden;
+      transition:opacity 0.4s ease, max-height 0.5s ease;
+      margin-top:0;
+    }
+    .q-reveal.visible {
+      opacity:1;
+      max-height:600px;
+      margin-top:1.75rem;
+    }
+
+    /* ── Pipeline ───────────────────────────────────────── */
+    .pipeline-node {
+      flex:1;
+      min-width:0;
+      border:1px solid rgba(255,255,255,0.07);
+      border-radius:0.75rem;
+      padding:1rem 1.1rem;
+      transition:border-color 0.45s ease, background 0.45s ease, opacity 0.45s ease;
+    }
+    .pipeline-node.level-critical  { border-color:rgba(74,222,128,0.5);  background:rgba(34,197,94,0.07); }
+    .pipeline-node.level-active    { border-color:rgba(74,222,128,0.22); background:rgba(34,197,94,0.03); }
+    .pipeline-node.level-secondary { border-color:rgba(74,222,128,0.1);  background:transparent; }
+    .pipeline-node.level-future    { border-color:rgba(255,255,255,0.05);background:transparent; opacity:0.4; }
+    .pipeline-node.level-warning   { border-color:rgba(239,68,68,0.4);   background:rgba(239,68,68,0.04); }
+    .pipeline-node.level-at-risk   { border-color:rgba(251,146,60,0.35); background:rgba(251,146,60,0.03); }
+    .pipeline-node.level-default   { border-color:rgba(255,255,255,0.07);background:transparent; }
+
+    .node-icon { width:1.4rem; height:1.4rem; margin-bottom:0.65rem; transition:color 0.45s; }
+    .level-critical  .node-icon { color:rgba(74,222,128,0.95); }
+    .level-active    .node-icon { color:rgba(74,222,128,0.65); }
+    .level-secondary .node-icon { color:rgba(74,222,128,0.4); }
+    .level-future    .node-icon { color:rgba(255,255,255,0.18); }
+    .level-warning   .node-icon { color:rgba(239,68,68,0.75); }
+    .level-at-risk   .node-icon { color:rgba(251,146,60,0.75); }
+    .level-default   .node-icon { color:rgba(255,255,255,0.15); }
+
+    .node-badge {
+      display:inline-block;
+      font-size:0.5rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:0.12em;
+      padding:0.15rem 0.45rem;
+      border-radius:0.25rem;
+      margin-bottom:0.5rem;
+      border:1px solid transparent;
+      transition:background 0.45s, color 0.45s, border-color 0.45s;
+    }
+    .badge-critical  { color:rgba(74,222,128,0.9);  background:rgba(34,197,94,0.1);  border-color:rgba(74,222,128,0.2); }
+    .badge-active    { color:rgba(74,222,128,0.6);  background:rgba(34,197,94,0.06); border-color:rgba(74,222,128,0.12); }
+    .badge-secondary { color:rgba(74,222,128,0.4);  background:transparent;          border-color:rgba(74,222,128,0.08); }
+    .badge-future    { color:rgba(255,255,255,0.2); background:transparent;          border-color:rgba(255,255,255,0.07); }
+    .badge-warning   { color:rgba(239,68,68,0.85);  background:rgba(239,68,68,0.07); border-color:rgba(239,68,68,0.2); }
+    .badge-at-risk   { color:rgba(251,146,60,0.85); background:rgba(251,146,60,0.06);border-color:rgba(251,146,60,0.2); }
+    .badge-default   { color:rgba(255,255,255,0.15);background:transparent;          border-color:rgba(255,255,255,0.06); }
+
+    .node-title    { font-size:0.76rem; font-weight:700; color:rgba(255,255,255,0.7); margin-bottom:0.2rem; }
+    .node-examples { font-size:0.6rem;  color:rgba(255,255,255,0.16); line-height:1.5; margin-bottom:0.55rem; }
+    .node-desc     { font-size:0.7rem;  color:rgba(255,255,255,0.35); line-height:1.65; min-height:3.2rem; transition:color 0.45s; }
+    .level-critical  .node-desc { color:rgba(255,255,255,0.55); }
+    .level-warning   .node-desc { color:rgba(239,68,68,0.65); }
+    .level-at-risk   .node-desc { color:rgba(251,146,60,0.6); }
+
+    /* ── Connectors ─────────────────────────────────────── */
+    .pipe-connector {
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; color:rgba(255,255,255,0.1);
+      transition:color 0.45s;
+      /* mobile: vertical gap */
+      padding:0.15rem 0;
+    }
+    @media (min-width:768px) {
+      .pipe-connector { width:1.75rem; padding:0; }
+      .pipe-connector .arr-down { display:none; }
+      .pipe-connector .arr-right { display:block; }
+    }
+    .pipe-connector .arr-down  { display:block; }
+    .pipe-connector .arr-right { display:none; }
+
+    .conn-critical  { color:rgba(74,222,128,0.45); }
+    .conn-active    { color:rgba(74,222,128,0.25); }
+    .conn-secondary { color:rgba(74,222,128,0.12); }
+    .conn-future    { color:rgba(255,255,255,0.08); }
+    .conn-warning   { color:rgba(239,68,68,0.35); }
+    .conn-at-risk   { color:rgba(251,146,60,0.3); }
+    .conn-default   { color:rgba(255,255,255,0.08); }
+
+    /* ── Toggles ─────────────────────────────────────────── */
+    .toggle-row {
+      display:flex; align-items:flex-start; gap:0.85rem;
+      padding:0.75rem 1rem;
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:0.5rem;
+      transition:border-color 0.2s, background 0.2s;
+      cursor:pointer;
+    }
+    .toggle-row:hover        { border-color:rgba(255,255,255,0.1); }
+    .toggle-row.toggled      { border-color:rgba(239,68,68,0.2); background:rgba(239,68,68,0.03); }
+    .toggle-row.t-disabled   { opacity:0.3; pointer-events:none; }
+
+    .toggle-input { display:none; }
+    .toggle-label {
+      width:2rem; height:1.1rem;
+      background:rgba(255,255,255,0.1);
+      border-radius:999px;
+      cursor:pointer;
+      position:relative; flex-shrink:0;
+      display:block; margin-top:0.15rem;
+      transition:background 0.2s;
+    }
+    .toggle-label::after {
+      content:''; position:absolute;
+      top:0.15rem; left:0.15rem;
+      width:0.8rem; height:0.8rem;
+      background:rgba(255,255,255,0.45);
+      border-radius:50%;
+      transition:transform 0.2s, background 0.2s;
+    }
+    .toggle-input:checked + .toggle-label              { background:rgba(239,68,68,0.5); }
+    .toggle-input:checked + .toggle-label::after       { transform:translateX(0.9rem); background:#fff; }
+
+    .toggle-title { font-size:0.76rem; font-weight:600; color:rgba(255,255,255,0.5); margin-bottom:0.15rem; }
+    .toggle-desc  { font-size:0.67rem; color:rgba(255,255,255,0.2); line-height:1.5; }
+
+    /* ── Architecture reveal ─────────────────────────────── */
+    #architecture { opacity:0; transition:opacity 0.5s ease; }
+    #architecture.visible { opacity:1; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
+  <div id="site-nav"></div>
+  <div class="main-content">
+
+    <!-- Hero -->
+    <section class="pt-20 pb-10">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 anim-fade">Explore</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-3 anim-up">What would Mouliqe build for you?</h1>
+        <p class="anim-up anim-d1" style="color:rgba(255,255,255,0.4);font-size:0.84rem;line-height:1.85;max-width:38rem">Answer three questions. Get a real architecture mapped to your situation — then explore what happens when you cut corners.</p>
+      </div>
+    </section>
+
+    <!-- Main -->
+    <section class="pb-24">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+        <!-- ── Questions ─────────────────────────────────── -->
+        <div id="questions-section" class="mb-12">
+
+          <!-- Q1 -->
+          <div class="q-block">
+            <div class="q-label">
+              <span class="q-num">01</span>
+              <span class="q-text">What's your main challenge?</span>
+            </div>
+            <div class="q-tiles grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button class="q-tile" data-q="challenge" data-v="automation">
+                <strong>Automate manual work</strong>
+                <span>Repetitive processes eating time and headcount</span>
+              </button>
+              <button class="q-tile" data-q="challenge" data-v="reliability">
+                <strong>Fix unreliable AI</strong>
+                <span>AI that works in demos but breaks in production</span>
+              </button>
+              <button class="q-tile" data-q="challenge" data-v="data">
+                <strong>Fix messy data</strong>
+                <span>Multiple systems, no single source of truth</span>
+              </button>
+              <button class="q-tile" data-q="challenge" data-v="ai-product">
+                <strong>Build an AI product</strong>
+                <span>AI-powered feature or application for users</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div id="q2-reveal" class="q-reveal">
+            <div class="q-block">
+              <div class="q-label">
+                <span class="q-num">02</span>
+                <span class="q-text">How organized is your data right now?</span>
+              </div>
+              <div class="q-tiles grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <button class="q-tile" data-q="maturity" data-v="scattered">
+                  <strong>Scattered</strong>
+                  <span>Spreadsheets, siloed systems, no clear structure</span>
+                </button>
+                <button class="q-tile" data-q="maturity" data-v="siloed">
+                  <strong>Structured but siloed</strong>
+                  <span>Clean data, fragmented across systems</span>
+                </button>
+                <button class="q-tile" data-q="maturity" data-v="clean">
+                  <strong>Pretty organized</strong>
+                  <span>Solid structure, just needs smarter use</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div id="q3-reveal" class="q-reveal">
+            <div class="q-block">
+              <div class="q-label">
+                <span class="q-num">03</span>
+                <span class="q-text">What does success look like?</span>
+              </div>
+              <div class="q-tiles grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <button class="q-tile" data-q="success" data-v="save-time">
+                  <strong>Save time</strong>
+                  <span>Automate processes, reduce manual work</span>
+                </button>
+                <button class="q-tile" data-q="success" data-v="reliable-production">
+                  <strong>Production reliability</strong>
+                  <span>AI that works consistently at scale</span>
+                </button>
+                <button class="q-tile" data-q="success" data-v="insights">
+                  <strong>Better decisions</strong>
+                  <span>Visibility and insights I can act on</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── Architecture ──────────────────────────────── -->
+        <div id="architecture" style="display:none">
+
+          <!-- Divider + reset -->
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem">
+            <div style="height:1px;flex:1;background:rgba(255,255,255,0.05)"></div>
+            <button id="reset-btn" style="font-size:0.65rem;color:rgba(255,255,255,0.18);background:none;border:none;font-family:inherit;cursor:pointer;transition:color 0.2s;letter-spacing:0.05em" onmouseover="this.style.color='rgba(255,255,255,0.45)'" onmouseout="this.style.color='rgba(255,255,255,0.18)'">↺ Start over</button>
+          </div>
+
+          <!-- Summary -->
+          <div id="arch-summary" style="display:none;background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.1);border-radius:0.6rem;padding:0.9rem 1.15rem;margin-bottom:2rem;font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.75"></div>
+
+          <!-- Pipeline -->
+          <div id="pipeline" class="flex flex-col md:flex-row md:items-stretch" style="gap:0"></div>
+
+          <!-- Toggles -->
+          <div style="margin-top:2.75rem">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.18);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:1rem">What happens if you cut corners?</p>
+            <div class="flex flex-col gap-2.5">
+
+              <label class="toggle-row" for="t-skipData">
+                <div style="flex-shrink:0;margin-top:0.1rem">
+                  <input type="checkbox" id="t-skipData" class="toggle-input" data-toggle="skipData">
+                  <label for="t-skipData" class="toggle-label" onclick="event.stopPropagation()"></label>
+                </div>
+                <div>
+                  <p class="toggle-title">Skip the data foundation</p>
+                  <p class="toggle-desc">Run AI directly on raw, unvalidated inputs</p>
+                </div>
+              </label>
+
+              <label class="toggle-row" for="t-noGuardrails" id="tr-noGuardrails">
+                <div style="flex-shrink:0;margin-top:0.1rem">
+                  <input type="checkbox" id="t-noGuardrails" class="toggle-input" data-toggle="noGuardrails">
+                  <label for="t-noGuardrails" class="toggle-label" onclick="event.stopPropagation()"></label>
+                </div>
+                <div>
+                  <p class="toggle-title">Remove AI guardrails</p>
+                  <p class="toggle-desc">No output validation, no permission classification</p>
+                </div>
+              </label>
+
+              <label class="toggle-row" for="t-singleAgent" id="tr-singleAgent">
+                <div style="flex-shrink:0;margin-top:0.1rem">
+                  <input type="checkbox" id="t-singleAgent" class="toggle-input" data-toggle="singleAgent">
+                  <label for="t-singleAgent" class="toggle-label" onclick="event.stopPropagation()"></label>
+                </div>
+                <div>
+                  <p class="toggle-title">Use a single agent</p>
+                  <p class="toggle-desc">One model handles planning, execution, and synthesis</p>
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Warning callout -->
+          <div id="toggle-warning" style="display:none;margin-top:1.25rem;background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.15);border-radius:0.6rem;padding:0.85rem 1.1rem;font-size:0.76rem;color:rgba(239,68,68,0.65);line-height:1.75"></div>
+
+          <!-- CTA -->
+          <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.05)" class="flex flex-col md:flex-row md:items-center gap-4">
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.35);line-height:1.8;max-width:34rem;flex:1">This is a starting point. Your actual situation has details that shape the architecture — timeline, budget, team, and existing systems. A discovery call takes 30 minutes and costs nothing.</p>
+            <a href="/contact" class="btn-primary" style="white-space:nowrap;flex-shrink:0;justify-content:center">Book a Discovery Call</a>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+  <script src="/components.js"></script>
+  <script>
+  // ─────────────────────────────────────────────────────────
+  // DATA
+  // ─────────────────────────────────────────────────────────
+
+  const NODES = ['sources','ingestion','warehouse','ai','output'];
+
+  const NODE_META = {
+    sources: {
+      label: 'Data Sources',
+      examples: 'Databases · APIs · Spreadsheets · Third-party tools',
+      icon: `<svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3" stroke-width="1.5"/><path stroke-width="1.5" stroke-linecap="round" d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5"/><path stroke-width="1.5" stroke-linecap="round" d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6"/></svg>`,
+    },
+    ingestion: {
+      label: 'Ingestion & Cleaning',
+      examples: 'ETL · Pipelines · Normalization · Validation',
+      icon: `<svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>`,
+    },
+    warehouse: {
+      label: 'Data Warehouse',
+      examples: 'Single source of truth · Lineage · Queryable structure',
+      icon: `<svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`,
+    },
+    ai: {
+      label: 'AI Layer',
+      examples: 'Models · Guardrails · Context · Orchestration',
+      icon: `<svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>`,
+    },
+    output: {
+      label: 'Output',
+      examples: 'Dashboards · APIs · Automation · User interfaces',
+      icon: `<svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>`,
+    },
+  };
+
+  const BADGE = { critical:'Core', active:'Needed', secondary:'Relevant', future:'Later', warning:'At Risk', 'at-risk':'Degraded', default:'—' };
+
+  // Base node levels per challenge
+  const BASE = {
+    automation:  { sources:'active',   ingestion:'critical', warehouse:'active',   ai:'active',   output:'critical' },
+    reliability: { sources:'secondary',ingestion:'secondary',warehouse:'active',   ai:'critical', output:'active'   },
+    data:        { sources:'critical', ingestion:'critical', warehouse:'critical', ai:'future',   output:'secondary'},
+    'ai-product':{ sources:'active',   ingestion:'active',   warehouse:'active',   ai:'critical', output:'critical' },
+  };
+
+  // Node descriptions per challenge
+  const DESC = {
+    sources: {
+      automation:   'The inputs to your automation. We map every existing data source — systems, APIs, manual exports — and establish reliable, monitored connections.',
+      reliability:  'Your existing inputs. For a reliability problem, source data is usually fine. The issues are downstream.',
+      data:         'The root of the problem. Multiple sources with no shared identifier, inconsistent formats, and no clear owner. This is where the audit starts.',
+      'ai-product': 'The data your product needs to function. We map what exists today, what needs to be created, and what will arrive in real time.',
+    },
+    ingestion: {
+      automation:   'The backbone of your automation. Reliable ETL pipelines that move and transform data without human intervention — and alert when something breaks.',
+      reliability:  'Likely not your core problem. But clean ingestion is a prerequisite for anything trustworthy downstream.',
+      data:         'The most critical layer for your situation. Standardizing schemas, consolidating sources, building a single definition for every metric.',
+      'ai-product': 'The pipeline feeding your AI. Data quality here directly determines output quality — garbage in, confident garbage out.',
+    },
+    warehouse: {
+      automation:   'Consolidated, queryable data that automation can rely on. The difference between automation that holds and automation that quietly drifts.',
+      reliability:  'A clean warehouse is non-negotiable for reliable AI. Without it, models pick between conflicting numbers — and you never know which one they chose.',
+      data:         'The primary deliverable for your situation. A properly structured warehouse with documented lineage, consistent schemas, and a single source of truth per metric.',
+      'ai-product': 'The knowledge base your AI draws from. Quality and structure here determine how useful and trustworthy your product actually is.',
+    },
+    ai: {
+      automation:   'AI where it genuinely makes sense — not everywhere. Classification, extraction, generation — each with validation before any action is taken.',
+      reliability:  'The core of your problem. Not just a model call — a structured multi-agent pipeline with output validation, guardrails, and context management built in from the start.',
+      data:         'The goal, but not yet. Build the data foundation first, or this layer generates confident, well-formatted wrong answers.',
+      'ai-product': 'The core of what you\'re building. Production AI requires context management, memory systems, guardrails, and validated outputs — not just a model wrapped in an API.',
+    },
+    output: {
+      automation:   'Automated reports, triggered workflows, and actions that run without human intervention. This is where the time savings and ROI show up.',
+      reliability:  'Validated, trustworthy outputs that users can actually rely on. Every guardrail upstream exists to make this layer dependable.',
+      data:         'Better reporting and cleaner answers — once the data underneath them is worth trusting.',
+      'ai-product': 'Your product\'s interface. API responses, a conversational UI, generated content, or automated decisions — built on a reliable foundation.',
+    },
+  };
+
+  // Summary per challenge × maturity
+  const SUMMARY = {
+    'automation-scattered':  'Significant data infrastructure work comes before the automation layer is viable. Scattered inputs make any automation fragile. Expect 8–12 weeks: 4–6 weeks of data foundation, then the automation layer on top.',
+    'automation-siloed':     'The data is there — it\'s just fragmented. Consolidate first, then automate. Expect 6–10 weeks total depending on the number of systems.',
+    'automation-clean':      'Clean data means you can move fast. Automation pipelines are achievable in 4–6 weeks from here, without a major infrastructure project first.',
+    'reliability-scattered': 'Messy data is likely contributing to your reliability problems. Fixing the foundation will resolve a significant portion of the unreliability you\'re seeing upstream.',
+    'reliability-siloed':    'Fragmented sources may be silently degrading AI performance. Worth auditing the data layer before investing further in the AI layer itself.',
+    'reliability-clean':     'With clean data, reliability improvements are purely architectural — guardrails, multi-agent pipelines, output validation. This is very fixable.',
+    'data-scattered':        'Start with data consolidation — not AI. You need a single source of truth before anything useful can be built on top. Typically 4–8 weeks for the foundation.',
+    'data-siloed':           'The data exists, it\'s just fragmented. Consolidation and a proper warehouse is the first milestone. AI comes after the foundation is solid.',
+    'data-clean':            'Better shape than most. A lightweight warehouse cleanup and AI layer are likely achievable without a major data overhaul first.',
+    'ai-product-scattered':  'Building a product on messy data produces a messy product. Data foundation first — then the AI layer can actually deliver on what it promises.',
+    'ai-product-siloed':     'Doable, but siloed data will create blind spots in your AI product. Worth resolving early before it becomes a product quality issue.',
+    'ai-product-clean':      'Good data foundation — the focus can go where it belongs. AI architecture, guardrails, context management, and building the product experience.',
+  };
+
+  // Toggle override descriptions per node
+  const TOGGLE_DESC = {
+    skipData: {
+      sources:   'Unvalidated, inconsistent raw inputs — no normalization, no common identifiers.',
+      ingestion: 'Skipped entirely. No schema enforcement, no cleaning, no single source of truth.',
+      warehouse: 'Non-existent. Raw data feeds the AI directly with no structure or validation.',
+      ai:        'Running on raw, inconsistent inputs. Outputs will be confident, well-formatted, and wrong.',
+      output:    'Unreliable. The AI generates answers — they just can\'t be trusted without the foundation underneath.',
+    },
+    noGuardrails: {
+      ai: 'No output validation, no permission classification, no behavioral constraints. The model interprets your request literally — including edge cases you didn\'t anticipate.',
+    },
+    singleAgent: {
+      ai: 'One model handles planning, execution, and response synthesis. Works at small scale. As context grows, signal-to-noise degrades and hallucinations gradually increase.',
+    },
+  };
+
+  // Warning messages per toggle
+  const TOGGLE_WARN = {
+    skipData:      'Without a data foundation, AI outputs are confident guesses. You won\'t know they\'re wrong until they cause a problem.',
+    noGuardrails:  'An AI without guardrails will eventually take an action you didn\'t intend. The question isn\'t if — it\'s when, and whether you\'ll catch it first.',
+    singleAgent:   'A single-agent approach works fine initially. The cracks appear gradually — missed tool calls, hallucinated results — until the system quietly stops being reliable.',
+  };
+
+  const AI_ONLY_TOGGLES = ['noGuardrails','singleAgent'];
+
+  // ─────────────────────────────────────────────────────────
+  // STATE
+  // ─────────────────────────────────────────────────────────
+
+  const state = {
+    challenge: null,
+    maturity:  null,
+    success:   null,
+    toggles: { skipData:false, noGuardrails:false, singleAgent:false },
+  };
+
+  // ─────────────────────────────────────────────────────────
+  // COMPUTE
+  // ─────────────────────────────────────────────────────────
+
+  const PRIORITY = { critical:6, active:5, secondary:4, future:3, 'at-risk':2, warning:1, default:0 };
+
+  function promoteLevel(l) {
+    const order = ['default','future','secondary','active','critical'];
+    const i = order.indexOf(l);
+    return i < order.length - 1 ? order[i + 1] : l;
+  }
+
+  function computeLevels() {
+    if (!state.challenge) return Object.fromEntries(NODES.map(n => [n,'default']));
+
+    let lv = { ...BASE[state.challenge] };
+
+    // Maturity modifiers
+    if (state.maturity === 'scattered') {
+      if (lv.sources   !== 'critical') lv.sources   = promoteLevel(lv.sources);
+      if (lv.ingestion !== 'critical') lv.ingestion = promoteLevel(lv.ingestion);
+    } else if (state.maturity === 'clean') {
+      if (lv.sources   === 'active') lv.sources   = 'secondary';
+      if (lv.ingestion === 'active') lv.ingestion = 'secondary';
+    }
+
+    // Success modifiers
+    if (state.success === 'save-time') {
+      if (lv.output !== 'critical') lv.output = promoteLevel(lv.output);
+    } else if (state.success === 'reliable-production') {
+      if (lv.ai !== 'critical' && lv.ai !== 'future') lv.ai = promoteLevel(lv.ai);
+    } else if (state.success === 'insights') {
+      if (lv.warehouse !== 'critical') lv.warehouse = promoteLevel(lv.warehouse);
+      if (lv.output    !== 'critical') lv.output    = promoteLevel(lv.output);
+    }
+
+    // Toggle overrides
+    if (state.toggles.skipData) {
+      lv.sources   = 'warning';
+      lv.ingestion = 'warning';
+      lv.warehouse = 'warning';
+      if (lv.ai     !== 'future') lv.ai     = 'at-risk';
+      if (lv.output !== 'future') lv.output = 'at-risk';
+    }
+    if (state.toggles.noGuardrails && lv.ai !== 'future' && lv.ai !== 'warning') {
+      lv.ai = 'warning';
+    }
+
+    return lv;
+  }
+
+  function getDescriptions(lv) {
+    return Object.fromEntries(NODES.map(id => {
+      let d = (DESC[id] && DESC[id][state.challenge]) || '';
+      // Apply toggle overrides (last one wins)
+      ['skipData','noGuardrails','singleAgent'].forEach(t => {
+        if (state.toggles[t] && TOGGLE_DESC[t] && TOGGLE_DESC[t][id]) d = TOGGLE_DESC[t][id];
+      });
+      return [id, d];
+    }));
+  }
+
+  function connLevel(a, b) {
+    const min = Math.min(PRIORITY[a] ?? 0, PRIORITY[b] ?? 0);
+    return Object.keys(PRIORITY).find(k => PRIORITY[k] === min) || 'default';
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // RENDER
+  // ─────────────────────────────────────────────────────────
+
+  function renderDiagram() {
+    const lv   = computeLevels();
+    const desc = getDescriptions(lv);
+
+    NODES.forEach(id => {
+      const node = document.getElementById('node-' + id);
+      if (!node) return;
+      node.className = 'pipeline-node level-' + lv[id];
+      const badge = node.querySelector('.node-badge');
+      badge.className   = 'node-badge badge-' + lv[id];
+      badge.textContent = BADGE[lv[id]] || '—';
+      node.querySelector('.node-desc').textContent = desc[id] || '';
+    });
+
+    // Connectors
+    const pairs = [['sources','ingestion'],['ingestion','warehouse'],['warehouse','ai'],['ai','output']];
+    pairs.forEach(([a, b], i) => {
+      const c = document.getElementById('conn-' + i);
+      if (c) c.className = 'pipe-connector conn-' + connLevel(lv[a], lv[b]);
+    });
+
+    // Summary
+    const key  = state.challenge + '-' + state.maturity;
+    const sumEl = document.getElementById('arch-summary');
+    if (state.challenge && state.maturity && SUMMARY[key]) {
+      sumEl.innerHTML = '<span style="font-size:0.6rem;font-weight:700;color:rgba(74,222,128,0.6);text-transform:uppercase;letter-spacing:0.12em">Recommended starting point</span><br><span style="display:block;margin-top:0.35rem">' + SUMMARY[key] + '</span>';
+      sumEl.style.display = 'block';
+    }
+
+    // Disable AI-dependent toggles when AI is "future"
+    const aiIsFuture = lv.ai === 'future';
+    AI_ONLY_TOGGLES.forEach(t => {
+      const row = document.getElementById('tr-' + t);
+      if (!row) return;
+      if (aiIsFuture) {
+        row.classList.add('t-disabled');
+        const inp = row.querySelector('.toggle-input');
+        if (inp && inp.checked) { inp.checked = false; state.toggles[t] = false; row.classList.remove('toggled'); }
+      } else {
+        row.classList.remove('t-disabled');
+      }
+    });
+
+    // Warning callout
+    const warns = Object.entries(state.toggles)
+      .filter(([,v]) => v)
+      .map(([k]) => TOGGLE_WARN[k])
+      .filter(Boolean);
+    const warnEl = document.getElementById('toggle-warning');
+    if (warns.length) {
+      warnEl.innerHTML = warns.map(w => '⚠ ' + w).join('<br><br>');
+      warnEl.style.display = 'block';
+    } else {
+      warnEl.style.display = 'none';
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // PIPELINE BUILD
+  // ─────────────────────────────────────────────────────────
+
+  function buildPipeline() {
+    const wrap = document.getElementById('pipeline');
+    const RARR = `<svg class="arr-right" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>`;
+    const DARR = `<svg class="arr-down" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>`;
+    let html = '';
+    NODES.forEach((id, i) => {
+      const m = NODE_META[id];
+      html += `<div id="node-${id}" class="pipeline-node level-default">
+        <div class="node-icon">${m.icon}</div>
+        <span class="node-badge badge-default">—</span>
+        <h3 class="node-title">${m.label}</h3>
+        <p class="node-examples">${m.examples}</p>
+        <p class="node-desc"></p>
+      </div>`;
+      if (i < NODES.length - 1) {
+        html += `<div class="pipe-connector conn-default" id="conn-${i}">${RARR}${DARR}</div>`;
+      }
+    });
+    wrap.innerHTML = html;
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // HANDLERS
+  // ─────────────────────────────────────────────────────────
+
+  function selectAnswer(q, v, tile) {
+    state[q] = v;
+    tile.closest('.q-tiles').querySelectorAll('.q-tile').forEach(t => t.classList.remove('selected'));
+    tile.classList.add('selected');
+
+    if (q === 'challenge') {
+      document.getElementById('q2-reveal').classList.add('visible');
+      // Reset downstream
+      state.maturity = null; state.success = null;
+      document.querySelectorAll('[data-q="maturity"],[data-q="success"]').forEach(t => t.classList.remove('selected'));
+      document.getElementById('q3-reveal').classList.remove('visible');
+      const arch = document.getElementById('architecture');
+      arch.classList.remove('visible');
+      setTimeout(() => { if (!arch.classList.contains('visible')) arch.style.display = 'none'; }, 500);
+    } else if (q === 'maturity') {
+      document.getElementById('q3-reveal').classList.add('visible');
+      // Reset downstream
+      state.success = null;
+      document.querySelectorAll('[data-q="success"]').forEach(t => t.classList.remove('selected'));
+      if (document.getElementById('architecture').classList.contains('visible')) renderDiagram();
+    } else if (q === 'success') {
+      const arch = document.getElementById('architecture');
+      arch.style.display = 'block';
+      requestAnimationFrame(() => requestAnimationFrame(() => arch.classList.add('visible')));
+      renderDiagram();
+    }
+
+    // Re-render if already visible and all answers present
+    if (state.challenge && state.maturity && state.success) renderDiagram();
+  }
+
+  function initTiles() {
+    document.querySelectorAll('.q-tile').forEach(tile => {
+      tile.addEventListener('click', () => selectAnswer(tile.dataset.q, tile.dataset.v, tile));
+    });
+  }
+
+  function initToggles() {
+    document.querySelectorAll('.toggle-input').forEach(inp => {
+      inp.addEventListener('change', () => {
+        state.toggles[inp.dataset.toggle] = inp.checked;
+        const row = inp.closest('.toggle-row');
+        row.classList.toggle('toggled', inp.checked);
+        renderDiagram();
+      });
+    });
+    // Clicking the label row also fires toggle (label click → input change)
+  }
+
+  function initReset() {
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      state.challenge = null; state.maturity = null; state.success = null;
+      state.toggles = { skipData:false, noGuardrails:false, singleAgent:false };
+
+      document.querySelectorAll('.q-tile').forEach(t => t.classList.remove('selected'));
+      document.querySelectorAll('.toggle-input').forEach(i => { i.checked = false; });
+      document.querySelectorAll('.toggle-row').forEach(r => { r.classList.remove('toggled','t-disabled'); });
+
+      document.getElementById('q2-reveal').classList.remove('visible');
+      document.getElementById('q3-reveal').classList.remove('visible');
+
+      const arch = document.getElementById('architecture');
+      arch.classList.remove('visible');
+      setTimeout(() => { arch.style.display = 'none'; }, 500);
+
+      document.getElementById('toggle-warning').style.display = 'none';
+      document.getElementById('arch-summary').style.display   = 'none';
+
+      NODES.forEach(id => {
+        const n = document.getElementById('node-' + id); if (!n) return;
+        n.className = 'pipeline-node level-default';
+        n.querySelector('.node-badge').className   = 'node-badge badge-default';
+        n.querySelector('.node-badge').textContent = '—';
+        n.querySelector('.node-desc').textContent  = '';
+      });
+      for (let i = 0; i < 4; i++) {
+        const c = document.getElementById('conn-' + i);
+        if (c) c.className = 'pipe-connector conn-default';
+      }
+
+      document.getElementById('questions-section').scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // INIT
+  // ─────────────────────────────────────────────────────────
+  buildPipeline();
+  initTiles();
+  initToggles();
+  initReset();
+  </script>
+</body>
+</html>
