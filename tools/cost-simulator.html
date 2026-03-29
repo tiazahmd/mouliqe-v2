@@ -414,10 +414,10 @@
           inputTok: 4000, outputTok: 800, model: 'Claude Sonnet 4.6', cacheHit: 0.35, routeFrac: 0, miniModel: null,
           arch: [
             { label: 'User Query',       sub: null,                        type: 'neutral' },
-            { label: 'Semantic Cache',   sub: '35% served from cache',     type: 'new'     },
-            { label: 'RAG Retrieval',    sub: 'Uncached queries only',     type: 'better'  },
+            { label: 'RAG Retrieval',    sub: 'Relevant chunks only',      type: 'better'  },
             { label: '4K Context',       sub: 'Relevant chunks only',      type: 'better'  },
             { label: 'Claude Sonnet 4.6',sub: '$0.016 blended/query',      type: 'better'  },
+            { label: 'Semantic Cache',   sub: '35% responses cached',      type: 'new'     },
             { label: 'Response',         sub: null,                        type: 'neutral' },
           ]
         },
@@ -428,11 +428,11 @@
           inputTok: 4000, outputTok: 800, model: 'Claude Sonnet 4.6', cacheHit: 0.35, routeFrac: 0.70, miniModel: 'Claude Haiku 4.5',
           arch: [
             { label: 'User Query',       sub: null,                        type: 'neutral' },
-            { label: 'Semantic Cache',   sub: '35% served from cache',     type: 'better'  },
             { label: 'RAG Retrieval',    sub: 'Relevant chunks only',      type: 'better'  },
             { label: 'Complexity Router',sub: '70% simple / 30% complex',  type: 'new'     },
             { label: 'Claude Haiku 4.5', sub: '70% of queries',            type: 'new'     },
             { label: 'Claude Sonnet 4.6',sub: '30% of queries',            type: 'better'  },
+            { label: 'Semantic Cache',   sub: '35% responses cached',      type: 'better'  },
             { label: 'Response',         sub: null,                        type: 'neutral' },
           ]
         },
@@ -548,11 +548,11 @@
           inputTok: 4000, outputTok: 900, model: 'Claude Sonnet 4.6', cacheHit: 0.25, routeFrac: 0.75, miniModel: 'Claude Haiku 4.5',
           arch: [
             { label: 'Task Request',      sub: null,                        type: 'neutral' },
-            { label: 'Result Cache',      sub: '25% served from cache',     type: 'new'     },
             { label: 'Template Engine',   sub: 'Compressed prompts',        type: 'better'  },
             { label: 'Task Router',       sub: '75% simple / 25% creative', type: 'better'  },
             { label: 'Claude Haiku 4.5',  sub: 'JSON out (900 tok)',        type: 'better'  },
             { label: 'Claude Sonnet 4.6', sub: 'JSON out (900 tok)',        type: 'better'  },
+            { label: 'Result Cache',      sub: '25% responses cached',      type: 'new'     },
             { label: 'Output',            sub: null,                        type: 'neutral' },
           ]
         },
