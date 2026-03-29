@@ -11,6 +11,7 @@ const NAV_LINKS = [
     { href: '/tools/agent-workflow', label: 'Agent Workflow', tag: 'ai' },
     { href: '/tools/kpi-dashboard', label: 'KPI Dashboard', tag: 'local' },
     { href: '/tools/etl-pipeline', label: 'ETL Pipeline', tag: 'local' },
+    { href: '/tools/cost-simulator', label: 'Cost Simulator', tag: 'local' },
   ]},
   { href: '/explore', label: 'Explore' },
   { href: '/blog', label: 'Blog' },

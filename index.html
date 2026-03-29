@@ -296,6 +296,16 @@
       stages: ['Extract', 'Validate', 'Clean', 'Transform', 'Load'],
       aiStages: [],
     },
+    {
+      href: '/tools/cost-simulator',
+      label: 'Cost Simulator',
+      badge: 'Runs Locally', badgeColor: 'rgba(96,165,250,0.7)', badgeBg: 'rgba(96,165,250,0.08)', badgeBorder: 'rgba(96,165,250,0.15)',
+      title: 'AI Cost Simulator',
+      desc: 'Most companies are overpaying for AI by 80–97%. Pick a scenario, set your query volume, and watch the monthly cost collapse as RAG, caching, and model routing are applied — one decision at a time.',
+      features: ['3 real-world cost scenarios', 'Live cost counter (climbs, then drops)', 'Real model pricing (GPT-4o, Haiku, etc.)', 'Annual savings calculation'],
+      stages: ['Profile', 'Baseline', 'Optimize', 'Compare', 'Recommend'],
+      aiStages: [0, 2, 4],
+    },
   ];
 
   let current = 0;
