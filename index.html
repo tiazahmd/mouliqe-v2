@@ -12,9 +12,11 @@
   <meta property="og:description" content="Mouliqe helps businesses navigate AI transformation with the right architecture, the right tooling, and honest guidance.">
   <meta property="og:url" content="https://mouliqe.com/">
   <link rel="canonical" href="https://mouliqe.com/">
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Mouliqe — AI Solutions & Data Architecture">
   <meta name="twitter:description" content="Mouliqe helps businesses navigate AI transformation with the right architecture, the right tooling, and honest guidance.">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,6 +43,10 @@
             <a href="/contact" class="btn-primary">Book a Discovery Call</a>
             <a href="/services" class="btn-secondary">Explore Services</a>
           </div>
+          <a href="/explore" class="anim-up anim-d2" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:1.5rem;font-size:0.72rem;color:rgba(74,222,128,0.5);text-decoration:none;transition:color 0.3s;letter-spacing:0.04em" onmouseover="this.style.color='rgba(74,222,128,0.85)'" onmouseout="this.style.color='rgba(74,222,128,0.5)'">
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+            See what we'd build for you &rarr;
+          </a>
         </div>
       </div>
     </section>
@@ -171,6 +177,44 @@
       </div>
     </section>
 
+    <!-- Demo Showcase -->
+    <section class="py-20 relative">
+      <div style="height:1px;background:linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent 95%);position:absolute;top:0;left:2rem;right:2rem"></div>
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <div class="mb-10 reveal">
+          <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-4">Interactive Demos</p>
+          <h2 class="text-2xl md:text-[1.75rem] font-bold text-white mb-4">See it working before you commit to anything.</h2>
+          <p class="text-white/55 max-w-lg leading-[1.85] text-[0.84rem]">Five interactive tools showing what production-grade AI and data engineering looks like — running live in your browser.</p>
+        </div>
+
+        <!-- Carousel -->
+        <div class="reveal" id="demo-carousel">
+          <!-- Tab buttons -->
+          <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem" id="demo-tabs"></div>
+
+          <!-- Card -->
+          <div style="position:relative;min-height:220px" id="demo-card-wrap">
+            <div id="demo-card" style="border-radius:0.85rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);padding:1.75rem 2rem;transition:opacity 0.35s ease,transform 0.35s ease">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <!-- Progress dots + bar -->
+          <div style="display:flex;align-items:center;gap:1rem;margin-top:1.25rem">
+            <div style="display:flex;gap:0.5rem" id="demo-dots"></div>
+            <div style="flex:1;height:2px;background:rgba(255,255,255,0.05);border-radius:1px;overflow:hidden">
+              <div id="demo-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,rgba(74,222,128,0.4),rgba(74,222,128,0.2));border-radius:1px;transition:width 0.1s linear"></div>
+            </div>
+            <a href="/tools/data-quality" id="demo-try-link" style="font-size:0.65rem;font-weight:600;color:rgba(74,222,128,0.5);text-decoration:none;white-space:nowrap;letter-spacing:0.05em;transition:color 0.3s" onmouseover="this.style.color='rgba(74,222,128,0.9)'" onmouseout="this.style.color='rgba(74,222,128,0.5)'">Try this demo &rarr;</a>
+          </div>
+        </div>
+
+        <div class="mt-8 reveal">
+          <a href="/tools/data-quality" class="btn-secondary" style="font-size:0.62rem">View All Demos &rarr;</a>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA -->
     <section class="py-20 relative">
       <div style="height:1px;background:linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent 95%);position:absolute;top:0;left:2rem;right:2rem"></div>
@@ -186,5 +230,210 @@
   </div>
 
   <script src="components.js"></script>
+  <script>
+  // ── Demo Carousel ──
+  const DEMOS = [
+    {
+      href: '/tools/data-quality',
+      label: 'Data Quality',
+      badge: 'AI-Powered', badgeColor: 'rgba(192,132,252,0.7)', badgeBg: 'rgba(192,132,252,0.08)', badgeBorder: 'rgba(192,132,252,0.15)',
+      title: 'Data Quality Scanner',
+      desc: 'Upload any CSV and watch an AI coordinator dispatch specialist detector agents — null checks, outlier detection, duplicate IDs, format validation — then score every column in seconds.',
+      features: ['Null & duplicate detection', 'Statistical outlier analysis', 'Per-column quality scores', 'Fix suggestions per issue'],
+      stages: ['Parse', 'Profile', 'Detect', 'Score', 'Report'],
+      aiStages: [2, 3],
+    },
+    {
+      href: '/tools/rag-pipeline',
+      label: 'RAG Pipeline',
+      badge: 'AI-Powered', badgeColor: 'rgba(192,132,252,0.7)', badgeBg: 'rgba(192,132,252,0.08)', badgeBorder: 'rgba(192,132,252,0.15)',
+      title: 'RAG Pipeline Explorer',
+      desc: 'See exactly how a question becomes an answer: chunking, semantic embedding, vector similarity search, AI re-ranking, and grounded answer generation — all visualised step by step.',
+      features: ['Chunk + overlap visualisation', 'Fake vector embeddings', 'Cosine similarity scores', 'Word-by-word answer streaming'],
+      stages: ['Chunk', 'Embed', 'Search', 'Retrieve', 'Generate'],
+      aiStages: [1, 3, 4],
+    },
+    {
+      href: '/tools/agent-workflow',
+      label: 'Agent Workflow',
+      badge: 'AI-Powered', badgeColor: 'rgba(192,132,252,0.7)', badgeBg: 'rgba(192,132,252,0.08)', badgeBorder: 'rgba(192,132,252,0.15)',
+      title: 'Agent Workflow Simulator',
+      desc: 'Five business tasks, five different agentic architectures. Watch Fan-Out, Router, Map-Reduce, Sequential Chain, and ReAct Loop patterns execute in real time with live tool call logs.',
+      features: ['5 architecture patterns', 'Live agent tool call logs', 'Pattern badges + descriptions', 'Validation gates & loop cycles'],
+      stages: ['Analyze', 'Plan', 'Execute', 'Synthesize', 'Deliver'],
+      aiStages: [0, 1, 2, 3],
+    },
+    {
+      href: '/tools/kpi-dashboard',
+      label: 'KPI Dashboard',
+      badge: 'Runs Locally', badgeColor: 'rgba(96,165,250,0.7)', badgeBg: 'rgba(96,165,250,0.08)', badgeBorder: 'rgba(96,165,250,0.15)',
+      title: 'KPI Dashboard Builder',
+      desc: 'Drop in a CSV or pick a sample dataset and watch the pipeline classify columns, select the right chart types, and render an interactive dashboard — entirely in your browser.',
+      features: ['Auto chart-type selection', 'SaaS, e-commerce & marketing samples', 'CSV upload (runs locally)', 'Bar, line & doughnut charts'],
+      stages: ['Parse', 'Profile', 'Classify', 'Select Charts', 'Render'],
+      aiStages: [],
+    },
+    {
+      href: '/tools/etl-pipeline',
+      label: 'ETL Pipeline',
+      badge: 'Runs Locally', badgeColor: 'rgba(96,165,250,0.7)', badgeBg: 'rgba(96,165,250,0.08)', badgeBorder: 'rgba(96,165,250,0.15)',
+      title: 'ETL Pipeline Simulator',
+      desc: 'Watch a live data table transform stage by stage: extraction from multiple sources, validation flagging, cleaning, transformation, and load — with per-row change tracking.',
+      features: ['3 real-world ETL scenarios', 'Live row-level change tracking', 'Flagged / fixed / removed badges', 'Final quality score card'],
+      stages: ['Extract', 'Validate', 'Clean', 'Transform', 'Load'],
+      aiStages: [],
+    },
+  ];
+
+  let current = 0;
+  let timer = null;
+  let progress = 0;
+  let progressTimer = null;
+  const DURATION = 5000;
+  const TICK = 80;
+
+  function renderCard(idx, direction) {
+    const d = DEMOS[idx];
+    const card = document.getElementById('demo-card');
+    const tryLink = document.getElementById('demo-try-link');
+    if (tryLink) tryLink.href = d.href;
+
+    // Fade out
+    card.style.opacity = '0';
+    card.style.transform = direction === 1 ? 'translateX(12px)' : 'translateX(-12px)';
+
+    setTimeout(() => {
+      // Build stages pills
+      const stagePills = d.stages.map((s, i) => {
+        const isAI = d.aiStages.includes(i);
+        const color = isAI ? 'rgba(192,132,252,0.6)' : 'rgba(74,222,128,0.4)';
+        const bg = isAI ? 'rgba(192,132,252,0.07)' : 'rgba(74,222,128,0.05)';
+        const border = isAI ? 'rgba(192,132,252,0.15)' : 'rgba(74,222,128,0.1)';
+        return `<span style="font-size:0.55rem;font-weight:600;padding:0.18rem 0.5rem;border-radius:9rem;border:1px solid ${border};background:${bg};color:${color};letter-spacing:0.04em">${s}</span>`;
+      }).join('<span style="color:rgba(255,255,255,0.1);font-size:0.6rem;margin:0 0.1rem">›</span>');
+
+      // Build feature bullets
+      const bullets = d.features.map(f =>
+        `<p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin:0;line-height:1.6"><span style="color:rgba(74,222,128,0.4);margin-right:0.35rem">›</span>${f}</p>`
+      ).join('');
+
+      card.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:1.1rem">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:0.75rem">
+            <div>
+              <span style="font-size:0.48rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:0.15rem 0.45rem;border-radius:0.25rem;color:${d.badgeColor};background:${d.badgeBg};border:1px solid ${d.badgeBorder}">${d.badge}</span>
+              <h3 style="font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.85);margin:0.4rem 0 0">${d.title}</h3>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.3rem;flex-wrap:wrap;padding-top:0.15rem">${stagePills}</div>
+          </div>
+          <p style="font-size:0.78rem;color:rgba(255,255,255,0.45);line-height:1.75;margin:0;max-width:54rem">${d.desc}</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.2rem 1.5rem">${bullets}</div>
+        </div>
+      `;
+
+      card.style.transform = 'translateX(0)';
+      card.style.opacity = '1';
+    }, 180);
+
+    // Update dots
+    document.querySelectorAll('.demo-dot').forEach((dot, i) => {
+      dot.style.background = i === idx ? 'rgba(74,222,128,0.6)' : 'rgba(255,255,255,0.12)';
+      dot.style.width = i === idx ? '1.5rem' : '0.4rem';
+    });
+  }
+
+  function goTo(idx, direction) {
+    current = (idx + DEMOS.length) % DEMOS.length;
+    renderCard(current, direction);
+    resetProgress();
+  }
+
+  function resetProgress() {
+    clearInterval(progressTimer);
+    progress = 0;
+    updateBar();
+    progressTimer = setInterval(() => {
+      progress += (TICK / DURATION) * 100;
+      if (progress >= 100) {
+        progress = 0;
+        goTo(current + 1, 1);
+      }
+      updateBar();
+    }, TICK);
+  }
+
+  function updateBar() {
+    const bar = document.getElementById('demo-progress-bar');
+    if (bar) bar.style.width = progress + '%';
+  }
+
+  function initCarousel() {
+    const tabsEl = document.getElementById('demo-tabs');
+    const dotsEl = document.getElementById('demo-dots');
+    if (!tabsEl || !dotsEl) return;
+
+    DEMOS.forEach((d, i) => {
+      // Tab button
+      const btn = document.createElement('button');
+      btn.textContent = d.label;
+      btn.style.cssText = 'font-family:inherit;font-size:0.62rem;font-weight:600;padding:0.3rem 0.75rem;border-radius:9rem;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);color:rgba(255,255,255,0.35);cursor:pointer;transition:all 0.25s;letter-spacing:0.03em';
+      btn.id = `demo-tab-${i}`;
+      btn.addEventListener('click', () => goTo(i, i > current ? 1 : -1));
+      btn.addEventListener('mouseenter', () => {
+        if (i !== current) btn.style.borderColor = 'rgba(255,255,255,0.15)';
+        btn.style.color = 'rgba(255,255,255,0.6)';
+      });
+      btn.addEventListener('mouseleave', () => {
+        if (i !== current) { btn.style.borderColor = 'rgba(255,255,255,0.07)'; btn.style.color = 'rgba(255,255,255,0.35)'; }
+      });
+      tabsEl.appendChild(btn);
+
+      // Dot
+      const dot = document.createElement('div');
+      dot.className = 'demo-dot';
+      dot.style.cssText = 'height:0.4rem;border-radius:9rem;background:rgba(255,255,255,0.12);cursor:pointer;transition:all 0.3s';
+      dot.style.width = i === 0 ? '1.5rem' : '0.4rem';
+      dot.addEventListener('click', () => goTo(i, i > current ? 1 : -1));
+      dotsEl.appendChild(dot);
+    });
+
+    // Pause on hover
+    const wrap = document.getElementById('demo-card-wrap');
+    if (wrap) {
+      wrap.addEventListener('mouseenter', () => clearInterval(progressTimer));
+      wrap.addEventListener('mouseleave', () => resetProgress());
+    }
+
+    renderCard(0, 1);
+    resetProgress();
+  }
+
+  // Watch for tabs being highlighted (sync with active tab styling)
+  const _origGoTo = goTo;
+  function updateTabs() {
+    DEMOS.forEach((_, i) => {
+      const btn = document.getElementById(`demo-tab-${i}`);
+      if (!btn) return;
+      if (i === current) {
+        btn.style.borderColor = 'rgba(74,222,128,0.3)';
+        btn.style.background = 'rgba(74,222,128,0.05)';
+        btn.style.color = 'rgba(74,222,128,0.7)';
+      } else {
+        btn.style.borderColor = 'rgba(255,255,255,0.07)';
+        btn.style.background = 'rgba(255,255,255,0.02)';
+        btn.style.color = 'rgba(255,255,255,0.35)';
+      }
+    });
+  }
+
+  // Patch renderCard to also update tabs
+  const _origRenderCard = renderCard;
+  window.addEventListener('DOMContentLoaded', () => {
+    initCarousel();
+    // Override to sync tabs on each render
+    const origGoTo = goTo;
+    setInterval(updateTabs, 50);
+  });
+  </script>
 </body>
 </html>

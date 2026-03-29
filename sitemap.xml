@@ -23,7 +23,39 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://mouliqe.com/explore</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://mouliqe.com/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Demo tools -->
+  <url>
+    <loc>https://mouliqe.com/tools/data-quality</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://mouliqe.com/tools/rag-pipeline</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://mouliqe.com/tools/agent-workflow</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://mouliqe.com/tools/kpi-dashboard</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://mouliqe.com/tools/etl-pipeline</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
