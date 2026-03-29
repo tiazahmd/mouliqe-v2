@@ -61,7 +61,8 @@ body { background: #060a14; }
 .sidebar-sublink.active { color: rgba(255,255,255,0.65) !important; }
 .nav-tag {
   font-size: 0.42rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
-  padding: 0.06rem 0.25rem; border-radius: 0.15rem; margin-left: auto; flex-shrink: 0;
+  padding: 0.12rem 0.25rem 0.04rem; border-radius: 0.15rem; margin-left: auto; flex-shrink: 0;
+  line-height: 1;
 }
 .nav-tag-ai { color: rgba(251,191,36,0.8); background: rgba(251,191,36,0.1); }
 .nav-tag-local { color: rgba(96,165,250,0.5); background: rgba(96,165,250,0.06); }
@@ -410,7 +411,7 @@ textarea.form-input { resize: none; }
 .tool-stage[data-ai] .tool-stage-label::after {
   content: 'AI';
   font-size: 0.4rem; font-weight: 700; letter-spacing: 0.04em;
-  margin-left: 0.3rem; padding: 0.04rem 0.2rem; border-radius: 0.12rem; vertical-align: middle;
+  margin-left: 0.3rem; padding: 0.08rem 0.2rem 0.04rem; border-radius: 0.12rem; vertical-align: baseline;
   color: rgba(192,132,252,0.6); background: rgba(192,132,252,0.08);
 }
 .tool-stage.active[data-ai] .tool-stage-dot { background: #c084fc; box-shadow: 0 0 8px rgba(192,132,252,0.4); }
@@ -459,8 +460,8 @@ textarea.form-input { resize: none; }
   letter-spacing: 0.1em; color: rgba(255,255,255,0.3);
 }
 .tool-score {
-  font-size: 0.75rem; font-weight: 700; padding: 0.15rem 0.5rem;
-  border-radius: 0.25rem;
+  font-size: 0.75rem; font-weight: 700; padding: 0.22rem 0.5rem 0.1rem;
+  border-radius: 0.25rem; line-height: 1;
 }
 .tool-score.high { color: #4ade80; background: rgba(34,197,94,0.08); }
 .tool-score.medium { color: #fbbf24; background: rgba(251,191,36,0.08); }

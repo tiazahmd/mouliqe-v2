@@ -70,8 +70,8 @@
         grid.innerHTML = posts.map((p, i) => {
           const d = new Date(p.date + 'T12:00:00');
           const dateStr = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-          const tags = p.tags.map(t => `<span style="font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.5);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);padding:0.15rem 0.45rem;border-radius:0.25rem">${t}</span>`).join('');
-          return `<a href="/blog/${p.slug}" class="card group" style="text-decoration:none;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.04);border-radius:0;padding:1.5rem 0">
+          const tags = p.tags.map(t => `<span style="font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(74,222,128,0.5);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.1);padding:0.25rem 0.45rem 0.1rem;border-radius:0.25rem;line-height:1">${t}</span>`).join('');
+          return `<a href="/blog/${p.slug}" class="group" style="display:block;text-decoration:none;background:transparent;border-bottom:1px solid rgba(255,255,255,0.04);border-radius:0.5rem;padding:1.5rem 1rem;transition:background 0.3s,border-color 0.3s" onmouseover="this.style.background='rgba(255,255,255,0.02)';this.style.borderColor='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(255,255,255,0.04)'">
             <div class="flex items-center gap-3 mb-3">${tags}</div>
             <h2 style="font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:0.5rem;transition:color 0.3s">${p.title}</h2>
             <p style="color:rgba(255,255,255,0.40);font-size:0.78rem;line-height:1.75;margin-bottom:0.75rem">${p.excerpt}</p>

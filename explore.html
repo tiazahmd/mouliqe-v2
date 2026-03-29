@@ -98,11 +98,12 @@
       display:inline-block;
       font-size:0.5rem; font-weight:700;
       text-transform:uppercase; letter-spacing:0.12em;
-      padding:0.15rem 0.45rem;
+      padding:0.26rem 0.45rem 0.09rem;
       border-radius:0.25rem;
       margin-bottom:0.5rem;
       border:1px solid transparent;
       transition:background 0.45s, color 0.45s, border-color 0.45s;
+      line-height:1;
     }
     .badge-critical  { color:rgba(74,222,128,0.9);  background:rgba(34,197,94,0.1);  border-color:rgba(74,222,128,0.2); }
     .badge-active    { color:rgba(74,222,128,0.6);  background:rgba(34,197,94,0.06); border-color:rgba(74,222,128,0.12); }
@@ -200,10 +201,10 @@
       background:rgba(255,255,255,0.03);
       border:1px solid rgba(255,255,255,0.07);
       border-radius:999px;
-      padding:0.28rem 0.75rem;
+      padding:0.34rem 0.75rem 0.22rem;
       cursor:pointer; font-family:inherit;
       transition:color 0.2s, border-color 0.2s, background 0.2s;
-      white-space:nowrap;
+      white-space:nowrap; line-height:1;
     }
     .preset-pill:hover { color:rgba(74,222,128,0.8); border-color:rgba(74,222,128,0.2); background:rgba(34,197,94,0.04); }
 
@@ -227,12 +228,13 @@
       border-radius:50%; flex-shrink:0; margin-top:0.35rem;
     }
     .cost-badge {
-      display:inline-flex; align-items:center;
+      display:inline-block;
       font-size:0.5rem; font-weight:700;
       text-transform:uppercase; letter-spacing:0.12em;
-      padding:0.15rem 0.5rem;
+      padding:0.26rem 0.5rem 0.09rem;
       border-radius:0.25rem;
       border:1px solid transparent;
+      line-height:1;
     }
     .cost-medium  { color:rgba(74,222,128,0.8);  background:rgba(34,197,94,0.08);  border-color:rgba(74,222,128,0.15); }
     .cost-high    { color:rgba(251,146,60,0.85); background:rgba(251,146,60,0.07); border-color:rgba(251,146,60,0.18); }
@@ -256,20 +258,8 @@
     /* ── Inline action row ───────────────────────────────── */
     #explore-actions {
       display:none;
-      justify-content:flex-end;
-      align-items:center;
-      gap:1rem;
-      margin-bottom:1.25rem;
     }
-    #explore-actions.visible { display:flex; }
-
-    .action-btn {
-      font-size:0.65rem; color:rgba(255,255,255,0.4);
-      background:none; border:none; font-family:inherit;
-      cursor:pointer; transition:color 0.2s; letter-spacing:0.05em;
-      padding:0;
-    }
-    .action-btn:hover { color:rgba(255,255,255,0.75); }
+    #explore-actions.visible { display:block; }
   </style>
 </head>
 <body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
@@ -288,12 +278,6 @@
     <!-- Main -->
     <section class="pb-24">
       <div class="max-w-6xl mx-auto px-6 md:px-10">
-
-        <!-- ── Actions row (shown after architecture reveals) ── -->
-        <div id="explore-actions">
-          <button id="copy-link-btn" class="action-btn" aria-label="Copy shareable link">⎘ Copy link</button>
-          <button id="reset-btn" class="action-btn">↺ Start over</button>
-        </div>
 
         <!-- ── Scenario presets ───────────────────────────── -->
         <div style="margin-bottom:0.35rem">
@@ -397,6 +381,16 @@
 
           <!-- Node drill-down panel -->
           <div id="node-drilldown"></div>
+
+          <!-- Actions row -->
+          <div id="explore-actions" style="margin-top:2rem">
+            <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);margin-bottom:1.25rem"></div>
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:0.75rem">
+              <button id="copy-link-btn" style="font-size:0.62rem;font-weight:600;color:rgba(74,222,128,0.6);background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);border-radius:0.35rem;padding:0.4rem 0.85rem;cursor:pointer;font-family:inherit;transition:all 0.2s;letter-spacing:0.05em" onmouseover="this.style.background='rgba(34,197,94,0.1)';this.style.borderColor='rgba(34,197,94,0.3)'" onmouseout="this.style.background='rgba(34,197,94,0.05)';this.style.borderColor='rgba(34,197,94,0.15)'" aria-label="Copy shareable link">Copy link</button>
+              <button id="reset-btn" style="font-size:0.62rem;font-weight:600;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:0.35rem;padding:0.4rem 0.85rem;cursor:pointer;font-family:inherit;transition:all 0.2s;letter-spacing:0.05em" onmouseover="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.02)';this.style.borderColor='rgba(255,255,255,0.08)'">Start over</button>
+            </div>
+            <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);margin-top:1.25rem"></div>
+          </div>
 
           <!-- Toggles -->
           <div style="margin-top:2.75rem">
@@ -1199,15 +1193,15 @@
     btn.addEventListener('click', () => {
       updateURL();
       const url = window.location.href;
-      const reset = () => setTimeout(() => { btn.textContent = '⎘ Copy link'; }, 2000);
+      const reset = () => setTimeout(() => { btn.textContent = 'Copy link'; }, 2000);
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(() => { btn.textContent = '✓ Copied'; reset(); });
+        navigator.clipboard.writeText(url).then(() => { btn.textContent = 'Copied!'; reset(); });
       } else {
         const ta = document.createElement('textarea');
         ta.value = url; ta.style.cssText = 'position:fixed;opacity:0';
         document.body.appendChild(ta); ta.select(); document.execCommand('copy');
         document.body.removeChild(ta);
-        btn.textContent = '✓ Copied'; reset();
+        btn.textContent = 'Copied!'; reset();
       }
     });
   }
