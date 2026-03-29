@@ -251,7 +251,7 @@
                   <div id="cost-meter-meta" style="text-align:right"></div>
                 </div>
                 <!-- Architecture flow using standard pipeline dots -->
-                <div id="arch-pipeline" class="tool-pipeline" style="flex-wrap:wrap;gap:0.35rem 0"></div>
+                <div id="arch-pipeline" class="tool-pipeline" style="flex-wrap:wrap;gap:0.35rem 0;overflow-x:auto;"></div>
                 <p class="pricing-note">Pricing based on published Anthropic rates as of March 2026: Claude Sonnet 4.6 $3.00/1M input · $15.00/1M output &nbsp;·&nbsp; Claude Haiku 4.5 $0.80/1M input · $4.00/1M output.</p>
               </div>
 
@@ -647,6 +647,7 @@
       if (i > 0) {
         const conn = document.createElement('div');
         conn.className = 'tool-stage-connector done';
+        conn.style.cssText = 'flex:0 0 0.6rem;min-width:0.6rem;';
         pipeline.appendChild(conn);
       }
       const stage = document.createElement('div');
@@ -734,6 +735,7 @@
     }, resolve));
 
     await delay(800);
+    document.getElementById('run-opt-btn').disabled = false;
     document.getElementById('phase2-cta').style.display = 'block';
     document.getElementById('phase2-cta').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -903,6 +905,7 @@
 
       document.getElementById('slider-section').style.display = 'block';
       document.getElementById('run-baseline-btn').disabled = false;
+      document.getElementById('run-opt-btn').disabled = false;
       phase = 0;
 
       // Reset output
