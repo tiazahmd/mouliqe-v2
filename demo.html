@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Demos — AI, Data & Analytics Tools | Mouliqe</title>
+  <meta name="description" content="Try interactive demos of AI-powered and local data tools — data quality scanning, RAG pipelines, agent workflows, KPI dashboards, ETL simulators, and AI cost optimization.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="Interactive Demos — AI, Data & Analytics Tools | Mouliqe">
+  <meta property="og:description" content="Try interactive demos of AI-powered and local data tools — data quality scanning, RAG pipelines, agent workflows, KPI dashboards, ETL simulators, and AI cost optimization.">
+  <meta property="og:url" content="https://mouliqe.com/demo">
+  <link rel="canonical" href="https://mouliqe.com/demo">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Interactive Demos — AI, Data & Analytics Tools | Mouliqe">
+  <meta name="twitter:description" content="Try interactive demos of AI-powered and local data tools.">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
+  <div id="site-nav"></div>
+  <div class="main-content">
+
+    <section class="pt-20 pb-10">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 anim-fade">Interactive Demos</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-3 anim-up">See the work in action.</h1>
+        <p class="anim-up anim-d1" style="color:rgba(255,255,255,0.55);line-height:1.85;font-size:0.84rem;max-width:38rem">Each tool runs entirely in your browser — no data leaves your machine. Pick one and watch the pipeline execute step by step.</p>
+      </div>
+    </section>
+
+    <section class="pb-20">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+        <!-- AI-Powered -->
+        <div class="mb-12">
+          <div class="flex items-center gap-3 mb-5 reveal">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(192,132,252,0.5);text-transform:uppercase;letter-spacing:0.18em">AI-Powered</p>
+            <div style="flex:1;height:1px;background:rgba(192,132,252,0.08)"></div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="ai-demos"></div>
+        </div>
+
+        <!-- Runs Locally -->
+        <div>
+          <div class="flex items-center gap-3 mb-5 reveal">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(96,165,250,0.5);text-transform:uppercase;letter-spacing:0.18em">Runs Locally</p>
+            <div style="flex:1;height:1px;background:rgba(96,165,250,0.08)"></div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="local-demos"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+  <script src="/components.js"></script>
+  <script>
+  const DEMOS = [
+    {
+      href: '/tools/data-quality', type: 'ai',
+      title: 'Data Quality Scanner',
+      desc: 'Upload a CSV or pick a sample dataset. AI detects inconsistent formats, outliers, nulls, and duplicates — then scores every column.',
+      stages: ['Parse', 'Profile', 'Detect', 'Score', 'Report'],
+      aiStages: [2, 3],
+    },
+    {
+      href: '/tools/rag-pipeline', type: 'ai',
+      title: 'RAG Pipeline Explorer',
+      desc: 'Pick a document, ask a question, and watch every stage of a Retrieval-Augmented Generation pipeline — from chunking to answer generation.',
+      stages: ['Chunk', 'Embed', 'Search', 'Retrieve', 'Generate'],
+      aiStages: [1, 3, 4],
+    },
+    {
+      href: '/tools/agent-workflow', type: 'ai',
+      title: 'Agent Workflow Simulator',
+      desc: 'Pick a business task and watch multi-agent AI systems use Fan-Out, Router, Map-Reduce, Chain, and ReAct patterns to execute work.',
+      stages: ['Analyze', 'Plan', 'Execute', 'Synthesize', 'Deliver'],
+      aiStages: [0, 1, 2, 3],
+    },
+    {
+      href: '/tools/kpi-dashboard', type: 'local',
+      title: 'KPI Dashboard Builder',
+      desc: 'Upload a CSV or pick a sample. Column types are detected, metrics classified, and an interactive Chart.js dashboard is built automatically.',
+      stages: ['Parse', 'Profile', 'Classify', 'Charts', 'Render'],
+      aiStages: [],
+    },
+    {
+      href: '/tools/etl-pipeline', type: 'local',
+      title: 'ETL Pipeline Simulator',
+      desc: 'Watch messy data get extracted, validated, cleaned, transformed, and loaded — with per-row change tracking and a final quality score.',
+      stages: ['Extract', 'Validate', 'Clean', 'Transform', 'Load'],
+      aiStages: [],
+    },
+    {
+      href: '/tools/cost-simulator', type: 'local',
+      title: 'AI Cost Simulator',
+      desc: 'Most teams overpay for AI by 80-97%. Pick a scenario, set your volume, and watch the cost collapse as RAG, caching, and routing are applied.',
+      stages: ['Profile', 'Baseline', 'Optimize', 'Compare', 'Recommend'],
+      aiStages: [0, 2, 4],
+    },
+  ];
+
+  function renderDemos() {
+    const aiGrid = document.getElementById('ai-demos');
+    const localGrid = document.getElementById('local-demos');
+
+    DEMOS.forEach(d => {
+      const isAI = d.type === 'ai';
+      const accentColor = isAI ? 'rgba(192,132,252' : 'rgba(96,165,250';
+
+      const stages = d.stages.map((s, i) => {
+        const stageIsAI = d.aiStages.includes(i);
+        const c = stageIsAI ? 'rgba(192,132,252,0.5)' : 'rgba(74,222,128,0.35)';
+        const bg = stageIsAI ? 'rgba(192,132,252,0.05)' : 'rgba(74,222,128,0.03)';
+        const bd = stageIsAI ? 'rgba(192,132,252,0.12)' : 'rgba(74,222,128,0.08)';
+        return `<span style="font-size:0.5rem;font-weight:600;padding:0.18rem 0.4rem 0.08rem;border-radius:9rem;border:1px solid ${bd};background:${bg};color:${c};letter-spacing:0.04em;line-height:1">${s}</span>`;
+      }).join('<span style="color:rgba(255,255,255,0.08);font-size:0.5rem">›</span>');
+
+      const card = document.createElement('a');
+      card.href = d.href;
+      card.className = 'card group reveal';
+      card.style.cssText = 'text-decoration:none;display:flex;flex-direction:column;gap:0.85rem;transition:all 0.4s';
+      card.innerHTML = `
+        <div style="display:flex;align-items:center;gap:0.3rem;flex-wrap:wrap">${stages}</div>
+        <div>
+          <h3 style="font-size:0.92rem;font-weight:700;color:rgba(255,255,255,0.85);margin-bottom:0.35rem;transition:color 0.3s">${d.title}</h3>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.7">${d.desc}</p>
+        </div>
+        <div style="margin-top:auto;padding-top:0.25rem">
+          <span class="text-forest-400 text-[0.62rem] font-semibold tracking-wider uppercase">Try it <span class="learn-more-arrow">&rarr;</span></span>
+        </div>`;
+
+      (isAI ? aiGrid : localGrid).appendChild(card);
+    });
+  }
+
+  renderDemos();
+  </script>
+</body>
+</html>

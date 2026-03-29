@@ -5,7 +5,7 @@ const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/services', label: 'Services' },
   { href: '/process', label: 'Process' },
-  { label: 'Demo', children: [
+  { label: 'Demo', href: '/demo', children: [
     { href: '/tools/data-quality', label: 'Data Quality', tag: 'ai' },
     { href: '/tools/rag-pipeline', label: 'RAG Pipeline', tag: 'ai' },
     { href: '/tools/agent-workflow', label: 'Agent Workflow', tag: 'ai' },
@@ -29,26 +29,29 @@ const path = window.location.pathname.replace(/\/+$/, '') || '/';
 function isActive(href) {
   if (href === '/') return path === '/' || path === '' || path === '/index' || path === '/index.html';
   if (href === '/blog') return path.startsWith('/blog');
+  if (href === '/demo') return path === '/demo' || path === '/demo.html';
   if (href === '/tools') return path.startsWith('/tools');
   return path === href || path === href + '.html';
 }
 
 function isToolsActive() {
-  return path.startsWith('/tools');
+  return path.startsWith('/tools') || path === '/demo' || path === '/demo.html';
 }
 
 function buildLinks() {
   return NAV_LINKS.map(l => {
     if (l.children) {
-      const toolsOpen = isToolsActive();
+      const toolsOpen = isToolsActive() || (l.href && isActive(l.href));
       const childLinks = l.children.map(c => {
         const tagHtml = c.tag ? `<span class="nav-tag nav-tag-${c.tag}">${c.tag === 'ai' ? 'AI' : 'Local'}</span>` : '';
         return `<a href="${c.href}" class="sidebar-link sidebar-sublink${isActive(c.href) ? ' active' : ''}">${isActive(c.href) ? CHEVRON : ''}<span>${c.label}</span>${tagHtml}</a>`;
       }).join('');
+      const groupActive = (l.href && isActive(l.href)) || toolsOpen;
       return `<div class="sidebar-group${toolsOpen ? ' open' : ''}">
-        <button class="sidebar-link sidebar-group-toggle${toolsOpen ? ' active' : ''}" type="button">
-          ${toolsOpen ? CHEVRON : ''}<span>${l.label}</span>${EXPAND_ARROW}
-        </button>
+        <div class="sidebar-link sidebar-group-toggle${groupActive ? ' active' : ''}" style="display:flex;align-items:center;gap:0.5rem">
+          ${groupActive ? CHEVRON : ''}<a href="${l.href || '#'}" style="text-decoration:none;color:inherit;flex:1">${l.label}</a>
+          <button type="button" class="sidebar-expand-btn" style="background:none;border:none;cursor:pointer;padding:0.2rem;color:inherit;display:flex;align-items:center">${EXPAND_ARROW}</button>
+        </div>
         <div class="sidebar-children">${childLinks}</div>
       </div>`;
     }
@@ -95,9 +98,11 @@ function initMobileMenu() {
 }
 
 function initToolsToggle() {
-  document.querySelectorAll('.sidebar-group-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      btn.parentElement.classList.toggle('open');
+  document.querySelectorAll('.sidebar-expand-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      btn.closest('.sidebar-group').classList.toggle('open');
     });
   });
 }
