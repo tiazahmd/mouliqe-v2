@@ -43,48 +43,49 @@
       font-size:2.6rem;font-weight:700;line-height:1;
       font-variant-numeric:tabular-nums;transition:color 0.6s ease;
     }
-    .cost-number.high  { color:rgba(248,113,113,0.9); }
-    .cost-number.med   { color:rgba(251,191,36,0.9); }
-    .cost-number.low   { color:rgba(74,222,128,0.9); }
+    .cost-number.high { color:rgba(248,113,113,0.9); }
+    .cost-number.med  { color:rgba(251,191,36,0.9); }
+    .cost-number.low  { color:rgba(74,222,128,0.9); }
 
-    /* ── Architecture flow ────────────────────────── */
-    .arch-flow {
-      display:flex;align-items:stretch;flex-wrap:wrap;gap:0;
-      margin:1rem 0;
+    /* ── Architecture pipeline (reuses tool-stage dots) ── */
+    /* warn state — used for unoptimised stages */
+    .tool-stage.arch-warn .tool-stage-dot {
+      background: rgba(248,113,113,0.7);
+      box-shadow: 0 0 8px rgba(248,113,113,0.3);
     }
-    .arch-node {
-      display:flex;flex-direction:column;justify-content:center;
-      padding:0.55rem 0.75rem;border-radius:0.4rem;
-      border:1px solid rgba(255,255,255,0.06);
-      background:rgba(255,255,255,0.015);
-      min-width:0;transition:all 0.4s;
+    .tool-stage.arch-warn .tool-stage-label { color: rgba(248,113,113,0.7); }
+    .tool-stage.arch-warn { background: rgba(248,113,113,0.03); border-color: rgba(248,113,113,0.12); }
+    /* new state — newly added optimisation component */
+    .tool-stage.arch-new .tool-stage-dot {
+      background: rgba(74,222,128,0.8);
+      box-shadow: 0 0 8px rgba(74,222,128,0.35);
     }
-    .arch-node.naive  { border-color:rgba(248,113,113,0.3);background:rgba(248,113,113,0.04); }
-    .arch-node.new    { border-color:rgba(74,222,128,0.3);background:rgba(74,222,128,0.04);animation:fadeInUp 0.35s ease-out; }
-    .arch-node.better { border-color:rgba(74,222,128,0.18);background:rgba(74,222,128,0.02); }
-    .arch-node .n-label { font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.55);letter-spacing:0.04em; }
-    .arch-node .n-detail{ font-size:0.62rem;color:rgba(255,255,255,0.28);line-height:1.4;margin-top:0.1rem; }
-    .arch-node.naive .n-label  { color:rgba(248,113,113,0.75); }
-    .arch-node.naive .n-detail { color:rgba(248,113,113,0.45); }
-    .arch-node.new .n-label    { color:rgba(74,222,128,0.8); }
-    .arch-node.new .n-detail   { color:rgba(74,222,128,0.5); }
-    .arch-arrow {
-      display:flex;align-items:center;padding:0 0.3rem;
-      color:rgba(255,255,255,0.12);font-size:0.75rem;flex-shrink:0;
+    .tool-stage.arch-new .tool-stage-label { color: rgba(74,222,128,0.8); }
+    .tool-stage.arch-new { background: rgba(74,222,128,0.04); border-color: rgba(74,222,128,0.15); animation: fadeInUp 0.35s ease-out; }
+    /* better state — existing stage that improved */
+    .tool-stage.arch-better .tool-stage-dot { background: rgba(74,222,128,0.4); }
+    .tool-stage.arch-better .tool-stage-label { color: rgba(74,222,128,0.5); }
+    /* arch-label shown below the dot (two lines) */
+    .tool-stage .arch-sub {
+      font-size:0.5rem;color:rgba(255,255,255,0.28);margin-top:0.15rem;
+      max-width:5rem;text-align:center;line-height:1.3;
     }
+    .tool-stage.arch-warn .arch-sub { color:rgba(248,113,113,0.45); }
+    .tool-stage.arch-new .arch-sub  { color:rgba(74,222,128,0.5); }
+    .tool-stage.arch-better .arch-sub { color:rgba(74,222,128,0.35); }
 
     /* ── Phase buttons ────────────────────────────── */
     .phase-btn {
       display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;
       padding:0.65rem 1.4rem;border-radius:0.5rem;font-size:0.63rem;font-weight:700;
       letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;
-      border:none;font-family:inherit;white-space:nowrap;
+      border:none;font-family:inherit;white-space:nowrap;line-height:1;
     }
-    .phase-btn.naive-btn {
+    .phase-btn.baseline-btn {
       background:rgba(248,113,113,0.1);color:rgba(248,113,113,0.85);
       border:1px solid rgba(248,113,113,0.25);
     }
-    .phase-btn.naive-btn:hover:not(:disabled) { background:rgba(248,113,113,0.17); }
+    .phase-btn.baseline-btn:hover:not(:disabled) { background:rgba(248,113,113,0.17); }
     .phase-btn.opt-btn {
       background:rgba(74,222,128,0.08);color:rgba(74,222,128,0.85);
       border:1px solid rgba(74,222,128,0.25);
@@ -92,7 +93,7 @@
     .phase-btn.opt-btn:hover:not(:disabled) { background:rgba(74,222,128,0.14); }
     .phase-btn:disabled { opacity:0.35;cursor:not-allowed; }
 
-    /* ── Optimization step cards ──────────────────── */
+    /* ── Optimisation step cards ──────────────────── */
     .opt-card {
       border:1px solid rgba(74,222,128,0.12);border-radius:0.6rem;
       padding:1rem 1.1rem;background:rgba(74,222,128,0.02);
@@ -118,8 +119,8 @@
       font-size:0.7rem;align-items:center;
     }
     .comp-row.header { font-size:0.55rem;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.1em; }
-    .comp-row .col-naive  { color:rgba(248,113,113,0.7); }
-    .comp-row .col-opt    { color:rgba(74,222,128,0.7); }
+    .comp-row .col-base { color:rgba(248,113,113,0.7); }
+    .comp-row .col-opt  { color:rgba(74,222,128,0.7); }
 
     /* ── Savings summary ──────────────────────────── */
     .savings-card {
@@ -128,8 +129,6 @@
       animation:fadeInUp 0.5s ease-out;
     }
     .savings-big { font-size:3rem;font-weight:700;color:rgba(74,222,128,0.9);line-height:1; }
-
-    /* ── Disclaimer ───────────────────────────────── */
     .pricing-note {
       font-size:0.58rem;color:rgba(255,255,255,0.2);line-height:1.6;
       border-top:1px solid rgba(255,255,255,0.04);padding-top:0.75rem;margin-top:0.75rem;
@@ -148,7 +147,7 @@
           <h1 class="text-3xl md:text-4xl font-bold text-white">AI Cost Simulator</h1>
           <span style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.15rem 0.45rem;border-radius:0.25rem;color:rgba(96,165,250,0.7);background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);white-space:nowrap;margin-top:0.3rem">Runs Locally</span>
         </div>
-        <p class="text-[0.84rem] text-white/45 max-w-xl anim-up anim-d1">Most companies are overpaying for AI by 80–97%. Pick a scenario, set your query volume, and watch the cost collapse as proper architecture is applied — one decision at a time.</p>
+        <p class="text-[0.84rem] text-white/45 max-w-xl anim-up anim-d1">Most teams are overpaying for AI by 80–97%. Pick a scenario, set your query volume, and watch the monthly cost collapse as proper architecture is applied — one decision at a time.</p>
       </div>
     </section>
 
@@ -192,25 +191,18 @@
                   <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">10,000/day</span>
                 </div>
 
-                <!-- Live cost preview -->
-                <div id="cost-preview" style="margin-top:1.1rem;padding:0.75rem 1rem;border-radius:0.5rem;background:rgba(248,113,113,0.04);border:1px solid rgba(248,113,113,0.12)">
-                  <p style="font-size:0.6rem;font-weight:700;color:rgba(248,113,113,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem">Naive architecture cost</p>
-                  <p style="font-size:0.95rem;font-weight:700;color:rgba(248,113,113,0.85)" id="naive-preview-cost">$0</p>
-                  <p style="font-size:0.65rem;color:rgba(255,255,255,0.28);margin-top:0.15rem" id="naive-preview-desc">—</p>
-                </div>
-
                 <!-- Phase 1 button -->
-                <div style="margin-top:1.1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-                  <button class="phase-btn naive-btn" id="run-naive-btn">
+                <div style="margin-top:1.25rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+                  <button class="phase-btn baseline-btn" id="run-baseline-btn">
                     <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Run Naive Architecture
+                    Run Current Architecture
                   </button>
                   <span style="font-size:0.62rem;color:rgba(255,255,255,0.2)">Phase 1 of 2</span>
                 </div>
               </div>
             </div>
 
-            <!-- Pipeline visualization -->
+            <!-- Progress pipeline (Profile → Baseline → Optimize → Compare → Recommend) -->
             <div class="tool-pipeline" id="pipeline" style="display:none">
               <div class="tool-stage pending" data-stage="profile" data-ai>
                 <div class="tool-stage-dot"></div>
@@ -224,7 +216,7 @@
               <div class="tool-stage-connector"></div>
               <div class="tool-stage pending" data-stage="optimize" data-ai>
                 <div class="tool-stage-dot"></div>
-                <span class="tool-stage-label">Optimize</span>
+                <span class="tool-stage-label">Optimise</span>
               </div>
               <div class="tool-stage-connector"></div>
               <div class="tool-stage pending" data-stage="compare">
@@ -246,9 +238,9 @@
             <!-- Output -->
             <div id="sim-output" style="display:none;margin-top:1.25rem">
 
-              <!-- Live cost meter -->
+              <!-- Cost meter + architecture flow -->
               <div id="cost-meter" style="display:none;border-radius:0.75rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);padding:1.5rem;margin-bottom:1.25rem">
-                <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1rem">
+                <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.25rem">
                   <div>
                     <p style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.25);margin-bottom:0.35rem" id="cost-meter-label">Monthly Cost</p>
                     <div style="display:flex;align-items:baseline;gap:0.4rem">
@@ -258,26 +250,26 @@
                   </div>
                   <div id="cost-meter-meta" style="text-align:right"></div>
                 </div>
-                <!-- Architecture flow -->
-                <div id="arch-flow" class="arch-flow"></div>
-                <p class="pricing-note">Pricing based on published rates as of March 2026: GPT-4o $2.50/1M input · GPT-4o-mini $0.15/1M input · Claude Sonnet 3.5 $3.00/1M · Claude Haiku 3.5 $0.80/1M input.</p>
+                <!-- Architecture flow using standard pipeline dots -->
+                <div id="arch-pipeline" class="tool-pipeline" style="flex-wrap:wrap;gap:0.35rem 0"></div>
+                <p class="pricing-note">Pricing based on published Anthropic rates as of March 2026: Claude Sonnet 3.5 $3.00/1M input · $15.00/1M output &nbsp;·&nbsp; Claude Haiku 3.5 $0.80/1M input · $4.00/1M output.</p>
               </div>
 
-              <!-- Phase 2 button (appears after naive run) -->
+              <!-- Phase 2 CTA -->
               <div id="phase2-cta" style="display:none;margin-bottom:1.25rem">
                 <div style="padding:1rem 1.25rem;border-radius:0.6rem;background:rgba(74,222,128,0.03);border:1px solid rgba(74,222,128,0.1)">
-                  <p style="font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.6);margin-bottom:0.25rem">That's what the naive approach costs.</p>
+                  <p style="font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.6);margin-bottom:0.25rem">That's what a typical, unoptimised setup costs.</p>
                   <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.65;margin-bottom:0.85rem">Now watch what happens when proper architecture is applied — one decision at a time.</p>
                   <button class="phase-btn opt-btn" id="run-opt-btn">
                     <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    Optimize This Architecture
+                    Optimise This Architecture
                   </button>
                 </div>
               </div>
 
-              <!-- Optimization steps (build up) -->
+              <!-- Optimisation steps -->
               <div id="opt-steps" style="display:none">
-                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.75rem">Optimizations Applied</p>
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.75rem">Optimisations Applied</p>
                 <div id="opt-steps-list"></div>
               </div>
 
@@ -359,12 +351,10 @@
   <script src="/components.js"></script>
   <script>
 
-  // ── Pricing (per 1M tokens, as of March 2026) ──
+  // ── Pricing: Claude models (Anthropic, March 2026) ──
   const PRICE = {
-    'GPT-4o':           { input: 2.50,  output: 10.00 },
-    'GPT-4o-mini':      { input: 0.15,  output: 0.60  },
-    'Claude Sonnet 3.5':{ input: 3.00,  output: 15.00 },
-    'Claude Haiku 3.5': { input: 0.80,  output: 4.00  },
+    'Claude Sonnet 3.5': { input: 3.00,  output: 15.00 },
+    'Claude Haiku 3.5':  { input: 0.80,  output: 4.00  },
   };
 
   function costPerQuery(inputTok, outputTok, model) {
@@ -379,30 +369,28 @@
   function fmt$(n) {
     if (n >= 10000) return '$' + Math.round(n).toLocaleString();
     if (n >= 1000)  return '$' + n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    if (n >= 100)   return '$' + n.toFixed(0);
-    if (n >= 10)    return '$' + n.toFixed(2);
-    return '$' + n.toFixed(2);
+    return '$' + n.toFixed(0);
   }
 
   function fmtTok(n) {
-    if (n >= 1000) return Math.round(n / 1000) + 'K';
-    return n.toString();
+    return n >= 1000 ? Math.round(n / 1000) + 'K' : n.toString();
   }
 
   // ── Scenario Data ──
+  // node types: 'warn' (red, unoptimised), 'new' (green, newly added), 'better' (muted green, improved), 'neutral' (default)
   const SCENARIOS = {
     support: {
       name: 'Customer Support AI',
       unit: 'queries/day',
       defaultVol: 500,
-      naive: {
-        inputTok: 65000, outputTok: 1000, model: 'GPT-4o',
-        desc: 'Full knowledge base stuffed into every LLM call',
+      baseline: {
+        inputTok: 65000, outputTok: 1000, model: 'Claude Sonnet 3.5',
+        desc: 'Full knowledge base passed to Claude Sonnet 3.5 on every call',
         arch: [
-          { label: 'User Query', detail: null, type: 'neutral' },
-          { label: '65K Context', detail: 'Full 200-page manual per call', type: 'naive' },
-          { label: 'GPT-4o', detail: '$0.17 per query', type: 'naive' },
-          { label: 'Response', detail: '1K tokens output', type: 'neutral' },
+          { label: 'User Query',       sub: null,                          type: 'neutral' },
+          { label: '65K Context',      sub: 'Full manual in every call',   type: 'warn'    },
+          { label: 'Claude Sonnet 3.5',sub: '$0.21 per query',             type: 'warn'    },
+          { label: 'Response',         sub: '1K tokens out',               type: 'neutral' },
         ]
       },
       optimizations: [
@@ -410,42 +398,42 @@
           name: 'Add RAG Layer',
           pattern: 'Retrieval-Augmented Generation',
           desc: 'Embed the knowledge base and retrieve only the top 3 relevant chunks per query — reducing context from 65K to 4K tokens without losing answer quality.',
-          inputTok: 4000, outputTok: 800, model: 'GPT-4o', cacheHit: 0, routeFrac: 0, miniModel: null,
+          inputTok: 4000, outputTok: 800, model: 'Claude Sonnet 3.5', cacheHit: 0, routeFrac: 0, miniModel: null,
           arch: [
-            { label: 'User Query', detail: null, type: 'neutral' },
-            { label: 'RAG Retrieval', detail: 'Top 3 relevant chunks', type: 'new' },
-            { label: '4K Context', detail: '96% fewer tokens', type: 'better' },
-            { label: 'GPT-4o', detail: '$0.018 per query', type: 'better' },
-            { label: 'Response', detail: '800 tokens output', type: 'neutral' },
+            { label: 'User Query',       sub: null,                        type: 'neutral' },
+            { label: 'RAG Retrieval',    sub: 'Top 3 relevant chunks',     type: 'new'     },
+            { label: '4K Context',       sub: '94% fewer tokens',          type: 'better'  },
+            { label: 'Claude Sonnet 3.5',sub: '$0.024 per query',          type: 'better'  },
+            { label: 'Response',         sub: '800 tokens out',            type: 'neutral' },
           ]
         },
         {
-          name: 'Enable Semantic Caching',
+          name: 'Semantic Caching',
           pattern: 'Query-Level Caching',
-          desc: '35% of support queries are semantically identical (same question, different wording). Cache responses to those — they cost $0 to serve from cache.',
-          inputTok: 4000, outputTok: 800, model: 'GPT-4o', cacheHit: 0.35, routeFrac: 0, miniModel: null,
+          desc: '35% of support queries are semantically identical — same question, different wording. Cache those responses once and serve them instantly at zero LLM cost.',
+          inputTok: 4000, outputTok: 800, model: 'Claude Sonnet 3.5', cacheHit: 0.35, routeFrac: 0, miniModel: null,
           arch: [
-            { label: 'User Query', detail: null, type: 'neutral' },
-            { label: 'Semantic Cache', detail: '35% served from cache', type: 'new' },
-            { label: 'RAG Retrieval', detail: 'Only uncached queries', type: 'better' },
-            { label: '4K Context', detail: 'Relevant chunks only', type: 'better' },
-            { label: 'GPT-4o', detail: '$0.012 blended/query', type: 'better' },
-            { label: 'Response', detail: null, type: 'neutral' },
+            { label: 'User Query',       sub: null,                        type: 'neutral' },
+            { label: 'Semantic Cache',   sub: '35% served from cache',     type: 'new'     },
+            { label: 'RAG Retrieval',    sub: 'Uncached queries only',     type: 'better'  },
+            { label: '4K Context',       sub: 'Relevant chunks only',      type: 'better'  },
+            { label: 'Claude Sonnet 3.5',sub: '$0.016 blended/query',      type: 'better'  },
+            { label: 'Response',         sub: null,                        type: 'neutral' },
           ]
         },
         {
           name: 'Route by Complexity',
           pattern: 'Model Routing',
-          desc: '70% of support queries are simple FAQ lookups — GPT-4o-mini handles them at 17× lower cost. Reserve GPT-4o for multi-step reasoning and edge cases only.',
-          inputTok: 4000, outputTok: 800, model: 'GPT-4o', cacheHit: 0.35, routeFrac: 0.70, miniModel: 'GPT-4o-mini',
+          desc: '70% of support queries are simple FAQ lookups — Claude Haiku 3.5 handles them at 14× lower input cost. Reserve Sonnet 3.5 for multi-step reasoning and nuanced edge cases only.',
+          inputTok: 4000, outputTok: 800, model: 'Claude Sonnet 3.5', cacheHit: 0.35, routeFrac: 0.70, miniModel: 'Claude Haiku 3.5',
           arch: [
-            { label: 'User Query', detail: null, type: 'neutral' },
-            { label: 'Semantic Cache', detail: '35% served from cache', type: 'better' },
-            { label: 'RAG Retrieval', detail: 'Relevant chunks only', type: 'better' },
-            { label: 'Complexity Router', detail: '70% simple / 30% complex', type: 'new' },
-            { label: 'GPT-4o-mini 70%', detail: '$0.00108 per query', type: 'new' },
-            { label: 'GPT-4o 30%', detail: '$0.018 per query', type: 'better' },
-            { label: 'Response', detail: null, type: 'neutral' },
+            { label: 'User Query',       sub: null,                        type: 'neutral' },
+            { label: 'Semantic Cache',   sub: '35% served from cache',     type: 'better'  },
+            { label: 'RAG Retrieval',    sub: 'Relevant chunks only',      type: 'better'  },
+            { label: 'Complexity Router',sub: '70% simple / 30% complex',  type: 'new'     },
+            { label: 'Claude Haiku 3.5', sub: '70% of queries',            type: 'new'     },
+            { label: 'Claude Sonnet 3.5',sub: '30% of queries',            type: 'better'  },
+            { label: 'Response',         sub: null,                        type: 'neutral' },
           ]
         },
       ]
@@ -455,57 +443,57 @@
       name: 'Internal Data Assistant',
       unit: 'queries/day',
       defaultVol: 200,
-      naive: {
-        inputTok: 45000, outputTok: 1500, model: 'GPT-4o',
+      baseline: {
+        inputTok: 45000, outputTok: 1500, model: 'Claude Sonnet 3.5',
         desc: 'Full database schema + conversation history sent with every query',
         arch: [
-          { label: 'User Query', detail: null, type: 'neutral' },
-          { label: '45K Context', detail: 'Full schema + 20-turn history', type: 'naive' },
-          { label: 'GPT-4o', detail: '$0.13 per query', type: 'naive' },
-          { label: 'Response', detail: '1.5K tokens output', type: 'neutral' },
+          { label: 'User Query',        sub: null,                         type: 'neutral' },
+          { label: '45K Context',       sub: 'Full schema + 20-turn hist', type: 'warn'    },
+          { label: 'Claude Sonnet 3.5', sub: '$0.16 per query',            type: 'warn'    },
+          { label: 'Response',          sub: '1.5K tokens out',            type: 'neutral' },
         ]
       },
       optimizations: [
         {
           name: 'Schema Pruning',
           pattern: 'Context Selection',
-          desc: "Identify which tables are relevant to each query using lightweight classification — pass only those 12 tables (~5K tokens) instead of the full 800-table schema.",
-          inputTok: 5000, outputTok: 1200, model: 'GPT-4o', cacheHit: 0, routeFrac: 0, miniModel: null,
+          desc: 'Use lightweight classification to identify which tables are relevant to each query — pass only those (~5K tokens) instead of the full 800-table schema.',
+          inputTok: 5000, outputTok: 1200, model: 'Claude Sonnet 3.5', cacheHit: 0, routeFrac: 0, miniModel: null,
           arch: [
-            { label: 'User Query', detail: null, type: 'neutral' },
-            { label: 'Schema Selector', detail: 'Relevant tables only', type: 'new' },
-            { label: '5K Context', detail: '89% fewer schema tokens', type: 'better' },
-            { label: 'GPT-4o', detail: '$0.025 per query', type: 'better' },
-            { label: 'Response', detail: '1.2K tokens output', type: 'neutral' },
+            { label: 'User Query',        sub: null,                        type: 'neutral' },
+            { label: 'Schema Selector',   sub: 'Relevant tables only',      type: 'new'     },
+            { label: '5K Context',        sub: '89% fewer schema tokens',   type: 'better'  },
+            { label: 'Claude Sonnet 3.5', sub: '$0.033 per query',          type: 'better'  },
+            { label: 'Response',          sub: '1.2K tokens out',           type: 'neutral' },
           ]
         },
         {
           name: 'Context Summarisation',
           pattern: 'Conversation Compression',
-          desc: 'After 5 conversation turns, summarise older history into a compact paragraph instead of keeping the full raw exchange. Reduces history from 10K to 1.5K tokens.',
-          inputTok: 3500, outputTok: 1200, model: 'GPT-4o', cacheHit: 0, routeFrac: 0, miniModel: null,
+          desc: 'After 5 turns, summarise older history into a compact paragraph instead of keeping the full raw exchange — reducing conversation context from 10K to 1.5K tokens.',
+          inputTok: 3500, outputTok: 1200, model: 'Claude Sonnet 3.5', cacheHit: 0, routeFrac: 0, miniModel: null,
           arch: [
-            { label: 'User Query', detail: null, type: 'neutral' },
-            { label: 'Schema Selector', detail: 'Relevant tables only', type: 'better' },
-            { label: 'History Summariser', detail: '10K → 1.5K history tokens', type: 'new' },
-            { label: '3.5K Context', detail: '92% fewer tokens total', type: 'better' },
-            { label: 'GPT-4o', detail: '$0.021 per query', type: 'better' },
-            { label: 'Response', detail: null, type: 'neutral' },
+            { label: 'User Query',        sub: null,                        type: 'neutral' },
+            { label: 'Schema Selector',   sub: 'Relevant tables only',      type: 'better'  },
+            { label: 'History Summariser',sub: '10K → 1.5K history tokens', type: 'new'     },
+            { label: '3.5K Context',      sub: '92% fewer tokens total',    type: 'better'  },
+            { label: 'Claude Sonnet 3.5', sub: '$0.029 per query',          type: 'better'  },
+            { label: 'Response',          sub: null,                        type: 'neutral' },
           ]
         },
         {
           name: 'Route by Query Type',
           pattern: 'Model Routing',
-          desc: '60% of queries are simple data lookups (aggregations, filters, counts) — Claude Haiku 3.5 handles these well at 26× lower input cost. Complex joins and analytics stay on GPT-4o.',
-          inputTok: 3500, outputTok: 1200, model: 'GPT-4o', cacheHit: 0, routeFrac: 0.60, miniModel: 'Claude Haiku 3.5',
+          desc: '60% of queries are simple lookups — aggregations, filters, counts. Claude Haiku 3.5 handles these well at 14× lower cost. Complex joins and multi-table analytics stay on Sonnet 3.5.',
+          inputTok: 3500, outputTok: 1200, model: 'Claude Sonnet 3.5', cacheHit: 0, routeFrac: 0.60, miniModel: 'Claude Haiku 3.5',
           arch: [
-            { label: 'User Query', detail: null, type: 'neutral' },
-            { label: 'Schema Selector', detail: 'Relevant tables only', type: 'better' },
-            { label: 'History Summariser', detail: 'Compressed context', type: 'better' },
-            { label: 'Query Router', detail: '60% simple / 40% complex', type: 'new' },
-            { label: 'Claude Haiku 60%', detail: '$0.0076 per query', type: 'new' },
-            { label: 'GPT-4o 40%', detail: '$0.021 per query', type: 'better' },
-            { label: 'Response', detail: null, type: 'neutral' },
+            { label: 'User Query',        sub: null,                        type: 'neutral' },
+            { label: 'Schema Selector',   sub: 'Relevant tables only',      type: 'better'  },
+            { label: 'History Summariser',sub: 'Compressed context',        type: 'better'  },
+            { label: 'Query Router',      sub: '60% simple / 40% complex',  type: 'new'     },
+            { label: 'Claude Haiku 3.5',  sub: '60% of queries',            type: 'new'     },
+            { label: 'Claude Sonnet 3.5', sub: '40% of queries',            type: 'better'  },
+            { label: 'Response',          sub: null,                        type: 'neutral' },
           ]
         },
       ]
@@ -515,57 +503,57 @@
       name: 'Content Generation Pipeline',
       unit: 'tasks/day',
       defaultVol: 300,
-      naive: {
-        inputTok: 22000, outputTok: 1800, model: 'GPT-4o',
-        desc: 'Verbose prompts, large catalog context, GPT-4o for every task',
+      baseline: {
+        inputTok: 22000, outputTok: 1800, model: 'Claude Sonnet 3.5',
+        desc: 'Verbose prompts, full catalog context, Claude Sonnet 3.5 for every task',
         arch: [
-          { label: 'Task Request', detail: null, type: 'neutral' },
-          { label: '22K Context', detail: '8K system prompt + 14K catalog', type: 'naive' },
-          { label: 'GPT-4o', detail: '$0.073 per task', type: 'naive' },
-          { label: 'Output', detail: '1.8K tokens prose', type: 'neutral' },
+          { label: 'Task Request',      sub: null,                          type: 'neutral' },
+          { label: '22K Context',       sub: '8K prompt + 14K catalog',     type: 'warn'    },
+          { label: 'Claude Sonnet 3.5', sub: '$0.093 per task',             type: 'warn'    },
+          { label: 'Output',            sub: '1.8K tokens prose',           type: 'neutral' },
         ]
       },
       optimizations: [
         {
           name: 'Prompt Compression',
           pattern: 'Structured Templates',
-          desc: "Replace verbose freeform prompts with structured templates. Trim the system prompt from 8K to 1.5K tokens, and pass only the relevant product context (2K) instead of the full catalog (14K).",
-          inputTok: 4000, outputTok: 1500, model: 'GPT-4o', cacheHit: 0, routeFrac: 0, miniModel: null,
+          desc: 'Replace verbose freeform prompts with structured templates. Trim the system prompt from 8K to 1.5K tokens, and pass only relevant product context (2K) instead of the full catalog (14K).',
+          inputTok: 4000, outputTok: 1500, model: 'Claude Sonnet 3.5', cacheHit: 0, routeFrac: 0, miniModel: null,
           arch: [
-            { label: 'Task Request', detail: null, type: 'neutral' },
-            { label: 'Template Engine', detail: '8K prompt → 1.5K template', type: 'new' },
-            { label: '4K Context', detail: '82% fewer input tokens', type: 'better' },
-            { label: 'GPT-4o', detail: '$0.025 per task', type: 'better' },
-            { label: 'Output', detail: '1.5K tokens', type: 'neutral' },
+            { label: 'Task Request',      sub: null,                        type: 'neutral' },
+            { label: 'Template Engine',   sub: '8K prompt → 1.5K template', type: 'new'     },
+            { label: '4K Context',        sub: '82% fewer input tokens',    type: 'better'  },
+            { label: 'Claude Sonnet 3.5', sub: '$0.035 per task',           type: 'better'  },
+            { label: 'Output',            sub: '1.5K tokens',               type: 'neutral' },
           ]
         },
         {
-          name: 'Route by Task Complexity',
+          name: 'Route by Task Type',
           pattern: 'Model Routing',
-          desc: '75% of tasks are mechanical — reformats, subject line variants, short descriptions. GPT-4o-mini handles these at 17× lower cost. GPT-4o stays for creative and long-form work.',
-          inputTok: 4000, outputTok: 1500, model: 'GPT-4o', cacheHit: 0, routeFrac: 0.75, miniModel: 'GPT-4o-mini',
+          desc: '75% of tasks are mechanical — reformats, subject line variants, short descriptions. Claude Haiku 3.5 handles these at 14× lower input cost. Sonnet 3.5 stays for creative and long-form work.',
+          inputTok: 4000, outputTok: 1500, model: 'Claude Sonnet 3.5', cacheHit: 0, routeFrac: 0.75, miniModel: 'Claude Haiku 3.5',
           arch: [
-            { label: 'Task Request', detail: null, type: 'neutral' },
-            { label: 'Template Engine', detail: 'Compressed prompts', type: 'better' },
-            { label: 'Task Router', detail: '75% simple / 25% creative', type: 'new' },
-            { label: 'GPT-4o-mini 75%', detail: '$0.0015 per task', type: 'new' },
-            { label: 'GPT-4o 25%', detail: '$0.025 per task', type: 'better' },
-            { label: 'Output', detail: null, type: 'neutral' },
+            { label: 'Task Request',      sub: null,                        type: 'neutral' },
+            { label: 'Template Engine',   sub: 'Compressed prompts',        type: 'better'  },
+            { label: 'Task Router',       sub: '75% simple / 25% creative', type: 'new'     },
+            { label: 'Claude Haiku 3.5',  sub: '75% of tasks',              type: 'new'     },
+            { label: 'Claude Sonnet 3.5', sub: '25% of tasks',              type: 'better'  },
+            { label: 'Output',            sub: null,                        type: 'neutral' },
           ]
         },
         {
           name: 'Structured Outputs + Caching',
           pattern: 'Output Optimisation & Cache',
-          desc: 'Request JSON instead of prose for structured tasks — cuts output tokens by 40%. Cache results for repeated product categories (25% cache hit rate).',
-          inputTok: 4000, outputTok: 900, model: 'GPT-4o', cacheHit: 0.25, routeFrac: 0.75, miniModel: 'GPT-4o-mini',
+          desc: 'Request JSON instead of prose for structured tasks — cuts output tokens by 40%. Cache results for repeated product categories, intercepting ~25% of tasks before they hit the LLM.',
+          inputTok: 4000, outputTok: 900, model: 'Claude Sonnet 3.5', cacheHit: 0.25, routeFrac: 0.75, miniModel: 'Claude Haiku 3.5',
           arch: [
-            { label: 'Task Request', detail: null, type: 'neutral' },
-            { label: 'Result Cache', detail: '25% served from cache', type: 'new' },
-            { label: 'Template Engine', detail: 'Compressed prompts', type: 'better' },
-            { label: 'Task Router', detail: '75% simple / 25% creative', type: 'better' },
-            { label: 'GPT-4o-mini 75%', detail: 'JSON output (900 tok)', type: 'better' },
-            { label: 'GPT-4o 25%', detail: 'JSON output (900 tok)', type: 'better' },
-            { label: 'Output', detail: null, type: 'neutral' },
+            { label: 'Task Request',      sub: null,                        type: 'neutral' },
+            { label: 'Result Cache',      sub: '25% served from cache',     type: 'new'     },
+            { label: 'Template Engine',   sub: 'Compressed prompts',        type: 'better'  },
+            { label: 'Task Router',       sub: '75% simple / 25% creative', type: 'better'  },
+            { label: 'Claude Haiku 3.5',  sub: 'JSON out (900 tok)',        type: 'better'  },
+            { label: 'Claude Sonnet 3.5', sub: 'JSON out (900 tok)',        type: 'better'  },
+            { label: 'Output',            sub: null,                        type: 'neutral' },
           ]
         },
       ]
@@ -575,20 +563,20 @@
   // ── State ──
   let currentScenario = null;
   let running = false;
-  let phase = 0; // 0=idle, 1=naive done, 2=optimized
+  let phase = 0;
 
-  // ── Pipeline helpers ──
+  // ── Pipeline stage progress ──
   const STAGES = ['profile','baseline','optimize','compare','recommend'];
   const STAGE_CTX = {
-    profile:  { title: 'AI: Profiling Architecture', text: 'Analysing token usage patterns, model selection, caching opportunities, and routing potential across the naive implementation...' },
-    baseline: { title: 'Computing Baseline Cost',    text: 'Calculating current monthly spend based on tokens per query, model pricing, and query volume...' },
-    optimize: { title: 'AI: Applying Optimisations', text: 'Sequentially applying architectural improvements and measuring the cost impact of each decision...' },
-    compare:  { title: 'Comparing Before & After',   text: 'Building a side-by-side breakdown of naive vs optimised cost at each stage...' },
-    recommend:{ title: 'AI: Final Recommendations',  text: 'Identifying which changes had the largest impact and what the architecture now looks like at scale...' },
+    profile:  { title: 'AI: Profiling Architecture',  text: 'Analysing token usage patterns, model selection efficiency, caching opportunities, and routing potential across the current setup...' },
+    baseline: { title: 'Computing Baseline Cost',      text: 'Calculating current monthly spend based on tokens per query, Claude pricing, and query volume at your selected scale...' },
+    optimize: { title: 'AI: Applying Optimisations',   text: 'Sequentially applying architectural improvements — RAG, caching, model routing — and measuring the cost impact of each decision...' },
+    compare:  { title: 'Comparing Before & After',     text: 'Building a side-by-side breakdown of the current setup vs the optimised architecture at each stage...' },
+    recommend:{ title: 'AI: Final Recommendations',    text: 'Identifying which changes drove the most savings and what the architecture now looks like at scale...' },
   };
 
   function setStage(id) {
-    const stages = document.querySelectorAll('.tool-stage');
+    const stages = document.querySelectorAll('.tool-stage[data-stage]');
     const connectors = document.querySelectorAll('.tool-stage-connector');
     const idx = STAGES.indexOf(id);
     stages.forEach((s, i) => {
@@ -628,8 +616,8 @@
   }
 
   function finishPipeline() {
-    document.querySelectorAll('.tool-stage').forEach(s => { s.className = 'tool-stage done'; });
-    document.querySelectorAll('.tool-stage-connector').forEach(c => { c.className = 'tool-stage-connector done'; });
+    document.querySelectorAll('.tool-stage[data-stage]').forEach(s => s.className = 'tool-stage done');
+    document.querySelectorAll('.tool-stage-connector').forEach(c => c.className = 'tool-stage-connector done');
     const panel = document.getElementById('context-panel');
     const log = document.getElementById('context-log');
     panel.classList.remove('pulsing');
@@ -651,21 +639,20 @@
     log.appendChild(entry);
   }
 
-  // ── Architecture flow renderer ──
+  // ── Architecture flow (standard pipeline dots) ──
   function renderArch(nodes) {
-    const flow = document.getElementById('arch-flow');
-    flow.innerHTML = '';
+    const pipeline = document.getElementById('arch-pipeline');
+    pipeline.innerHTML = '';
     nodes.forEach((n, i) => {
       if (i > 0) {
-        const arr = document.createElement('div');
-        arr.className = 'arch-arrow';
-        arr.innerHTML = '›';
-        flow.appendChild(arr);
+        const conn = document.createElement('div');
+        conn.className = 'tool-stage-connector done';
+        pipeline.appendChild(conn);
       }
-      const node = document.createElement('div');
-      node.className = 'arch-node ' + (n.type || 'neutral');
-      node.innerHTML = `<div class="n-label">${n.label}</div>${n.detail ? `<div class="n-detail">${n.detail}</div>` : ''}`;
-      flow.appendChild(node);
+      const stage = document.createElement('div');
+      stage.className = 'tool-stage arch-' + (n.type || 'neutral');
+      stage.innerHTML = `<div class="tool-stage-dot"></div><span class="tool-stage-label">${n.label}</span>${n.sub ? `<span class="arch-sub">${n.sub}</span>` : ''}`;
+      pipeline.appendChild(stage);
     });
   }
 
@@ -673,9 +660,8 @@
   function animateCost(from, to, durationMs, onUpdate, onDone) {
     const start = performance.now();
     function step(now) {
-      const elapsed = now - start;
-      const t = Math.min(elapsed / durationMs, 1);
-      const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t; // ease in-out quad
+      const t = Math.min((now - start) / durationMs, 1);
+      const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
       const val = from + (to - from) * ease;
       onUpdate(val);
       if (t < 1) requestAnimationFrame(step);
@@ -684,42 +670,29 @@
     requestAnimationFrame(step);
   }
 
-  // ── Compute cost for a state ──
+  // ── Compute monthly cost for a given opt state ──
   function computeMonthly(opt, vol) {
     const { inputTok, outputTok, model, cacheHit = 0, routeFrac = 0, miniModel } = opt;
     let cpq;
     if (miniModel && routeFrac > 0) {
-      const mainFrac = 1 - routeFrac;
       const mainCpq = costPerQuery(inputTok, outputTok, model);
       const miniCpq = costPerQuery(inputTok, outputTok, miniModel);
-      cpq = mainFrac * mainCpq + routeFrac * miniCpq;
+      cpq = (1 - routeFrac) * mainCpq + routeFrac * miniCpq;
     } else {
       cpq = costPerQuery(inputTok, outputTok, model);
     }
     return monthlyCost(cpq, vol, cacheHit);
   }
 
-  // ── Update naive cost preview ──
-  function updatePreview() {
-    if (!currentScenario) return;
-    const sc = SCENARIOS[currentScenario];
-    const vol = parseInt(document.getElementById('vol-slider').value);
-    const naive = sc.naive;
-    const cpq = costPerQuery(naive.inputTok, naive.outputTok, naive.model);
-    const monthly = monthlyCost(cpq, vol, 0);
-    document.getElementById('naive-preview-cost').textContent = fmt$(monthly) + '/month';
-    document.getElementById('naive-preview-desc').textContent = `${fmtTok(naive.inputTok)} tokens × ${vol.toLocaleString()} ${sc.unit} × ${naive.model}`;
-  }
-
-  // ── Phase 1: Run Naive ──
-  async function runNaive() {
+  // ── Phase 1: Run Current Architecture ──
+  async function runBaseline() {
     if (running || !currentScenario) return;
     running = true;
     phase = 0;
     const sc = SCENARIOS[currentScenario];
     const vol = parseInt(document.getElementById('vol-slider').value);
 
-    // Reset
+    // Reset output
     document.getElementById('context-log').innerHTML = '';
     document.getElementById('opt-steps-list').innerHTML = '';
     document.getElementById('comparison').innerHTML = '';
@@ -728,44 +701,39 @@
     document.getElementById('savings-card').style.display = 'none';
     document.getElementById('opt-steps').style.display = 'none';
     document.getElementById('phase2-cta').style.display = 'none';
-    document.querySelectorAll('.tool-stage').forEach(s => s.className = 'tool-stage pending');
+    document.querySelectorAll('.tool-stage[data-stage]').forEach(s => s.className = 'tool-stage pending');
     document.querySelectorAll('.tool-stage-connector').forEach(c => c.className = 'tool-stage-connector');
 
-    // Show pipeline + output
     document.getElementById('pipeline').style.display = 'flex';
     document.getElementById('sim-output').style.display = 'block';
     document.getElementById('cost-meter').style.display = 'block';
-    document.getElementById('run-naive-btn').disabled = true;
+    document.getElementById('run-baseline-btn').disabled = true;
 
-    // ── Stage 1: Profile ──
+    // Stage 1: Profile
     setStage('profile');
     await delay(1800);
 
-    // ── Stage 2: Baseline ──
+    // Stage 2: Baseline
     setStage('baseline');
     await delay(1200);
 
-    const naive = sc.naive;
-    const naiveCpq = costPerQuery(naive.inputTok, naive.outputTok, naive.model);
-    const naiveMonthly = monthlyCost(naiveCpq, vol, 0);
+    const b = sc.baseline;
+    const baseCpq = costPerQuery(b.inputTok, b.outputTok, b.model);
+    const baseMonthly = monthlyCost(baseCpq, vol, 0);
 
-    // Show architecture
-    renderArch(naive.arch);
-    document.getElementById('cost-meter-label').textContent = 'Naive Monthly Cost';
+    renderArch(b.arch);
+    document.getElementById('cost-meter-label').textContent = 'Current Monthly Cost';
     document.getElementById('cost-meter-meta').innerHTML = `
-      <p style="font-size:0.6rem;color:rgba(248,113,113,0.5);font-weight:600">${naive.desc}</p>
-      <p style="font-size:0.62rem;color:rgba(255,255,255,0.25);margin-top:0.2rem">${fmtTok(naive.inputTok)} in + ${fmtTok(naive.outputTok)} out tokens · ${naive.model}</p>`;
+      <p style="font-size:0.6rem;color:rgba(248,113,113,0.55);font-weight:600">${b.desc}</p>
+      <p style="font-size:0.62rem;color:rgba(255,255,255,0.25);margin-top:0.2rem">${fmtTok(b.inputTok)} in + ${fmtTok(b.outputTok)} out tokens · ${b.model}</p>`;
 
-    // Animate cost climbing
     const costEl = document.getElementById('cost-number');
     costEl.className = 'cost-number high';
-    await new Promise(resolve => animateCost(0, naiveMonthly, 2200, v => {
+    await new Promise(resolve => animateCost(0, baseMonthly, 2200, v => {
       costEl.textContent = fmt$(v);
     }, resolve));
 
     await delay(800);
-
-    // Show phase 2 CTA
     document.getElementById('phase2-cta').style.display = 'block';
     document.getElementById('phase2-cta').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -779,51 +747,46 @@
     running = true;
     const sc = SCENARIOS[currentScenario];
     const vol = parseInt(document.getElementById('vol-slider').value);
-    const naive = sc.naive;
-    const naiveCpq = costPerQuery(naive.inputTok, naive.outputTok, naive.model);
-    const naiveMonthly = monthlyCost(naiveCpq, vol, 0);
+    const b = sc.baseline;
+    const baseCpq = costPerQuery(b.inputTok, b.outputTok, b.model);
+    const baseMonthly = monthlyCost(baseCpq, vol, 0);
 
     document.getElementById('run-opt-btn').disabled = true;
     document.getElementById('phase2-cta').style.display = 'none';
 
-    // ── Stage 3: Optimize ──
     setStage('optimize');
     document.getElementById('opt-steps').style.display = 'block';
     await delay(1500);
 
     const costEl = document.getElementById('cost-number');
-    let prevMonthly = naiveMonthly;
+    let prevMonthly = baseMonthly;
     const stepResults = [];
 
     for (let i = 0; i < sc.optimizations.length; i++) {
       const opt = sc.optimizations[i];
       const newMonthly = computeMonthly(opt, vol);
       const savedFrac = (prevMonthly - newMonthly) / prevMonthly;
-      const totalSavedFrac = (naiveMonthly - newMonthly) / naiveMonthly;
+      const totalSavedFrac = (baseMonthly - newMonthly) / baseMonthly;
 
-      // Update architecture diagram
       renderArch(opt.arch);
 
-      // Animate cost dropping
       await new Promise(resolve => animateCost(prevMonthly, newMonthly, 1600, v => {
         costEl.textContent = fmt$(v);
-        const ratio = v / naiveMonthly;
+        const ratio = v / baseMonthly;
         costEl.className = 'cost-number ' + (ratio > 0.5 ? 'high' : ratio > 0.15 ? 'med' : 'low');
       }, resolve));
 
-      // Update label
       document.getElementById('cost-meter-label').textContent = `After Step ${i + 1}: ${opt.name}`;
       document.getElementById('cost-meter-meta').innerHTML = `
         <p style="font-size:0.6rem;color:rgba(74,222,128,0.6);font-weight:600">${opt.pattern}</p>
-        <p style="font-size:0.62rem;color:rgba(255,255,255,0.25);margin-top:0.2rem">${Math.round(savedFrac * 100)}% cheaper than previous step · ${Math.round(totalSavedFrac * 100)}% cheaper than naive</p>`;
+        <p style="font-size:0.62rem;color:rgba(255,255,255,0.25);margin-top:0.2rem">−${Math.round(savedFrac*100)}% from previous · −${Math.round(totalSavedFrac*100)}% from current setup</p>`;
 
-      // Add optimization card
       const card = document.createElement('div');
       card.className = 'opt-card';
       card.innerHTML = `
         <div class="opt-card-header">
-          <span class="opt-card-title">Step ${i + 1}: ${opt.name}</span>
-          <span class="savings-pill">−${Math.round(savedFrac * 100)}% from prev · −${Math.round(totalSavedFrac * 100)}% from naive</span>
+          <span class="opt-card-title">Step ${i+1}: ${opt.name}</span>
+          <span class="savings-pill">−${Math.round(savedFrac*100)}% from prev &nbsp;·&nbsp; −${Math.round(totalSavedFrac*100)}% from baseline</span>
         </div>
         <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);line-height:1.65;margin:0 0 0.5rem">${opt.desc}</p>
         <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
@@ -844,15 +807,14 @@
       document.getElementById('opt-steps-list').appendChild(card);
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-      stepResults.push({ name: opt.name, pattern: opt.pattern, monthly: newMonthly, savedFromNaive: totalSavedFrac });
+      stepResults.push({ name: opt.name, pattern: opt.pattern, monthly: newMonthly, savedFromBase: totalSavedFrac });
       prevMonthly = newMonthly;
-
       await delay(800);
     }
 
     const finalMonthly = prevMonthly;
 
-    // ── Stage 4: Compare ──
+    // Stage 4: Compare
     setStage('compare');
     await delay(1200);
 
@@ -862,28 +824,28 @@
       <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.75rem">Full Breakdown</p>
       <div style="border:1px solid rgba(255,255,255,0.05);border-radius:0.6rem;overflow:hidden;padding:0.75rem 1rem">
         <div class="comp-row header">
-          <div>Stage</div><div style="text-align:right">Monthly Cost</div><div style="text-align:right">Saved vs Naive</div>
+          <div>Stage</div><div style="text-align:right">Monthly Cost</div><div style="text-align:right">vs Current Setup</div>
         </div>
         <div class="comp-row">
-          <div style="color:rgba(255,255,255,0.5);font-weight:600">Naive (baseline)</div>
-          <div class="col-naive" style="text-align:right;font-weight:700">${fmt$(naiveMonthly)}</div>
+          <div style="color:rgba(255,255,255,0.5);font-weight:600">Current setup (baseline)</div>
+          <div class="col-base" style="text-align:right;font-weight:700">${fmt$(baseMonthly)}</div>
           <div style="text-align:right;color:rgba(255,255,255,0.25)">—</div>
         </div>
         ${stepResults.map(r => `
         <div class="comp-row">
           <div style="color:rgba(255,255,255,0.45)">${r.name}</div>
           <div class="col-opt" style="text-align:right;font-weight:600">${fmt$(r.monthly)}</div>
-          <div class="col-opt" style="text-align:right">−${Math.round(r.savedFromNaive * 100)}%</div>
+          <div class="col-opt" style="text-align:right">−${Math.round(r.savedFromBase*100)}%</div>
         </div>`).join('')}
       </div>`;
     compDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-    // ── Stage 5: Recommend ──
+    // Stage 5: Recommend
     setStage('recommend');
     await delay(1500);
 
-    const totalSavedFrac = (naiveMonthly - finalMonthly) / naiveMonthly;
-    const annualSavings = (naiveMonthly - finalMonthly) * 12;
+    const totalSavedFrac = (baseMonthly - finalMonthly) / baseMonthly;
+    const annualSavings = (baseMonthly - finalMonthly) * 12;
 
     const savingsDiv = document.getElementById('savings-card');
     savingsDiv.style.display = 'block';
@@ -892,7 +854,7 @@
         <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.25rem">
           <div>
             <p style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.25);margin-bottom:0.4rem">Total Cost Reduction</p>
-            <div class="savings-big">${Math.round(totalSavedFrac * 100)}%</div>
+            <div class="savings-big">${Math.round(totalSavedFrac*100)}%</div>
           </div>
           <div style="text-align:right">
             <p style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.25);margin-bottom:0.4rem">Annual Savings</p>
@@ -901,15 +863,15 @@
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem">
           <div style="padding:0.75rem;border-radius:0.4rem;background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.12)">
-            <p style="font-size:0.55rem;font-weight:700;color:rgba(248,113,113,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem">Naive approach</p>
-            <p style="font-size:1.1rem;font-weight:700;color:rgba(248,113,113,0.8);line-height:1">${fmt$(naiveMonthly)}<span style="font-size:0.65rem;font-weight:400;color:rgba(248,113,113,0.4)">/month</span></p>
+            <p style="font-size:0.55rem;font-weight:700;color:rgba(248,113,113,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem">Current setup</p>
+            <p style="font-size:1.1rem;font-weight:700;color:rgba(248,113,113,0.8);line-height:1">${fmt$(baseMonthly)}<span style="font-size:0.65rem;font-weight:400;color:rgba(248,113,113,0.4)">/month</span></p>
           </div>
           <div style="padding:0.75rem;border-radius:0.4rem;background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.12)">
             <p style="font-size:0.55rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem">Optimised</p>
             <p style="font-size:1.1rem;font-weight:700;color:rgba(74,222,128,0.8);line-height:1">${fmt$(finalMonthly)}<span style="font-size:0.65rem;font-weight:400;color:rgba(74,222,128,0.4)">/month</span></p>
           </div>
         </div>
-        <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:0.75rem">Same output quality. Same user experience. <strong style="color:rgba(255,255,255,0.55)">${Math.round(totalSavedFrac * 100)}% lower running cost</strong> — achieved through three architectural decisions that any well-designed system should include from day one.</p>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:0.75rem">Same output quality. Same user experience. <strong style="color:rgba(255,255,255,0.55)">${Math.round(totalSavedFrac*100)}% lower running cost</strong> — achieved through three architectural decisions that any well-designed AI system should include from day one.</p>
         <div style="height:1px;background:rgba(255,255,255,0.05);margin:0.75rem 0"></div>
         <p style="font-size:0.65rem;color:rgba(255,255,255,0.25);line-height:1.6">This is a simplified model using a single scenario. Real-world savings vary based on query distribution, model choices, document characteristics, and existing infrastructure. An architecture review produces accurate projections for your specific situation.</p>
       </div>`;
@@ -935,26 +897,21 @@
 
       currentScenario = btn.dataset.scenario;
       const sc = SCENARIOS[currentScenario];
-
-      // Set slider defaults
       const slider = document.getElementById('vol-slider');
       slider.value = sc.defaultVol;
-      document.getElementById('vol-display').innerHTML = `${sc.defaultVol.toLocaleString()} <span style="font-size:0.6rem;font-weight:400;color:rgba(255,255,255,0.3)" id="vol-unit">${sc.unit}</span>`;
-      document.getElementById('vol-unit').textContent = sc.unit;
+      document.getElementById('vol-display').innerHTML = `${sc.defaultVol.toLocaleString()} <span style="font-size:0.6rem;font-weight:400;color:rgba(255,255,255,0.3)">${sc.unit}</span>`;
 
       document.getElementById('slider-section').style.display = 'block';
-      document.getElementById('run-naive-btn').disabled = false;
+      document.getElementById('run-baseline-btn').disabled = false;
       phase = 0;
 
-      // Reset output if previously run
+      // Reset output
       document.getElementById('pipeline').style.display = 'none';
       document.getElementById('context-panel').style.display = 'none';
       document.getElementById('context-log').innerHTML = '';
       document.getElementById('sim-output').style.display = 'none';
-      document.querySelectorAll('.tool-stage').forEach(s => s.className = 'tool-stage pending');
+      document.querySelectorAll('.tool-stage[data-stage]').forEach(s => s.className = 'tool-stage pending');
       document.querySelectorAll('.tool-stage-connector').forEach(c => c.className = 'tool-stage-connector');
-
-      updatePreview();
     });
   });
 
@@ -964,11 +921,10 @@
     const sc = SCENARIOS[currentScenario];
     const unit = sc ? sc.unit : 'queries/day';
     document.getElementById('vol-display').innerHTML = `${val.toLocaleString()} <span style="font-size:0.6rem;font-weight:400;color:rgba(255,255,255,0.3)">${unit}</span>`;
-    updatePreview();
   });
 
-  // ── Phase buttons ──
-  document.getElementById('run-naive-btn').addEventListener('click', runNaive);
+  // ── Buttons ──
+  document.getElementById('run-baseline-btn').addEventListener('click', runBaseline);
   document.getElementById('run-opt-btn').addEventListener('click', runOptimize);
 
   </script>

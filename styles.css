@@ -52,7 +52,7 @@ body { background: #060a14; }
 .sidebar-children {
   max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
 }
-.sidebar-group.open .sidebar-children { max-height: 300px; }
+.sidebar-group.open .sidebar-children { max-height: 420px; }
 .sidebar-sublink {
   padding-left: 1.25rem !important; font-size: 0.72rem !important;
   color: rgba(255,255,255,0.22) !important;
