@@ -70,19 +70,6 @@
                     </button>
                   </div>
                 </div>
-
-                <!-- Divider -->
-                <div class="hidden md:flex" style="width:1px;background:rgba(255,255,255,0.06);margin:0 1.5rem;align-self:stretch"></div>
-                <div class="md:hidden" style="height:1px;background:rgba(255,255,255,0.04);margin:1rem 0"></div>
-
-                <!-- Paste your own -->
-                <div style="display:flex;flex-direction:column;justify-content:center;flex:1;min-width:0">
-                  <p style="font-size:0.65rem;color:rgba(255,255,255,0.3);margin-bottom:0.5rem;font-weight:600">Or paste your own text:</p>
-                  <div style="position:relative">
-                    <textarea id="custom-text" class="form-input" rows="4" maxlength="2000" placeholder="Paste up to 2,000 characters..." style="font-size:0.72rem;line-height:1.6;min-height:5rem"></textarea>
-                    <span id="char-count" style="position:absolute;bottom:0.4rem;right:0.6rem;font-size:0.55rem;color:rgba(255,255,255,0.12)">0 / 2,000</span>
-                  </div>
-                </div>
               </div>
 
               <!-- Question input -->
@@ -838,8 +825,6 @@ Termination for Cause. Either party may terminate this agreement immediately upo
     // Highlight selected
     document.querySelectorAll('.sample-btn').forEach(b => b.style.borderColor = '');
     btn.style.borderColor = 'rgba(34,197,94,0.3)';
-    document.getElementById('custom-text').value = '';
-    document.getElementById('char-count').textContent = '0 / 2,000';
 
     // Show sample questions
     const qContainer = document.getElementById('sample-questions');
@@ -859,21 +844,6 @@ Termination for Cause. Either party may terminate this agreement immediately upo
     const chip = e.target.closest('.q-chip');
     if (!chip || running) return;
     document.getElementById('question-input').value = chip.textContent;
-    updateRunBtn();
-  });
-
-  // Custom text
-  document.getElementById('custom-text').addEventListener('input', (e) => {
-    const text = e.target.value;
-    document.getElementById('char-count').textContent = `${text.length.toLocaleString()} / 2,000`;
-    if (text.trim().length > 50) {
-      currentDoc = 'custom';
-      currentText = text;
-      document.querySelectorAll('.sample-btn').forEach(b => b.style.borderColor = '');
-      document.getElementById('sample-questions').style.display = 'none';
-    } else if (text.trim().length === 0 && !currentDoc) {
-      currentText = '';
-    }
     updateRunBtn();
   });
 
