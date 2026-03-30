@@ -22,6 +22,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Booking wizard color enhancements */
+    .step-dot.active{background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.3);color:rgba(74,222,128,0.8)}
+    .step-item.active .step-label{color:rgba(74,222,128,0.6)}
+    .step-connector.filled .step-connector-fill{background:linear-gradient(90deg,rgba(34,197,94,0.4),rgba(74,222,128,0.25))}
+    .date-btn:hover,.time-btn:hover{border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.06)}
+    .form-input:focus{border-color:rgba(34,197,94,0.3);box-shadow:0 0 0 2px rgba(34,197,94,0.06)}
+    .expect-card{border-radius:0.6rem;padding:0.85rem 1rem;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);text-align:center}
+  </style>
 </head>
 <body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
   <div id="site-nav"></div>
@@ -30,8 +39,8 @@
     <section class="pt-20 pb-10">
       <div class="max-w-6xl mx-auto px-6 md:px-10">
         <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 anim-fade">Contact</p>
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-5 anim-up">Book a Discovery Call</h1>
-        <p class="anim-up anim-d1" style="color:rgba(255,255,255,0.55);line-height:1.85;font-size:0.84rem;max-width:36rem">Pick a time that works for you, tell me a bit about your situation, and I'll be there. Free, no commitment, no pitch.</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-5 anim-up">Start with a question.</h1>
+        <p class="anim-up anim-d1" style="color:rgba(255,255,255,0.55);line-height:1.85;font-size:0.84rem;max-width:36rem">Pick a time, tell me what you're dealing with, and we'll figure it out together. Free, no commitment, no pitch.</p>
       </div>
     </section>
 
@@ -149,19 +158,20 @@
           <div class="lg:w-56 shrink-0 reveal reveal-d1">
             <div style="position:sticky;top:1.5rem" class="flex flex-col gap-5">
               <div class="sidebar-card">
-                <div style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1rem">Discovery Call</div>
-                <div class="flex flex-col gap-3">
+                <div style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.75rem">What to Expect</div>
+                <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:0.75rem">This is a conversation, not a sales pitch. I'll ask about your situation, share what I think the right approach is, and if it makes sense to work together, we'll talk next steps. If it doesn't, you'll still walk away with a clearer picture.</p>
+                <div style="display:flex;flex-direction:column;gap:0.5rem">
                   <div class="flex items-center gap-2.5">
-                    <svg width="13" height="13" fill="none" stroke="rgba(255,255,255,0.2)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span style="font-size:0.75rem;color:rgba(255,255,255,0.35)">30 minutes</span>
+                    <svg width="13" height="13" fill="none" stroke="rgba(74,222,128,0.4)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span style="font-size:0.72rem;color:rgba(255,255,255,0.35)">30 minutes on Google Meet</span>
                   </div>
                   <div class="flex items-center gap-2.5">
-                    <svg width="13" height="13" fill="none" stroke="rgba(255,255,255,0.2)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <span style="font-size:0.75rem;color:rgba(255,255,255,0.35)">Google Meet</span>
+                    <svg width="13" height="13" fill="none" stroke="rgba(74,222,128,0.4)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span style="font-size:0.72rem;color:rgba(255,255,255,0.35)">Free, no commitment</span>
                   </div>
                   <div class="flex items-center gap-2.5">
-                    <svg width="13" height="13" fill="none" stroke="rgba(255,255,255,0.2)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span style="font-size:0.75rem;color:rgba(255,255,255,0.35)">Free, no commitment</span>
+                    <svg width="13" height="13" fill="none" stroke="rgba(74,222,128,0.4)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span style="font-size:0.72rem;color:rgba(255,255,255,0.35)">No prep needed, no follow-up spam</span>
                   </div>
                 </div>
               </div>
@@ -175,8 +185,28 @@
         </div>
       </div>
     </section>
-  </div>
 
+    <!-- ═══ WHAT TO EXPECT ═══ -->
+    <section class="pb-20">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 reveal">
+          <div class="expect-card">
+            <p style="font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.6);margin-bottom:0.3rem">We talk about your situation</p>
+            <p style="font-size:0.65rem;color:rgba(255,255,255,0.25);line-height:1.65">No prep needed. Just tell me what you're dealing with and what you're trying to achieve.</p>
+          </div>
+          <div class="expect-card">
+            <p style="font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.6);margin-bottom:0.3rem">I tell you what I think</p>
+            <p style="font-size:0.65rem;color:rgba(255,255,255,0.25);line-height:1.65">Honest assessment — even if the answer is "you don't need me" or "AI isn't the right approach here."</p>
+          </div>
+          <div class="expect-card">
+            <p style="font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.6);margin-bottom:0.3rem">You decide what's next</p>
+            <p style="font-size:0.65rem;color:rgba(255,255,255,0.25);line-height:1.65">No pressure, no follow-up emails. If it makes sense to work together, we'll talk about it. If not, no hard feelings.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
   <script src="components.js"></script>
   <script>
   const API = 'https://script.google.com/macros/s/AKfycbzg3YyUhQGz-DSj966ma53mP79g5-u00OIjv8WUtW4cJOTcHu387uMbKpPNpS_kMoE/exec';
