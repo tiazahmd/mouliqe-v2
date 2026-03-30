@@ -124,10 +124,16 @@
 
             <!-- Dashboard output -->
             <div id="dashboard-output" style="display:none;margin-top:1.25rem">
+              <!-- Profiling results (shown during profile stage) -->
+              <div id="profile-output" style="display:none;margin-bottom:1rem"></div>
               <!-- KPI cards row -->
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="kpi-cards"></div>
-              <!-- Charts -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="chart-area"></div>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="kpi-cards" style="--kpi:1"></div>
+              <!-- Auto-generated insights -->
+              <div id="insights-row" style="display:none;margin-top:0.75rem"></div>
+              <!-- Charts — one per row -->
+              <div class="flex flex-col gap-4 mt-4" id="chart-area"></div>
+              <!-- Funnel (marketing only) -->
+              <div id="funnel-area" style="display:none;margin-top:1rem"></div>
               <!-- Data preview -->
               <div class="tool-result-card mt-4" id="data-preview" style="display:none">
                 <div class="tool-result-header">
@@ -136,6 +142,8 @@
                 </div>
                 <div style="overflow-x:auto;margin-top:0.5rem" id="data-table-wrap"></div>
               </div>
+              <!-- Demo Report -->
+              <div id="demo-report" style="display:none;margin-top:1.5rem"></div>
             </div>
 
           </div>
@@ -424,7 +432,7 @@
     });
   }
 
-  // ── Metric Classifier ──
+  // ── Metric Classifier (smart chart types) ──
   function classifyMetrics(profiles) {
     const dateCol = profiles.find(p => p.type === 'date');
     const kpis = [];
@@ -442,56 +450,85 @@
           ...p,
           format: isCurrency ? 'currency' : isRate ? 'percentage' : isCount ? 'number' : isScore ? 'score' : 'number',
           importance: isCurrency ? 3 : isRate ? 2 : isCount ? 2 : 1,
+          isCurrency, isRate, isCount, isScore
         });
 
-        // Decide chart type
         if (dateCol) {
-          if (isCurrency || isCount) {
-            chartConfigs.push({ type: 'line', metric: p.name, label: p.name, fill: isCurrency });
-          } else if (isRate) {
-            chartConfigs.push({ type: 'line', metric: p.name, label: p.name, fill: false });
-          }
+          let chartType = 'line';
+          if (isCount && !isCurrency) chartType = 'bar';
+          chartConfigs.push({ type: chartType, metric: p.name, label: p.name, fill: isCurrency, isRate, isCurrency, isCount, isScore });
         }
       }
     });
 
-    // Sort by importance, take top 4 for KPI cards
     kpis.sort((a, b) => b.importance - a.importance);
-    // Group some charts (pair related metrics)
+
+    // Detect funnel (marketing: Leads > MQLs > SQLs > Conversions)
+    const funnelNames = ['Leads','MQLs','SQLs','Conversions'];
+    const funnelMetrics = funnelNames.map(n => kpis.find(k => k.name === n)).filter(Boolean);
+    const hasFunnel = funnelMetrics.length >= 3;
+
+    // Group related charts
     const grouped = groupCharts(chartConfigs);
 
-    return { kpis, chartConfigs: grouped, dateCol: dateCol ? dateCol.name : null };
+    // Add doughnut for composition pairs
+    const compPairs = [
+      { label: 'MRR Composition (Latest Month)', pos: 'New MRR', neg: 'Churned MRR' },
+      { label: 'Customer Flow (Latest Month)', pos: 'New Customers', neg: 'Churned Customers' },
+    ];
+    compPairs.forEach(cp => {
+      const posK = kpis.find(k => k.name === cp.pos);
+      const negK = kpis.find(k => k.name === cp.neg);
+      if (posK && negK) {
+        grouped.push({ type: 'doughnut', label: cp.label, metrics: [{ metric: cp.pos }, { metric: cp.neg }] });
+      }
+    });
+
+    // Add gauge-style doughnut for key rates (latest value)
+    const gaugeRates = kpis.filter(k => k.isRate).slice(0, 2);
+    gaugeRates.forEach(k => {
+      grouped.push({ type: 'gauge', label: k.name + ' (Current)', metric: k.name, value: k.latest, max: k.type === 'percentage' ? 100 : k.max * 1.2 });
+    });
+
+    // Add score metrics as bar chart if present (NPS, CSAT)
+    const scores = kpis.filter(k => k.isScore);
+    if (scores.length) {
+      grouped.push({ type: 'bar', metrics: scores.map(s => ({ metric: s.name, label: s.name })), label: scores.map(s => s.name).join(' & ') + ' Trend' });
+    }
+
+    return { kpis, chartConfigs: grouped, dateCol: dateCol ? dateCol.name : null, hasFunnel, funnelMetrics };
   }
 
   function groupCharts(configs) {
-    // Try to pair related metrics on same chart
     const used = new Set();
     const grouped = [];
 
     const pairs = [
-      [/^mrr$/i, /new mrr|churned mrr/i],
-      [/revenue/i, /orders/i],
-      [/leads/i, /mqls|sqls|conversions/i],
-      [/customers$/i, /new customers|churned customers/i],
+      [/^mrr$/i, /new mrr|churned mrr/i, 'line'],
+      [/revenue/i, /orders/i, 'bar'],
+      [/leads/i, /mqls|sqls|conversions/i, 'bar'],
+      [/customers$/i, /new customers|churned customers/i, 'bar'],
+      [/ad spend/i, /roas/i, 'bar'],
     ];
 
-    pairs.forEach(([primary, secondary]) => {
+    pairs.forEach(([primary, secondary, type]) => {
       const p = configs.find(c => primary.test(c.metric) && !used.has(c.metric));
       const ss = configs.filter(c => secondary.test(c.metric) && !used.has(c.metric));
       if (p && ss.length) {
         used.add(p.metric);
         ss.forEach(s => used.add(s.metric));
-        grouped.push({ type: 'line', metrics: [p, ...ss], label: p.label + ' Breakdown' });
+        grouped.push({ type, metrics: [p, ...ss], label: p.label + ' Breakdown' });
       }
     });
 
+    // Remaining rate metrics as individual line charts
     configs.forEach(c => {
       if (!used.has(c.metric)) {
-        grouped.push({ type: c.type, metrics: [c], label: c.label });
+        grouped.push({ type: c.isRate ? 'line' : c.type, metrics: [c], label: c.label });
       }
     });
 
-    return grouped.slice(0, 6); // max 6 charts
+    return grouped.slice(0, 8);
   }
 
   // ── Formatters ──
@@ -510,21 +547,42 @@
     return `<span style="color:rgba(255,255,255,0.2);font-size:0.6rem">— 0%</span>`;
   }
 
-  // ── Render KPI Cards ──
-  function renderKPICards(kpis) {
+  // ── Render KPI Cards with Sparklines ──
+  function renderKPICards(kpis, headers, rows) {
     const container = document.getElementById('kpi-cards');
     const top = kpis.slice(0, 4);
-    container.innerHTML = top.map(k => {
+    container.innerHTML = top.map((k, ki) => {
       const change = k.previous !== null ? ((k.latest - k.previous) / Math.abs(k.previous || 1)) * 100 : 0;
-      return `<div class="tool-result-card" style="text-align:center">
-        <p style="font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:0.35rem">${k.name}</p>
-        <p style="font-size:1.3rem;font-weight:700;color:rgba(255,255,255,0.85);margin-bottom:0.25rem">${formatValue(k.latest, k.format)}</p>
+      return `<div class="tool-result-card" style="text-align:center;padding:0.5rem 0.4rem !important;margin-top:0 !important;position:relative;overflow:hidden">
+        <p style="font-size:0.5rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);margin-bottom:0.15rem">${k.name}</p>
+        <p style="font-size:1.05rem;font-weight:700;color:rgba(255,255,255,0.85);line-height:1.2">${formatValue(k.latest, k.format)}</p>
         ${trendArrow(change)}
+        <div style="position:relative;height:22px;margin-top:0.2rem"><canvas id="spark-${ki}"></canvas></div>
       </div>`;
     }).join('');
+
+    // Draw sparklines
+    top.forEach((k, ki) => {
+      const colIdx = headers.indexOf(k.name);
+      if (colIdx < 0) return;
+      const data = rows.map(r => Number(r[colIdx]));
+      const color = k.trend >= 0 ? '#4ade80' : '#f87171';
+      const c = new Chart(document.getElementById(`spark-${ki}`).getContext('2d'), {
+        type: 'line',
+        data: { labels: data.map(() => ''), datasets: [{ data, borderColor: color, backgroundColor: color + '10', fill: true, tension: 0.4, borderWidth: 1.5, pointRadius: 0 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } } }
+      });
+      charts.push(c);
+    });
   }
 
-  // ── Render Charts ──
+  // ── Chart defaults ──
+  const COLORS = ['#4ade80','#f87171','#60a5fa','#fbbf24','#c084fc','#22c55e','#fb923c','#38bdf8'];
+  const CHART_FONT = { family: 'Oxanium' };
+  const GRID_COLOR = 'rgba(255,255,255,0.03)';
+  const TICK_COLOR = 'rgba(255,255,255,0.2)';
+
+  // ── Render Charts (full-width, mixed types) ──
   function renderCharts(chartConfigs, dateCol, headers, rows) {
     const container = document.getElementById('chart-area');
     container.innerHTML = '';
@@ -532,49 +590,159 @@
     charts = [];
 
     const labels = dateCol ? rows.map(r => r[headers.indexOf(dateCol)]) : rows.map((_, i) => i + 1);
-    const colors = ['#4ade80','#22c55e','#86efac','#fbbf24','#60a5fa','#c084fc'];
 
-    chartConfigs.forEach((cfg, ci) => {
+    // Render gauge charts in pairs (2-col row)
+    const gauges = chartConfigs.filter(c => c.type === 'gauge');
+    const doughnuts = chartConfigs.filter(c => c.type === 'doughnut');
+    const timeSeries = chartConfigs.filter(c => c.type !== 'gauge' && c.type !== 'doughnut');
+
+    // Time-series charts: one per row, 240px tall
+    timeSeries.forEach((cfg, ci) => {
       const wrap = document.createElement('div');
       wrap.className = 'tool-result-card';
-      wrap.innerHTML = `<div class="tool-result-header"><span class="tool-result-label">${cfg.label}</span></div><div style="position:relative;height:180px"><canvas id="chart-${ci}"></canvas></div>`;
+      wrap.innerHTML = `<div class="tool-result-header"><span class="tool-result-label">${cfg.label}</span></div><div style="position:relative;height:240px"><canvas id="chart-ts-${ci}"></canvas></div>`;
       container.appendChild(wrap);
 
-      const ctx = document.getElementById(`chart-${ci}`).getContext('2d');
       const datasets = cfg.metrics.map((m, mi) => ({
         label: m.metric || m.label,
         data: rows.map(r => Number(r[headers.indexOf(m.metric)])),
-        borderColor: colors[mi % colors.length],
-        backgroundColor: mi === 0 && m.fill !== false ? colors[mi % colors.length] + '15' : 'transparent',
-        fill: mi === 0 && m.fill !== false,
-        tension: 0.35,
-        borderWidth: 1.5,
-        pointRadius: 2,
-        pointHoverRadius: 4,
+        borderColor: COLORS[mi % COLORS.length],
+        backgroundColor: cfg.type === 'bar' ? COLORS[mi % COLORS.length] + '40' : (mi === 0 && m.fill !== false ? COLORS[mi % COLORS.length] + '15' : 'transparent'),
+        fill: cfg.type !== 'bar' && mi === 0 && m.fill !== false,
+        tension: 0.35, borderWidth: cfg.type === 'bar' ? 0 : 1.5, pointRadius: cfg.type === 'bar' ? 0 : 2, pointHoverRadius: 4,
+        borderRadius: cfg.type === 'bar' ? 4 : 0,
       }));
 
-      const chart = new Chart(ctx, {
-        type: cfg.type,
-        data: { labels, datasets },
+      charts.push(new Chart(document.getElementById(`chart-ts-${ci}`).getContext('2d'), {
+        type: cfg.type, data: { labels, datasets },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          resizeDelay: 100,
+          responsive: true, maintainAspectRatio: false, resizeDelay: 100,
           interaction: { intersect: false, mode: 'index' },
-          plugins: {
-            legend: {
-              display: datasets.length > 1,
-              labels: { color: 'rgba(255,255,255,0.3)', font: { size: 10, family: 'Oxanium' }, boxWidth: 8, padding: 12 }
-            }
-          },
+          plugins: { legend: { display: datasets.length > 1, labels: { color: 'rgba(255,255,255,0.3)', font: { size: 10, ...CHART_FONT }, boxWidth: 8, padding: 12 } } },
           scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.2)', font: { size: 9, family: 'Oxanium' }, maxRotation: 0 } },
-            y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.2)', font: { size: 9, family: 'Oxanium' } } }
+            x: { grid: { color: GRID_COLOR }, ticks: { color: TICK_COLOR, font: { size: 9, ...CHART_FONT }, maxRotation: 0 } },
+            y: { grid: { color: GRID_COLOR }, ticks: { color: TICK_COLOR, font: { size: 9, ...CHART_FONT } } }
           }
         }
-      });
-      charts.push(chart);
+      }));
     });
+
+    // Doughnuts + Gauges in a 2-col grid
+    if (doughnuts.length || gauges.length) {
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+      container.appendChild(row);
+
+      doughnuts.forEach((cfg, di) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'tool-result-card';
+        wrap.innerHTML = `<div class="tool-result-header"><span class="tool-result-label">${cfg.label}</span></div><div style="position:relative;height:200px"><canvas id="chart-dn-${di}"></canvas></div>`;
+        row.appendChild(wrap);
+
+        const vals = cfg.metrics.map(m => {
+          const ci = headers.indexOf(m.metric);
+          return ci >= 0 ? Number(rows[rows.length - 1][ci]) : 0;
+        });
+
+        charts.push(new Chart(document.getElementById(`chart-dn-${di}`).getContext('2d'), {
+          type: 'doughnut',
+          data: { labels: cfg.metrics.map(m => m.metric), datasets: [{ data: vals, backgroundColor: [COLORS[0] + '80', COLORS[1] + '80'], borderColor: ['transparent','transparent'], borderWidth: 0 }] },
+          options: {
+            responsive: true, maintainAspectRatio: false, cutout: '65%',
+            plugins: { legend: { position: 'bottom', labels: { color: 'rgba(255,255,255,0.3)', font: { size: 10, ...CHART_FONT }, boxWidth: 8, padding: 16 } } }
+          }
+        }));
+      });
+
+      gauges.forEach((cfg, gi) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'tool-result-card';
+        wrap.innerHTML = `<div class="tool-result-header"><span class="tool-result-label">${cfg.label}</span></div><div style="position:relative;height:200px"><canvas id="chart-ga-${gi}"></canvas></div>`;
+        row.appendChild(wrap);
+
+        const val = cfg.value;
+        const max = cfg.max || 100;
+        const remainder = Math.max(0, max - val);
+        const color = val > max * 0.7 ? COLORS[1] : val > max * 0.4 ? COLORS[3] : COLORS[0];
+
+        charts.push(new Chart(document.getElementById(`chart-ga-${gi}`).getContext('2d'), {
+          type: 'doughnut',
+          data: { labels: [cfg.metric, ''], datasets: [{ data: [val, remainder], backgroundColor: [color + '80', 'rgba(255,255,255,0.03)'], borderWidth: 0 }] },
+          options: {
+            responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, cutout: '75%',
+            plugins: {
+              legend: { display: false },
+              tooltip: { filter: (item) => item.dataIndex === 0 }
+            }
+          },
+          plugins: [{
+            id: 'gaugeText',
+            afterDraw(chart) {
+              const { ctx, chartArea: { left, right, top, bottom } } = chart;
+              const cx = (left + right) / 2, cy = bottom - 10;
+              ctx.save();
+              ctx.textAlign = 'center';
+              ctx.fillStyle = 'rgba(255,255,255,0.8)';
+              ctx.font = '700 1.1rem Oxanium';
+              ctx.fillText(formatValue(val, cfg.metric.match(/rate|ctr/i) ? 'percentage' : 'number'), cx, cy - 8);
+              ctx.fillStyle = 'rgba(255,255,255,0.2)';
+              ctx.font = '500 0.6rem Oxanium';
+              ctx.fillText(cfg.metric, cx, cy + 10);
+              ctx.restore();
+            }
+          }]
+        }));
+      });
+    }
+  }
+
+  // ── Render Column Profile Cards ──
+  function renderProfileCards(profiles) {
+    const el = document.getElementById('profile-output');
+    const typeColors = { date: '#60a5fa', number: '#4ade80', percentage: '#fbbf24', text: 'rgba(255,255,255,0.3)' };
+    const typeBgs = { date: 'rgba(96,165,250,0.06)', number: 'rgba(74,222,128,0.06)', percentage: 'rgba(251,191,36,0.06)', text: 'rgba(255,255,255,0.03)' };
+    el.innerHTML = `<p style="font-size:0.58rem;font-weight:700;color:rgba(251,191,36,0.5);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.5rem">Column Profiles</p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">${profiles.map(p => {
+        const c = typeColors[p.type] || typeColors.text;
+        const bg = typeBgs[p.type] || typeBgs.text;
+        const stats = p.type === 'number' || p.type === 'percentage'
+          ? `<span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">min ${p.min?.toLocaleString()} / max ${p.max?.toLocaleString()}</span>`
+          : `<span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">${p.unique} unique values</span>`;
+        return `<div style="border-radius:0.4rem;padding:0.5rem 0.6rem;background:${bg};border:1px solid ${c}15;animation:fadeInUp 0.3s ease-out">
+          <p style="font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.55);margin-bottom:0.15rem">${p.name}</p>
+          <span style="font-size:0.48rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:${c};background:${c}12;padding:0.1rem 0.3rem;border-radius:0.2rem">${p.type}</span>
+          <div style="margin-top:0.3rem">${stats}</div>
+        </div>`;
+      }).join('')}</div>`;
+    el.style.display = 'block';
+  }
+
+  // ── Render Funnel (horizontal bar) ──
+  function renderFunnel(funnelMetrics, headers, rows) {
+    const area = document.getElementById('funnel-area');
+    if (!funnelMetrics || funnelMetrics.length < 3) { area.style.display = 'none'; return; }
+    area.style.display = 'block';
+    const lastRow = rows[rows.length - 1];
+    const items = funnelMetrics.map(m => ({ name: m.name, value: Number(lastRow[headers.indexOf(m.name)]) }));
+    const maxVal = items[0].value;
+    const funnelColors = ['#60a5fa','#c084fc','#fbbf24','#4ade80'];
+
+    area.innerHTML = `<div class="tool-result-card">
+      <div class="tool-result-header"><span class="tool-result-label">Conversion Funnel (Latest Month)</span></div>
+      <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.75rem">${items.map((it, i) => {
+        const pct = maxVal > 0 ? (it.value / maxVal * 100) : 0;
+        const convRate = i > 0 ? (it.value / items[i - 1].value * 100).toFixed(1) : null;
+        return `<div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.25rem">
+            <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">${it.name}</span>
+            <span style="font-size:0.72rem;color:rgba(255,255,255,0.35)">${it.value.toLocaleString()}${convRate ? ` <span style="font-size:0.6rem;color:${funnelColors[i]}">(${convRate}% from prev)</span>` : ''}</span>
+          </div>
+          <div style="height:24px;background:rgba(255,255,255,0.02);border-radius:4px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${funnelColors[i]}30;border-right:2px solid ${funnelColors[i]}80;border-radius:4px;transition:width 0.8s ease-out"></div>
+          </div>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
   }
 
   // ── Render Data Preview ──
@@ -601,45 +769,192 @@
     preview.style.display = 'block';
   }
 
+  // ── Generate Insights ──
+  function renderInsights(kpis) {
+    const row = document.getElementById('insights-row');
+    const insights = [];
+    kpis.forEach(k => {
+      if (k.trend > 50) insights.push({ text: `${k.name} grew ${k.trend.toFixed(0)}% over the period`, type: 'positive' });
+      else if (k.trend < -20) insights.push({ text: `${k.name} declined ${Math.abs(k.trend).toFixed(0)}% — needs attention`, type: 'negative' });
+      if (k.isRate && k.latest > k.mean * 1.15) insights.push({ text: `${k.name} is above average at ${formatValue(k.latest, k.format)}`, type: 'positive' });
+      if (k.isRate && k.name.match(/churn/i) && k.trend > 10) insights.push({ text: `${k.name} trending upward — investigate retention`, type: 'warning' });
+    });
+    if (!insights.length) { row.style.display = 'none'; return; }
+    const colors = { positive: '#4ade80', negative: '#f87171', warning: '#fbbf24' };
+    const bgs = { positive: 'rgba(74,222,128,0.03)', negative: 'rgba(248,113,113,0.03)', warning: 'rgba(251,191,36,0.03)' };
+    const borders = { positive: 'rgba(74,222,128,0.1)', negative: 'rgba(248,113,113,0.1)', warning: 'rgba(251,191,36,0.1)' };
+    row.style.display = 'block';
+    row.innerHTML = `<p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.5rem">Key Insights</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">${insights.slice(0, 6).map(ins =>
+        `<div style="border-radius:0.5rem;padding:0.65rem 0.85rem;background:${bgs[ins.type]};border:1px solid ${borders[ins.type]};display:flex;align-items:flex-start;gap:0.5rem">
+          <span style="width:6px;height:6px;border-radius:50%;background:${colors[ins.type]};flex-shrink:0;margin-top:0.35rem"></span>
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.5);line-height:1.65">${ins.text}</span>
+        </div>`
+      ).join('')}</div>`;
+  }
+
+  // ── Demo Report: data generation ──
+  function generateReportData(kpis, headers, rows) {
+    const sections = [];
+    const lastRow = rows[rows.length - 1];
+    const firstRow = rows[0];
+
+    // Executive summary bullets
+    const exec = [];
+    kpis.slice(0, 6).forEach(k => {
+      const ci = headers.indexOf(k.name);
+      if (ci < 0) return;
+      const first = Number(firstRow[ci]), last = Number(lastRow[ci]);
+      const delta = first !== 0 ? ((last - first) / Math.abs(first) * 100) : 0;
+      if (Math.abs(delta) > 5) {
+        const dir = delta > 0 ? 'increased' : 'decreased';
+        exec.push({ metric: k.name, text: `${k.name} ${dir} ${Math.abs(delta).toFixed(0)}% (${formatValue(first, k.format)} to ${formatValue(last, k.format)})`, positive: k.name.match(/churn|abandon|cost|cac|cpc/i) ? delta < 0 : delta > 0 });
+      }
+    });
+    if (exec.length) sections.push({ title: 'Executive Summary', type: 'exec', items: exec });
+
+    // Risks
+    const risks = [];
+    kpis.forEach(k => {
+      if (k.name.match(/churn/i) && k.trend > 10) risks.push(`${k.name} has risen ${k.trend.toFixed(0)}% — customer retention may be deteriorating.`);
+      if (k.name.match(/abandon/i) && k.latest > 65) risks.push(`Cart abandonment at ${k.latest.toFixed(1)}% — checkout friction is high.`);
+      if (k.name.match(/cac/i) && k.trend > 0) risks.push(`Customer acquisition cost trending up — efficiency declining.`);
+      if (k.name.match(/return rate/i) && k.latest > 8) risks.push(`Return rate at ${k.latest.toFixed(1)}% — product quality or expectation mismatch.`);
+      if (k.name.match(/conversion rate/i) && k.trend < -5) risks.push(`Conversion rate declining — funnel optimization needed.`);
+    });
+    if (risks.length) sections.push({ title: 'Risks & Watch Items', type: 'risks', items: risks });
+
+    // Opportunities
+    const opps = [];
+    kpis.forEach(k => {
+      if (k.name.match(/repeat/i) && k.trend > 10) opps.push(`Repeat customer rate growing — loyalty programs could accelerate this.`);
+      if (k.name.match(/aov/i) && k.trend > 5) opps.push(`AOV trending up ${k.trend.toFixed(0)}% — upsell/cross-sell strategies are working.`);
+      if (k.name.match(/roas/i) && k.latest > 3) opps.push(`ROAS at ${k.latest.toFixed(1)}x — consider scaling ad spend in top channels.`);
+      if (k.name.match(/nps/i) && k.trend > 10) opps.push(`NPS improving — leverage promoters for referral programs.`);
+      if (k.name.match(/email open/i) && k.latest > 25) opps.push(`Email open rate at ${k.latest.toFixed(1)}% — strong engagement, test more campaigns.`);
+    });
+    if (opps.length) sections.push({ title: 'Opportunities', type: 'opps', items: opps });
+
+    // Recommended actions
+    const actions = [];
+    if (risks.length) actions.push('Investigate top risk items within the next sprint cycle.');
+    if (opps.length) actions.push('Prioritize highest-ROI opportunity for next quarter planning.');
+    actions.push('Set automated alerts for KPIs that deviate more than 15% from trailing average.');
+    actions.push('Schedule monthly review of this dashboard with stakeholders.');
+    sections.push({ title: 'Recommended Next Steps', type: 'actions', items: actions });
+
+    return sections;
+  }
+
+  // ── Demo Report: renderer ──
+  function renderDemoReport(kpis, headers, rows) {
+    const el = document.getElementById('demo-report');
+    const sections = generateReportData(kpis, headers, rows);
+    if (!sections.length) { el.style.display = 'none'; return; }
+
+    const typeColors = { exec: '#4ade80', risks: '#f87171', opps: '#60a5fa', actions: '#fbbf24' };
+    const typeIcons = { exec: 'M9 12l2 2 4-4m6-2a9 9 0 11-18 0 9 9 0 0118 0z', risks: 'M12 9v2m0 4h.01M5.07 19A11 11 0 0112 2a11 11 0 016.93 17', opps: 'M2 12l5 5L20 4', actions: 'M4 6h16M4 12h16M4 18h10' };
+    const typeDescs = { exec: 'Period-over-period performance across your most important metrics.', risks: 'Metrics trending in the wrong direction that need investigation.', opps: 'Positive trends worth doubling down on.', actions: 'Concrete steps to take based on what the data is showing.' };
+
+    let html = `<div style="border-radius:0.75rem;padding:1.5rem;background:rgba(74,222,128,0.015);border:1px solid rgba(74,222,128,0.08);position:relative;overflow:hidden">`;
+    html += `<div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(74,222,128,0.2),transparent)"></div>`;
+    html += `<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem">`;
+    html += `<p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em">Demo Report</p>`;
+    html += `<span style="font-size:0.48rem;color:rgba(255,255,255,0.2);font-weight:500">Auto-generated from your data</span></div>`;
+    html += `<p style="font-size:0.92rem;font-weight:700;color:rgba(255,255,255,0.8);margin-bottom:0.3rem">What This Data Is Telling You</p>`;
+    html += `<p style="font-size:0.72rem;color:rgba(255,255,255,0.3);line-height:1.7;margin-bottom:1.25rem">A real dashboard doesn't just show numbers — it surfaces what matters, flags what's breaking, and tells you what to do next. Here's what an automated report built on this data would look like.</p>`;
+
+    sections.forEach(sec => {
+      const color = typeColors[sec.type] || '#4ade80';
+      const iconPath = typeIcons[sec.type] || typeIcons.actions;
+      const desc = typeDescs[sec.type] || '';
+      const borderColor = color + '18';
+      const bgColor = color + '08';
+      html += `<div style="border-radius:0.6rem;padding:1rem 1.15rem;background:${bgColor};border:1px solid ${borderColor};margin-bottom:0.75rem">`;
+      html += `<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem">`;
+      html += `<div style="width:22px;height:22px;border-radius:50%;background:${color}15;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="11" height="11" fill="none" stroke="${color}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="${iconPath}"/></svg></div>`;
+      html += `<p style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.7)">${sec.title}</p></div>`;
+      if (desc) html += `<p style="font-size:0.62rem;color:rgba(255,255,255,0.2);line-height:1.6;margin-bottom:0.6rem;margin-left:2rem">${desc}</p>`;
+      html += `<div style="display:flex;flex-direction:column;gap:0.4rem;margin-left:2rem">`;
+
+      if (sec.type === 'exec') {
+        sec.items.forEach(it => {
+          const dotColor = it.positive ? '#4ade80' : '#f87171';
+          const label = it.positive ? 'Positive' : 'Needs attention';
+          html += `<div style="display:flex;align-items:flex-start;gap:0.5rem"><span style="font-size:0.5rem;font-weight:700;padding:0.12rem 0.35rem;border-radius:0.2rem;background:${dotColor}12;color:${dotColor};flex-shrink:0;margin-top:0.15rem;text-transform:uppercase;letter-spacing:0.05em">${label}</span><span style="font-size:0.72rem;color:rgba(255,255,255,0.5);line-height:1.65">${it.text}</span></div>`;
+        });
+      } else {
+        sec.items.forEach(it => {
+          html += `<div style="display:flex;align-items:flex-start;gap:0.5rem"><span style="color:${color};font-size:0.55rem;flex-shrink:0;margin-top:0.25rem">&#9656;</span><span style="font-size:0.72rem;color:rgba(255,255,255,0.45);line-height:1.65">${it}</span></div>`;
+        });
+      }
+      html += `</div></div>`;
+    });
+
+    html += `<div style="border-top:1px solid rgba(255,255,255,0.04);padding-top:1rem;margin-top:0.25rem">`;
+    html += `<p style="font-size:0.68rem;color:rgba(255,255,255,0.3);line-height:1.75;margin-bottom:0.5rem">This is a simplified version of what a production report looks like. In a real engagement, reports like this are:</p>`;
+    html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem">`;
+    const footerItems = ['Generated automatically on a schedule','Delivered via email, Slack, or embedded in your tools','Tailored per stakeholder — execs see strategy, operators see actions','Backed by anomaly detection that flags deviations before you notice them'];
+    footerItems.forEach(fi => { html += `<div style="font-size:0.62rem;color:rgba(255,255,255,0.2);line-height:1.6;display:flex;gap:0.3rem"><span style="color:rgba(74,222,128,0.3);flex-shrink:0">›</span>${fi}</div>`; });
+    html += `</div></div></div>`;
+
+    el.innerHTML = html;
+    el.style.display = 'block';
+  }
+
   // ── Pipeline Runner ──
   async function runPipeline(headers, rows) {
     const pipeline = document.getElementById('pipeline');
     const output = document.getElementById('dashboard-output');
     pipeline.style.display = 'flex';
     output.style.display = 'none';
+    document.getElementById('demo-report').style.display = 'none';
+    document.getElementById('funnel-area').style.display = 'none';
+    document.getElementById('insights-row').style.display = 'none';
+    document.getElementById('profile-output').style.display = 'none';
+    document.getElementById('data-preview').style.display = 'none';
+    document.getElementById('chart-area').innerHTML = '';
+    document.getElementById('kpi-cards').innerHTML = '';
 
-    // Clear previous context log and charts
     document.getElementById('context-log').innerHTML = '';
     document.getElementById('context-panel').style.display = 'none';
     charts.forEach(c => c.destroy());
     charts = [];
 
-    // Stage 1: Parse
+    // Stage 1: Parse — show data preview
     setStage('parse');
-    await delay(1800);
-
-    // Stage 2: Profile
-    setStage('profile');
-    await delay(2200);
-    const profiles = profileColumns(headers, rows);
-
-    // Stage 3: Classify
-    setStage('classify');
-    await delay(2000);
-    const { kpis, chartConfigs, dateCol } = classifyMetrics(profiles);
-
-    // Stage 4: Visualize
-    setStage('visualize');
-    await delay(1800);
-
-    // Stage 5: Render
-    setStage('render');
     await delay(1200);
-
     output.style.display = 'block';
-    renderKPICards(kpis);
-    renderCharts(chartConfigs, dateCol, headers, rows);
     renderDataPreview(headers, rows);
+    await delay(600);
+
+    // Stage 2: Profile — show column profile cards
+    setStage('profile');
+    await delay(1200);
+    const profiles = profileColumns(headers, rows);
+    renderProfileCards(profiles);
+    await delay(1000);
+
+    // Stage 3: Classify — show KPI cards + insights
+    setStage('classify');
+    await delay(1200);
+    const { kpis, chartConfigs, dateCol, hasFunnel, funnelMetrics } = classifyMetrics(profiles);
+    renderKPICards(kpis, headers, rows);
+    await delay(800);
+    renderInsights(kpis);
+    await delay(600);
+
+    // Stage 4: Visualize — show charts + funnel
+    setStage('visualize');
+    await delay(800);
+    renderCharts(chartConfigs, dateCol, headers, rows);
+    if (hasFunnel) renderFunnel(funnelMetrics, headers, rows);
+    await delay(1000);
+
+    // Stage 5: Render — show demo report
+    setStage('render');
+    await delay(800);
+    renderDemoReport(kpis, headers, rows);
 
     finishPipeline();
   }
