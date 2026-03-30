@@ -294,7 +294,7 @@
               <span class="q-num">01</span>
               <span class="q-text">What's your main challenge?</span>
             </div>
-            <div class="q-tiles grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div class="q-tiles grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               <button class="q-tile" data-q="challenge" data-v="automation">
                 <strong>Automate manual work</strong>
                 <span>Repetitive processes eating time and headcount</span>
@@ -310,6 +310,18 @@
               <button class="q-tile" data-q="challenge" data-v="ai-product">
                 <strong>Build an AI product</strong>
                 <span>AI-powered feature or application for users</span>
+              </button>
+              <button class="q-tile" data-q="challenge" data-v="cost">
+                <strong>Reduce AI costs</strong>
+                <span>Spending too much on models, tokens, or infrastructure</span>
+              </button>
+              <button class="q-tile" data-q="challenge" data-v="migrate">
+                <strong>Migrate systems</strong>
+                <span>Moving off legacy platforms to modern infrastructure</span>
+              </button>
+              <button class="q-tile" data-q="challenge" data-v="reporting">
+                <strong>Build reporting</strong>
+                <span>Leadership needs better visibility into what's happening</span>
               </button>
             </div>
           </div>
@@ -395,40 +407,81 @@
           <!-- Toggles -->
           <div style="margin-top:2.75rem">
             <p style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.36);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:1rem">What happens if you cut corners?</p>
-            <div class="flex flex-col gap-2.5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-              <label class="toggle-row" for="t-skipData">
-                <div style="flex-shrink:0;margin-top:0.1rem">
-                  <input type="checkbox" id="t-skipData" class="toggle-input" data-toggle="skipData">
-                  <label for="t-skipData" class="toggle-label" onclick="event.stopPropagation()"></label>
+              <!-- Column 1: Architecture shortcuts -->
+              <div>
+                <p style="font-size:0.48rem;font-weight:700;color:rgba(192,132,252,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Architecture</p>
+                <div class="flex flex-col gap-2.5">
+                  <label class="toggle-row" for="t-skipData">
+                    <div style="flex-shrink:0;margin-top:0.1rem">
+                      <input type="checkbox" id="t-skipData" class="toggle-input" data-toggle="skipData">
+                      <label for="t-skipData" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Skip the data foundation</p>
+                      <p class="toggle-desc">Run AI directly on raw, unvalidated inputs</p>
+                    </div>
+                  </label>
+                  <label class="toggle-row" for="t-noGuardrails" id="tr-noGuardrails">
+                    <div style="flex-shrink:0;margin-top:0.1rem">
+                      <input type="checkbox" id="t-noGuardrails" class="toggle-input" data-toggle="noGuardrails">
+                      <label for="t-noGuardrails" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Remove AI guardrails</p>
+                      <p class="toggle-desc">No output validation, no permission classification</p>
+                    </div>
+                  </label>
+                  <label class="toggle-row" for="t-singleAgent" id="tr-singleAgent">
+                    <div style="flex-shrink:0;margin-top:0.1rem">
+                      <input type="checkbox" id="t-singleAgent" class="toggle-input" data-toggle="singleAgent">
+                      <label for="t-singleAgent" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Use a single agent</p>
+                      <p class="toggle-desc">One model handles planning, execution, and synthesis</p>
+                    </div>
+                  </label>
                 </div>
-                <div>
-                  <p class="toggle-title">Skip the data foundation</p>
-                  <p class="toggle-desc">Run AI directly on raw, unvalidated inputs</p>
-                </div>
-              </label>
+              </div>
 
-              <label class="toggle-row" for="t-noGuardrails" id="tr-noGuardrails">
-                <div style="flex-shrink:0;margin-top:0.1rem">
-                  <input type="checkbox" id="t-noGuardrails" class="toggle-input" data-toggle="noGuardrails">
-                  <label for="t-noGuardrails" class="toggle-label" onclick="event.stopPropagation()"></label>
+              <!-- Column 2: Operational shortcuts -->
+              <div>
+                <p style="font-size:0.48rem;font-weight:700;color:rgba(251,191,36,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Operations</p>
+                <div class="flex flex-col gap-2.5">
+                  <label class="toggle-row" for="t-noMonitoring" id="tr-noMonitoring">
+                    <div style="flex-shrink:0;margin-top:0.1rem">
+                      <input type="checkbox" id="t-noMonitoring" class="toggle-input" data-toggle="noMonitoring">
+                      <label for="t-noMonitoring" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Skip monitoring & alerting</p>
+                      <p class="toggle-desc">No pipeline health checks, no anomaly detection</p>
+                    </div>
+                  </label>
+                  <label class="toggle-row" for="t-noCaching" id="tr-noCaching">
+                    <div style="flex-shrink:0;margin-top:0.1rem">
+                      <input type="checkbox" id="t-noCaching" class="toggle-input" data-toggle="noCaching">
+                      <label for="t-noCaching" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">No caching layer</p>
+                      <p class="toggle-desc">Every request hits the AI model directly</p>
+                    </div>
+                  </label>
+                  <label class="toggle-row" for="t-skipTesting" id="tr-skipTesting">
+                    <div style="flex-shrink:0;margin-top:0.1rem">
+                      <input type="checkbox" id="t-skipTesting" class="toggle-input" data-toggle="skipTesting">
+                      <label for="t-skipTesting" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Skip testing & validation</p>
+                      <p class="toggle-desc">No parallel runs, no data reconciliation, no evals</p>
+                    </div>
+                  </label>
                 </div>
-                <div>
-                  <p class="toggle-title">Remove AI guardrails</p>
-                  <p class="toggle-desc">No output validation, no permission classification</p>
-                </div>
-              </label>
-
-              <label class="toggle-row" for="t-singleAgent" id="tr-singleAgent">
-                <div style="flex-shrink:0;margin-top:0.1rem">
-                  <input type="checkbox" id="t-singleAgent" class="toggle-input" data-toggle="singleAgent">
-                  <label for="t-singleAgent" class="toggle-label" onclick="event.stopPropagation()"></label>
-                </div>
-                <div>
-                  <p class="toggle-title">Use a single agent</p>
-                  <p class="toggle-desc">One model handles planning, execution, and synthesis</p>
-                </div>
-              </label>
+              </div>
 
             </div>
           </div>
@@ -592,6 +645,9 @@
     reliability: { sources:'secondary',ingestion:'secondary',warehouse:'active',   ai:'critical', output:'active'   },
     data:        { sources:'critical', ingestion:'critical', warehouse:'critical', ai:'future',   output:'secondary'},
     'ai-product':{ sources:'active',   ingestion:'active',   warehouse:'active',   ai:'critical', output:'critical' },
+    cost:        { sources:'secondary',ingestion:'active',   warehouse:'active',   ai:'critical', output:'secondary'},
+    migrate:     { sources:'critical', ingestion:'critical', warehouse:'critical', ai:'future',   output:'secondary'},
+    reporting:   { sources:'active',   ingestion:'active',   warehouse:'critical', ai:'secondary',output:'critical' },
   };
 
   // Node descriptions per challenge
@@ -601,30 +657,45 @@
       reliability:  'Your existing inputs. For a reliability problem, source data is usually fine. The issues are downstream.',
       data:         'The root of the problem. Multiple sources with no shared identifier, inconsistent formats, and no clear owner. This is where the audit starts.',
       'ai-product': 'The data your product needs to function. We map what exists today, what needs to be created, and what will arrive in real time.',
+      cost:        'Your current data sources may be over-fetched or redundantly queried. We audit what\u2019s actually needed versus what\u2019s being pulled \u2014 reducing token waste starts at the input layer.',
+      migrate:     'The systems you\u2019re moving away from. We catalog every source, its schema, data volume, and downstream dependencies before touching anything.',
+      reporting:   'The raw inputs feeding your reports. We map every source to ensure nothing is missed and every metric traces back to an authoritative origin.',
     },
     ingestion: {
       automation:   'The backbone of your automation. Reliable ETL pipelines that move and transform data without human intervention — and alert when something breaks.',
       reliability:  'Likely not your core problem. But clean ingestion is a prerequisite for anything trustworthy downstream.',
       data:         'The most critical layer for your situation. Standardizing schemas, consolidating sources, building a single definition for every metric.',
       'ai-product': 'The pipeline feeding your AI. Data quality here directly determines output quality — garbage in, confident garbage out.',
+      cost:        'Inefficient pipelines often duplicate processing or send unnecessary context to AI models. Optimizing ingestion can cut costs before you even touch the model layer.',
+      migrate:     'The most critical layer in a migration. Building new pipelines that replicate existing logic while improving reliability, with parallel runs to validate before cutover.',
+      reporting:   'The pipeline that feeds your dashboards. Automated, scheduled, and monitored \u2014 so reports are always current and nobody spends Monday morning debugging a broken refresh.',
     },
     warehouse: {
       automation:   'Consolidated, queryable data that automation can rely on. The difference between automation that holds and automation that quietly drifts.',
       reliability:  'A clean warehouse is non-negotiable for reliable AI. Without it, models pick between conflicting numbers — and you never know which one they chose.',
       data:         'The primary deliverable for your situation. A properly structured warehouse with documented lineage, consistent schemas, and a single source of truth per metric.',
       'ai-product': 'The knowledge base your AI draws from. Quality and structure here determine how useful and trustworthy your product actually is.',
+      cost:        'A well-structured warehouse enables caching, pre-computation, and semantic search \u2014 all of which dramatically reduce the number of expensive AI model calls needed.',
+      migrate:     'The target destination. Schema design, data type mapping, and constraint validation happen here. Get this wrong and everything downstream inherits the problems.',
+      reporting:   'The single source of truth your reports draw from. Consistent metric definitions, documented lineage, and a schema that makes self-service queries possible.',
     },
     ai: {
       automation:   'AI where it genuinely makes sense — not everywhere. Classification, extraction, generation — each with validation before any action is taken.',
       reliability:  'The core of your problem. Not just a model call — a structured multi-agent pipeline with output validation, guardrails, and context management built in from the start.',
       data:         'The goal, but not yet. Build the data foundation first, or this layer generates confident, well-formatted wrong answers.',
       'ai-product': 'The core of what you\'re building. Production AI requires context management, memory systems, guardrails, and validated outputs — not just a model wrapped in an API.',
+      cost:        'The primary cost driver. Model selection, prompt optimization, caching strategies, semantic routing, and RAG architecture \u2014 each decision directly impacts your monthly bill.',
+      migrate:     'Usually not the focus of a migration \u2014 but if you\'re moving AI workloads between platforms, model compatibility, context management, and eval parity all need attention.',
+      reporting:   'AI-enhanced reporting: automated narrative generation, anomaly detection, and natural language queries against your data. Useful but not always necessary \u2014 depends on your team\'s needs.',
     },
     output: {
       automation:   'Automated reports, triggered workflows, and actions that run without human intervention. This is where the time savings and ROI show up.',
       reliability:  'Validated, trustworthy outputs that users can actually rely on. Every guardrail upstream exists to make this layer dependable.',
       data:         'Better reporting and cleaner answers — once the data underneath them is worth trusting.',
       'ai-product': 'Your product\'s interface. API responses, a conversational UI, generated content, or automated decisions — built on a reliable foundation.',
+      cost:        'Optimized outputs mean fewer redundant calls. Response caching, tiered model routing, and batch processing can reduce costs by 60\u201390% without degrading quality.',
+      migrate:     'Your users shouldn\'t notice the migration happened. Same reports, same APIs, same dashboards \u2014 just faster, more reliable, and on modern infrastructure.',
+      reporting:   'The dashboards, reports, and alerts your team actually uses. Built for the questions leadership actually asks, not vanity metrics nobody acts on.',
     },
   };
 
@@ -642,6 +713,15 @@
     'ai-product-scattered':  'Building a product on messy data produces a messy product. Data foundation first — then the AI layer can actually deliver on what it promises.',
     'ai-product-siloed':     'Doable, but siloed data will create blind spots in your AI product. Worth resolving early before it becomes a product quality issue.',
     'ai-product-clean':      'Good data foundation — the focus can go where it belongs. AI architecture, guardrails, context management, and building the product experience.',
+    'cost-scattered':        'Scattered data means your AI is probably processing far more than it needs to. Consolidating sources and adding a caching layer can cut costs dramatically — but the data work comes first.',
+    'cost-siloed':           'Siloed data often leads to redundant AI calls across systems. Unifying the data layer and adding semantic caching and model routing can reduce costs by 60-80%.',
+    'cost-clean':            'Clean data is the best starting point for cost optimization. The focus is purely on the AI layer — prompt engineering, model tiering, caching, and routing. Fast wins likely.',
+    'migrate-scattered':     'Migrating scattered data is the hardest variant. Every source needs mapping, cleaning, and validation before it lands in the new system. Plan for 8-12 weeks minimum.',
+    'migrate-siloed':        'Structured but siloed data migrates well with proper planning. The risk is in the joins and relationships between systems that only exist in people\'s heads.',
+    'migrate-clean':         'Clean, centralized data is the easiest migration. Schema mapping, parallel runs, and cutover planning. Typically 4-6 weeks with minimal risk.',
+    'reporting-scattered':   'You can\'t build trustworthy reports on messy data. The first milestone is a clean, consolidated data layer — then the dashboards practically build themselves.',
+    'reporting-siloed':      'The data exists but lives in silos. Consolidating into a single warehouse with consistent metric definitions is the unlock. Dashboards follow quickly after.',
+    'reporting-clean':       'With clean data, this is primarily a design and delivery engagement. KPI frameworks, dashboard builds, and self-service access for your team. Fast turnaround.',
   };
 
   // Toggle override descriptions per node
@@ -659,6 +739,20 @@
     singleAgent: {
       ai: 'One model handles planning, execution, and response synthesis. Works at small scale. As context grows, signal-to-noise degrades and hallucinations gradually increase.',
     },
+    noMonitoring: {
+      ingestion: 'Pipelines run without health checks. When a source schema changes or a job fails silently, you won\u2019t know until someone notices bad data in a report \u2014 days or weeks later.',
+      warehouse: 'No data quality monitoring. Duplicate records, null values, and schema drift accumulate silently. The warehouse looks fine until someone makes a decision based on wrong numbers.',
+      output:    'Dashboards and APIs serve stale or incorrect data with no indication anything is wrong. Users lose trust gradually, then all at once.',
+    },
+    noCaching: {
+      ai:     'Every request \u2014 including repeated questions \u2014 hits the model API at full cost. No semantic caching, no pre-computation. Costs scale linearly with usage instead of flattening.',
+      output: 'Identical queries generate fresh responses every time. Response times are slower, costs are higher, and the system can\u2019t handle traffic spikes without degradation.',
+    },
+    skipTesting: {
+      ingestion: 'No validation that transformed data matches the source. Schema changes, rounding errors, and dropped rows go undetected until they surface as business problems.',
+      warehouse: 'No reconciliation between old and new systems. Row counts, aggregates, and edge cases are assumed correct. Migration bugs become permanent data quality issues.',
+      ai:        'No eval framework. Model regressions are invisible \u2014 accuracy degrades over time and nobody notices until users complain. No baseline to compare against.',
+    },
   };
 
   // Warning messages per toggle
@@ -666,9 +760,12 @@
     skipData:      'Without a data foundation, AI outputs are confident guesses. You won\'t know they\'re wrong until they cause a problem.',
     noGuardrails:  'An AI without guardrails will eventually take an action you didn\'t intend. The question isn\'t if — it\'s when, and whether you\'ll catch it first.',
     singleAgent:   'A single-agent approach works fine initially. The cracks appear gradually — missed tool calls, hallucinated results — until the system quietly stops being reliable.',
+    noMonitoring:  'Without monitoring, failures are silent. You\u2019ll find out something broke when a stakeholder asks why the numbers look wrong \u2014 not when it actually happens.',
+    noCaching:     'No caching means every request costs full price. Repeated queries, common questions, and batch operations all hit the model API individually. Costs grow linearly with usage.',
+    skipTesting:   'Without testing, you\u2019re trusting that everything works correctly on the first try. In data systems, it never does. The bugs you don\u2019t catch become the data your business runs on.',
   };
 
-  const AI_ONLY_TOGGLES = ['noGuardrails','singleAgent'];
+  const AI_ONLY_TOGGLES = ['noGuardrails','singleAgent','noCaching'];
 
   // Node drill-down data
   const DRILLDOWN = {
@@ -718,6 +815,15 @@
     'ai-product-scattered':  { phases:['Data foundation build','AI architecture & guardrails','Product build & deployment'], weeks:['3–4w','3–4w','2–3w'], total:'8–11 weeks', cost:'Complex', costReason:'Full-stack engagement: data layer + AI architecture + product' },
     'ai-product-siloed':     { phases:['Data consolidation','AI architecture & guardrails','Product build & deployment'], weeks:['2–3w','2–3w','2–3w'], total:'6–9 weeks', cost:'Complex', costReason:'AI product build with upstream data consolidation required' },
     'ai-product-clean':      { phases:['AI architecture & guardrails','Product build','Testing & deployment'], weeks:['2–3w','2–4w','1–2w'], total:'5–9 weeks', cost:'High', costReason:'Focused AI product build on an already-solid data foundation' },
+    'cost-scattered':        { phases:['Data audit & consolidation','AI architecture review','Cost optimization & caching'], weeks:['3–4w','2–3w','1–2w'], total:'6–9 weeks', cost:'High', costReason:'Data foundation work required before AI cost optimization is meaningful' },
+    'cost-siloed':           { phases:['Data unification','Model routing & caching','Monitoring & optimization'], weeks:['2–3w','2–3w','1w'], total:'5–7 weeks', cost:'Medium', costReason:'Data consolidation enables caching and routing optimizations' },
+    'cost-clean':            { phases:['AI cost audit','Prompt & model optimization','Caching & routing deploy'], weeks:['1w','2–3w','1w'], total:'4–5 weeks', cost:'Medium', costReason:'Pure AI layer optimization — no upstream data work needed' },
+    'migrate-scattered':     { phases:['Source audit & mapping','Schema design & ETL build','Parallel run & cutover'], weeks:['3–4w','3–4w','2–3w'], total:'8–11 weeks', cost:'Complex', costReason:'Full migration from scattered sources to modern infrastructure' },
+    'migrate-siloed':        { phases:['Schema mapping & gap analysis','Pipeline build & data transfer','Validation & cutover'], weeks:['2–3w','2–3w','1–2w'], total:'5–8 weeks', cost:'High', costReason:'Structured migration with cross-system dependency resolution' },
+    'migrate-clean':         { phases:['Schema mapping','Data transfer & validation','Cutover & monitoring'], weeks:['1–2w','2–3w','1w'], total:'4–6 weeks', cost:'Medium', costReason:'Clean source data makes migration straightforward' },
+    'reporting-scattered':   { phases:['Data audit & consolidation','Warehouse & metric definitions','Dashboard build & rollout'], weeks:['3–4w','2–3w','2–3w'], total:'7–10 weeks', cost:'High', costReason:'Data foundation required before reporting is trustworthy' },
+    'reporting-siloed':      { phases:['Data consolidation','KPI framework & warehouse','Dashboard build & training'], weeks:['2–3w','1–2w','2–3w'], total:'5–8 weeks', cost:'Medium', costReason:'Consolidation unlocks reporting — dashboards follow quickly' },
+    'reporting-clean':       { phases:['KPI framework design','Dashboard build','Self-service setup & training'], weeks:['1w','2–3w','1w'], total:'4–5 weeks', cost:'Medium', costReason:'Clean data means focused dashboard and reporting delivery' },
   };
 
   // Scenario presets
@@ -727,6 +833,9 @@
     { label:'Support automation',     c:'automation',  m:'siloed',    s:'save-time'           },
     { label:'Fix AI in production',   c:'reliability', m:'clean',     s:'reliable-production' },
     { label:'Data mess first',        c:'data',        m:'scattered', s:'insights'            },
+    { label:'Cut AI spending',        c:'cost',        m:'siloed',    s:'save-time'           },
+    { label:'Legacy to cloud',        c:'migrate',     m:'siloed',    s:'reliable-production' },
+    { label:'Executive dashboards',   c:'reporting',   m:'siloed',    s:'insights'            },
   ];
 
   // ─────────────────────────────────────────────────────────
@@ -737,7 +846,7 @@
     challenge:  null,
     maturity:   null,
     success:    null,
-    toggles:    { skipData:false, noGuardrails:false, singleAgent:false },
+    toggles:    { skipData:false, noGuardrails:false, singleAgent:false, noMonitoring:false, noCaching:false, skipTesting:false },
     activeNode: null,
   };
 
@@ -791,6 +900,20 @@
     if (state.toggles.noGuardrails && lv.ai !== 'future' && lv.ai !== 'warning') {
       lv.ai = 'warning';
     }
+    if (state.toggles.noMonitoring) {
+      if (lv.ingestion !== 'future' && lv.ingestion !== 'warning') lv.ingestion = 'at-risk';
+      if (lv.warehouse !== 'future' && lv.warehouse !== 'warning') lv.warehouse = 'at-risk';
+      if (lv.output    !== 'future' && lv.output    !== 'warning') lv.output    = 'at-risk';
+    }
+    if (state.toggles.noCaching) {
+      if (lv.ai     !== 'future' && lv.ai     !== 'warning') lv.ai     = 'at-risk';
+      if (lv.output !== 'future' && lv.output !== 'warning') lv.output = 'at-risk';
+    }
+    if (state.toggles.skipTesting) {
+      if (lv.ingestion !== 'future' && lv.ingestion !== 'warning') lv.ingestion = 'at-risk';
+      if (lv.warehouse !== 'future' && lv.warehouse !== 'warning') lv.warehouse = 'at-risk';
+      if (lv.ai        !== 'future' && lv.ai        !== 'warning') lv.ai        = 'at-risk';
+    }
 
     return lv;
   }
@@ -798,7 +921,7 @@
   function getDescriptions(lv) {
     return Object.fromEntries(NODES.map(id => {
       let d = (DESC[id] && DESC[id][state.challenge]) || '';
-      ['skipData','noGuardrails','singleAgent'].forEach(t => {
+      ['skipData','noGuardrails','singleAgent','noMonitoring','noCaching','skipTesting'].forEach(t => {
         if (state.toggles[t] && TOGGLE_DESC[t] && TOGGLE_DESC[t][id]) d = TOGGLE_DESC[t][id];
       });
       return [id, d];
@@ -1211,6 +1334,9 @@
     reliability:  'AI Solutions & Architecture',
     data:         'Data Engineering & Infrastructure',
     'ai-product': 'AI Solutions & Architecture',
+    cost:         'AI Solutions & Architecture',
+    migrate:      'Data Engineering & Infrastructure',
+    reporting:    'Analytics & Business Intelligence',
   };
 
   function setBookingInterest() {
