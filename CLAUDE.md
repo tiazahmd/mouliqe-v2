@@ -22,16 +22,22 @@ Serves on port 8000 with clean URL routing (`/about` → `about.html`).
 - `styles.css` — all custom CSS; Tailwind is loaded from CDN in each HTML file's `<head>`
 - `components.js` — injected into every page; handles sidebar nav, mobile menu, scroll effects, back-to-top, and progress bar
 - `blog/posts.json` — drives the blog listing page; `blog/index.html` fetches and renders it client-side
+- `_headers` — Cloudflare Pages custom headers; sets `Cache-Control: no-cache, must-revalidate` on `components.js` to prevent stale nav after deployments
+- `og-image.png` / `og-image.svg` — social card preview image referenced in OG meta tags across all pages
 
 ### Layout Pattern
 - **Desktop**: Fixed 200px left sidebar (nav) + main content with left margin
 - **Mobile**: Sidebar becomes top bar with hamburger menu (breakpoint: 768px / Tailwind `md:`)
 - Navigation links and active state detection live in `components.js` (`NAV_LINKS` array, `isActive()`, `isToolsActive()`)
-- The "Demo" nav item is a collapsible group (`.sidebar-group`) with child links tagged `ai` or `local`
+- The "Demo" nav item is both a link (`/demo`) and a collapsible group (`.sidebar-group`) with child links tagged `ai` or `local`. Clicking the label navigates to the demo landing page; clicking the expand arrow toggles children.
 
-### Demo Section (`/tools/*`)
+### Demo Section (`/tools/*` + `/demo`)
 
-Five interactive tool pages: 3 AI-powered (`data-quality`, `rag-pipeline`, `agent-workflow`) and 2 local (`kpi-dashboard`, `etl-pipeline`). All use a **70/30 layout**: 70% tool area (pipeline + context + output), 30% sticky right sidebar (explanation + CTA).
+Seven interactive tool pages: 4 AI-powered (`data-quality`, `rag-pipeline`, `agent-workflow`, `supply-chain`) and 3 local (`kpi-dashboard`, `etl-pipeline`, `cost-simulator`). A landing page at `/demo` (`demo.html`) renders all tools as cards in a grid, split into "AI-Powered" and "Runs Locally" sections. Cards are generated dynamically from a `DEMOS` array.
+
+The Demo nav item is both a link (`/demo`) and a collapsible parent — clicking the label navigates, clicking the expand arrow toggles children.
+
+All tool pages use a **70/30 layout**: 70% tool area (pipeline + context + output), 30% sticky right sidebar (explanation + CTA).
 
 **Pipeline visualization** (shared across all 5): `.tool-pipeline` with `.tool-stage` elements. Regular stages: amber when active. AI stages marked with `data-ai` attribute: purple color scheme + "AI" micro-badge via CSS `::after`. The context panel (`.tool-context`) accumulates log entries — never replaces them.
 

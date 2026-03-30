@@ -2,7 +2,7 @@
 
 > Complete documentation of every decision, change, and architectural detail.
 > Written by Mimir (AI assistant) during build sessions with Imtiaz via Kiro CLI.
-> Last updated: March 28, 2026
+> Last updated: March 29, 2026
 
 ---
 
@@ -48,11 +48,15 @@ site/
 ├── process.html                        # The Mouliqe Way (6-stage process)
 ├── explore.html                        # Interactive AI architecture configurator
 ├── contact.html                        # Booking system (3-step flow)
+├── demo.html                           # Demo landing page (grid of all tools)
 ├── styles.css                          # All styles (v9)
 ├── components.js                       # Nav/footer injection, scroll effects (v4)
 ├── favicon.svg                         # SVG favicon (green "M")
+├── og-image.svg                        # OG image source (SVG)
+├── og-image.png                        # OG image (rendered PNG for social cards)
 ├── serve.py                            # Local dev server with clean URL routing
 ├── sitemap.xml                         # XML sitemap (submitted to Google Search Console)
+├── _headers                            # Cloudflare Pages custom headers (cache-busting components.js)
 ├── blog/
 │   ├── index.html                      # Blog listing page (reads posts.json)
 │   ├── posts.json                      # Blog post metadata (drives listing)
@@ -68,8 +72,10 @@ site/
 │   ├── data-quality.html               # AI: Data Quality Scanner
 │   ├── rag-pipeline.html               # AI: RAG Pipeline Explorer
 │   ├── agent-workflow.html             # AI: Agent Workflow Simulator (5 agentic patterns)
+│   ├── supply-chain.html               # AI: Supply Chain Intelligence Engine
 │   ├── kpi-dashboard.html              # Local: KPI Dashboard Builder
-│   └── etl-pipeline.html              # Local: ETL Pipeline Simulator
+│   ├── etl-pipeline.html               # Local: ETL Pipeline Simulator
+│   └── cost-simulator.html             # Local: AI Cost Simulator
 ├── worker/
 │   └── index.js                        # Cloudflare Worker script (unused — tools use simulation)
 └── .git/
@@ -173,7 +179,7 @@ Used on blog listing and post pages:
 
 ## Architecture: Components & Navigation
 
-`components.js` (v3) handles:
+`components.js` (v4) handles:
 
 1. **Sidebar navigation** — Injected into `<div id="site-nav">` on every page
 2. **Mobile menu** — Hamburger toggle, overlay, slide-in menu
@@ -191,12 +197,14 @@ const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/services', label: 'Services' },
   { href: '/process', label: 'Process' },
-  { label: 'Demo', children: [
+  { label: 'Demo', href: '/demo', children: [
     { href: '/tools/data-quality', label: 'Data Quality', tag: 'ai' },
     { href: '/tools/rag-pipeline', label: 'RAG Pipeline', tag: 'ai' },
     { href: '/tools/agent-workflow', label: 'Agent Workflow', tag: 'ai' },
     { href: '/tools/kpi-dashboard', label: 'KPI Dashboard', tag: 'local' },
     { href: '/tools/etl-pipeline', label: 'ETL Pipeline', tag: 'local' },
+    { href: '/tools/cost-simulator', label: 'Cost Simulator', tag: 'local' },
+    { href: '/tools/supply-chain', label: 'Supply Chain', tag: 'ai' },
   ]},
   { href: '/explore', label: 'Explore' },
   { href: '/blog', label: 'Blog' },
@@ -204,7 +212,7 @@ const NAV_LINKS = [
 ];
 ```
 
-The Demo group is a collapsible sidebar section (`.sidebar-group`, `.sidebar-children` with `max-height` transition). Tags render as colored badges: `.nav-tag-ai` (amber `#fbbf24`) and `.nav-tag-local` (blue `#38bdf8`). The group auto-opens when on any `/tools/*` path via `isToolsActive()`.
+The Demo group is both a clickable link (`/demo` → demo landing page) and a collapsible sidebar section (`.sidebar-group`, `.sidebar-children` with `max-height` transition). Clicking the label navigates to `/demo`; clicking the expand arrow toggles the children. Tags render as colored badges: `.nav-tag-ai` (amber `#fbbf24`) and `.nav-tag-local` (blue `#38bdf8`). The group auto-opens when on any `/tools/*` or `/demo` path via `isToolsActive()`.
 
 ### Active State Logic
 
@@ -212,6 +220,8 @@ The Demo group is a collapsible sidebar section (`.sidebar-group`, `.sidebar-chi
 function isActive(href) {
   if (href === '/') return path === '/' || path === '' || path === '/index' || path === '/index.html';
   if (href === '/blog') return path.startsWith('/blog');  // All blog pages highlight "Blog"
+  if (href === '/demo') return path === '/demo' || path === '/demo.html';
+  if (href === '/tools') return path.startsWith('/tools');
   return path === href || path === href + '.html';
 }
 ```
@@ -254,6 +264,7 @@ All internal links use clean URLs (no `.html` extension):
 - `/services` → `services.html`
 - `/process` → `process.html`
 - `/contact` → `contact.html`
+- `/demo` → `demo.html`
 - `/blog` → `blog/index.html`
 - `/blog/post-slug` → `blog/post-slug.html`
 
@@ -322,6 +333,16 @@ Cloudflare Pages handles clean URLs natively — no config needed. It automatica
 
 Interactive AI architecture configurator — see the March 28, 2026 changelog entry for the full architectural breakdown.
 
+### Demo (`demo.html`)
+
+Landing page for all interactive tool demos. No sidebar — full-width grid layout.
+- Hero: "See the work in action." + privacy note (runs in browser, no data leaves)
+- Two sections: "AI-Powered" (purple accent) and "Runs Locally" (blue accent), each with a horizontal rule divider
+- 3-column grid on desktop, single column on mobile
+- Cards rendered dynamically from a `DEMOS` array in inline `<script>` — each entry has `href`, `type`, `title`, `desc`, `stages[]`, and `aiStages[]` (indices of AI-powered stages)
+- Each card shows: mini pipeline stage pills (purple for AI stages, green for deterministic), title, description, "Try it" link
+- 7 tools total: 4 AI-powered (Data Quality, RAG Pipeline, Agent Workflow, Supply Chain) + 3 local (KPI Dashboard, ETL Pipeline, Cost Simulator)
+
 ### Contact (`contact.html`)
 
 - 3-step booking flow (see [Booking System](#booking-system-contact-page))
@@ -374,8 +395,14 @@ Interactive AI architecture configurator — see the March 28, 2026 changelog en
 
 | # | Slug | Title | Date | Tags |
 |---|------|-------|------|------|
-| 1 | `costume-change-vs-new-actor` | When Your AI Agent Needs a Costume Change vs. a Whole New Actor | Feb 19, 2026 | AI Architecture, Multi-Agent Systems |
-| 2 | `planner-worker-synthesizer` | Planner, Worker, Synthesizer: The 3-Agent Pattern That Actually Works | Feb 26, 2026 | AI Architecture, Multi-Agent Systems |
+| 1 | `stop-building-ai-features` | Stop Building AI Features. Start Solving Problems. | Mar 26, 2026 | AI Strategy, Business |
+| 2 | `poc-to-production` | Why Your AI Proof of Concept Worked but Your Production System Doesn't | Mar 19, 2026 | AI Strategy, Production Systems |
+| 3 | `data-problem-not-ai-problem` | You Don't Have an AI Problem. You Have a Data Problem. | Mar 16, 2026 | Data Engineering, AI Strategy |
+| 4 | `context-windows-are-a-lie` | Context Windows Are a Lie (Sort Of) | Mar 12, 2026 | AI Architecture, Context Management |
+| 5 | `guardrails-problem` | The Guardrails Problem: When Your AI Needs to Be Told No | Mar 9, 2026 | AI Architecture, Reliability |
+| 6 | `ai-memory-systems` | Your AI Doesn't Remember You. Here's Why That Matters. | Mar 5, 2026 | AI Architecture, Memory Systems |
+| 7 | `planner-worker-synthesizer` | Planner, Worker, Synthesizer: The 3-Agent Pattern That Actually Works | Feb 26, 2026 | AI Architecture, Multi-Agent Systems |
+| 8 | `costume-change-vs-new-actor` | When Your AI Agent Needs a Costume Change vs. a Whole New Actor | Feb 19, 2026 | AI Architecture, Multi-Agent Systems |
 
 ---
 
@@ -480,7 +507,7 @@ kill <PID>
 
 ## Demo Section (Tools)
 
-Five interactive tool pages at `/tools/*`. Designed as LinkedIn-shareable demos that showcase Mouliqe's AI/data capabilities. All tools use simulated responses with realistic delays — no real API calls required.
+Seven interactive tool pages at `/tools/*`, with a landing page at `/demo`. Designed as LinkedIn-shareable demos that showcase Mouliqe's AI/data capabilities. All tools use simulated responses with realistic delays — no real API calls required.
 
 ### Layout Pattern
 
@@ -490,7 +517,7 @@ Each tool page uses a 70/30 layout:
 
 ### Pipeline Visualization (shared pattern)
 
-All 5 tools use the same pipeline stage component (`.tool-pipeline`, `.tool-stage`):
+All 7 tools use the same pipeline stage component (`.tool-pipeline`, `.tool-stage`):
 - States: `pending` → `active` → `done`
 - Regular active stages: amber dot + amber label (`#fbbf24`)
 - AI-powered stages marked with `data-ai` attribute: purple dot + purple label (`#c084fc`) + "AI" micro-badge on label
@@ -554,6 +581,26 @@ The graph visualization area (`#agent-graph`) is fully dynamic — each pattern'
 - Strikethrough styling for removed rows; source color tags per data origin
 - Final quality score card with score/rows/issues metrics
 
+#### AI Cost Simulator (`tools/cost-simulator.html`) — Runs Locally
+- Shows how architecture decisions reduce AI costs by 80–97%
+- Pipeline: **Profile** → **Baseline** → **Optimize** → **Compare** → **Recommend**
+- Volume slider lets users set monthly query count
+- Two-phase flow: "Show Baseline" (calculates naive cost) → "Apply Optimizations" (applies RAG, caching, routing step by step)
+- Each optimization step renders as an `.opt-card` with a savings pill showing per-step reduction
+- Comparison table (`.comp-row` grid) shows before/after per cost category
+- Final `.savings-card` with large percentage savings figure
+- Custom CSS: `.vol-slider` (green thumb), `.cost-number` (color transitions: `.high` red / `.med` amber / `.low` green), `.phase-btn` (baseline red / optimize green), `.savings-pill`, `.pricing-note`
+
+#### Supply Chain Intelligence Engine (`tools/supply-chain.html`) — AI-Powered
+- Hybrid AI + statistical engine processing 12 signals across 3 domains: market data (commodity prices, shipping indices, currency rates, CPI/PPI), company data (inventory, procurement costs, supplier contracts, sales velocity), and news/policy (tariffs, geopolitical events, disruptions)
+- Pipeline: **Ingest** → **Process** → **Correlate** → **Reason** (AI) → **Optimize** → **Recommend** (AI)
+- Signal cards (`.signal-card`) show name, value, delta (`.signal-delta.up/.down/.neutral`), and domain tag (`.signal-tag.market/.company`)
+- Correlation section with bar visualizations (`.corr-row`, `.corr-bar`)
+- Recommendation cards (`.rec-card`) color-coded by type: `.procurement` (blue), `.pricing` (amber), `.inventory` (green), `.supplier` (purple), `.risk` (red)
+- Each recommendation has a confidence badge (`.rec-confidence`, `.conf-high/.conf-med`)
+- News items (`.news-item`) with severity indicator bars (`.news-severity`)
+- Badge in header: "AI + Statistical" in purple
+
 ### New CSS Classes (styles.css)
 
 **Nav:**
@@ -584,6 +631,38 @@ The graph visualization area (`#agent-graph`) is fully dynamic — each pattern'
 ---
 
 ## Change Log
+
+### Session: March 29, 2026 (Claude Code + Kiro CLI) — Demo landing page, 2 new tools, infrastructure
+
+**New Page: `/demo` (`demo.html`)**
+- Dedicated landing page for all interactive demos
+- Demo nav item is now both a link (`/demo`) and a collapsible parent (expand arrow toggles children)
+- `isActive()` and `isToolsActive()` updated to handle `/demo` path
+- Cards rendered dynamically from `DEMOS` array with mini pipeline stage pills
+
+**New Tool: AI Cost Simulator (`tools/cost-simulator.html`)**
+- Runs locally (no AI stages in pipeline)
+- Volume slider + two-phase baseline/optimize flow
+- Step-by-step optimization cards showing cost reduction
+- Before/after comparison table + final savings summary
+
+**New Tool: Supply Chain Intelligence Engine (`tools/supply-chain.html`)**
+- AI-powered hybrid engine (AI + statistical)
+- 12 signals across market, company, and news domains
+- 6-stage pipeline with AI on Reason and Recommend stages
+- Color-coded recommendation cards by type (procurement, pricing, inventory, supplier, risk)
+
+**Infrastructure**
+- `_headers` file added — sets `Cache-Control: no-cache, must-revalidate` on `components.js` to prevent stale nav after deployments
+- `og-image.png` and `og-image.svg` added for social card previews (referenced in OG meta tags across all pages)
+
+**Bug Fixes (via git history)**
+- Multiple fixes to explore page architecture pipeline (overflow, left-to-right regression, cache node positioning)
+- Cost simulator pipeline bug fixes and model version updates
+- RAG pipeline updates
+- Home page updates
+
+---
 
 ### Session: March 28, 2026 (Claude Code) — Demo section (5 tool pages)
 
