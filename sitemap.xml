@@ -35,6 +35,11 @@
 
   <!-- Demo tools -->
   <url>
+    <loc>https://mouliqe.com/demo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://mouliqe.com/tools/data-quality</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -61,6 +66,11 @@
   </url>
   <url>
     <loc>https://mouliqe.com/tools/cost-simulator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://mouliqe.com/tools/supply-chain</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

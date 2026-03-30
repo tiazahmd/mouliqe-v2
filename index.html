@@ -99,7 +99,7 @@
         <div class="mb-10 reveal">
           <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-4">Interactive Demos</p>
           <h2 class="text-2xl md:text-[1.75rem] font-bold text-white mb-4">See it working before you commit to anything.</h2>
-          <p class="text-white/55 max-w-lg leading-[1.85] text-[0.84rem]">Seven interactive tools showing what production-grade AI and data engineering looks like — running live in your browser.</p>
+          <p class="text-white/55 max-w-lg leading-[1.85] text-[0.84rem]">Eleven interactive tools showing what production-grade AI and data engineering looks like — running live in your browser.</p>
         </div>
 
         <!-- Carousel -->
@@ -315,6 +315,46 @@
       features: ['12 signals across 4 domains', 'Hybrid AI + statistical processing', 'Constrained optimization model', 'Actionable recommendations with confidence'],
       stages: ['Ingest', 'Process', 'Correlate', 'Reason', 'Optimize', 'Recommend'],
       aiStages: [3, 5],
+    },
+    {
+      href: '/tools/document-intelligence',
+      label: 'Doc Intelligence',
+      badge: 'AI-Powered', badgeColor: 'rgba(192,132,252,0.7)', badgeBg: 'rgba(192,132,252,0.08)', badgeBorder: 'rgba(192,132,252,0.15)',
+      title: 'Document Intelligence Pipeline',
+      desc: 'Pick a document — invoice, contract, or medical report — and watch AI parse it, classify the content, extract every entity, structure the data into JSON, and generate an executive summary.',
+      features: ['3 document types', 'Named entity extraction', 'Structured JSON output', 'AI-generated executive summary'],
+      stages: ['Parse', 'Classify', 'Extract', 'Structure', 'Summary'],
+      aiStages: [1, 2, 4],
+    },
+    {
+      href: '/tools/prompt-security',
+      label: 'Prompt Security',
+      badge: 'AI-Powered', badgeColor: 'rgba(192,132,252,0.7)', badgeBg: 'rgba(192,132,252,0.08)', badgeBorder: 'rgba(192,132,252,0.15)',
+      title: 'AI Security & Guardrails',
+      desc: 'Send a prompt through six security layers — validation, content filtering, PII detection, and output sanitization. Then toggle guardrails off to see what happens when there\'s no protection.',
+      features: ['4 attack scenarios', 'Toggle guardrails on/off', 'PII detection and redaction', 'Side-by-side safe vs. unsafe output'],
+      stages: ['Input', 'Validate', 'Filter', 'Sanitize', 'PII Scan', 'Output'],
+      aiStages: [2, 4],
+    },
+    {
+      href: '/tools/data-migration',
+      label: 'Data Migration',
+      badge: 'AI-Powered', badgeColor: 'rgba(192,132,252,0.7)', badgeBg: 'rgba(192,132,252,0.08)', badgeBorder: 'rgba(192,132,252,0.15)',
+      title: 'Data Migration Planner',
+      desc: 'Pick a source and target system — Salesforce to Snowflake, legacy SQL to BigQuery, or spreadsheets to Postgres. Watch schemas get mapped, risks flagged, and a phased plan generated.',
+      features: ['3 migration scenarios', 'Column-level schema mapping', 'Risk and compatibility flags', 'Phased plan with effort estimates'],
+      stages: ['Connect', 'Map', 'Analyze', 'Plan', 'Validate', 'Report'],
+      aiStages: [3],
+    },
+    {
+      href: '/tools/anomaly-detection',
+      label: 'Anomaly Detection',
+      badge: 'AI-Powered', badgeColor: 'rgba(192,132,252,0.7)', badgeBg: 'rgba(192,132,252,0.08)', badgeBorder: 'rgba(192,132,252,0.15)',
+      title: 'Anomaly Detection Dashboard',
+      desc: 'Feed in time-series data — revenue, traffic, or sensor readings — and watch statistical baselines get computed, then AI models catch anomalies that simple thresholds miss entirely.',
+      features: ['3 time-series datasets', 'Z-Score + IQR + AI detection', 'Chart.js visualization', 'Threshold vs. AI comparison per alert'],
+      stages: ['Ingest', 'Baseline', 'Detect', 'Classify', 'Alert', 'Report'],
+      aiStages: [3],
     },
   ];
 

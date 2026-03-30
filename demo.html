@@ -112,6 +112,34 @@
       stages: ['Profile', 'Baseline', 'Optimize', 'Compare', 'Recommend'],
       aiStages: [0, 2, 4],
     },
+    {
+      href: '/tools/document-intelligence', type: 'ai',
+      title: 'Document Intelligence',
+      desc: 'Pick a document — invoice, contract, or medical report — and watch AI parse, classify, extract entities, structure into JSON, and summarize.',
+      stages: ['Parse', 'Classify', 'Extract', 'Structure', 'Summary'],
+      aiStages: [1, 2, 4],
+    },
+    {
+      href: '/tools/prompt-security', type: 'ai',
+      title: 'AI Security & Guardrails',
+      desc: 'Send a prompt through six security layers — validation, content filtering, PII detection, sanitization. Then toggle guardrails off to see what breaks.',
+      stages: ['Input', 'Validate', 'Filter', 'Sanitize', 'PII Scan', 'Output'],
+      aiStages: [2, 4],
+    },
+    {
+      href: '/tools/data-migration', type: 'ai',
+      title: 'Data Migration Planner',
+      desc: 'Pick a source and target system. Watch schemas get mapped, incompatibilities flagged, and a phased migration plan generated with risk assessments.',
+      stages: ['Connect', 'Map', 'Analyze', 'Plan', 'Validate', 'Report'],
+      aiStages: [3],
+    },
+    {
+      href: '/tools/anomaly-detection', type: 'ai',
+      title: 'Anomaly Detection',
+      desc: 'Feed in time-series data and watch statistical baselines get computed, then AI models detect anomalies that simple threshold alerts miss entirely.',
+      stages: ['Ingest', 'Baseline', 'Detect', 'Classify', 'Alert', 'Report'],
+      aiStages: [3],
+    },
   ];
 
   function renderDemos() {
