@@ -23,17 +23,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <style>
-    .etl-table { width:100%; border-collapse:collapse; font-size:0.68rem; }
-    .etl-table th { text-align:left; padding:0.35rem 0.5rem; color:rgba(255,255,255,0.35); font-weight:600; border-bottom:1px solid rgba(255,255,255,0.06); white-space:nowrap; }
-    .etl-table td { padding:0.3rem 0.5rem; color:rgba(255,255,255,0.4); border-bottom:1px solid rgba(255,255,255,0.02); white-space:nowrap; transition: all 0.4s; }
+    .etl-table { width:max-content; min-width:100%; border-collapse:collapse; font-size:0.68rem; }
+    .etl-table th { text-align:left; padding:0.35rem 0.65rem; color:rgba(255,255,255,0.35); font-weight:600; border-bottom:1px solid rgba(255,255,255,0.06); white-space:nowrap; }
+    .etl-table td { padding:0.3rem 0.65rem; color:rgba(255,255,255,0.4); border-bottom:1px solid rgba(255,255,255,0.02); transition: all 0.4s; vertical-align:top; line-height:1.6; }
+    .etl-table td .td-inner { display:inline-flex; align-items:center; gap:0.25rem; white-space:nowrap; }
     .etl-table tr.row-flagged td { background:rgba(251,191,36,0.04); }
     .etl-table tr.row-removed td { text-decoration:line-through; color:rgba(255,255,255,0.12); background:rgba(248,113,113,0.03); }
     .etl-table tr.row-new td { background:rgba(74,222,128,0.03); }
     .etl-table tr { animation: rowFadeIn 0.3s ease-out forwards; }
     @keyframes rowFadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
     .cell-badge {
-      display:inline-block; font-size:0.5rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
-      padding:0.16rem 0.3rem 0.05rem; border-radius:0.15rem; margin-left:0.35rem; vertical-align:middle; line-height:1;
+      display:inline-flex; align-items:center; font-size:0.5rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+      padding:0.16rem 0.3rem 0.05rem; border-radius:0.15rem; line-height:1; white-space:nowrap;
     }
     .cell-badge.warn { color:rgba(251,191,36,0.7); background:rgba(251,191,36,0.08); }
     .cell-badge.error { color:rgba(248,113,113,0.7); background:rgba(248,113,113,0.08); }
@@ -305,7 +306,7 @@
       sources: [
         { name: 'Sales CRM', color: 'rgba(74,222,128,0.6)', bg: 'rgba(74,222,128,0.08)' },
       ],
-      headers: ['Deal','Rep','Amount','Currency','Stage','Close Date','Probability','Region'],
+      headers: ['Source','Deal','Rep','Amount','Currency','Stage','Close Date','Probability','Region'],
       raw: [
         ['Sales CRM','Acme Renewal','Sarah K.','$45,000','USD','Negotiation','2024-06-15','85%','Northeast'],
         ['Sales CRM','Globex New','Mike T.','32000','USD','Proposal','June 30, 2024','60%','Midwest'],
@@ -377,7 +378,7 @@
       sources: [
         { name: 'Event Log', color: 'rgba(251,146,60,0.6)', bg: 'rgba(251,146,60,0.08)' },
       ],
-      headers: ['Timestamp','Event','User ID','Page','Duration (s)','Device','Country'],
+      headers: ['Source','Timestamp','Event','User ID','Page','Duration (s)','Device','Country'],
       raw: [
         ['Event Log','2024-06-01 09:12:33','page_view','usr_001','/home','12','desktop','US'],
         ['Event Log','2024-06-01 09:12:45','click','usr_001','/home','','desktop','US'],
@@ -566,13 +567,16 @@
         }
 
         let badge = '';
+        let isFixed = false;
         if (issue) badge = `<span class="cell-badge ${issue.type === 'error' ? 'error' : 'warn'}">${issue.badge}</span>`;
         if (transform) {
           cellContent = `<span class="cell-highlight">${transform.to}</span>`;
           badge = `<span class="cell-badge fixed">${transform.badge}</span>`;
+          isFixed = true;
         }
 
-        html += `<td>${cellContent}${badge}</td>`;
+        let sep = isFixed ? '<br>' : '';
+        html += `<td${isFixed ? ' style="padding-bottom:1.4rem"' : ''}>${cellContent}${sep}${badge}</td>`;
       });
       html += '</tr>';
     });
