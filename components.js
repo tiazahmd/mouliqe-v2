@@ -20,6 +20,7 @@ const NAV_LINKS = [
   ]},
   { href: '/explore', label: 'Explore' },
   { href: '/blog', label: 'Blog' },
+  { href: '/faq', label: 'FAQ' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -158,6 +159,22 @@ function injectSchema() {
       "description": "Dashboard and reporting development, KPI framework design, executive reporting systems, and self-service analytics.",
       "areaServed": "Worldwide"
     });
+  }
+
+  // FAQ page — FAQPage schema (Google rich results)
+  if (p === '/faq' || p === '/faq.html') {
+    const faqItems = typeof FAQS !== 'undefined' ? FAQS : [];
+    if (faqItems.length > 0) {
+      schemas.push({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqItems.map(f => ({
+          "@type": "Question",
+          "name": f.q,
+          "acceptedAnswer": { "@type": "Answer", "text": f.a.replace(/<[^>]*>/g, '') }
+        }))
+      });
+    }
   }
 
   // Blog posts — Article schema
