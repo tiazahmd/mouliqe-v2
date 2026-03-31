@@ -20,8 +20,9 @@ Serves on port 8000 with clean URL routing (`/about` → `about.html`).
 
 ### Key Files
 - `styles.css` — all custom CSS; Tailwind is loaded from CDN in each HTML file's `<head>`
-- `components.js` — injected into every page; handles sidebar nav, mobile menu, scroll effects, back-to-top, and progress bar
+- `components.js` — injected into every page; handles sidebar nav, mobile menu, scroll effects, back-to-top, progress bar, JSON-LD schema injection (`injectSchema()`), and blog CTA injection (`injectBlogCTA()`)
 - `blog/posts.json` — drives the blog listing page; `blog/index.html` fetches and renders it client-side
+- `robots.txt` — points to `sitemap.xml` for search engine discovery
 - `_headers` — Cloudflare Pages custom headers; sets `Cache-Control: no-cache, must-revalidate` on `components.js` to prevent stale nav after deployments
 - `og-image.png` / `og-image.svg` — social card preview image referenced in OG meta tags across all pages
 
@@ -33,7 +34,7 @@ Serves on port 8000 with clean URL routing (`/about` → `about.html`).
 
 ### Demo Section (`/tools/*` + `/demo`)
 
-Seven interactive tool pages: 4 AI-powered (`data-quality`, `rag-pipeline`, `agent-workflow`, `supply-chain`) and 3 local (`kpi-dashboard`, `etl-pipeline`, `cost-simulator`). A landing page at `/demo` (`demo.html`) renders all tools as cards in a grid, split into "AI-Powered" and "Runs Locally" sections. Cards are generated dynamically from a `DEMOS` array.
+Eleven interactive tool pages: 8 AI-powered (`data-quality`, `rag-pipeline`, `agent-workflow`, `supply-chain`, `document-intelligence`, `prompt-security`, `data-migration`, `anomaly-detection`) and 3 local (`kpi-dashboard`, `etl-pipeline`, `cost-simulator`). A landing page at `/demo` (`demo.html`) renders all tools as cards in a grid, split into "AI-Powered" and "Runs Locally" sections. Cards are generated dynamically from a `DEMOS` array. The home page has an auto-rotating carousel showcasing all 11 demos.
 
 The Demo nav item is both a link (`/demo`) and a collapsible parent — clicking the label navigates, clicking the expand arrow toggles children.
 
@@ -116,7 +117,16 @@ The desktop version is `hidden md:flex` (horizontal flow with arrows). The mobil
 **Important**: Mobile display uses `class="grid md:hidden"` — do NOT put `display:grid` in inline styles or it will override Tailwind's `md:hidden` and show on desktop.
 
 ### SEO
-All pages have OG + Twitter Card tags, canonical URLs, and descriptive `<title>` / `<meta name="description">` tags. `sitemap.xml` in the repo root lists all URLs and is submitted to Google Search Console.
+All pages have OG + Twitter Card tags, canonical URLs, `<meta name="keywords">`, and search-intent-optimized `<title>` / `<meta name="description">` tags (rewritten Mar 31, 2026). Blog post `<title>` tags target search queries; H1 headings inside articles retain original catchy titles for LinkedIn sharing. `sitemap.xml` and `robots.txt` in the repo root; sitemap submitted to Google Search Console.
+
+**JSON-LD structured data** injected via `components.js` `injectSchema()`:
+- All pages: `ProfessionalService` schema
+- Homepage: `WebSite` schema
+- About: `Person` schema
+- Services: 3x `Service` schemas
+- Blog posts: `BlogPosting` schema (auto-detected from URL)
+
+**Blog CTAs** injected via `components.js` `injectBlogCTA()` — auto-adds "Need help with this?" block with discovery call button + contextual service link on all blog posts.
 
 ## Full Documentation
 

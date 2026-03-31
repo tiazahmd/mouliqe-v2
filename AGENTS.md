@@ -2,7 +2,7 @@
 
 > Complete documentation of every decision, change, and architectural detail.
 > Written by Mimir (AI assistant) during build sessions with Imtiaz via Kiro CLI.
-> Last updated: March 29, 2026
+> Last updated: March 31, 2026
 
 ---
 
@@ -42,7 +42,7 @@
 
 ```
 site/
-├── index.html                          # Home page
+├── index.html                          # Home page (with demo carousel)
 ├── about.html                          # About page (background, experience)
 ├── services.html                       # Services page (3 service areas)
 ├── process.html                        # The Mouliqe Way (6-stage process)
@@ -50,12 +50,13 @@ site/
 ├── contact.html                        # Booking system (3-step flow)
 ├── demo.html                           # Demo landing page (grid of all tools)
 ├── styles.css                          # All styles (v9)
-├── components.js                       # Nav/footer injection, scroll effects (v4)
+├── components.js                       # Nav/footer/schema/CTA injection, scroll effects (v5)
 ├── favicon.svg                         # SVG favicon (green "M")
 ├── og-image.svg                        # OG image source (SVG)
 ├── og-image.png                        # OG image (rendered PNG for social cards)
 ├── serve.py                            # Local dev server with clean URL routing
 ├── sitemap.xml                         # XML sitemap (submitted to Google Search Console)
+├── robots.txt                          # Points to sitemap.xml
 ├── _headers                            # Cloudflare Pages custom headers (cache-busting components.js)
 ├── blog/
 │   ├── index.html                      # Blog listing page (reads posts.json)
@@ -73,6 +74,10 @@ site/
 │   ├── rag-pipeline.html               # AI: RAG Pipeline Explorer
 │   ├── agent-workflow.html             # AI: Agent Workflow Simulator (5 agentic patterns)
 │   ├── supply-chain.html               # AI: Supply Chain Intelligence Engine
+│   ├── document-intelligence.html      # AI: Document Intelligence Pipeline
+│   ├── prompt-security.html            # AI: AI Security & Guardrails
+│   ├── data-migration.html             # AI: Data Migration Planner
+│   ├── anomaly-detection.html          # AI: Anomaly Detection Dashboard
 │   ├── kpi-dashboard.html              # Local: KPI Dashboard Builder
 │   ├── etl-pipeline.html               # Local: ETL Pipeline Simulator
 │   └── cost-simulator.html             # Local: AI Cost Simulator
@@ -179,7 +184,7 @@ Used on blog listing and post pages:
 
 ## Architecture: Components & Navigation
 
-`components.js` (v4) handles:
+`components.js` (v5) handles:
 
 1. **Sidebar navigation** — Injected into `<div id="site-nav">` on every page
 2. **Mobile menu** — Hamburger toggle, overlay, slide-in menu
@@ -188,6 +193,8 @@ Used on blog listing and post pages:
 5. **Back to top button** — Appears after 400px scroll
 6. **Process hover** — Card hover highlights flow labels (home page)
 7. **Process tracker** — Scroll-based sidebar tracker (process page)
+8. **JSON-LD schema injection** — Injects structured data (ProfessionalService, Person, Service, BlogPosting) based on current page URL
+9. **Blog CTA injection** — Auto-injects "Need help with this?" CTA block on all blog posts with contextual service link + discovery call button
 
 ### Nav Links (current)
 
@@ -205,6 +212,10 @@ const NAV_LINKS = [
     { href: '/tools/etl-pipeline', label: 'ETL Pipeline', tag: 'local' },
     { href: '/tools/cost-simulator', label: 'Cost Simulator', tag: 'local' },
     { href: '/tools/supply-chain', label: 'Supply Chain', tag: 'ai' },
+    { href: '/tools/document-intelligence', label: 'Doc Intelligence', tag: 'ai' },
+    { href: '/tools/prompt-security', label: 'Prompt Security', tag: 'ai' },
+    { href: '/tools/data-migration', label: 'Data Migration', tag: 'ai' },
+    { href: '/tools/anomaly-detection', label: 'Anomaly Detection', tag: 'ai' },
   ]},
   { href: '/explore', label: 'Explore' },
   { href: '/blog', label: 'Blog' },
@@ -343,6 +354,32 @@ Landing page for all interactive tool demos. No sidebar — full-width grid layo
 - Each card shows: mini pipeline stage pills (purple for AI stages, green for deterministic), title, description, "Try it" link
 - 7 tools total: 4 AI-powered (Data Quality, RAG Pipeline, Agent Workflow, Supply Chain) + 3 local (KPI Dashboard, ETL Pipeline, Cost Simulator)
 
+### Home Page Demo Carousel
+
+The home page features an auto-rotating carousel showcasing all 11 demos with tab buttons, progress bar, and dot navigation. Each card shows: badge (AI-Powered/Runs Locally), title, description, pipeline stage pills (purple for AI, green for deterministic), feature bullets, and "Try this demo" link. Auto-advances every 5 seconds, pauses on hover.
+
+### Additional Tool Pages (added Mar 29-30, 2026)
+
+#### Document Intelligence Pipeline (`tools/document-intelligence.html`) — AI-Powered
+- 3 document types: invoice, contract, medical report
+- Pipeline: **Parse** → **Classify** (AI) → **Extract** (AI) → **Structure** → **Summary** (AI)
+- Named entity extraction, structured JSON output, AI-generated executive summary
+
+#### AI Security & Guardrails (`tools/prompt-security.html`) — AI-Powered
+- 4 attack scenarios with toggle guardrails on/off
+- Pipeline: **Input** → **Validate** → **Filter** (AI) → **Sanitize** → **PII Scan** (AI) → **Output**
+- PII detection and redaction, side-by-side safe vs unsafe output
+
+#### Data Migration Planner (`tools/data-migration.html`) — AI-Powered
+- 3 migration scenarios: Salesforce→Snowflake, legacy SQL→BigQuery, spreadsheets→Postgres
+- Pipeline: **Connect** → **Map** → **Analyze** → **Plan** (AI) → **Validate** → **Report**
+- Column-level schema mapping, risk/compatibility flags, phased plan with effort estimates
+
+#### Anomaly Detection Dashboard (`tools/anomaly-detection.html`) — AI-Powered
+- 3 time-series datasets: revenue, traffic, sensor readings
+- Pipeline: **Ingest** → **Baseline** → **Detect** → **Classify** (AI) → **Alert** → **Report**
+- Z-Score + IQR + AI detection, Chart.js visualization, threshold vs AI comparison
+
 ### Contact (`contact.html`)
 
 - 3-step booking flow (see [Booking System](#booking-system-contact-page))
@@ -393,16 +430,18 @@ Landing page for all interactive tool demos. No sidebar — full-width grid layo
 
 ### Current Posts
 
-| # | Slug | Title | Date | Tags |
+Blog post titles are SEO-optimized for search intent (Mar 31, 2026). The H1 headings inside the articles retain the original catchy titles for LinkedIn sharing.
+
+| # | Slug | SEO Title (in `<title>` + posts.json) | Date | Tags |
 |---|------|-------|------|------|
-| 1 | `stop-building-ai-features` | Stop Building AI Features. Start Solving Problems. | Mar 26, 2026 | AI Strategy, Business |
-| 2 | `poc-to-production` | Why Your AI Proof of Concept Worked but Your Production System Doesn't | Mar 19, 2026 | AI Strategy, Production Systems |
-| 3 | `data-problem-not-ai-problem` | You Don't Have an AI Problem. You Have a Data Problem. | Mar 16, 2026 | Data Engineering, AI Strategy |
-| 4 | `context-windows-are-a-lie` | Context Windows Are a Lie (Sort Of) | Mar 12, 2026 | AI Architecture, Context Management |
-| 5 | `guardrails-problem` | The Guardrails Problem: When Your AI Needs to Be Told No | Mar 9, 2026 | AI Architecture, Reliability |
-| 6 | `ai-memory-systems` | Your AI Doesn't Remember You. Here's Why That Matters. | Mar 5, 2026 | AI Architecture, Memory Systems |
-| 7 | `planner-worker-synthesizer` | Planner, Worker, Synthesizer: The 3-Agent Pattern That Actually Works | Feb 26, 2026 | AI Architecture, Multi-Agent Systems |
-| 8 | `costume-change-vs-new-actor` | When Your AI Agent Needs a Costume Change vs. a Whole New Actor | Feb 19, 2026 | AI Architecture, Multi-Agent Systems |
+| 1 | `stop-building-ai-features` | Does Your Business Actually Need AI? How to Tell | Mar 26, 2026 | AI Strategy, Business |
+| 2 | `poc-to-production` | Why AI Proof of Concepts Fail in Production (And How to Fix It) | Mar 19, 2026 | AI Strategy, Production Systems |
+| 3 | `data-problem-not-ai-problem` | Why Most AI Projects Fail: It's a Data Problem, Not an AI Problem | Mar 16, 2026 | Data Engineering, AI Strategy |
+| 4 | `context-windows-are-a-lie` | LLM Context Window Limits Explained: Why Bigger Isn't Better | Mar 12, 2026 | AI Architecture, Context Management |
+| 5 | `guardrails-problem` | How to Implement AI Guardrails Without Breaking Your System | Mar 9, 2026 | AI Architecture, Reliability |
+| 6 | `ai-memory-systems` | How to Build AI Memory Systems That Persist Across Sessions | Mar 5, 2026 | AI Architecture, Memory Systems |
+| 7 | `planner-worker-synthesizer` | Multi-Agent AI Architecture: The Planner-Worker-Synthesizer Pattern | Feb 26, 2026 | AI Architecture, Multi-Agent Systems |
+| 8 | `costume-change-vs-new-actor` | Single AI Agent vs. Multiple Specialized Agents: When to Split | Feb 19, 2026 | AI Architecture, Multi-Agent Systems |
 
 ---
 
@@ -507,7 +546,7 @@ kill <PID>
 
 ## Demo Section (Tools)
 
-Seven interactive tool pages at `/tools/*`, with a landing page at `/demo`. Designed as LinkedIn-shareable demos that showcase Mouliqe's AI/data capabilities. All tools use simulated responses with realistic delays — no real API calls required.
+Eleven interactive tool pages at `/tools/*`, with a landing page at `/demo`. Designed as LinkedIn-shareable demos that showcase Mouliqe's AI/data capabilities. All tools use simulated responses with realistic delays — no real API calls required.
 
 ### Layout Pattern
 
@@ -631,6 +670,39 @@ The graph visualization area (`#agent-graph`) is fully dynamic — each pattern'
 ---
 
 ## Change Log
+
+### Session: March 31, 2026 (Kiro CLI + Mimir) — SEO Optimization
+
+**Blog Post SEO (8 posts)**
+- All `<title>`, `<meta description>`, OG, and Twitter tags rewritten for search intent
+- `<meta name="keywords">` added to all posts with 5-7 long-tail terms each
+- `posts.json` updated with new titles and excerpts
+- H1 headings inside articles unchanged (retain original catchy titles for LinkedIn)
+
+**Core Page SEO (5 pages)**
+- Home, About, Services, Process, Contact — all titles and descriptions rewritten for search intent
+- Keywords added to all pages
+
+**JSON-LD Schema Markup (via components.js)**
+- `injectSchema()` function added — injects structured data based on current URL:
+  - All pages: `ProfessionalService` (business name, founder, services, area served)
+  - Homepage: `WebSite` schema
+  - About: `Person` schema (Imtiaz Ahmed, job title, expertise)
+  - Services: 3x `Service` schemas (AI Solutions, Data Engineering, Analytics)
+  - Blog posts: `BlogPosting` schema (headline, author, publisher, date, image)
+
+**Blog CTA Injection (via components.js)**
+- `injectBlogCTA()` function added — auto-injects CTA block on all `/blog/*` pages
+- CTA includes "Need help with this?" header, discovery call button, contextual service link
+- Service link mapped per post slug (e.g., data-problem → Data Engineering & Infrastructure)
+- Styled to match existing green accent design system
+
+**robots.txt**
+- Created at site root, pointing to `sitemap.xml`
+
+**Files changed**: 17 total (robots.txt, components.js, 5 core pages, 8 blog posts, posts.json)
+
+---
 
 ### Session: March 29, 2026 (Claude Code + Kiro CLI) — Demo landing page, 2 new tools, infrastructure
 
