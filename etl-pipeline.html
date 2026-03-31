@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETL Pipeline Explained — Interactive Extract Transform Load Demo | Mouliqe</title>
+  <meta name="description" content="Watch an ETL pipeline run step by step — extraction, validation, cleaning, transformation, and loading with per-row change tracking. Interactive demo.">
+  <meta name="keywords" content="ETL pipeline explained, extract transform load demo, ETL process visualization, data pipeline tutorial, ETL example">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="ETL Pipeline Simulator — Mouliqe Demo">
+  <meta property="og:description" content="Watch messy data get extracted, validated, cleaned, transformed, and loaded — step by step.">
+  <meta property="og:url" content="https://mouliqe.com/tools/etl-pipeline">
+  <link rel="canonical" href="https://mouliqe.com/tools/etl-pipeline">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ETL Pipeline Simulator — Mouliqe Demo">
+  <meta name="twitter:description" content="Watch messy data get extracted, validated, cleaned, transformed, and loaded — step by step.">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .etl-table { width:max-content; min-width:100%; border-collapse:collapse; font-size:0.68rem; }
+    .etl-table th { text-align:left; padding:0.35rem 0.65rem; color:rgba(255,255,255,0.35); font-weight:600; border-bottom:1px solid rgba(255,255,255,0.06); white-space:nowrap; }
+    .etl-table td { padding:0.3rem 0.65rem; color:rgba(255,255,255,0.4); border-bottom:1px solid rgba(255,255,255,0.02); transition: all 0.4s; vertical-align:top; line-height:1.6; }
+    .etl-table td .td-inner { display:inline-flex; align-items:center; gap:0.25rem; white-space:nowrap; }
+    .etl-table tr.row-flagged td { background:rgba(251,191,36,0.04); }
+    .etl-table tr.row-removed td { text-decoration:line-through; color:rgba(255,255,255,0.12); background:rgba(248,113,113,0.03); }
+    .etl-table tr.row-new td { background:rgba(74,222,128,0.03); }
+    .etl-table tr { animation: rowFadeIn 0.3s ease-out forwards; }
+    @keyframes rowFadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+    .cell-badge {
+      display:inline-flex; align-items:center; font-size:0.5rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+      padding:0.16rem 0.3rem 0.05rem; border-radius:0.15rem; line-height:1; white-space:nowrap;
+    }
+    .cell-badge.warn { color:rgba(251,191,36,0.7); background:rgba(251,191,36,0.08); }
+    .cell-badge.error { color:rgba(248,113,113,0.7); background:rgba(248,113,113,0.08); }
+    .cell-badge.fixed { color:rgba(74,222,128,0.7); background:rgba(74,222,128,0.08); }
+    .cell-badge.dup { color:rgba(248,113,113,0.6); background:rgba(248,113,113,0.06); }
+    .cell-highlight { color:rgba(74,222,128,0.6) !important; }
+    .source-tag {
+      display:inline-block; font-size:0.5rem; font-weight:600; letter-spacing:0.05em;
+      padding:0.18rem 0.35rem 0.06rem; border-radius:0.2rem; margin-right:0.25rem; line-height:1;
+    }
+    .etl-stats { display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.75rem; }
+    .etl-stat {
+      font-size:0.6rem; color:rgba(255,255,255,0.3);
+    }
+    .etl-stat strong { color:rgba(255,255,255,0.6); font-weight:700; }
+  </style>
+</head>
+<body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
+  <div id="site-nav"></div>
+  <div class="main-content">
+
+    <!-- Hero -->
+    <section class="pt-20 pb-6">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 anim-fade">Demo</p>
+        <div class="flex items-center gap-3 mb-3 anim-up">
+          <h1 class="text-3xl md:text-4xl font-bold text-white">ETL Pipeline Simulator</h1>
+          <span style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.28rem 0.45rem 0.08rem;border-radius:0.25rem;line-height:1;color:rgba(96,165,250,0.7);background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);white-space:nowrap;margin-top:0.3rem">Runs Locally</span>
+        </div>
+        <p class="text-[0.84rem] text-white/45 max-w-xl anim-up anim-d1">Watch messy data get extracted, validated, cleaned, transformed, and loaded — step by step. See every transformation as it happens.</p>
+      </div>
+    </section>
+
+    <!-- Tool + Sidebar -->
+    <section class="pb-20">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+          <!-- ═══ TOOL AREA (70%) ═══ -->
+          <div class="flex-1 min-w-0 reveal">
+
+            <!-- Scenario selection -->
+            <div class="card" id="input-section">
+              <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1rem">Choose a Scenario</p>
+              <div class="flex flex-wrap gap-2" id="scenario-btns">
+                <button class="slot-btn" data-scenario="customers" style="padding:0.5rem 0.75rem">
+                  <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">Merge Customer Data</span>
+                  <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">3 sources, duplicates, mismatches</span>
+                </button>
+                <button class="slot-btn" data-scenario="sales" style="padding:0.5rem 0.75rem">
+                  <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">Clean Sales Pipeline</span>
+                  <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">Nulls, mixed formats, duplicates</span>
+                </button>
+                <button class="slot-btn" data-scenario="events" style="padding:0.5rem 0.75rem">
+                  <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">Build Reporting Table</span>
+                  <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">Raw events → daily summary</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Pipeline visualization -->
+            <div class="tool-pipeline" id="pipeline" style="display:none">
+              <div class="tool-stage pending" data-stage="extract"><div class="tool-stage-dot"></div><span class="tool-stage-label">Extract</span></div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="validate"><div class="tool-stage-dot"></div><span class="tool-stage-label">Validate</span></div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="clean"><div class="tool-stage-dot"></div><span class="tool-stage-label">Clean</span></div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="transform"><div class="tool-stage-dot"></div><span class="tool-stage-label">Transform</span></div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="load"><div class="tool-stage-dot"></div><span class="tool-stage-label">Load</span></div>
+            </div>
+
+            <!-- Dynamic context log -->
+            <div class="tool-context" id="context-panel" style="display:none">
+              <div id="context-log"></div>
+            </div>
+
+            <!-- Data preview area -->
+            <div id="data-preview" style="display:none;margin-top:1.25rem">
+              <div class="tool-result-card">
+                <div class="tool-result-header">
+                  <span class="tool-result-label" id="preview-title">Data</span>
+                  <span style="font-size:0.6rem;color:rgba(255,255,255,0.2)" id="preview-stats"></span>
+                </div>
+                <div style="overflow-x:auto;margin-top:0.5rem" id="table-wrap"></div>
+                <div class="etl-stats" id="etl-stats"></div>
+              </div>
+            </div>
+
+            <!-- Final quality score -->
+            <div id="quality-card" style="display:none;margin-top:1rem">
+              <div class="tool-result-card" style="text-align:center;padding:1.5rem">
+                <p style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(74,222,128,0.4);margin-bottom:0.5rem">Pipeline Complete</p>
+                <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap">
+                  <div>
+                    <p style="font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)" id="final-score"></p>
+                    <p style="font-size:0.6rem;color:rgba(255,255,255,0.25);margin-top:0.15rem">Quality Score</p>
+                  </div>
+                  <div>
+                    <p style="font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)" id="final-rows"></p>
+                    <p style="font-size:0.6rem;color:rgba(255,255,255,0.25);margin-top:0.15rem">Clean Rows</p>
+                  </div>
+                  <div>
+                    <p style="font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)" id="final-issues"></p>
+                    <p style="font-size:0.6rem;color:rgba(255,255,255,0.25);margin-top:0.15rem">Issues Fixed</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ═══ SIDEBAR (30%) ═══ -->
+          <div class="lg:w-64 shrink-0 reveal reveal-d1 hidden lg:block">
+            <div style="position:sticky;top:1.5rem" class="flex flex-col gap-5">
+
+              <div class="sidebar-card">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">What This Demonstrates</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">This simulator runs pre-built transformations on sample data so you can see each ETL stage in action. In production, these pipelines run continuously on live data.</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">A production data pipeline adds:</p>
+                <div style="display:flex;flex-direction:column;gap:0.3rem">
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Orchestration (Airflow, Dagster, Prefect)</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Incremental loads and CDC</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Schema evolution and versioning</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Data quality monitoring and alerts</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Lineage tracking and audit logs</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Retry logic and dead-letter queues</p>
+                </div>
+              </div>
+
+              <div class="sidebar-cta">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Messy data slowing you down?</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about building pipelines that clean, transform, and deliver your data reliably.</p>
+                <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+                <a href="mailto:imtiaz@mouliqe.com" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;margin-top:0.75rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><span style="line-height:1">prefer email instead?</span></a>
+                <div style="height:1px;background:rgba(255,255,255,0.05);margin:1.25rem 0"></div>
+                <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:block;flex-shrink:0"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  <span style="line-height:1;padding-top:0.1rem">Follow on LinkedIn</span>
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Mobile sidebar -->
+        <div class="lg:hidden" style="margin-top:2rem">
+          <div class="flex flex-col gap-5">
+          <div class="sidebar-card">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">What This Demonstrates</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">This simulator runs pre-built transformations on sample data so you can see each ETL stage in action. In production, these pipelines run continuously on live data.</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">A production data pipeline adds:</p>
+            <div style="display:flex;flex-direction:column;gap:0.3rem">
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Orchestration (Airflow, Dagster, Prefect)</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Incremental loads and CDC</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Schema evolution and versioning</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Data quality monitoring and alerts</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Lineage tracking and audit logs</p>
+              <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span>Retry logic and dead-letter queues</p>
+            </div>
+          </div>
+          <div class="sidebar-cta">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Messy data slowing you down?</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about building pipelines that clean, transform, and deliver your data reliably.</p>
+            <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+            <a href="mailto:imtiaz@mouliqe.com" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;margin-top:0.75rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><span style="line-height:1">prefer email instead?</span></a>
+            <div style="height:1px;background:rgba(255,255,255,0.05);margin:1.25rem 0"></div>
+            <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:block;flex-shrink:0"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              <span style="line-height:1;padding-top:0.1rem">Follow on LinkedIn</span>
+            </a>
+          </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+  <script src="/components.js"></script>
+  <script>
+  // ══════════════════════════════════════════════════
+  // ETL Pipeline Simulator — Pure Client-Side
+  // ══════════════════════════════════════════════════
+
+  // ── Scenario Data ──
+  const SCENARIOS = {
+    customers: {
+      name: 'Merge Customer Data',
+      sources: [
+        { name: 'CRM', color: 'rgba(96,165,250,0.6)', bg: 'rgba(96,165,250,0.08)' },
+        { name: 'Email', color: 'rgba(192,132,252,0.6)', bg: 'rgba(192,132,252,0.08)' },
+        { name: 'Support', color: 'rgba(251,191,36,0.6)', bg: 'rgba(251,191,36,0.08)' },
+      ],
+      headers: ['Source','Name','Email','Phone','Company','City','Signup Date'],
+      raw: [
+        ['CRM','John Smith','john@acme.com','(555) 123-4567','Acme Inc','New York','2024-01-15'],
+        ['CRM','Sarah Connor','s.connor@skynet.io','555.234.5678','Skynet LLC','Los Angeles','2024-02-20'],
+        ['CRM','Mike Johnson','mike.j@globex.com','','Globex Corp','Chicago','2024-03-01'],
+        ['Email','john smith','JOHN@ACME.COM','','','new york','Jan 15, 2024'],
+        ['Email','Sarah Connor','s.connor@skynet.io','','Skynet','LA','2/20/2024'],
+        ['Email','Lisa Park','lisa@umbrella.co','','Umbrella Inc','Seattle','03-15-2024'],
+        ['Email','','dave@wayne.com','','Wayne Ent','','2024-04-01'],
+        ['Support','J. Smith','john@acme.com','5551234567','Acme','NYC','2024-01-15'],
+        ['Support','Mike Johnson','mike.j@globex.com','312-555-0199','Globex','Chicago','03/01/2024'],
+        ['Support','Sarah C.','connor.s@skynet.io','','Skynet LLC','Los Angeles','2024-02-20'],
+        ['Support','Lisa Park','lisa@umbrella.co','206-555-0142','Umbrella','Seattle','2024-03-15'],
+        ['Support','Tom Wilson','tom@stark.io','','Stark Industries','Boston','2024-05-10'],
+      ],
+      validate: {
+        issues: [
+          { row: 3, col: 'Phone', type: 'warn', badge: 'null' },
+          { row: 4, col: 'Name', type: 'warn', badge: 'case' },
+          { row: 4, col: 'Email', type: 'warn', badge: 'case' },
+          { row: 5, col: 'Signup Date', type: 'warn', badge: 'format' },
+          { row: 6, col: 'Signup Date', type: 'warn', badge: 'format' },
+          { row: 7, col: 'Name', type: 'error', badge: 'null' },
+          { row: 7, col: 'City', type: 'warn', badge: 'null' },
+          { row: 8, col: 'Phone', type: 'warn', badge: 'format' },
+        ],
+        summary: 'Scanned 12 rows across 3 sources. Found 8 issues: 2 null values, 2 case inconsistencies, 3 format mismatches, and 1 missing required field (name).',
+      },
+      clean: {
+        // Remove row with null name (index 7→6 in 0-based), standardize formats
+        removedRows: [6], // row index in raw (0-based), the empty name row
+        transforms: [
+          { row: 3, col: 'Name', from: 'john smith', to: 'John Smith', badge: 'fixed' },
+          { row: 3, col: 'Email', from: 'JOHN@ACME.COM', to: 'john@acme.com', badge: 'fixed' },
+          { row: 3, col: 'Signup Date', from: 'Jan 15, 2024', to: '2024-01-15', badge: 'fixed' },
+          { row: 4, col: 'City', from: 'LA', to: 'Los Angeles', badge: 'fixed' },
+          { row: 4, col: 'Signup Date', from: '2/20/2024', to: '2024-02-20', badge: 'fixed' },
+          { row: 5, col: 'Signup Date', from: '03-15-2024', to: '2024-03-15', badge: 'fixed' },
+          { row: 7, col: 'Phone', from: '5551234567', to: '(555) 123-4567', badge: 'fixed' },
+          { row: 7, col: 'Company', from: 'Acme', to: 'Acme Inc', badge: 'fixed' },
+          { row: 7, col: 'City', from: 'NYC', to: 'New York', badge: 'fixed' },
+          { row: 8, col: 'Signup Date', from: '03/01/2024', to: '2024-03-01', badge: 'fixed' },
+          { row: 9, col: 'Name', from: 'Sarah C.', to: 'Sarah Connor', badge: 'fixed' },
+          { row: 9, col: 'Email', from: 'connor.s@skynet.io', to: 's.connor@skynet.io', badge: 'fixed' },
+          { row: 10, col: 'Company', from: 'Umbrella', to: 'Umbrella Inc', badge: 'fixed' },
+        ],
+        summary: 'Removed 1 row (missing required name field). Standardized 13 values: normalized case, unified date formats to ISO 8601, expanded city abbreviations, formatted phone numbers, resolved company name variants.',
+      },
+      transform: {
+        // Deduplicate: merge by email, keep richest record
+        headers: ['Name','Email','Phone','Company','City','Signup Date','Sources'],
+        rows: [
+          ['John Smith','john@acme.com','(555) 123-4567','Acme Inc','New York','2024-01-15','CRM, Email, Support'],
+          ['Sarah Connor','s.connor@skynet.io','555.234.5678','Skynet LLC','Los Angeles','2024-02-20','CRM, Email, Support'],
+          ['Mike Johnson','mike.j@globex.com','312-555-0199','Globex Corp','Chicago','2024-03-01','CRM, Support'],
+          ['Lisa Park','lisa@umbrella.co','206-555-0142','Umbrella Inc','Seattle','2024-03-15','Email, Support'],
+          ['Dave','dave@wayne.com','','Wayne Ent','','2024-04-01','Email'],
+          ['Tom Wilson','tom@stark.io','','Stark Industries','Boston','2024-05-10','Support'],
+        ],
+        summary: 'Deduplicated 11 records into 6 unique customers using email as the merge key. For each customer, kept the most complete values across sources. Added a Sources column tracking data provenance.',
+      },
+      load: {
+        summary: 'Loaded 6 clean customer records into the warehouse. Data quality score: 94% (1 record missing phone, 1 missing city). Lineage tracked across 3 source systems.',
+        score: 94,
+        rows: 6,
+        issues: 14,
+      }
+    },
+
+    sales: {
+      name: 'Clean Sales Pipeline',
+      sources: [
+        { name: 'Sales CRM', color: 'rgba(74,222,128,0.6)', bg: 'rgba(74,222,128,0.08)' },
+      ],
+      headers: ['Source','Deal','Rep','Amount','Currency','Stage','Close Date','Probability','Region'],
+      raw: [
+        ['Sales CRM','Acme Renewal','Sarah K.','$45,000','USD','Negotiation','2024-06-15','85%','Northeast'],
+        ['Sales CRM','Globex New','Mike T.','32000','USD','Proposal','June 30, 2024','60%','Midwest'],
+        ['Sales CRM','Wayne Expansion','','$78,500','','Closed Won','2024-05-20','100%',''],
+        ['Sales CRM','Stark Deal','Lisa M.','€52,000','EUR','Discovery','2024-07-10','25%','Europe'],
+        ['Sales CRM','Umbrella Upsell','Sarah K.','$28,000','USD','Proposal','2024-06-25','55%','West'],
+        ['Sales CRM','Acme Renewal','Sarah K.','$45,000','USD','Negotiation','2024-06-15','85%','Northeast'],
+        ['Sales CRM','Oscorp Pilot','Dave R.','15000','','Qualification','7/20/2024','30%','Northeast'],
+        ['Sales CRM','Globex Add-on','Mike T.','$12,500','USD','Closed Won','2024-06-01','100%','Midwest'],
+        ['Sales CRM','LexCorp Trial','','$0','USD','Lost','2024-04-30','0%','Southeast'],
+        ['Sales CRM','Stark Deal','Lisa M.','52000','EUR','Discovery','2024-07-10','25','Europe'],
+      ],
+      validate: {
+        issues: [
+          { row: 2, col: 'Amount', type: 'warn', badge: 'format' },
+          { row: 3, col: 'Rep', type: 'error', badge: 'null' },
+          { row: 3, col: 'Currency', type: 'warn', badge: 'null' },
+          { row: 3, col: 'Region', type: 'warn', badge: 'null' },
+          { row: 4, col: 'Currency', type: 'warn', badge: 'non-std' },
+          { row: 6, col: 'Probability', type: 'warn', badge: 'dup' },
+          { row: 7, col: 'Amount', type: 'warn', badge: 'format' },
+          { row: 7, col: 'Currency', type: 'warn', badge: 'null' },
+          { row: 7, col: 'Close Date', type: 'warn', badge: 'format' },
+          { row: 9, col: 'Rep', type: 'error', badge: 'null' },
+          { row: 10, col: 'Amount', type: 'warn', badge: 'format' },
+          { row: 10, col: 'Probability', type: 'warn', badge: 'format' },
+        ],
+        summary: 'Scanned 10 deals. Found 12 issues: 2 missing reps, 2 missing currencies, 1 missing region, 3 amount format inconsistencies, 2 date format issues, 1 duplicate row, 1 probability format mismatch.',
+      },
+      clean: {
+        removedRows: [5, 9], // duplicate Acme Renewal, duplicate Stark Deal
+        transforms: [
+          { row: 2, col: 'Amount', from: '32000', to: '$32,000', badge: 'fixed' },
+          { row: 3, col: 'Currency', from: '', to: 'USD', badge: 'fixed' },
+          { row: 3, col: 'Region', from: '', to: 'Unknown', badge: 'fixed' },
+          { row: 4, col: 'Amount', from: '€52,000', to: '$56,680', badge: 'fixed' },
+          { row: 4, col: 'Currency', from: 'EUR', to: 'USD', badge: 'fixed' },
+          { row: 7, col: 'Amount', from: '15000', to: '$15,000', badge: 'fixed' },
+          { row: 7, col: 'Currency', from: '', to: 'USD', badge: 'fixed' },
+          { row: 7, col: 'Close Date', from: '7/20/2024', to: '2024-07-20', badge: 'fixed' },
+          { row: 2, col: 'Close Date', from: 'June 30, 2024', to: '2024-06-30', badge: 'fixed' },
+        ],
+        summary: 'Removed 2 duplicate rows. Standardized 9 values: converted EUR amounts to USD at market rate, formatted all amounts with $ prefix, unified date formats to ISO 8601, inferred missing currency as USD, marked missing region as Unknown.',
+      },
+      transform: {
+        headers: ['Deal','Rep','Amount (USD)','Stage','Close Date','Probability','Region','Pipeline Value'],
+        rows: [
+          ['Acme Renewal','Sarah K.','$45,000','Negotiation','2024-06-15','85%','Northeast','$38,250'],
+          ['Globex New','Mike T.','$32,000','Proposal','2024-06-30','60%','Midwest','$19,200'],
+          ['Wayne Expansion','Unassigned','$78,500','Closed Won','2024-05-20','100%','Unknown','$78,500'],
+          ['Stark Deal','Lisa M.','$56,680','Discovery','2024-07-10','25%','Europe','$14,170'],
+          ['Umbrella Upsell','Sarah K.','$28,000','Proposal','2024-06-25','55%','West','$15,400'],
+          ['Oscorp Pilot','Dave R.','$15,000','Qualification','2024-07-20','30%','Northeast','$4,500'],
+          ['Globex Add-on','Mike T.','$12,500','Closed Won','2024-06-01','100%','Midwest','$12,500'],
+          ['LexCorp Trial','Unassigned','$0','Lost','2024-04-30','0%','Southeast','$0'],
+        ],
+        summary: 'Added computed Pipeline Value column (Amount × Probability). Normalized currency to USD. Replaced missing rep names with "Unassigned". Merged duplicate deal entries. Removed Currency column (all standardized to USD).',
+      },
+      load: {
+        summary: 'Loaded 8 clean deals into the warehouse. Total pipeline value: $182,520. Data quality score: 88% (2 deals missing rep assignment, 1 missing region).',
+        score: 88,
+        rows: 8,
+        issues: 13,
+      }
+    },
+
+    events: {
+      name: 'Build Reporting Table',
+      sources: [
+        { name: 'Event Log', color: 'rgba(251,146,60,0.6)', bg: 'rgba(251,146,60,0.08)' },
+      ],
+      headers: ['Source','Timestamp','Event','User ID','Page','Duration (s)','Device','Country'],
+      raw: [
+        ['Event Log','2024-06-01 09:12:33','page_view','usr_001','/home','12','desktop','US'],
+        ['Event Log','2024-06-01 09:12:45','click','usr_001','/home','','desktop','US'],
+        ['Event Log','2024-06-01 09:14:02','page_view','usr_001','/pricing','34','desktop','US'],
+        ['Event Log','2024-06-01 09:15:10','signup','usr_001','/signup','','desktop','US'],
+        ['Event Log','2024-06-01 10:03:22','page_view','usr_002','/home','8','mobile','UK'],
+        ['Event Log','2024-06-01 10:04:01','page_view','usr_002','/about','22','mobile','UK'],
+        ['Event Log','2024-06-01 10:05:44','page_view','','','0','bot',''],
+        ['Event Log','2024-06-01 14:22:10','page_view','usr_003','/home','45','desktop','DE'],
+        ['Event Log','2024-06-01 14:23:55','page_view','usr_003','/pricing','62','desktop','DE'],
+        ['Event Log','2024-06-01 14:25:00','click','usr_003','/pricing','','desktop','DE'],
+        ['Event Log','2024-06-01 14:26:30','signup','usr_003','/signup','','desktop','DE'],
+        ['Event Log','2024-06-02 08:45:12','page_view','usr_004','/home','15','mobile','US'],
+        ['Event Log','2024-06-02 08:46:30','page_view','usr_004','/services','28','mobile','US'],
+        ['Event Log','2024-06-02 09:10:05','page_view','usr_005','/home','5','tablet','CA'],
+        ['Event Log','2024-06-02 09:10:08','page_view','usr_005','/home','5','tablet','CA'],
+        ['Event Log','2024-06-02 11:30:00','page_view','usr_006','/pricing','38','desktop','US'],
+        ['Event Log','2024-06-02 11:31:22','click','usr_006','/pricing','','desktop','US'],
+        ['Event Log','2024-06-02 11:33:45','signup','usr_006','/signup','','desktop','US'],
+      ],
+      validate: {
+        issues: [
+          { row: 2, col: 'Duration (s)', type: 'warn', badge: 'null' },
+          { row: 4, col: 'Duration (s)', type: 'warn', badge: 'null' },
+          { row: 7, col: 'User ID', type: 'error', badge: 'null' },
+          { row: 7, col: 'Page', type: 'error', badge: 'null' },
+          { row: 7, col: 'Duration (s)', type: 'warn', badge: 'zero' },
+          { row: 7, col: 'Device', type: 'warn', badge: 'bot' },
+          { row: 7, col: 'Country', type: 'warn', badge: 'null' },
+          { row: 10, col: 'Duration (s)', type: 'warn', badge: 'null' },
+          { row: 11, col: 'Duration (s)', type: 'warn', badge: 'null' },
+          { row: 15, col: 'Timestamp', type: 'warn', badge: 'dup' },
+        ],
+        summary: 'Scanned 18 events. Found 10 issues: 1 bot traffic row (no user ID, 0 duration), 4 null durations on click/signup events (expected), 1 duplicate page_view, 1 row missing all identifiers.',
+      },
+      clean: {
+        removedRows: [6, 14], // bot row, duplicate page_view
+        transforms: [
+          { row: 2, col: 'Duration (s)', from: '', to: '0', badge: 'fixed' },
+          { row: 4, col: 'Duration (s)', from: '', to: '0', badge: 'fixed' },
+          { row: 10, col: 'Duration (s)', from: '', to: '0', badge: 'fixed' },
+          { row: 11, col: 'Duration (s)', from: '', to: '0', badge: 'fixed' },
+        ],
+        summary: 'Removed 2 rows: 1 bot traffic (no user ID, device=bot), 1 duplicate page_view (same user, page, timestamp within 3s). Set 4 null durations to 0 (click and signup events have no duration by design).',
+      },
+      transform: {
+        headers: ['Date','Unique Visitors','Page Views','Signups','Conversion Rate','Avg Duration (s)','Top Page','Top Country'],
+        rows: [
+          ['2024-06-01','3','7','2','66.7%','26.1','/home','US'],
+          ['2024-06-02','3','5','1','33.3%','21.5','/home','US'],
+        ],
+        summary: 'Aggregated 16 clean events into daily summary rows. Computed unique visitors, page views, signup conversions, average page duration, most-visited page, and top country per day. Granularity reduced from event-level to day-level for reporting.',
+      },
+      load: {
+        summary: 'Loaded 2 daily summary rows into the reporting table. Conversion rate: 50% avg across both days. Data quality score: 97% (only minor null durations on non-duration events).',
+        score: 97,
+        rows: 2,
+        issues: 6,
+      }
+    }
+  };
+
+  // ── Pipeline Stage Context ──
+  const STAGES = ['extract','validate','clean','transform','load'];
+  const STAGE_CONTEXT = {
+    extract: {
+      title: 'Extracting Data',
+      textFn: (s) => `Pulling raw records from ${s.sources.length > 1 ? s.sources.length + ' source systems' : 'the source system'}. In production, this would be API calls, database queries, or file ingestion — each with its own auth, rate limits, and schema. Here we\'re loading ${s.raw.length} raw records.`
+    },
+    validate: {
+      title: 'Validating Records',
+      textFn: (s) => s.validate.summary
+    },
+    clean: {
+      title: 'Cleaning Data',
+      textFn: (s) => s.clean.summary
+    },
+    transform: {
+      title: 'Transforming',
+      textFn: (s) => s.transform.summary
+    },
+    load: {
+      title: 'Loading to Warehouse',
+      textFn: (s) => s.load.summary
+    },
+  };
+
+  // ── Pipeline Stage Logic ──
+  function setStage(stageId, scenario) {
+    const stages = document.querySelectorAll('.tool-stage');
+    const connectors = document.querySelectorAll('.tool-stage-connector');
+    const stageIdx = STAGES.indexOf(stageId);
+
+    stages.forEach((s, i) => {
+      s.className = 'tool-stage ' + (i < stageIdx ? 'done' : i === stageIdx ? 'active' : 'pending');
+    });
+    connectors.forEach((c, i) => {
+      c.className = 'tool-stage-connector ' + (i < stageIdx ? 'done' : i === stageIdx ? 'active' : '');
+    });
+
+    const ctx = STAGE_CONTEXT[stageId];
+    const panel = document.getElementById('context-panel');
+    const log = document.getElementById('context-log');
+    panel.style.display = 'block';
+    panel.classList.add('pulsing');
+
+    // Mark previous entry as done
+    const prev = log.querySelector('.context-entry.active');
+    if (prev) {
+      prev.classList.remove('active');
+      prev.classList.add('done');
+      const dot = prev.querySelector('.context-dot');
+      if (dot) { dot.style.background = 'rgba(74,222,128,0.5)'; dot.style.boxShadow = 'none'; }
+      const title = prev.querySelector('.context-title-text');
+      if (title) title.style.color = 'rgba(74,222,128,0.5)';
+    }
+
+    const entry = document.createElement('div');
+    entry.className = 'context-entry active';
+    entry.style.cssText = 'display:flex;gap:0.6rem;align-items:flex-start;margin-bottom:0.75rem;animation:fadeInUp 0.3s ease-out forwards';
+    entry.innerHTML = `
+      <div class="context-dot" style="width:6px;height:6px;border-radius:50%;background:#fbbf24;box-shadow:0 0 8px rgba(251,191,36,0.4);margin-top:0.35rem;flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <p class="context-title-text" style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(251,191,36,0.6);margin-bottom:0.2rem">${ctx.title}</p>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.45);line-height:1.65;margin:0">${ctx.textFn(scenario)}</p>
+      </div>`;
+    log.appendChild(entry);
+    panel.scrollTop = panel.scrollHeight;
+  }
+
+  function finishPipeline() {
+    const stages = document.querySelectorAll('.tool-stage');
+    const connectors = document.querySelectorAll('.tool-stage-connector');
+    stages.forEach(s => s.className = 'tool-stage done');
+    connectors.forEach(c => c.className = 'tool-stage-connector done');
+
+    const panel = document.getElementById('context-panel');
+    const log = document.getElementById('context-log');
+    panel.classList.remove('pulsing');
+
+    const prev = log.querySelector('.context-entry.active');
+    if (prev) {
+      prev.classList.remove('active');
+      prev.classList.add('done');
+      const dot = prev.querySelector('.context-dot');
+      if (dot) { dot.style.background = 'rgba(74,222,128,0.5)'; dot.style.boxShadow = 'none'; }
+      const title = prev.querySelector('.context-title-text');
+      if (title) title.style.color = 'rgba(74,222,128,0.5)';
+    }
+  }
+
+  // ── Table Renderer ──
+  function renderTable(headers, rows, options = {}) {
+    const { issues, removedRows, transforms, sourceColors, newRows } = options;
+    const issueMap = {};
+    if (issues) issues.forEach(iss => { issueMap[`${iss.row}-${iss.col}`] = iss; });
+    const transformMap = {};
+    if (transforms) transforms.forEach(t => { transformMap[`${t.row}-${t.col}`] = t; });
+
+    let html = '<table class="etl-table"><thead><tr>';
+    headers.forEach(h => { html += `<th>${h}</th>`; });
+    html += '</tr></thead><tbody>';
+
+    rows.forEach((row, ri) => {
+      const isRemoved = removedRows && removedRows.includes(ri);
+      const isNew = newRows;
+      let rowClass = '';
+      if (isRemoved) rowClass = 'row-removed';
+      else if (isNew) rowClass = 'row-new';
+      else if (issues && issues.some(iss => iss.row === ri)) rowClass = 'row-flagged';
+
+      html += `<tr class="${rowClass}" style="animation-delay:${ri * 0.03}s">`;
+      row.forEach((val, ci) => {
+        const colName = headers[ci];
+        const issueKey = `${ri}-${colName}`;
+        const issue = issueMap[issueKey];
+        const transform = transformMap[issueKey];
+
+        // Source tag coloring
+        let cellContent = val;
+        if (colName === 'Source' && sourceColors) {
+          const src = sourceColors.find(s => s.name === val);
+          if (src) {
+            cellContent = `<span class="source-tag" style="color:${src.color};background:${src.bg}">${val}</span>`;
+          }
+        }
+
+        let badge = '';
+        let isFixed = false;
+        if (issue) badge = `<span class="cell-badge ${issue.type === 'error' ? 'error' : 'warn'}">${issue.badge}</span>`;
+        if (transform) {
+          cellContent = `<span class="cell-highlight">${transform.to}</span>`;
+          badge = `<span class="cell-badge fixed">${transform.badge}</span>`;
+          isFixed = true;
+        }
+
+        let sep = isFixed ? '<br>' : '';
+        html += `<td${isFixed ? ' style="padding-bottom:1.4rem"' : ''}>${cellContent}${sep}${badge}</td>`;
+      });
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    return html;
+  }
+
+  // ── Show Table ──
+  function showTable(title, stats, html) {
+    document.getElementById('preview-title').textContent = title;
+    document.getElementById('preview-stats').textContent = stats;
+    document.getElementById('table-wrap').innerHTML = html;
+    document.getElementById('data-preview').style.display = 'block';
+  }
+
+  // ── Pipeline Runner ──
+  async function runPipeline(scenarioKey) {
+    const scenario = SCENARIOS[scenarioKey];
+    const pipeline = document.getElementById('pipeline');
+    const preview = document.getElementById('data-preview');
+    const qualityCard = document.getElementById('quality-card');
+
+    // Reset
+    pipeline.style.display = 'flex';
+    preview.style.display = 'none';
+    qualityCard.style.display = 'none';
+    document.getElementById('context-log').innerHTML = '';
+    document.getElementById('context-panel').style.display = 'none';
+    document.getElementById('etl-stats').innerHTML = '';
+
+    // ── EXTRACT ──
+    setStage('extract', scenario);
+    await delay(2000);
+    const rawHeaders = scenario.headers;
+    const rawRows = scenario.raw;
+    const tableHtml = renderTable(rawHeaders, rawRows, { sourceColors: scenario.sources });
+    showTable('Extracted Data', `${rawRows.length} rows × ${rawHeaders.length} columns`, tableHtml);
+    await delay(1500);
+
+    // ── VALIDATE ──
+    setStage('validate', scenario);
+    await delay(1200);
+    const validateHtml = renderTable(rawHeaders, rawRows, {
+      issues: scenario.validate.issues,
+      sourceColors: scenario.sources,
+    });
+    showTable('Validation Results', `${scenario.validate.issues.length} issues found`, validateHtml);
+    document.getElementById('etl-stats').innerHTML = `
+      <span class="etl-stat"><strong style="color:rgba(251,191,36,0.7)">${scenario.validate.issues.filter(i=>i.type==='warn').length}</strong> warnings</span>
+      <span class="etl-stat"><strong style="color:rgba(248,113,113,0.7)">${scenario.validate.issues.filter(i=>i.type==='error').length}</strong> errors</span>
+    `;
+    await delay(2200);
+
+    // ── CLEAN ──
+    setStage('clean', scenario);
+    await delay(1200);
+    const cleanHtml = renderTable(rawHeaders, rawRows, {
+      removedRows: scenario.clean.removedRows,
+      transforms: scenario.clean.transforms,
+      sourceColors: scenario.sources,
+    });
+    const keptRows = rawRows.length - scenario.clean.removedRows.length;
+    showTable('Cleaned Data', `${scenario.clean.removedRows.length} removed, ${scenario.clean.transforms.length} fixed`, cleanHtml);
+    document.getElementById('etl-stats').innerHTML = `
+      <span class="etl-stat"><strong style="color:rgba(248,113,113,0.7)">${scenario.clean.removedRows.length}</strong> rows removed</span>
+      <span class="etl-stat"><strong style="color:rgba(74,222,128,0.7)">${scenario.clean.transforms.length}</strong> values fixed</span>
+      <span class="etl-stat"><strong>${keptRows}</strong> rows remaining</span>
+    `;
+    await delay(2200);
+
+    // ── TRANSFORM ──
+    setStage('transform', scenario);
+    await delay(1500);
+    const transformHtml = renderTable(scenario.transform.headers, scenario.transform.rows, { newRows: true });
+    showTable('Transformed Data', `${scenario.transform.rows.length} rows × ${scenario.transform.headers.length} columns`, transformHtml);
+    document.getElementById('etl-stats').innerHTML = `
+      <span class="etl-stat"><strong>${scenario.transform.rows.length}</strong> final rows</span>
+      <span class="etl-stat"><strong>${scenario.transform.headers.length}</strong> columns</span>
+    `;
+    await delay(2000);
+
+    // ── LOAD ──
+    setStage('load', scenario);
+    await delay(1500);
+    finishPipeline();
+
+    // Show quality card
+    document.getElementById('final-score').textContent = scenario.load.score + '%';
+    document.getElementById('final-rows').textContent = scenario.load.rows;
+    document.getElementById('final-issues').textContent = scenario.load.issues;
+    qualityCard.style.display = 'block';
+  }
+
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  // ── Event Handlers ──
+  document.getElementById('scenario-btns').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-scenario]');
+    if (!btn) return;
+    document.querySelectorAll('#scenario-btns .slot-btn').forEach(b => b.style.borderColor = '');
+    btn.style.borderColor = 'rgba(34,197,94,0.3)';
+    runPipeline(btn.dataset.scenario);
+  });
+  </script>
+</body>
+</html>
