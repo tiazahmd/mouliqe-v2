@@ -162,6 +162,23 @@ function injectSchema() {
   }
 
   // FAQ page — FAQPage schema (Google rich results)
+  // Tool pages — SoftwareApplication schema
+  if (p.startsWith('/tools/')) {
+    const title = document.querySelector('title')?.textContent?.replace(/\s*[|—].*$/, '') || '';
+    const desc = document.querySelector('meta[name="description"]')?.content || '';
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": title,
+      "description": desc,
+      "url": window.location.href,
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@type": "Person", "name": "Imtiaz Ahmed", "url": "https://mouliqe.com/about" }
+    });
+  }
+
   if (p === '/faq' || p === '/faq.html') {
     const faqItems = typeof FAQS !== 'undefined' ? FAQS : [];
     if (faqItems.length > 0) {
@@ -306,7 +323,6 @@ function injectBlogCTA() {
   const p = window.location.pathname.replace(/\/+$/, '') || '/';
   if (!p.startsWith('/blog/') || p === '/blog' || p === '/blog/') return;
 
-  // Map slugs to relevant service links
   const serviceMap = {
     'stop-building-ai-features': { service: 'AI Solutions & Architecture', href: '/services' },
     'poc-to-production': { service: 'AI Solutions & Architecture', href: '/services' },
@@ -333,7 +349,6 @@ function injectBlogCTA() {
       </div>
     </div>`;
 
-  // Find the LinkedIn follow link's parent and inject before it
   const linkedInLinks = document.querySelectorAll('a[href*="linkedin.com/in/"]');
   if (linkedInLinks.length > 0) {
     const container = linkedInLinks[linkedInLinks.length - 1].closest('div');
@@ -345,11 +360,45 @@ function injectBlogCTA() {
   }
 }
 
+function injectShareBar() {
+  const p = window.location.pathname.replace(/\/+$/, '') || '/';
+  const isBlog = p.startsWith('/blog/') && p !== '/blog' && p !== '/blog/';
+  const isTool = p.startsWith('/tools/');
+  if (!isBlog && !isTool) return;
+
+  const url = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(document.title.replace(' | Mouliqe', '').replace(' — Mouliqe', ''));
+
+  const shareCard = document.createElement('div');
+  shareCard.className = 'sidebar-card';
+  shareCard.innerHTML = `
+    <p style="font-size:0.6rem;font-weight:600;color:rgba(255,255,255,0.25);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem">Share this</p>
+    <div style="display:flex;align-items:center;gap:0.5rem">
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=${url}" target="_blank" rel="noopener" title="Share on LinkedIn" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.3);transition:all 0.3s;text-decoration:none" onmouseover="this.style.borderColor='rgba(74,222,128,0.3)';this.style.color='rgba(74,222,128,0.7)';this.style.background='rgba(74,222,128,0.04)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='rgba(255,255,255,0.3)';this.style.background='rgba(255,255,255,0.015)'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://twitter.com/intent/tweet?url=${url}&text=${title}" target="_blank" rel="noopener" title="Share on X" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.3);transition:all 0.3s;text-decoration:none" onmouseover="this.style.borderColor='rgba(74,222,128,0.3)';this.style.color='rgba(74,222,128,0.7)';this.style.background='rgba(74,222,128,0.04)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='rgba(255,255,255,0.3)';this.style.background='rgba(255,255,255,0.015)'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <button title="Copy link" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const s=this.querySelector('.copy-label');s.textContent='Copied!';setTimeout(()=>s.textContent='Copy link',1500)})" style="display:flex;align-items:center;justify-content:center;gap:0.35rem;height:32px;padding:0 0.65rem;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.3);cursor:pointer;font-family:inherit;font-size:0.58rem;font-weight:600;letter-spacing:0.04em;transition:all 0.3s" onmouseover="this.style.borderColor='rgba(74,222,128,0.3)';this.style.color='rgba(74,222,128,0.7)';this.style.background='rgba(74,222,128,0.04)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='rgba(255,255,255,0.3)';this.style.background='rgba(255,255,255,0.015)'">
+        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        <span class="copy-label">Copy link</span>
+      </button>
+    </div>`;
+
+  // Find the sticky sidebar container and append the share card
+  const stickyContainer = document.querySelector('.hidden.lg\\:block div[style*="sticky"]');
+  if (stickyContainer) {
+    stickyContainer.appendChild(shareCard);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   injectNav();
   injectFooter();
   injectSchema();
   injectBlogCTA();
+  injectShareBar();
   initMobileMenu();
   initToolsToggle();
   initScrollReveal();
