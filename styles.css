@@ -212,6 +212,12 @@ textarea.form-input { resize: none; }
 /* ---- PROSE ---- */
 .prose-custom p { color: rgba(255,255,255,0.55); line-height: 1.85; margin-bottom: 1rem; letter-spacing: 0.01em; }
 .prose-custom p:last-child { margin-bottom: 0; }
+.prose-custom ul,.prose-custom ol { list-style: none; padding-left: 0; margin: 0.75rem 0; }
+.prose-custom li { position: relative; padding-left: 1.25rem; margin-bottom: 0.5rem; color: rgba(255,255,255,0.55); line-height: 1.85; }
+.prose-custom li::before { content: '\203A'; position: absolute; left: 0; color: rgba(74,222,128,0.5); font-weight: 700; }
+.prose-custom ol { counter-reset: ol-counter; }
+.prose-custom ol li { counter-increment: ol-counter; }
+.prose-custom ol li::before { content: counter(ol-counter) '.'; color: rgba(74,222,128,0.5); font-weight: 700; font-size: 0.85em; }
 
 /* ---- ANIMATIONS ---- */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
