@@ -1,5 +1,29 @@
 [
   {
+    "slug": "choose-ai-consultant",
+    "title": "How to Choose an AI Consultant: 7 Questions to Ask Before You Hire",
+    "date": "2026-03-31",
+    "excerpt": "Not all AI consultants are created equal. Here are the questions that separate the ones who solve problems from the ones who sell technology.",
+    "tags": ["AI Strategy", "Business"],
+    "linkedin": ""
+  },
+  {
+    "slug": "first-ai-project",
+    "title": "What to Expect From Your First AI Project: A Realistic Timeline and Guide",
+    "date": "2026-03-31",
+    "excerpt": "Your first AI project does not have to be a disaster. Here is what actually happens, step by step, when you build an AI solution for the first time.",
+    "tags": ["AI Strategy", "Business"],
+    "linkedin": ""
+  },
+  {
+    "slug": "fix-your-data",
+    "title": "How to Fix Your Business Data Without a 6-Month Project",
+    "date": "2026-03-31",
+    "excerpt": "Your data is a mess and you know it. Here is how to fix it in weeks, not months, without hiring a data team or buying an expensive platform.",
+    "tags": ["Data Engineering", "Business"],
+    "linkedin": ""
+  },
+  {
     "slug": "stop-building-ai-features",
     "title": "Does Your Business Actually Need AI? How to Tell",
     "date": "2026-03-26",
