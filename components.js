@@ -361,44 +361,58 @@ function injectBlogCTA() {
 }
 
 function injectShareBar() {
-  const p = window.location.pathname.replace(/\/+$/, '') || '/';
-  const isBlog = p.startsWith('/blog/') && p !== '/blog' && p !== '/blog/';
-  const isTool = p.startsWith('/tools/');
+  var p = window.location.pathname.replace(/\/+$/, '') || '/';
+  var isBlog = p.startsWith('/blog/') && p !== '/blog' && p !== '/blog/';
+  var isTool = p.startsWith('/tools/');
   if (!isBlog && !isTool) return;
-
-  const url = encodeURIComponent(window.location.href);
-  const title = encodeURIComponent(document.title.replace(' | Mouliqe', '').replace(' — Mouliqe', ''));
-
-  const shareCard = document.createElement('div');
+  var url = encodeURIComponent(window.location.href);
+  var title = encodeURIComponent(document.title.replace(' | Mouliqe', '').replace(' — Mouliqe', ''));
+  var shareCard = document.createElement('div');
   shareCard.className = 'sidebar-card';
-  shareCard.innerHTML = `
-    <p style="font-size:0.6rem;font-weight:600;color:rgba(255,255,255,0.25);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem">Share this</p>
-    <div style="display:flex;align-items:center;gap:0.5rem">
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=${url}" target="_blank" rel="noopener" title="Share on LinkedIn" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.3);transition:all 0.3s;text-decoration:none" onmouseover="this.style.borderColor='rgba(74,222,128,0.3)';this.style.color='rgba(74,222,128,0.7)';this.style.background='rgba(74,222,128,0.04)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='rgba(255,255,255,0.3)';this.style.background='rgba(255,255,255,0.015)'">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-      </a>
-      <a href="https://twitter.com/intent/tweet?url=${url}&text=${title}" target="_blank" rel="noopener" title="Share on X" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.3);transition:all 0.3s;text-decoration:none" onmouseover="this.style.borderColor='rgba(74,222,128,0.3)';this.style.color='rgba(74,222,128,0.7)';this.style.background='rgba(74,222,128,0.04)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='rgba(255,255,255,0.3)';this.style.background='rgba(255,255,255,0.015)'">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      </a>
-      <button title="Copy link" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const s=this.querySelector('.copy-label');s.textContent='Copied!';setTimeout(()=>s.textContent='Copy link',1500)})" style="display:flex;align-items:center;justify-content:center;gap:0.35rem;height:32px;padding:0 0.65rem;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.3);cursor:pointer;font-family:inherit;font-size:0.58rem;font-weight:600;letter-spacing:0.04em;transition:all 0.3s" onmouseover="this.style.borderColor='rgba(74,222,128,0.3)';this.style.color='rgba(74,222,128,0.7)';this.style.background='rgba(74,222,128,0.04)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.color='rgba(255,255,255,0.3)';this.style.background='rgba(255,255,255,0.015)'">
-        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-        <span class="copy-label">Copy link</span>
-      </button>
-    </div>`;
+  shareCard.innerHTML = '<p style="font-size:0.6rem;font-weight:600;color:rgba(255,255,255,0.25);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem">Share this</p><div style="display:flex;align-items:center;gap:0.5rem"><a href="https://www.linkedin.com/sharing/share-offsite/?url=' + url + '" target="_blank" rel="noopener" title="Share on LinkedIn" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.3);transition:all 0.3s;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a><a href="https://twitter.com/intent/tweet?url=' + url + '&text=' + title + '" target="_blank" rel="noopener" title="Share on X" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.3);transition:all 0.3s;text-decoration:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><button title="Copy link" onclick="navigator.clipboard.writeText(window.location.href).then(function(){var s=event.target.closest(\'button\').querySelector(\'.copy-label\');s.textContent=\'Copied!\';setTimeout(function(){s.textContent=\'Copy link\'},1500)})" style="display:flex;align-items:center;justify-content:center;gap:0.35rem;height:32px;padding:0 0.65rem;border-radius:0.4rem;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.3);cursor:pointer;font-family:inherit;font-size:0.58rem;font-weight:600;letter-spacing:0.04em;transition:all 0.3s"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg><span class="copy-label">Copy link</span></button></div>';
+  var stickyContainer = document.querySelector('.hidden.lg\\:block div[style*="sticky"]');
+  if (stickyContainer) { stickyContainer.appendChild(shareCard); }
+}
 
-  // Find the sticky sidebar container and append the share card
-  const stickyContainer = document.querySelector('.hidden.lg\\:block div[style*="sticky"]');
-  if (stickyContainer) {
-    stickyContainer.appendChild(shareCard);
+function injectAIMetadata() {
+  var p = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (p === '/' || p === '' || p === '/index' || p === '/index.html') {
+    var block = document.createElement('div');
+    block.setAttribute('aria-hidden', 'true');
+    block.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap';
+    block.innerHTML = '<div itemscope itemtype="https://schema.org/ProfessionalService"><meta itemprop="name" content="Mouliqe"><meta itemprop="description" content="Independent AI consulting practice specializing in custom AI solutions, data engineering, and analytics architecture. Founded by Imtiaz Ahmed. Evaluates whether AI is the right solution before recommending it. Discovery and Diagnosis phases are free."><meta itemprop="url" content="https://mouliqe.com"><meta itemprop="founder" content="Imtiaz Ahmed"><meta itemprop="areaServed" content="Worldwide"><meta itemprop="knowsAbout" content="Artificial Intelligence, AI Architecture, Data Engineering, Data Pipelines, Data Warehouses, Business Intelligence, Multi-Agent Systems, RAG Pipelines, AI Guardrails, AI Cost Optimization, Production AI Systems"><p>Mouliqe is an independent AI consulting practice founded by Imtiaz Ahmed. Services include custom AI application development, data pipeline and warehouse architecture, and analytics and business intelligence. Discovery and Diagnosis are free. Contact: imtiaz@mouliqe.com. Free discovery call at mouliqe.com/contact.</p></div>';
+    document.body.appendChild(block);
+  }
+  if (p.startsWith('/blog/') && p !== '/blog' && p !== '/blog/') {
+    var TLDR = {
+      'stop-building-ai-features': 'Most businesses do not need AI. They need a solution to a problem. AI is the right tool for unstructured data at scale, pattern recognition beyond human capacity, or natural language interaction.',
+      'poc-to-production': 'AI proof of concepts fail in production because of missing error handling, no input validation, no output guardrails, hardcoded context, and no monitoring.',
+      'data-problem-not-ai-problem': 'Most AI projects fail not because of the model but because the data underneath is scattered, inconsistent, or incomplete. Fix the data foundation first.',
+      'context-windows-are-a-lie': 'A 200K token context window does not mean the AI can effectively use 200K tokens. Performance degrades in the middle of long contexts.',
+      'guardrails-problem': 'AI without guardrails is a liability. Effective guardrails require input validation, output verification, content filtering, and PII detection working together.',
+      'ai-memory-systems': 'Most AI assistants forget everything between sessions. A six-layer memory architecture enables persistent context across sessions.',
+      'planner-worker-synthesizer': 'Breaking one AI agent into three specialized agents eliminated tool call hallucinations and made the system dramatically more reliable.',
+      'costume-change-vs-new-actor': 'When an AI agent underperforms, decide whether to tune its configuration or build a specialized replacement based on whether the task requires fundamentally different reasoning.',
+    };
+    var slug = p.split('/').pop();
+    if (TLDR[slug]) {
+      var b = document.createElement('div');
+      b.setAttribute('aria-hidden', 'true');
+      b.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap';
+      b.innerHTML = '<div class="ai-summary" data-role="tldr"><p><strong>Key Takeaway:</strong> ' + TLDR[slug] + '</p><p>Author: Imtiaz Ahmed, Founder of Mouliqe (mouliqe.com). AI Solutions Architect and Data Consultant.</p></div>';
+      var article = document.querySelector('.prose-custom') || document.querySelector('.main-content');
+      if (article) { article.prepend(b); }
+    }
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   injectNav();
   injectFooter();
   injectSchema();
   injectBlogCTA();
   injectShareBar();
+  injectAIMetadata();
   initMobileMenu();
   initToolsToggle();
   initScrollReveal();
