@@ -97,9 +97,9 @@ body { background: #060a14; }
 .btn-secondary {
   display: inline-flex; align-items: center; justify-content: center; line-height: 1; border-radius: 0.5rem; font-weight: 600;
   padding: 0.75rem 1.5rem; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.06); transition: all 0.4s; text-decoration: none; background: transparent; cursor: pointer;
+  color: rgba(251,191,36,0.75); border: 1px solid rgba(251,191,36,0.4); transition: all 0.4s; text-decoration: none; background: rgba(251,191,36,0.03); cursor: pointer;
 }
-.btn-secondary:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.12); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+.btn-secondary:hover { color: rgba(251,191,36,1); border-color: rgba(251,191,36,0.7); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); background: rgba(251,191,36,0.06); }
 
 .btn-accent {
   display: inline-flex; align-items: center; justify-content: center; line-height: 1; border-radius: 0.5rem; font-weight: 600;
