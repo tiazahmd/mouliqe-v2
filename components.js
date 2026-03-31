@@ -92,6 +92,104 @@ function injectNav() {
 
 function injectFooter() {}
 
+function injectSchema() {
+  const schemas = [];
+  const p = window.location.pathname.replace(/\/+$/, '') || '/';
+
+  // Organization schema — every page
+  schemas.push({
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Mouliqe",
+    "url": "https://mouliqe.com",
+    "logo": "https://mouliqe.com/favicon.svg",
+    "description": "AI consulting that starts with understanding your business. Custom AI solutions, data engineering, and analytics architecture.",
+    "founder": { "@type": "Person", "name": "Imtiaz Ahmed" },
+    "areaServed": "Worldwide",
+    "priceRange": "$$",
+    "knowsAbout": ["Artificial Intelligence", "Data Engineering", "Data Architecture", "Business Intelligence", "Machine Learning", "AI Agents"]
+  });
+
+  // Homepage — WebSite + SearchAction
+  if (p === '/' || p === '' || p === '/index' || p === '/index.html') {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Mouliqe",
+      "url": "https://mouliqe.com",
+      "description": "AI consulting and data architecture for businesses navigating AI transformation."
+    });
+  }
+
+  // About — Person
+  if (p === '/about' || p === '/about.html') {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Imtiaz Ahmed",
+      "jobTitle": "AI Solutions Architect & Data Consultant",
+      "url": "https://mouliqe.com/about",
+      "worksFor": { "@type": "Organization", "name": "Mouliqe", "url": "https://mouliqe.com" },
+      "knowsAbout": ["AI Architecture", "Data Engineering", "Business Intelligence", "Multi-Agent Systems", "Production AI Systems"]
+    });
+  }
+
+  // Services — Service items
+  if (p === '/services' || p === '/services.html') {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "AI Solutions & Architecture",
+      "provider": { "@type": "ProfessionalService", "name": "Mouliqe", "url": "https://mouliqe.com" },
+      "description": "Custom AI application development, intelligent process automation, AI architecture design and review, model integration and orchestration.",
+      "areaServed": "Worldwide"
+    }, {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Data Engineering & Infrastructure",
+      "provider": { "@type": "ProfessionalService", "name": "Mouliqe", "url": "https://mouliqe.com" },
+      "description": "Data pipeline design, data warehouse architecture, system integration, ETL development, and data quality frameworks.",
+      "areaServed": "Worldwide"
+    }, {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Analytics & Business Intelligence",
+      "provider": { "@type": "ProfessionalService", "name": "Mouliqe", "url": "https://mouliqe.com" },
+      "description": "Dashboard and reporting development, KPI framework design, executive reporting systems, and self-service analytics.",
+      "areaServed": "Worldwide"
+    });
+  }
+
+  // Blog posts — Article schema
+  if (p.startsWith('/blog/') && p !== '/blog' && p !== '/blog/') {
+    const title = document.querySelector('title')?.textContent?.replace(' — Mouliqe', '') || '';
+    const desc = document.querySelector('meta[name="description"]')?.content || '';
+    const canonical = document.querySelector('link[rel="canonical"]')?.href || window.location.href;
+    const dateEl = document.querySelector('time');
+    const datePublished = dateEl?.getAttribute('datetime') || dateEl?.textContent || '';
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": title,
+      "description": desc,
+      "url": canonical,
+      "datePublished": datePublished,
+      "author": { "@type": "Person", "name": "Imtiaz Ahmed", "url": "https://mouliqe.com/about" },
+      "publisher": { "@type": "Organization", "name": "Mouliqe", "url": "https://mouliqe.com", "logo": { "@type": "ImageObject", "url": "https://mouliqe.com/favicon.svg" } },
+      "image": "https://mouliqe.com/og-image.png",
+      "mainEntityOfPage": canonical
+    });
+  }
+
+  // Inject all schemas
+  schemas.forEach(s => {
+    const el = document.createElement('script');
+    el.type = 'application/ld+json';
+    el.textContent = JSON.stringify(s);
+    document.head.appendChild(el);
+  });
+}
+
 function initMobileMenu() {
   const toggle = document.getElementById('menu-toggle');
   const menu = document.getElementById('mobile-menu');
@@ -187,9 +285,54 @@ function initFormSuccess() {
   });
 }
 
+function injectBlogCTA() {
+  const p = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (!p.startsWith('/blog/') || p === '/blog' || p === '/blog/') return;
+
+  // Map slugs to relevant service links
+  const serviceMap = {
+    'stop-building-ai-features': { service: 'AI Solutions & Architecture', href: '/services' },
+    'poc-to-production': { service: 'AI Solutions & Architecture', href: '/services' },
+    'data-problem-not-ai-problem': { service: 'Data Engineering & Infrastructure', href: '/services' },
+    'context-windows-are-a-lie': { service: 'AI Solutions & Architecture', href: '/services' },
+    'guardrails-problem': { service: 'AI Solutions & Architecture', href: '/services' },
+    'ai-memory-systems': { service: 'AI Solutions & Architecture', href: '/services' },
+    'planner-worker-synthesizer': { service: 'AI Solutions & Architecture', href: '/services' },
+    'costume-change-vs-new-actor': { service: 'AI Solutions & Architecture', href: '/services' },
+  };
+
+  const slug = p.split('/').pop();
+  const mapping = serviceMap[slug] || { service: 'AI & Data Consulting', href: '/services' };
+
+  const ctaHTML = `
+    <div style="margin-top:3rem;padding:2rem;border-radius:0.85rem;border:1px solid rgba(34,197,94,0.12);background:rgba(34,197,94,0.02);position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(74,222,128,0.2),transparent)"></div>
+      <p style="font-size:0.65rem;font-weight:600;color:rgba(74,222,128,0.6);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem">Need help with this?</p>
+      <p style="font-size:0.92rem;font-weight:700;color:rgba(255,255,255,0.8);margin-bottom:0.5rem">This is the kind of problem I solve for businesses.</p>
+      <p style="font-size:0.78rem;color:rgba(255,255,255,0.4);line-height:1.75;margin-bottom:1.25rem">If you're navigating these challenges, I'd love to have a conversation. Every engagement starts with a free discovery call — no pitch, no pressure.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center">
+        <a href="/contact" style="display:inline-flex;align-items:center;justify-content:center;line-height:1;border-radius:0.5rem;font-weight:600;padding:0.65rem 1.25rem;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;color:rgba(10,46,24,0.9);background:rgba(74,222,128,0.85);text-decoration:none;transition:all 0.3s">Book a Discovery Call</a>
+        <a href="${mapping.href}" style="font-size:0.68rem;color:rgba(74,222,128,0.5);text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='rgba(74,222,128,0.8)'" onmouseout="this.style.color='rgba(74,222,128,0.5)'">Learn about ${mapping.service} &rarr;</a>
+      </div>
+    </div>`;
+
+  // Find the LinkedIn follow link's parent and inject before it
+  const linkedInLinks = document.querySelectorAll('a[href*="linkedin.com/in/"]');
+  if (linkedInLinks.length > 0) {
+    const container = linkedInLinks[linkedInLinks.length - 1].closest('div');
+    if (container) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = ctaHTML;
+      container.parentNode.insertBefore(wrapper.firstElementChild, container);
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   injectNav();
   injectFooter();
+  injectSchema();
+  injectBlogCTA();
   initMobileMenu();
   initToolsToggle();
   initScrollReveal();
