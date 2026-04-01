@@ -161,7 +161,6 @@ function injectSchema() {
     });
   }
 
-  // FAQ page — FAQPage schema (Google rich results)
   // Tool pages — SoftwareApplication schema
   if (p.startsWith('/tools/')) {
     const title = document.querySelector('title')?.textContent?.replace(/\s*[|—].*$/, '') || '';
@@ -177,21 +176,6 @@ function injectSchema() {
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "author": { "@type": "Person", "name": "Imtiaz Ahmed", "url": "https://mouliqe.com/about" }
     });
-  }
-
-  if (p === '/faq' || p === '/faq.html') {
-    const faqItems = typeof FAQS !== 'undefined' ? FAQS : [];
-    if (faqItems.length > 0) {
-      schemas.push({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": faqItems.map(f => ({
-          "@type": "Question",
-          "name": f.q,
-          "acceptedAnswer": { "@type": "Answer", "text": f.a.replace(/<[^>]*>/g, '') }
-        }))
-      });
-    }
   }
 
   // Blog posts — Article schema
