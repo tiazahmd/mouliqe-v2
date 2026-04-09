@@ -2,7 +2,9 @@
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
+  { href: '/about', label: 'About', children: [
+    { href: '/resume', label: 'Resume' },
+  ]},
   { href: '/services', label: 'Services' },
   { href: '/process', label: 'Process' },
   { label: 'Demo', href: '/demo', children: [
@@ -47,7 +49,8 @@ function isToolsActive() {
 function buildLinks() {
   return NAV_LINKS.map(l => {
     if (l.children) {
-      const toolsOpen = isToolsActive() || (l.href && isActive(l.href));
+      const anyChildActive = l.children.some(c => isActive(c.href));
+      const toolsOpen = isToolsActive() || (l.href && isActive(l.href)) || anyChildActive;
       const childLinks = l.children.map(c => {
         const tagHtml = c.tag ? `<span class="nav-tag nav-tag-${c.tag}">${c.tag === 'ai' ? 'AI' : 'Local'}</span>` : '';
         return `<a href="${c.href}" class="sidebar-link sidebar-sublink${isActive(c.href) ? ' active' : ''}">${isActive(c.href) ? CHEVRON : ''}<span>${c.label}</span>${tagHtml}</a>`;
