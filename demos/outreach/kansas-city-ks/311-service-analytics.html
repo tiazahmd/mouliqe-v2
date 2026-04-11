@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Government of WyCo/KCK — 311 Service Analytics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body{background:#060a14}
+    .card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}
+    .card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}
+    .stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}
+    .stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}
+    .stat-delta{font-size:0.65rem;font-weight:600}
+    .delta-up{color:#4ade80}.delta-down{color:#f87171}
+    .source-tag{font-size:0.5rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.2rem 0.4rem;border-radius:0.25rem}
+    .section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}
+    .dept-row{transition:all 0.2s}.dept-row:hover{background:rgba(255,255,255,0.02)}
+    .alert-card{border-left:3px solid #f87171;background:rgba(248,113,113,0.04);padding:1rem;border-radius:0 0.5rem 0.5rem 0;margin-bottom:0.75rem}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the Unified Government of WyCo/KCK</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-white">311 Service Analytics Dashboard</h1>
+        <p class="text-[0.75rem] text-white/35 mt-1">310,000 annual calls. 5 staff. Here's what the data reveals.</p>
+      </div>
+      <div class="text-right hidden md:block">
+        <p class="text-[0.6rem] text-white/25">Last updated</p>
+        <p class="text-[0.75rem] text-white/50 font-semibold" id="lastUpdated"></p>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-4">
+      <span class="source-tag" style="color:rgba(96,165,250,0.7);background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15)">311 Call Center</span>
+      <span class="source-tag" style="color:rgba(192,132,252,0.7);background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15)">Granicus GXA</span>
+      <span class="source-tag" style="color:rgba(74,222,128,0.7);background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15)">Workday HR</span>
+      <span class="source-tag" style="color:rgba(251,191,36,0.7);background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15)">Treasury</span>
+    </div>
+  </header>
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+    <!-- Alert -->
+    <div class="alert-card anim anim-d1 mt-6">
+      <p class="text-[0.7rem] font-bold text-white/70">Capacity Crisis: 80% of 311 calls overflow to other departments</p>
+      <p class="text-[0.6rem] text-white/40 mt-1">Treasury alone diverts 3.5 FTEs to handle 70,000 misdirected calls/year. GXA handles Treasury + Motor Vehicle — but 8 departments remain unserved.</p>
+    </div>
+    <!-- KPI Cards -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Annual 311 Calls</p>
+        <p class="stat-value mt-1">310K</p>
+        <p class="stat-delta delta-down mt-1">5 staff handling</p>
+      </div>
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Overflow Rate</p>
+        <p class="stat-value mt-1">80%</p>
+        <p class="stat-delta delta-down mt-1">Calls routed to depts</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Treasury Diverted FTEs</p>
+        <p class="stat-value mt-1">3.5</p>
+        <p class="stat-delta delta-down mt-1">70K calls absorbed</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">GXA Coverage</p>
+        <p class="stat-value mt-1">2</p>
+        <p class="stat-delta" style="color:rgba(192,132,252,0.7)">of 10+ departments</p>
+      </div>
+    </section>
+    <!-- Charts -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Call Volume</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Monthly 311 Call Distribution</p>
+        <canvas id="volumeChart" height="200"></canvas>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Department Overflow</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Misdirected Calls by Department</p>
+        <canvas id="overflowChart" height="200"></canvas>
+      </div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d4">
+        <p class="section-label">Topic Analysis</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Top Request Categories</p>
+        <canvas id="topicChart" height="200"></canvas>
+      </div>
+      <div class="card p-5 anim anim-d4">
+        <p class="section-label">GXA Expansion Opportunity</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-4">Projected Call Deflection by Department</p>
+        <canvas id="deflectionChart" height="200"></canvas>
+      </div>
+    </section>
+    <!-- Department Impact Table -->
+    <section class="card mt-4 anim anim-d4 overflow-hidden">
+      <div class="p-5 pb-3">
+        <p class="section-label">Staffing Impact</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">FTE Hours Lost to Misdirected 311 Calls</p>
+        <p class="text-[0.6rem] text-white/25 mt-1">Estimated annual cost of departments absorbing overflow calls from 311</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-[0.68rem]">
+          <thead><tr class="border-b border-white/5">
+            <th class="text-left px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Department</th>
+            <th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Overflow Calls/Yr</th>
+            <th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">FTE Diverted</th>
+            <th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Est. Cost</th>
+            <th class="text-right px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">GXA Ready?</th>
+          </tr></thead>
+          <tbody id="deptTable"></tbody>
+        </table>
+      </div>
+    </section>
+    <!-- Architecture -->
+    <section class="card mt-4 p-5 anim anim-d4">
+      <p class="section-label">Proposed Architecture</p>
+      <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-4">Extending GXA with Analytics</p>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-[0.6rem] font-semibold">
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);color:rgba(96,165,250,0.7)">311 Call Data</span>
+        <span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15);color:rgba(192,132,252,0.7)">Granicus GXA Logs</span>
+        <span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15);color:rgba(74,222,128,0.7)">Workday Staffing</span>
+        <span class="text-white/20 mx-2">&#8594;</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)">Analytics Pipeline</span>
+        <span class="text-white/20 mx-2">&#8594;</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.25);color:rgba(74,222,128,0.9)">Service Intelligence</span>
+      </div>
+      <p class="text-[0.6rem] text-white/25 text-center mt-4">Complements your Granicus investment — the analytics backbone behind GXA</p>
+    </section>
+    <footer class="mt-8 text-center">
+      <p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the Unified Government of Wyandotte County / Kansas City, KS</p>
+      <p class="text-[0.5rem] text-white/12 mt-1">Data shown is illustrative, based on publicly available statistics and Granicus case study data.</p>
+    </footer>
+  </main>
+<script>
+document.getElementById('lastUpdated').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});
+Chart.defaults.color='rgba(255,255,255,0.35)';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family='Oxanium';Chart.defaults.font.size=11;
+new Chart(document.getElementById('volumeChart'),{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{label:'311 Calls',data:[24200,22800,26100,27500,29800,28400,27100,26900,25600,24800,23200,23600],backgroundColor:'rgba(96,165,250,0.5)',borderRadius:4},{label:'GXA Deflected',data:[3200,3100,3500,3800,4100,3900,3700,3600,3400,3300,3100,3200],backgroundColor:'rgba(192,132,252,0.5)',borderRadius:4}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:15,font:{size:10}}}},scales:{y:{grid:{color:'rgba(255,255,255,0.03)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('overflowChart'),{type:'bar',data:{labels:['Treasury','Motor Vehicle','Public Works','Municipal Court','Community Dev','Police Non-Emerg','Health Dept','Parks & Rec'],datasets:[{data:[70000,42000,38000,31000,24000,22000,18000,15000],backgroundColor:['rgba(248,113,113,0.6)','rgba(251,191,36,0.5)','rgba(96,165,250,0.5)','rgba(192,132,252,0.5)','rgba(74,222,128,0.5)','rgba(255,255,255,0.2)','rgba(96,165,250,0.3)','rgba(74,222,128,0.3)'],borderRadius:4}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'}},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('topicChart'),{type:'doughnut',data:{labels:['Property Tax/Treasury','Vehicle Registration','Solid Waste','Code Enforcement','Water/Sewer','Street Maintenance','Permits','Court/Legal','Other'],datasets:[{data:[70000,42000,35000,28000,26000,24000,22000,31000,32000],backgroundColor:['rgba(248,113,113,0.6)','rgba(251,191,36,0.5)','rgba(74,222,128,0.5)','rgba(96,165,250,0.5)','rgba(96,165,250,0.3)','rgba(192,132,252,0.5)','rgba(255,255,255,0.2)','rgba(192,132,252,0.3)','rgba(255,255,255,0.1)'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'right',labels:{boxWidth:8,padding:8,font:{size:9}}}}}});
+new Chart(document.getElementById('deflectionChart'),{type:'bar',data:{labels:['Treasury','Motor Vehicle','Municipal Court','Public Works','Community Dev','Health','Police','Parks'],datasets:[{label:'Current (GXA)',data:[35,40,0,0,0,0,0,0],backgroundColor:'rgba(192,132,252,0.5)',borderRadius:4},{label:'Projected (Expanded)',data:[60,65,50,40,35,30,25,20],backgroundColor:'rgba(74,222,128,0.4)',borderRadius:4}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:15,font:{size:10}}}},scales:{y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+const depts=[{n:'Treasury',c:'70,000',f:'3.5',cost:'$192K',gxa:'<span style="color:#4ade80">Live</span>'},{n:'Motor Vehicle',c:'42,000',f:'2.1',cost:'$115K',gxa:'<span style="color:#4ade80">Live</span>'},{n:'Public Works',c:'38,000',f:'1.9',cost:'$104K',gxa:'<span style="color:rgba(251,191,36,0.7)">Planned</span>'},{n:'Municipal Court',c:'31,000',f:'1.6',cost:'$88K',gxa:'<span style="color:rgba(251,191,36,0.7)">Planned</span>'},{n:'Community Development',c:'24,000',f:'1.2',cost:'$66K',gxa:'<span style="color:rgba(255,255,255,0.3)">Not started</span>'},{n:'Police (non-emergency)',c:'22,000',f:'1.1',cost:'$60K',gxa:'<span style="color:rgba(255,255,255,0.3)">Not started</span>'},{n:'Health Department',c:'18,000',f:'0.9',cost:'$49K',gxa:'<span style="color:rgba(255,255,255,0.3)">Not started</span>'},{n:'Parks & Recreation',c:'15,000',f:'0.8',cost:'$44K',gxa:'<span style="color:rgba(255,255,255,0.3)">Not started</span>'}];
+const t=document.getElementById('deptTable');depts.forEach(d=>{t.innerHTML+=`<tr class="dept-row border-b border-white/[0.03]"><td class="px-5 py-3 text-white/60 font-medium">${d.n}</td><td class="text-right px-4 py-3 text-white/50">${d.c}</td><td class="text-right px-4 py-3 text-white/50">${d.f}</td><td class="text-right px-4 py-3 text-white/50">${d.cost}</td><td class="text-right px-5 py-3">${d.gxa}</td></tr>`;});
+</script>
+</body>
+</html>
