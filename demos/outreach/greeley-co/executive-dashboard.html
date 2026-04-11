@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Greeley — Executive Dashboard Concept</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: #060a14; }
+    .card { background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 0.75rem; }
+    .card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+    .stat-value { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+    .stat-label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); }
+    .stat-delta { font-size: 0.65rem; font-weight: 600; }
+    .delta-up { color: #4ade80; }
+    .delta-down { color: #f87171; }
+    .source-tag { font-size: 0.5rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.2rem 0.4rem; border-radius: 0.25rem; }
+    .pipeline-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .section-label { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.25); }
+    .dept-row { transition: all 0.2s; }
+    .dept-row:hover { background: rgba(255,255,255,0.02); }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    .anim { animation: fadeUp 0.5s ease both; }
+    .anim-d1 { animation-delay: 0.1s; }
+    .anim-d2 { animation-delay: 0.2s; }
+    .anim-d3 { animation-delay: 0.3s; }
+    .anim-d4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+
+  <!-- Header -->
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the City of Greeley</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-white">Executive Performance Dashboard</h1>
+        <p class="text-[0.75rem] text-white/35 mt-1">Cross-department visibility — unified from 6 city platforms</p>
+      </div>
+      <div class="text-right hidden md:block">
+        <p class="text-[0.6rem] text-white/25">Last updated</p>
+        <p class="text-[0.75rem] text-white/50 font-semibold" id="lastUpdated"></p>
+      </div>
+    </div>
+    <!-- Data source pills -->
+    <div class="flex flex-wrap gap-2 mt-4">
+      <span class="source-tag" style="color:rgba(96,165,250,0.7);background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15)">CitySourced 311</span>
+      <span class="source-tag" style="color:rgba(74,222,128,0.7);background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15)">Questica Budget</span>
+      <span class="source-tag" style="color:rgba(251,191,36,0.7);background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15)">RTIC Public Safety</span>
+      <span class="source-tag" style="color:rgba(192,132,252,0.7);background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15)">SpeakUp Engagement</span>
+      <span class="source-tag" style="color:rgba(248,113,113,0.7);background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15)">CivicClerk Legislative</span>
+      <span class="source-tag" style="color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)">GovDelivery Comms</span>
+    </div>
+  </header>
+
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+
+    <!-- KPI Cards Row -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">311 Requests (YTD)</p>
+        <p class="stat-value mt-1">4,218</p>
+        <p class="stat-delta delta-down mt-1">-12% vs prior year</p>
+        <p class="text-[0.5rem] text-white/20 mt-2">Source: CitySourced</p>
+      </div>
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Violent Crime (2025)</p>
+        <p class="stat-value mt-1">626</p>
+        <p class="stat-delta delta-up mt-1">-27% vs 2024</p>
+        <p class="text-[0.5rem] text-white/20 mt-2">Source: RTIC / GPD</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Budget Execution</p>
+        <p class="stat-value mt-1">68.2%</p>
+        <p class="stat-delta" style="color:rgba(96,165,250,0.7)">Q3 of $541.8M</p>
+        <p class="text-[0.5rem] text-white/20 mt-2">Source: Questica</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Citizen Engagement</p>
+        <p class="stat-value mt-1">2,847</p>
+        <p class="stat-delta delta-up mt-1">+34% vs prior year</p>
+        <p class="text-[0.5rem] text-white/20 mt-2">Source: SpeakUp</p>
+      </div>
+    </section>
+
+    <!-- Charts Row -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <!-- Crime Trends -->
+      <div class="card p-5 anim anim-d3">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <p class="section-label">Public Safety</p>
+            <p class="text-[0.8rem] font-bold text-white/70 mt-1">Crime Trends — Greeley PD</p>
+          </div>
+          <span class="source-tag" style="color:rgba(251,191,36,0.7);background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15)">RTIC</span>
+        </div>
+        <canvas id="crimeChart" height="200"></canvas>
+      </div>
+      <!-- 311 by Category -->
+      <div class="card p-5 anim anim-d3">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <p class="section-label">Citizen Services</p>
+            <p class="text-[0.8rem] font-bold text-white/70 mt-1">311 Requests by Category</p>
+          </div>
+          <span class="source-tag" style="color:rgba(96,165,250,0.7);background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15)">CitySourced</span>
+        </div>
+        <canvas id="requestsChart" height="200"></canvas>
+      </div>
+    </section>
+
+    <!-- Second Charts Row -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+      <!-- Budget by Department -->
+      <div class="card p-5 col-span-2 anim anim-d4">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <p class="section-label">Finance</p>
+            <p class="text-[0.8rem] font-bold text-white/70 mt-1">Budget Execution by Department</p>
+          </div>
+          <span class="source-tag" style="color:rgba(74,222,128,0.7);background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15)">Questica</span>
+        </div>
+        <canvas id="budgetChart" height="180"></canvas>
+      </div>
+      <!-- Engagement -->
+      <div class="card p-5 anim anim-d4">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <p class="section-label">Engagement</p>
+            <p class="text-[0.8rem] font-bold text-white/70 mt-1">SpeakUp Projects</p>
+          </div>
+          <span class="source-tag" style="color:rgba(192,132,252,0.7);background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15)">SpeakUp</span>
+        </div>
+        <canvas id="engagementChart" height="180"></canvas>
+      </div>
+    </section>
+
+    <!-- Department Performance Table -->
+    <section class="card mt-4 anim anim-d4 overflow-hidden">
+      <div class="p-5 pb-3">
+        <p class="section-label">Innovation & High Performance</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Department Performance Scorecard</p>
+        <p class="text-[0.6rem] text-white/25 mt-1">Cross-referenced from all 6 data sources — PMO view for Kylie Jackson's team</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-[0.68rem]">
+          <thead>
+            <tr class="border-b border-white/5">
+              <th class="text-left px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Department</th>
+              <th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">311 Open</th>
+              <th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Avg Response</th>
+              <th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Budget Used</th>
+              <th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Satisfaction</th>
+              <th class="text-right px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Trend</th>
+            </tr>
+          </thead>
+          <tbody id="deptTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Pipeline Architecture -->
+    <section class="card mt-4 p-5 anim anim-d4">
+      <p class="section-label">Data Architecture</p>
+      <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-4">How This Dashboard Works</p>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-[0.6rem] font-semibold">
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);color:rgba(96,165,250,0.7)">CitySourced 311</span>
+        <span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15);color:rgba(74,222,128,0.7)">Questica Budget</span>
+        <span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:rgba(251,191,36,0.7)">RTIC / GPD</span>
+        <span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15);color:rgba(192,132,252,0.7)">SpeakUp</span>
+        <span class="text-white/20 mx-2">&#8594;</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)">ETL Pipeline</span>
+        <span class="text-white/20 mx-2">&#8594;</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.25);color:rgba(74,222,128,0.9)">Unified Dashboard</span>
+      </div>
+      <p class="text-[0.6rem] text-white/25 text-center mt-4">Mouliqe connects your existing platforms — no rip-and-replace required</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-8 text-center">
+      <p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the City of Greeley, Colorado</p>
+      <p class="text-[0.5rem] text-white/12 mt-1">Data shown is illustrative, based on publicly available city statistics. A live implementation would connect directly to your systems.</p>
+    </footer>
+  </main>
+
+<script>
+document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+const chartDefaults = { color: 'rgba(255,255,255,0.35)', borderColor: 'rgba(255,255,255,0.06)' };
+Chart.defaults.color = chartDefaults.color;
+Chart.defaults.borderColor = chartDefaults.borderColor;
+Chart.defaults.font.family = 'Oxanium';
+Chart.defaults.font.size = 11;
+
+// Crime Trends
+new Chart(document.getElementById('crimeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2020','2021','2022','2023','2024','2025'],
+    datasets: [
+      { label: 'Violent Crime', data: [780, 820, 890, 856, 857, 626], backgroundColor: 'rgba(248,113,113,0.5)', borderRadius: 4 },
+      { label: 'Property Crime', data: [4100, 4350, 4500, 4200, 3990, 3254], backgroundColor: 'rgba(251,191,36,0.4)', borderRadius: 4 }
+    ]
+  },
+  options: { responsive:true, plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, padding:15, font:{size:10} } } }, scales:{ y:{ grid:{ color:'rgba(255,255,255,0.03)' } }, x:{ grid:{ display:false } } } }
+});
+
+// 311 Requests
+new Chart(document.getElementById('requestsChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Road/Pothole','Code Violation','Water/Sewer','Noise Complaint','Parks/Trees','Graffiti','Parking','Other'],
+    datasets: [{ data: [890, 720, 580, 410, 380, 340, 298, 600], backgroundColor: ['rgba(96,165,250,0.6)','rgba(248,113,113,0.5)','rgba(74,222,128,0.5)','rgba(251,191,36,0.5)','rgba(192,132,252,0.5)','rgba(255,255,255,0.2)','rgba(96,165,250,0.3)','rgba(255,255,255,0.1)'], borderWidth: 0 }]
+  },
+  options: { responsive:true, cutout:'60%', plugins:{ legend:{ position:'right', labels:{ boxWidth:8, padding:8, font:{size:9} } } } }
+});
+
+// Budget by Department
+new Chart(document.getElementById('budgetChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Public Safety','Public Works','Water & Sewer','Community Dev','Parks & Rec','Finance','IT','Innovation','Other'],
+    datasets: [
+      { label: 'Spent', data: [98.2, 52.1, 68.4, 18.3, 14.7, 8.2, 6.8, 1.2, 101.5], backgroundColor: 'rgba(74,222,128,0.5)', borderRadius: 4 },
+      { label: 'Remaining', data: [32.8, 17.9, 22.6, 6.7, 5.3, 2.8, 2.2, 0.8, 33.5], backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 4 }
+    ]
+  },
+  options: { responsive:true, indexAxis:'y', plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, padding:15, font:{size:10} } } }, scales:{ x:{ stacked:true, grid:{ color:'rgba(255,255,255,0.03)' }, ticks:{ callback: v => '$'+v+'M' } }, y:{ stacked:true, grid:{ display:false } } } }
+});
+
+// Engagement
+new Chart(document.getElementById('engagementChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Cascadia','Civic Campus','Transit Plan','Parks Master','Budget Input','Code Update'],
+    datasets: [{ data: [1240, 680, 420, 280, 145, 82], backgroundColor: 'rgba(192,132,252,0.5)', borderRadius: 4 }]
+  },
+  options: { responsive:true, indexAxis:'y', plugins:{ legend:{ display:false } }, scales:{ x:{ grid:{ color:'rgba(255,255,255,0.03)' } }, y:{ grid:{ display:false } } } }
+});
+
+// Department Table
+const depts = [
+  { name:'Public Safety (Police)', open:42, resp:'4.2 min', budget:'75%', sat:'82%', trend:'up' },
+  { name:'Public Works & Transportation', open:187, resp:'3.1 days', budget:'74%', sat:'71%', trend:'flat' },
+  { name:'Water & Sewer', open:63, resp:'1.8 days', budget:'75%', sat:'78%', trend:'up' },
+  { name:'Community Development', open:94, resp:'4.7 days', budget:'73%', sat:'65%', trend:'down' },
+  { name:'Code Compliance', open:156, resp:'6.2 days', budget:'68%', sat:'58%', trend:'down' },
+  { name:'Parks, Recreation & Culture', open:38, resp:'2.4 days', budget:'74%', sat:'84%', trend:'up' },
+  { name:'Housing Solutions', open:27, resp:'5.1 days', budget:'71%', sat:'62%', trend:'flat' },
+  { name:'Finance', open:12, resp:'1.2 days', budget:'75%', sat:'88%', trend:'up' },
+  { name:'Innovation & High Performance', open:0, resp:'—', budget:'60%', sat:'—', trend:'new' },
+];
+const tbody = document.getElementById('deptTable');
+depts.forEach(d => {
+  const trendIcon = d.trend === 'up' ? '<span style="color:#4ade80">&#9650;</span>' : d.trend === 'down' ? '<span style="color:#f87171">&#9660;</span>' : d.trend === 'new' ? '<span style="color:rgba(96,165,250,0.7);font-size:0.5rem;font-weight:700">NEW</span>' : '<span style="color:rgba(255,255,255,0.25)">&#9644;</span>';
+  const satColor = parseFloat(d.sat) >= 80 ? 'color:#4ade80' : parseFloat(d.sat) >= 70 ? 'color:rgba(251,191,36,0.7)' : parseFloat(d.sat) < 70 && d.sat !== '—' ? 'color:#f87171' : 'color:rgba(255,255,255,0.25)';
+  tbody.innerHTML += `<tr class="dept-row border-b border-white/[0.03]">
+    <td class="px-5 py-3 text-white/60 font-medium">${d.name}</td>
+    <td class="text-right px-4 py-3 text-white/50">${d.open}</td>
+    <td class="text-right px-4 py-3 text-white/50">${d.resp}</td>
+    <td class="text-right px-4 py-3 text-white/50">${d.budget}</td>
+    <td class="text-right px-4 py-3" style="${satColor}">${d.sat}</td>
+    <td class="text-right px-5 py-3">${trendIcon}</td>
+  </tr>`;
+});
+</script>
+</body>
+</html>
