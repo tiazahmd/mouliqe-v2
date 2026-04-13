@@ -19,6 +19,7 @@ const NAV_LINKS = [
     { href: '/tools/prompt-security', label: 'Prompt Security', tag: 'ai' },
     { href: '/tools/data-migration', label: 'Data Migration', tag: 'ai' },
     { href: '/tools/anomaly-detection', label: 'Anomaly Detection', tag: 'ai' },
+    { href: '/tools/ai-insight-engine', label: 'Insight Engine', tag: 'ai' },
   ]},
   { href: '/explore', label: 'Explore' },
   { href: '/blog', label: 'Blog' },
