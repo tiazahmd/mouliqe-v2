@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Insight Engine — Mouliqe Demo</title>
+  <meta name="description" content="Pick a business scenario, ask a question, and see the difference between AI with no context and AI with full business context. Same data. Completely different answers.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="AI Insight Engine — Mouliqe Demo">
+  <meta property="og:description" content="See the difference between AI reporting and AI insight. Same data, same question — completely different answers depending on what context the AI has.">
+  <meta property="og:url" content="https://mouliqe.com/tools/ai-insight-engine">
+  <link rel="canonical" href="https://mouliqe.com/tools/ai-insight-engine">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Insight Engine — Mouliqe Demo">
+  <meta name="twitter:description" content="Same data, same question — completely different answers depending on what context the AI has.">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#0a2e18'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .token-chip {
+      display:inline-flex;align-items:center;gap:0.2rem;padding:0.2rem 0.5rem 0.1rem;
+      border-radius:0.25rem;font-size:0.62rem;font-weight:700;letter-spacing:0.04em;
+      line-height:1.4;white-space:nowrap;margin:0.15rem;
+    }
+    .token-metric { color:rgba(96,165,250,0.9); background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.15); }
+    .token-period  { color:rgba(192,132,252,0.9); background:rgba(192,132,252,0.08); border:1px solid rgba(192,132,252,0.15); }
+    .token-variance{ color:rgba(251,191,36,0.9);  background:rgba(251,191,36,0.08);  border:1px solid rgba(251,191,36,0.15); }
+
+    .ctx-badge {
+      display:inline-block;font-size:0.48rem;font-weight:700;text-transform:uppercase;
+      letter-spacing:0.08em;padding:0.18rem 0.4rem 0.06rem;border-radius:0.2rem;line-height:1;flex-shrink:0;margin-top:0.05rem;
+    }
+
+    .synth-line {
+      font-size:0.72rem;line-height:1.65;color:rgba(255,255,255,0.4);padding:0.2rem 0;
+      animation:fadeInUp 0.25s ease-out forwards;
+    }
+    .synth-line.connecting { color:rgba(74,222,128,0.6);font-weight:600; }
+    .synth-line.conclusion { color:rgba(255,255,255,0.65);font-weight:600;margin-top:0.15rem; }
+
+    .check-item {
+      display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0;
+      font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.5;
+      animation:fadeInUp 0.25s ease-out forwards;
+    }
+    .check-icon { width:14px;height:14px;flex-shrink:0; }
+
+    .insight-card {
+      flex:1;min-width:0;border-radius:0.5rem;overflow:hidden;
+      border:1px solid transparent;position:relative;
+    }
+    .insight-card::before {
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    }
+    .insight-without {
+      background:rgba(251,191,36,0.03);border-color:rgba(251,191,36,0.12);
+    }
+    .insight-without::before { background:linear-gradient(90deg,rgba(251,191,36,0.3),transparent); }
+    .insight-with {
+      background:rgba(34,197,94,0.03);border-color:rgba(74,222,128,0.15);
+    }
+    .insight-with::before { background:linear-gradient(90deg,rgba(74,222,128,0.4),transparent); }
+
+    .insight-card-header {
+      padding:0.6rem 0.85rem 0.5rem;display:flex;align-items:center;gap:0.5rem;
+      border-bottom:1px solid rgba(255,255,255,0.04);
+    }
+    .insight-card-body {
+      padding:0.85rem;font-size:0.76rem;color:rgba(255,255,255,0.55);line-height:1.75;
+    }
+    .insight-with .insight-card-body { color:rgba(255,255,255,0.7); }
+
+    .metric-grid {
+      display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;
+    }
+    .metric-cell {
+      background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);
+      border-radius:0.35rem;padding:0.55rem 0.7rem;
+    }
+  </style>
+</head>
+<body class="bg-[#060a14] text-white/80 font-sans antialiased overflow-x-hidden">
+  <div id="site-nav"></div>
+  <noscript><nav aria-label="Site navigation"><a href="/">Home</a> | <a href="/about">About</a> | <a href="/services">Services</a> | <a href="/process">Process</a> | <a href="/explore">Explore</a> | <a href="/demo">Demos</a> | <a href="/blog">Blog</a> | <a href="/faq">FAQ</a> | <a href="/contact">Contact</a></nav></noscript>
+  <div class="main-content">
+
+    <!-- Hero -->
+    <section class="pt-20 pb-6">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <p class="text-forest-400 text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-5 anim-fade">Demo</p>
+        <div class="flex items-center gap-3 mb-3 anim-up">
+          <h1 class="text-3xl md:text-4xl font-bold text-white">AI Insight Engine</h1>
+          <span style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.28rem 0.45rem 0.08rem;border-radius:0.25rem;line-height:1;color:rgba(192,132,252,0.7);background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15);white-space:nowrap;margin-top:0.3rem">AI-Powered</span>
+        </div>
+        <p class="text-[0.84rem] text-white/45 max-w-xl anim-up anim-d1">Pick a business scenario, run the pipeline, and see exactly what happens when AI has no context versus full business context. Same data. Completely different answers.</p>
+      </div>
+    </section>
+
+    <!-- Tool + Sidebar -->
+    <section class="pb-20">
+      <div class="max-w-6xl mx-auto px-6 md:px-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+          <!-- TOOL AREA (70%) -->
+          <div class="flex-1 min-w-0 reveal">
+
+            <!-- Step 1: Scenario -->
+            <div class="card" id="input-section">
+              <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1rem">Step 1 — Choose a Scenario</p>
+              <div class="flex flex-wrap gap-2" id="scenario-btns">
+                <button class="sample-btn slot-btn" data-scenario="sales" style="padding:0.5rem 0.75rem">
+                  <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">Sales Performance</span>
+                  <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">Q1 pipeline analysis</span>
+                </button>
+                <button class="sample-btn slot-btn" data-scenario="marketing" style="padding:0.5rem 0.75rem">
+                  <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">Marketing Pipeline</span>
+                  <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">February lead analysis</span>
+                </button>
+                <button class="sample-btn slot-btn" data-scenario="operations" style="padding:0.5rem 0.75rem">
+                  <span style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5)">Operations</span>
+                  <span style="font-size:0.55rem;color:rgba(255,255,255,0.2)">Q3 fulfillment analysis</span>
+                </button>
+              </div>
+
+              <!-- Question display -->
+              <div id="question-row" style="display:none;margin-top:1.25rem">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Step 2 — Run the Analysis</p>
+                <div style="display:flex;gap:0.5rem;align-items:center">
+                  <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:0.35rem;padding:0.55rem 0.85rem;font-size:0.78rem;color:rgba(255,255,255,0.5)" id="question-display"></div>
+                  <button id="run-btn" class="btn-primary" style="padding:0.6rem 1.25rem;white-space:nowrap">Run Pipeline</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pipeline visualization -->
+            <div class="tool-pipeline" id="pipeline" style="display:none">
+              <div class="tool-stage pending" data-stage="query">
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Query</span>
+              </div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="fetch">
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Fetch Data</span>
+              </div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="context" data-ai>
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Load Context</span>
+              </div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="synthesize" data-ai>
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Synthesize</span>
+              </div>
+              <div class="tool-stage-connector"></div>
+              <div class="tool-stage pending" data-stage="validate" data-ai>
+                <div class="tool-stage-dot"></div>
+                <span class="tool-stage-label">Validate</span>
+              </div>
+            </div>
+
+            <!-- Dynamic context panel -->
+            <div class="tool-context" id="context-panel" style="display:none">
+              <div id="context-log"></div>
+            </div>
+
+            <!-- Per-stage visualizations -->
+            <div id="insight-output" style="display:none;margin-top:1.25rem">
+
+              <!-- Query parse viz -->
+              <div id="query-viz" style="display:none">
+                <div class="tool-result-card">
+                  <div class="tool-result-header">
+                    <span class="tool-result-label">Question Parsed</span>
+                    <span style="font-size:0.6rem;color:rgba(255,255,255,0.2)">Entities extracted</span>
+                  </div>
+                  <div style="margin-top:0.75rem">
+                    <p style="font-size:0.6rem;color:rgba(255,255,255,0.2);margin-bottom:0.4rem;font-weight:600">Detected tokens:</p>
+                    <div id="query-tokens" style="margin-bottom:0.85rem"></div>
+                    <p style="font-size:0.6rem;color:rgba(255,255,255,0.2);margin-bottom:0.3rem;font-weight:600">Query plan:</p>
+                    <div id="query-plan" style="font-size:0.7rem;color:rgba(255,255,255,0.35);line-height:1.7;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:0.3rem;padding:0.55rem 0.7rem;white-space:pre-line"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fetch viz -->
+              <div id="fetch-viz" style="display:none;margin-top:0.75rem">
+                <div class="tool-result-card">
+                  <div class="tool-result-header">
+                    <span class="tool-result-label">Raw Data — Deterministic Query Results</span>
+                    <span style="font-size:0.6rem;color:rgba(255,255,255,0.2)">No AI involved</span>
+                  </div>
+                  <div id="fetch-metrics" style="margin-top:0.75rem"></div>
+                  <p style="font-size:0.62rem;color:rgba(255,255,255,0.2);margin-top:0.65rem;line-height:1.5">These numbers are pulled from the database via deterministic SQL queries. The AI never touches raw data — it only receives the computed results.</p>
+                </div>
+              </div>
+
+              <!-- Context load viz -->
+              <div id="context-viz" style="display:none;margin-top:0.75rem">
+                <div class="tool-result-card">
+                  <div class="tool-result-header">
+                    <span class="tool-result-label">Context Layer — Business Knowledge Retrieved</span>
+                    <span id="ctx-count" style="font-size:0.6rem;color:rgba(255,255,255,0.2)">Loading...</span>
+                  </div>
+                  <div id="context-items" style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.75rem"></div>
+                </div>
+              </div>
+
+              <!-- Synthesize viz -->
+              <div id="synthesize-viz" style="display:none;margin-top:0.75rem">
+                <div class="tool-result-card">
+                  <div class="tool-result-header">
+                    <span class="tool-result-label">AI Synthesis — Connecting Data + Context</span>
+                    <span style="font-size:0.6rem;color:rgba(192,132,252,0.4)">AI stage</span>
+                  </div>
+                  <div id="synth-lines" style="margin-top:0.6rem;display:flex;flex-direction:column"></div>
+                </div>
+              </div>
+
+              <!-- Validate viz -->
+              <div id="validate-viz" style="display:none;margin-top:0.75rem">
+                <div class="tool-result-card">
+                  <div class="tool-result-header">
+                    <span class="tool-result-label">Fact Validation — Every Claim Verified</span>
+                    <span style="font-size:0.6rem;color:rgba(192,132,252,0.4)">AI stage</span>
+                  </div>
+                  <p style="font-size:0.62rem;color:rgba(255,255,255,0.25);margin-top:0.5rem;margin-bottom:0.6rem;line-height:1.5">Before the insight is delivered, every number in the narrative is cross-checked against the source data. Ungrounded claims are flagged and rewritten.</p>
+                  <div id="check-items" style="display:flex;flex-direction:column"></div>
+                </div>
+              </div>
+
+              <!-- Insight cards -->
+              <div id="insight-cards" style="display:none;margin-top:0.75rem">
+                <div class="tool-result-card" style="padding-bottom:0">
+                  <div class="tool-result-header" style="margin-bottom:0.85rem">
+                    <span class="tool-result-label">Output Comparison</span>
+                    <span style="font-size:0.6rem;color:rgba(255,255,255,0.2)">Same data — different context</span>
+                  </div>
+                  <div style="display:flex;flex-col gap-3;flex-wrap:wrap" id="cards-row">
+                    <div class="flex flex-col md:flex-row gap-3" style="padding-bottom:1rem">
+                      <!-- Without context -->
+                      <div class="insight-card insight-without">
+                        <div class="insight-card-header">
+                          <span style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(251,191,36,0.6);background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.12);padding:0.2rem 0.4rem 0.06rem;border-radius:0.2rem;line-height:1">No Context</span>
+                          <span style="font-size:0.65rem;color:rgba(255,255,255,0.3);font-weight:600">Reporter Mode</span>
+                        </div>
+                        <div class="insight-card-body" id="output-without"></div>
+                      </div>
+                      <!-- With context -->
+                      <div class="insight-card insight-with">
+                        <div class="insight-card-header">
+                          <span style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(74,222,128,0.7);background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.14);padding:0.2rem 0.4rem 0.06rem;border-radius:0.2rem;line-height:1">With Context</span>
+                          <span style="font-size:0.65rem;color:rgba(255,255,255,0.55);font-weight:600">Analyst Mode</span>
+                          <span style="font-size:0.45rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(192,132,252,0.6);background:rgba(192,132,252,0.07);border:1px solid rgba(192,132,252,0.12);padding:0.18rem 0.35rem 0.06rem;border-radius:0.2rem;line-height:1;margin-left:auto">AI</span>
+                        </div>
+                        <div class="insight-card-body" id="output-with" style="white-space:pre-line"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Reset button -->
+            <div id="reset-row" style="display:none;margin-top:1rem">
+              <button id="reset-btn" style="font-size:0.65rem;color:rgba(255,255,255,0.25);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.25)'">Run another scenario</button>
+            </div>
+
+          </div>
+
+          <!-- SIDEBAR (30%) -->
+          <div class="lg:w-64 shrink-0 reveal reveal-d1 hidden lg:block">
+            <div style="position:sticky;top:1.5rem" class="flex flex-col gap-5">
+
+              <div class="sidebar-card">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">What This Demonstrates</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">The same AI model, the same data — two completely different outputs. The difference is what context you give it.</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">Each stage shows what's happening under the hood:</p>
+                <div style="display:flex;flex-direction:column;gap:0.35rem">
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.4)">Query</strong> — parse the question, identify what's needed</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(74,222,128,0.4);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.4)">Fetch</strong> — pull deterministic numbers from the DB</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(192,132,252,0.5);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.4)">Load Context</strong> — retrieve the business knowledge layer</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(192,132,252,0.5);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.4)">Synthesize</strong> — AI connects data signals to context</p>
+                  <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);line-height:1.6;margin:0"><span style="color:rgba(192,132,252,0.5);margin-right:0.3rem">›</span><strong style="color:rgba(255,255,255,0.4)">Validate</strong> — every claim checked against source data</p>
+                </div>
+              </div>
+
+              <div class="sidebar-cta">
+                <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Want AI that thinks?</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about building a context layer for your business data — so your AI gives real answers, not just formatted numbers.</p>
+                <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+                <a href="mailto:imtiaz@mouliqe.com" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;margin-top:0.75rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><span style="line-height:1">prefer email instead?</span></a>
+                <div style="height:1px;background:rgba(255,255,255,0.05);margin:1.25rem 0"></div>
+                <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:block;flex-shrink:0"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  <span style="line-height:1;padding-top:0.1rem">Follow on LinkedIn</span>
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Mobile CTA -->
+        <div class="lg:hidden" style="margin-top:2rem">
+          <div class="flex flex-col gap-5">
+          <div class="sidebar-card">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">What This Demonstrates</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.7;margin-bottom:0.75rem">The same AI model, the same data — two completely different outputs. The difference is what context you give it. Each pipeline stage shows exactly what's happening under the hood.</p>
+          </div>
+          <div class="sidebar-cta">
+            <p style="font-size:0.58rem;font-weight:700;color:rgba(74,222,128,0.4);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.6rem">Want AI that thinks?</p>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:1rem">Let's talk about building a context layer for your business data — so your AI gives real answers, not just formatted numbers.</p>
+            <a href="/contact" class="btn-primary" style="width:100%;justify-content:center">Book a Discovery Call</a>
+            <a href="mailto:imtiaz@mouliqe.com" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;margin-top:0.75rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><span style="line-height:1">prefer email instead?</span></a>
+            <div style="height:1px;background:rgba(255,255,255,0.05);margin:1.25rem 0"></div>
+            <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" style="display:flex;justify-content:center;align-items:center;gap:0.35rem;line-height:1;text-decoration:none;color:rgba(255,255,255,0.3);font-size:0.7rem;transition:color 0.3s" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:block;flex-shrink:0"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              <span style="line-height:1;padding-top:0.1rem">Follow on LinkedIn</span>
+            </a>
+          </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+  <script src="/components.js"></script>
+  <script>
+  // ══════════════════════════════════════════════════
+  // AI Insight Engine — Simulated Pipeline
+  // ══════════════════════════════════════════════════
+
+  const SCENARIOS = {
+    sales: {
+      label: 'Sales Performance',
+      question: 'Why did Q1 pipeline drop?',
+      queryTokens: [
+        { text: 'pipeline', type: 'metric' },
+        { text: 'Q1 2026', type: 'period' },
+        { text: 'drop', type: 'variance' },
+      ],
+      queryPlan: 'Analysis type: DIAGNOSTIC — why did X change\nData needed: pipeline by region, deal count, win rate, time-series\nContext needed: targets, business events, org structure',
+      metrics: [
+        { label: 'Q1 Pipeline', value: '$2.5M', change: '−18% vs Q4 ($3.1M)', bad: true },
+        { label: 'vs Q1 Target', value: '$2.5M', change: '−22% vs $3.2M target', bad: true },
+        { label: 'Win Rate', value: '21%', change: '−7pts vs Q4 (28%)', bad: true },
+        { label: 'Northeast Region', value: '$790K', change: '−38% vs Q4 ($1.27M)', bad: true },
+      ],
+      context: [
+        { typeLabel: 'Metric Def', text: 'Pipeline = active opportunities in stages 2–5, weighted by close probability', color: 'rgba(96,165,250,0.7)', bg: 'rgba(96,165,250,0.06)', border: 'rgba(96,165,250,0.12)' },
+        { typeLabel: 'Q1 Target', text: 'Q1 2026 pipeline target: $3.2M — set in October 2025 planning cycle by VP Sales', color: 'rgba(74,222,128,0.7)', bg: 'rgba(74,222,128,0.06)', border: 'rgba(74,222,128,0.12)' },
+        { typeLabel: 'Event · Dec 15', text: 'Northeast territory reassigned — Mike Torres moved to Enterprise, Sarah Chen promoted from SDR to AE', color: 'rgba(251,191,36,0.7)', bg: 'rgba(251,191,36,0.06)', border: 'rgba(251,191,36,0.12)' },
+        { typeLabel: 'Event · Jan 8', text: 'Apex launched competing product at 20% lower price point — 3 lost deals in CRM cite pricing as reason', color: 'rgba(251,191,36,0.7)', bg: 'rgba(251,191,36,0.06)', border: 'rgba(251,191,36,0.12)' },
+        { typeLabel: 'Org Structure', text: 'Sarah Chen: month 3 in AE role. Typical AE ramp to full productivity: 6–9 months', color: 'rgba(192,132,252,0.7)', bg: 'rgba(192,132,252,0.06)', border: 'rgba(192,132,252,0.12)' },
+      ],
+      synthesis: [
+        { text: 'Data signal: Northeast pipeline −$480K (−38% vs Q4)', type: 'data' },
+        { text: 'Context signal: Territory reassigned Dec 15 — new AE in month 3 of 6-9mo ramp', type: 'context' },
+        { text: '→ Connecting: Underperformance maps to ramp window, not market weakness', type: 'connect' },
+        { text: 'Data signal: Win rate dropped 28% → 21% across all regions', type: 'data' },
+        { text: 'Context signal: Apex competitor launch Jan 8, 3 lost deals citing price', type: 'context' },
+        { text: '→ Connecting: Win rate compression is competitor-driven, not territory-specific', type: 'connect' },
+        { text: 'Data signal: West −5%, South −8% — roughly flat', type: 'data' },
+        { text: '→ Conclusion: Two distinct root causes — territory transition + competitive pricing pressure', type: 'conclusion' },
+      ],
+      checks: [
+        'Q1 pipeline $2.5M — verified against CRM closed-period snapshot',
+        'Northeast −$480K (−38%) — matches regional pipeline breakdown report',
+        'Win rate 21% — confirmed in closed/lost stage report (Q1 filter)',
+        'Sarah Chen tenure 3 months — cross-referenced HR records',
+        'Apex launch Jan 8 — sourced from competitive intelligence log',
+      ],
+      without: 'Pipeline dropped 18% in Q1, from $3.1M to $2.5M. The Northeast region saw the steepest decline at 38%.',
+      with: 'Q1 pipeline came in at $2.5M — 22% below the $3.2M target and down 18% from Q4. The decline is concentrated in the Northeast (−$480K, −38%), which accounts for 80% of the total miss.\n\nTwo root causes explain this: Sarah Chen took over the Northeast in December after Mike Torres moved to Enterprise, and she\'s in month 3 of a typical 6–9 month AE ramp — new pipeline creation runs lower during this window by design. Separately, Apex\'s January product launch at 20% below market rate has compressed win rate from 28% → 21% across all regions.\n\nWest and South are roughly flat, confirming this isn\'t a market-wide demand problem. It\'s a temporary territory transition compounded by a new competitive dynamic.',
+    },
+    marketing: {
+      label: 'Marketing Pipeline',
+      question: 'Why did lead volume fall in February?',
+      queryTokens: [
+        { text: 'lead volume', type: 'metric' },
+        { text: 'February', type: 'period' },
+        { text: 'fall', type: 'variance' },
+      ],
+      queryPlan: 'Analysis type: DIAGNOSTIC — why did X change\nData needed: MQL count by channel, month-over-month comparison\nContext needed: campaign activity log, definition changes, targets, seasonality',
+      metrics: [
+        { label: 'Feb MQLs', value: '312', change: '−31% vs January (451)', bad: true },
+        { label: 'Paid Channel', value: '28 leads', change: '−85% vs January (187)', bad: true },
+        { label: 'Organic', value: '198 leads', change: '+9% vs January (182)', bad: false },
+        { label: 'vs Monthly Target', value: '312', change: '−22% vs 400 MQL target', bad: true },
+      ],
+      context: [
+        { typeLabel: 'Metric Def', text: 'MQL = HubSpot lead score ≥ 40 points OR direct demo request submission', color: 'rgba(96,165,250,0.7)', bg: 'rgba(96,165,250,0.06)', border: 'rgba(96,165,250,0.12)' },
+        { typeLabel: 'Monthly Target', text: 'Q1 2026 monthly MQL target: 400 leads — set in Q4 annual planning', color: 'rgba(74,222,128,0.7)', bg: 'rgba(74,222,128,0.06)', border: 'rgba(74,222,128,0.12)' },
+        { typeLabel: 'Event · Feb 3', text: 'Paid campaign budget paused for 14 days — finance hold during quarterly budget reallocation', color: 'rgba(251,191,36,0.7)', bg: 'rgba(251,191,36,0.06)', border: 'rgba(251,191,36,0.12)' },
+        { typeLabel: 'Event · Jan 28', text: 'ICP definition updated: minimum company size raised from 50 → 100 employees, reducing qualifying pool', color: 'rgba(251,191,36,0.7)', bg: 'rgba(251,191,36,0.06)', border: 'rgba(251,191,36,0.12)' },
+        { typeLabel: 'Seasonal Pattern', text: 'February historically runs 8–12% below January: shorter month + post-January budget freeze in target accounts', color: 'rgba(192,132,252,0.7)', bg: 'rgba(192,132,252,0.06)', border: 'rgba(192,132,252,0.12)' },
+      ],
+      synthesis: [
+        { text: 'Data signal: Paid channel 187 → 28 leads (−85%)', type: 'data' },
+        { text: 'Context signal: Paid campaigns paused Feb 3–17 for budget reallocation', type: 'context' },
+        { text: '→ Connecting: Paid collapse accounts for ~105 of the 139-lead total drop', type: 'connect' },
+        { text: 'Data signal: Organic leads up 9% despite lower overall volume', type: 'data' },
+        { text: 'Context signal: ICP update Jan 28 narrowed qualifying pool', type: 'context' },
+        { text: '→ Connecting: Organic underperformed vs raw traffic due to ICP change, not demand', type: 'connect' },
+        { text: 'Context signal: February seasonally 8–12% below January (3-year average)', type: 'context' },
+        { text: '→ Conclusion: Two deliberate decisions drove the drop — demand signals are intact', type: 'conclusion' },
+      ],
+      checks: [
+        'Feb lead count 312 — verified against HubSpot MQL export (Feb 1–28 filter)',
+        'Paid channel drop 85% — matches campaign pause dates Feb 3–17 in ad platform',
+        'ICP update Jan 28 — confirmed in marketing ops change log with timestamp',
+        'Organic +9% — verified against GA4 goal conversion data',
+        'Seasonal baseline −8–12% — confirmed across 3 prior February periods',
+      ],
+      without: 'Lead volume fell 31% in February, from 451 in January to 312. Declines were recorded across all major channels.',
+      with: 'February\'s 31% lead drop (451 → 312) is explained by two deliberate decisions, not a demand problem.\n\nPaid campaigns were paused Feb 3–17 for budget reallocation — this alone accounts for ~105 of the 139-lead decline (paid: 187 → 28, −85%). Without the pause, projected volume would have been approximately 440, roughly flat month-over-month.\n\nThe Jan 28 ICP update (company size threshold: 50 → 100 employees) narrowed the qualifying pool, which explains why organic underperformed versus raw traffic levels even as organic traffic was up.\n\nOutbound was flat. February also historically runs 8–12% below January. Organic and outbound both held or improved — market demand is intact. This is a self-inflicted, recoverable dip.',
+    },
+    operations: {
+      label: 'Operations',
+      question: 'Why did fulfillment times spike in Q3?',
+      queryTokens: [
+        { text: 'fulfillment times', type: 'metric' },
+        { text: 'Q3 2026', type: 'period' },
+        { text: 'spike', type: 'variance' },
+      ],
+      queryPlan: 'Analysis type: DIAGNOSTIC — why did X change\nData needed: avg fulfillment time by week, order volume, SLA compliance rate\nContext needed: operational events, staffing records, SLA targets',
+      metrics: [
+        { label: 'Q3 Avg Fulfillment', value: '4.7 days', change: '+124% vs Q2 (2.1 days)', bad: true },
+        { label: 'Peak Week', value: '7.3 days', change: 'Week of Jul 21', bad: true },
+        { label: 'Order Volume', value: '10,270 orders', change: '+22% vs Q2 (8,420)', bad: false },
+        { label: 'SLA Compliance', value: '61%', change: '−33pts vs Q2 (94%)', bad: true },
+      ],
+      context: [
+        { typeLabel: 'Metric Def', text: 'Fulfillment time = order confirmed → carrier scan, in business days. SLA: ≥95% of orders shipped within 3 days', color: 'rgba(96,165,250,0.7)', bg: 'rgba(96,165,250,0.06)', border: 'rgba(96,165,250,0.12)' },
+        { typeLabel: 'Event · Jul 14', text: 'Warehouse system migration began — planned 10 days, actual duration was 14 days due to data sync issues', color: 'rgba(251,191,36,0.7)', bg: 'rgba(251,191,36,0.06)', border: 'rgba(251,191,36,0.12)' },
+        { typeLabel: 'Event · Jul 8', text: 'Summer campaign launched — volume forecast +15%, actual result was +22% (7 points above projection)', color: 'rgba(251,191,36,0.7)', bg: 'rgba(251,191,36,0.06)', border: 'rgba(251,191,36,0.12)' },
+        { typeLabel: 'Event · Jul–Aug', text: '2 of 6 warehouse staff on pre-approved leave — overlapped directly with migration window', color: 'rgba(251,191,36,0.7)', bg: 'rgba(251,191,36,0.06)', border: 'rgba(251,191,36,0.12)' },
+        { typeLabel: 'SLA Target', text: 'Fulfillment SLA: 95% shipped within 3 business days — contractual with 3 enterprise clients', color: 'rgba(74,222,128,0.7)', bg: 'rgba(74,222,128,0.06)', border: 'rgba(74,222,128,0.12)' },
+      ],
+      synthesis: [
+        { text: 'Data signal: Peak spike at 7.3 days, week of Jul 21', type: 'data' },
+        { text: 'Context signal: Warehouse migration ran Jul 14–28, reducing throughput', type: 'context' },
+        { text: '→ Connecting: Peak spike aligns exactly with migration window', type: 'connect' },
+        { text: 'Data signal: Order volume +22% vs Q2 forecast of +15%', type: 'data' },
+        { text: 'Context signal: 2 of 6 warehouse staff on leave during same window', type: 'context' },
+        { text: '→ Connecting: Higher-than-forecast volume met reduced capacity simultaneously', type: 'connect' },
+        { text: 'Data signal: September recovered to 89% SLA compliance', type: 'data' },
+        { text: '→ Conclusion: Three risk factors converged in one window — each known, none flagged together', type: 'conclusion' },
+      ],
+      checks: [
+        'Q3 avg 4.7 days — verified against WMS fulfillment timestamp logs',
+        'Migration Jul 14–28 — confirmed in IT change management system',
+        'Volume +22% — matched against order management system Q3 export',
+        'Staff leave records — cross-referenced HR approved-leave system',
+        'SLA compliance 61% — calculated from on-time delivery report (shipped ≤3 days)',
+      ],
+      without: 'Average fulfillment time increased from 2.1 days in Q2 to 4.7 days in Q3, with a peak of 7.3 days in the week of July 21.',
+      with: 'The Q3 fulfillment spike (2.1 → 4.7 days avg, peak 7.3 days Jul 21) was caused by three factors converging in the same two-week window.\n\nThe warehouse system migration started July 14 and ran 14 days instead of the planned 10, reducing processing throughput throughout. Simultaneously, the summer campaign drove 22% volume growth against a 15% projection — 7 points above forecast. And 2 of 6 warehouse staff were on pre-approved leave during the same window.\n\nNo single factor would have caused the spike alone — the combination created a backlog that took 3 weeks to clear. SLA compliance dropped to 61% (target: 95%), triggering breach notifications to 3 enterprise clients. September recovered to 89%, confirming no structural issue.\n\nThe risk was preventable: all three factors were known in advance and were never flagged as concurrent.',
+    }
+  };
+
+  // ── State ──
+  let currentScenario = null;
+  let running = false;
+
+  // ── Pipeline stages ──
+  const STAGES = ['query','fetch','context','synthesize','validate'];
+  const STAGE_CONTEXT = {
+    query: {
+      title: 'Parsing the Question',
+      text: 'Identifying the metric being asked about, the time period, and the type of analysis required. A DIAGNOSTIC query ("why did X happen") needs both data and context — unlike a REPORTING query ("what was X"), which only needs data.'
+    },
+    fetch: {
+      title: 'Fetching Data — Deterministic Queries',
+      text: 'Running SQL queries against the data source to pull exact numbers. No AI is involved at this stage — these are hard facts from the database. The AI will later orchestrate these numbers into a narrative, but it never invents them.'
+    },
+    context: {
+      title: 'AI: Loading Business Context',
+      text: 'Retrieving the context layer — metric definitions, business events, targets, and org structure that explain why numbers look the way they do. This is the layer most AI implementations skip. Without it, the model can only describe what happened, not why.'
+    },
+    synthesize: {
+      title: 'AI: Synthesizing Data + Context',
+      text: 'The AI acts as a coordinator: it connects data signals (what the numbers show) to context signals (what was happening in the business). It does not generate the numbers — it reasons about what they mean given the context it has been given.'
+    },
+    validate: {
+      title: 'AI: Validating Every Claim',
+      text: 'Before the insight is delivered, every number in the narrative is cross-checked against the source data. Any claim that cannot be grounded in a specific data point is flagged and rewritten. This is what separates AI analysis that executives trust from AI analysis that gets ignored after the first error.'
+    }
+  };
+
+  // ── Helpers ──
+  function setStage(stageId) {
+    const stages = document.querySelectorAll('.tool-stage');
+    const connectors = document.querySelectorAll('.tool-stage-connector');
+    const stageIdx = STAGES.indexOf(stageId);
+
+    stages.forEach((s, i) => {
+      s.className = 'tool-stage ' + (i < stageIdx ? 'done' : i === stageIdx ? 'active' : 'pending');
+    });
+    connectors.forEach((c, i) => {
+      c.className = 'tool-stage-connector ' + (i < stageIdx ? 'done' : i === stageIdx ? 'active' : '');
+    });
+
+    const ctx = STAGE_CONTEXT[stageId];
+    const panel = document.getElementById('context-panel');
+    const log = document.getElementById('context-log');
+    panel.style.display = 'block';
+    panel.classList.add('pulsing');
+
+    const prev = log.querySelector('.context-entry.active');
+    if (prev) {
+      prev.classList.remove('active');
+      prev.classList.add('done');
+      const dot = prev.querySelector('.context-dot');
+      if (dot) { dot.style.background = 'rgba(74,222,128,0.5)'; dot.style.boxShadow = 'none'; }
+      const title = prev.querySelector('.context-title-text');
+      if (title) title.style.color = 'rgba(74,222,128,0.5)';
+    }
+
+    const entry = document.createElement('div');
+    entry.className = 'context-entry active';
+    entry.style.cssText = 'display:flex;gap:0.6rem;align-items:flex-start;margin-bottom:0.75rem;animation:fadeInUp 0.3s ease-out forwards';
+    entry.innerHTML = `
+      <div class="context-dot" style="width:6px;height:6px;border-radius:50%;background:#fbbf24;box-shadow:0 0 8px rgba(251,191,36,0.4);margin-top:0.35rem;flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <p class="context-title-text" style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(251,191,36,0.6);margin-bottom:0.2rem">${ctx.title}</p>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.45);line-height:1.65;margin:0">${ctx.text}</p>
+      </div>`;
+    log.appendChild(entry);
+    panel.scrollTop = panel.scrollHeight;
+  }
+
+  function finishPipeline() {
+    const stages = document.querySelectorAll('.tool-stage');
+    const connectors = document.querySelectorAll('.tool-stage-connector');
+    stages.forEach(s => s.className = 'tool-stage done');
+    connectors.forEach(c => c.className = 'tool-stage-connector done');
+
+    const panel = document.getElementById('context-panel');
+    const log = document.getElementById('context-log');
+    panel.classList.remove('pulsing');
+
+    const prev = log.querySelector('.context-entry.active');
+    if (prev) {
+      prev.classList.remove('active');
+      prev.classList.add('done');
+      const dot = prev.querySelector('.context-dot');
+      if (dot) { dot.style.background = 'rgba(74,222,128,0.5)'; dot.style.boxShadow = 'none'; }
+      const title = prev.querySelector('.context-title-text');
+      if (title) title.style.color = 'rgba(74,222,128,0.5)';
+    }
+
+    const entry = document.createElement('div');
+    entry.className = 'context-entry done';
+    entry.style.cssText = 'display:flex;gap:0.6rem;align-items:flex-start;animation:fadeInUp 0.3s ease-out forwards';
+    entry.innerHTML = `
+      <div style="width:6px;height:6px;border-radius:50%;background:rgba(74,222,128,0.5);margin-top:0.35rem;flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <p style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(74,222,128,0.5);margin-bottom:0.2rem">Pipeline Complete</p>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.45);line-height:1.65;margin:0">All stages complete. Context was retrieved, data was grounded, and every claim was validated. See the output comparison below.</p>
+      </div>`;
+    log.appendChild(entry);
+  }
+
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  // ── Stage renderers ──
+  function renderQueryViz(scenario) {
+    const sc = SCENARIOS[scenario];
+    const tokenHTML = sc.queryTokens.map(t =>
+      `<span class="token-chip token-${t.type}">${t.text}</span>`
+    ).join('');
+    document.getElementById('query-tokens').innerHTML = tokenHTML;
+    document.getElementById('query-plan').textContent = sc.queryPlan;
+    document.getElementById('query-viz').style.display = 'block';
+  }
+
+  function renderFetchViz(scenario) {
+    const sc = SCENARIOS[scenario];
+    let html = '<div class="metric-grid">';
+    sc.metrics.forEach(m => {
+      const valueColor = m.bad ? 'rgba(248,113,113,0.85)' : 'rgba(74,222,128,0.85)';
+      const changeColor = m.bad ? 'rgba(248,113,113,0.5)' : 'rgba(74,222,128,0.5)';
+      html += `<div class="metric-cell">
+        <p style="font-size:0.58rem;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;font-weight:600">${m.label}</p>
+        <p style="font-size:1rem;font-weight:700;color:${valueColor};margin-bottom:0.1rem;line-height:1.2">${m.value}</p>
+        <p style="font-size:0.6rem;color:${changeColor};line-height:1.4">${m.change}</p>
+      </div>`;
+    });
+    html += '</div>';
+    document.getElementById('fetch-metrics').innerHTML = html;
+    document.getElementById('fetch-viz').style.display = 'block';
+  }
+
+  async function renderContextViz(scenario) {
+    const sc = SCENARIOS[scenario];
+    const el = document.getElementById('context-viz');
+    const items = document.getElementById('context-items');
+    const countEl = document.getElementById('ctx-count');
+    el.style.display = 'block';
+    items.innerHTML = '';
+
+    for (let i = 0; i < sc.context.length; i++) {
+      await delay(380);
+      const c = sc.context[i];
+      const item = document.createElement('div');
+      item.style.cssText = 'display:flex;align-items:flex-start;gap:0.55rem;padding:0.5rem 0.65rem;border-radius:0.3rem;animation:fadeInUp 0.25s ease-out forwards;background:' + c.bg + ';border:1px solid ' + c.border;
+      item.innerHTML = `<span class="ctx-badge" style="color:${c.color};background:${c.bg};border:1px solid ${c.border};margin-top:0.06rem">${c.typeLabel}</span>
+        <p style="font-size:0.71rem;color:rgba(255,255,255,0.5);line-height:1.65;margin:0;flex:1">${c.text}</p>`;
+      items.appendChild(item);
+      countEl.textContent = (i + 1) + ' of ' + sc.context.length + ' loaded';
+      document.getElementById('context-panel').scrollTop = document.getElementById('context-panel').scrollHeight;
+    }
+  }
+
+  async function renderSynthesizeViz(scenario) {
+    const sc = SCENARIOS[scenario];
+    const el = document.getElementById('synthesize-viz');
+    const lines = document.getElementById('synth-lines');
+    el.style.display = 'block';
+    lines.innerHTML = '';
+
+    for (const step of sc.synthesis) {
+      await delay(320);
+      const line = document.createElement('div');
+      line.className = 'synth-line' +
+        (step.type === 'connect' ? ' connecting' : '') +
+        (step.type === 'conclusion' ? ' conclusion' : '');
+
+      const prefix = step.type === 'data'
+        ? '<span style="color:rgba(96,165,250,0.5);margin-right:0.3rem">data</span>'
+        : step.type === 'context'
+        ? '<span style="color:rgba(192,132,252,0.5);margin-right:0.3rem">ctx</span>'
+        : '';
+
+      line.innerHTML = prefix + step.text;
+      lines.appendChild(line);
+    }
+  }
+
+  async function renderValidateViz(scenario) {
+    const sc = SCENARIOS[scenario];
+    const el = document.getElementById('validate-viz');
+    const checks = document.getElementById('check-items');
+    el.style.display = 'block';
+    checks.innerHTML = '';
+
+    for (const text of sc.checks) {
+      await delay(380);
+      const item = document.createElement('div');
+      item.className = 'check-item';
+      item.innerHTML = `<svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(74,222,128,0.7)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>${text}</span>`;
+      checks.appendChild(item);
+    }
+  }
+
+  function renderInsightCards(scenario) {
+    const sc = SCENARIOS[scenario];
+    document.getElementById('output-without').textContent = sc.without;
+    document.getElementById('output-with').textContent = sc.with;
+    document.getElementById('insight-cards').style.display = 'block';
+    document.getElementById('reset-row').style.display = 'block';
+  }
+
+  // ── Main pipeline runner ──
+  async function runPipeline(scenario) {
+    if (running) return;
+    running = true;
+
+    const sc = SCENARIOS[scenario];
+
+    // Reset output area
+    ['query-viz','fetch-viz','context-viz','synthesize-viz','validate-viz','insight-cards'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+    document.getElementById('reset-row').style.display = 'none';
+    document.getElementById('context-log').innerHTML = '';
+
+    // Show pipeline + output shell
+    document.getElementById('pipeline').style.display = 'flex';
+    document.getElementById('insight-output').style.display = 'block';
+    document.getElementById('context-panel').style.display = 'none';
+
+    // Disable button
+    const btn = document.getElementById('run-btn');
+    btn.disabled = true;
+    btn.textContent = 'Running…';
+
+    // ── Stage: Query ──
+    await delay(400);
+    setStage('query');
+    renderQueryViz(scenario);
+
+    // ── Stage: Fetch ──
+    await delay(1100);
+    setStage('fetch');
+    renderFetchViz(scenario);
+
+    // ── Stage: Context ──
+    await delay(1000);
+    setStage('context');
+    await renderContextViz(scenario);
+
+    // ── Stage: Synthesize ──
+    await delay(700);
+    setStage('synthesize');
+    await renderSynthesizeViz(scenario);
+
+    // ── Stage: Validate ──
+    await delay(700);
+    setStage('validate');
+    await renderValidateViz(scenario);
+
+    // ── Done ──
+    await delay(600);
+    finishPipeline();
+    renderInsightCards(scenario);
+
+    running = false;
+  }
+
+  // ── UI wiring ──
+  document.querySelectorAll('[data-scenario]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-scenario]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentScenario = btn.dataset.scenario;
+
+      const sc = SCENARIOS[currentScenario];
+      document.getElementById('question-display').textContent = sc.question;
+      document.getElementById('question-row').style.display = 'block';
+      document.getElementById('run-btn').disabled = false;
+
+      // Reset if re-selecting
+      document.getElementById('pipeline').style.display = 'none';
+      document.getElementById('context-panel').style.display = 'none';
+      document.getElementById('insight-output').style.display = 'none';
+      document.getElementById('reset-row').style.display = 'none';
+      document.getElementById('context-log').innerHTML = '';
+      document.getElementById('run-btn').textContent = 'Run Pipeline';
+    });
+  });
+
+  document.getElementById('run-btn').addEventListener('click', () => {
+    if (currentScenario) runPipeline(currentScenario);
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    currentScenario = null;
+    running = false;
+    document.querySelectorAll('[data-scenario]').forEach(b => b.classList.remove('active'));
+    document.getElementById('question-row').style.display = 'none';
+    document.getElementById('pipeline').style.display = 'none';
+    document.getElementById('context-panel').style.display = 'none';
+    document.getElementById('insight-output').style.display = 'none';
+    document.getElementById('reset-row').style.display = 'none';
+    document.getElementById('context-log').innerHTML = '';
+    document.getElementById('run-btn').textContent = 'Run Pipeline';
+    document.getElementById('run-btn').disabled = true;
+  });
+  </script>
+</body>
+</html>
