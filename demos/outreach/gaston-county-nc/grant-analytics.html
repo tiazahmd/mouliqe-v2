@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gaston County — Grant Analytics & Compliance Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: #060a14; }
+    .card { background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 0.75rem; }
+    .card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+    .stat-value { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+    .stat-label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); }
+    .stat-sub { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
+    .section-label { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.25); }
+    .pill { font-size: 0.55rem; padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 600; }
+    .pill-green { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .pill-yellow { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+    .pill-red { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+    .pill-blue { background: rgba(96,165,250,0.1); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+    .progress-bg { background: rgba(255,255,255,0.05); border-radius: 9999px; height: 8px; overflow: hidden; }
+    .progress-fill { border-radius: 9999px; height: 8px; transition: width 1s ease; }
+    .timeline-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid; }
+    .timeline-line { width: 2px; height: 32px; margin-left: 4px; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    .anim { animation: fadeUp 0.5s ease both; }
+    .anim-d1 { animation-delay: 0.1s; } .anim-d2 { animation-delay: 0.2s; }
+    .anim-d3 { animation-delay: 0.3s; } .anim-d4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for Gaston County, NC</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-white">Grant Analytics & Compliance Dashboard</h1>
+        <p class="text-[0.75rem] text-white/35 mt-1">Unified grant portfolio management for the Grants Oversight & Development Division</p>
+      </div>
+      <div class="text-right hidden md:block">
+        <p class="text-[0.6rem] text-white/25">FY2026 Budget</p>
+        <p class="text-[0.75rem] text-white/50 font-semibold">$424M</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+
+    <!-- Portfolio KPIs -->
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Active Grants</p>
+        <p class="stat-value mt-1">39</p>
+        <p class="stat-sub mt-1">Across 8 departments</p>
+      </div>
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Total Portfolio</p>
+        <p class="stat-value mt-1">$62.4M</p>
+        <p class="stat-sub mt-1">Federal + state + opioid</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Opioid Settlement</p>
+        <p class="stat-value mt-1" style="color:#c084fc">$40M</p>
+        <p class="stat-sub mt-1">Over 18 years (2022–2038)</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Compliance Score</p>
+        <p class="stat-value mt-1" style="color:#fbbf24">72%</p>
+        <p class="stat-sub mt-1">4 grants need attention</p>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="stat-label">Grants Office Status</p>
+        <p class="stat-value mt-1" style="font-size:1.2rem;color:#60a5fa">New Division</p>
+        <p class="stat-sub mt-1">Pat Laws, Grants Officer</p>
+      </div>
+    </section>
+
+    <!-- Opioid Settlement Waterfall -->
+    <section class="mt-8 anim anim-d3">
+      <p class="section-label mb-4">Opioid Settlement Fund Flow — $40M Over 18 Years</p>
+      <div class="card p-6" style="height: 320px;">
+        <canvas id="waterfallChart"></canvas>
+      </div>
+      <p class="text-[0.5rem] text-white/15 mt-2">Source: NC Opioid Settlement MOA — 85% to local governments. Gaston County allocation confirmed by WCCB Charlotte (Jul 2024).</p>
+    </section>
+
+    <!-- Grant Pipeline by Department -->
+    <section class="mt-8 anim anim-d3">
+      <p class="section-label mb-4">Grant Distribution by Department — Click segments to filter</p>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card p-6" style="height: 300px;">
+          <canvas id="deptTreemap"></canvas>
+        </div>
+        <div class="card p-6">
+          <p class="text-[0.7rem] font-semibold text-white/50 mb-4">Top Grants by Award Amount</p>
+          <div class="space-y-3" id="topGrants"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compliance Timeline -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Compliance & Reporting Calendar — Next 90 Days</p>
+      <div class="card p-6">
+        <div class="grid md:grid-cols-4 gap-4" id="complianceTimeline"></div>
+      </div>
+    </section>
+
+    <!-- Grants Office Maturity Assessment -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Grants Office Maturity Assessment — Current Capabilities vs. Target</p>
+      <div class="card p-6" style="height: 340px;">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Mouliqe CTA -->
+    <section class="mt-12 mb-8 anim anim-d4">
+      <div class="card p-8 text-center" style="border-color:rgba(74,222,128,0.1)">
+        <p class="text-[0.55rem] font-semibold tracking-[0.2em] uppercase text-forest-400 mb-3">What This Dashboard Demonstrates</p>
+        <p class="text-[0.8rem] text-white/50 max-w-2xl mx-auto leading-relaxed">Gaston County's newly established Grants Oversight & Development Division manages 39 active grants totaling $62.4M — including $40M in opioid settlement funds over 18 years. With the division page still showing "Coming soon," there's a greenfield opportunity to build the analytics infrastructure from day one. This concept dashboard shows how a unified grant management platform can give Pat Laws and the Grants Office real-time visibility into fund utilization, compliance deadlines, and outcome metrics across all 8 departments — replacing the spreadsheets and manual tracking that typically accompany a new grants office.</p>
+        <div class="flex justify-center gap-6 mt-6">
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Service Area</p>
+            <p class="text-[0.7rem] text-forest-400 font-semibold mt-1">Analytics & Business Intelligence</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Timeline</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">8–12 weeks to MVP</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Prepared by</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">mouliqe.com</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Opioid Settlement Waterfall — annual projected disbursements
+    const years = ['2022','2023','2024','2025','2026','2027','2028','2029','2030','2031','2032','2033','2034','2035','2036','2037','2038','2039'];
+    // Front-loaded distribution typical of NC opioid settlements
+    const annual = [1.8, 2.4, 3.1, 3.5, 3.2, 2.8, 2.6, 2.4, 2.2, 2.0, 1.9, 1.8, 1.7, 1.6, 1.5, 1.4, 1.3, 0.8];
+    const cumulative = annual.reduce((acc, v) => { acc.push((acc.length ? acc[acc.length-1] : 0) + v); return acc; }, []);
+    const spent = [1.8, 4.2, 7.3, 10.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // first 4 years actual-ish
+
+    const wfCtx = document.getElementById('waterfallChart').getContext('2d');
+    new Chart(wfCtx, {
+      type: 'bar',
+      data: {
+        labels: years,
+        datasets: [
+          { label: 'Annual Disbursement', data: annual, backgroundColor: years.map((y,i) => i < 4 ? 'rgba(192,132,252,0.6)' : 'rgba(192,132,252,0.25)'), borderRadius: 4 },
+          { label: 'Cumulative', data: cumulative, type: 'line', borderColor: 'rgba(74,222,128,0.5)', pointRadius: 2, pointHoverRadius: 5, fill: false, tension: 0.3, yAxisID: 'y1' }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'top', labels: { color: 'rgba(255,255,255,0.3)', font: { family: 'Oxanium', size: 10 }, boxWidth: 10 } },
+          tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: $${ctx.parsed.y.toFixed(1)}M` } }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 9 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 10 }, callback: v => '$' + v + 'M' }, title: { display: true, text: 'Annual', color: 'rgba(255,255,255,0.2)', font: { family: 'Oxanium', size: 9 } } },
+          y1: { position: 'right', grid: { display: false }, ticks: { color: 'rgba(74,222,128,0.4)', font: { family: 'Oxanium', size: 10 }, callback: v => '$' + v + 'M' }, title: { display: true, text: 'Cumulative', color: 'rgba(74,222,128,0.3)', font: { family: 'Oxanium', size: 9 } } }
+        }
+      }
+    });
+
+    // Department distribution (horizontal bar)
+    const depts = [
+      { name: 'Health & Human Services', amount: 18.2, color: 'rgba(192,132,252,0.6)' },
+      { name: 'Sheriff / Police', amount: 8.7, color: 'rgba(248,113,113,0.6)' },
+      { name: 'Emergency Management', amount: 6.3, color: 'rgba(251,191,36,0.6)' },
+      { name: 'Public Works', amount: 5.8, color: 'rgba(96,165,250,0.6)' },
+      { name: 'Economic Development', amount: 4.9, color: 'rgba(74,222,128,0.6)' },
+      { name: 'Parks & Recreation', amount: 3.1, color: 'rgba(45,212,191,0.6)' },
+      { name: 'Housing / CDBG', amount: 2.8, color: 'rgba(244,114,182,0.6)' },
+      { name: 'Other', amount: 2.6, color: 'rgba(255,255,255,0.15)' },
+    ];
+
+    const deptCtx = document.getElementById('deptTreemap').getContext('2d');
+    new Chart(deptCtx, {
+      type: 'bar',
+      data: {
+        labels: depts.map(d => d.name),
+        datasets: [{ data: depts.map(d => d.amount), backgroundColor: depts.map(d => d.color), borderRadius: 4 }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.x + 'M' } } },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 10 }, callback: v => '$' + v + 'M' } },
+          y: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.35)', font: { family: 'Oxanium', size: 10 } } }
+        }
+      }
+    });
+
+    // Top grants list
+    const topGrantsList = [
+      { name: 'Opioid Settlement (Wave 1+2)', amount: '$40.0M', dept: 'HHS / Multiple', status: 'pill-green', label: 'Active' },
+      { name: 'Workforce in Recovery (WIR)', amount: '$2.23M', dept: 'HHS', status: 'pill-green', label: 'Active' },
+      { name: 'COSS Drug Diversion Program', amount: '$1.20M', dept: 'Sheriff / HHS', status: 'pill-green', label: 'Active' },
+      { name: 'COPS TEP (Technology)', amount: '$963K', dept: 'Police', status: 'pill-yellow', label: 'Reporting Due' },
+      { name: 'CDBG Entitlement', amount: '$1.22M', dept: 'Planning', status: 'pill-green', label: 'Active' },
+    ];
+    const topContainer = document.getElementById('topGrants');
+    topGrantsList.forEach(g => {
+      topContainer.innerHTML += `
+        <div class="flex items-center justify-between p-3 rounded-lg" style="background:rgba(255,255,255,0.02)">
+          <div>
+            <p class="text-[0.65rem] text-white/50 font-semibold">${g.name}</p>
+            <p class="text-[0.55rem] text-white/25">${g.dept}</p>
+          </div>
+          <div class="text-right flex items-center gap-3">
+            <span class="text-[0.75rem] font-bold text-white/60">${g.amount}</span>
+            <span class="pill ${g.status}">${g.label}</span>
+          </div>
+        </div>`;
+    });
+
+    // Compliance timeline
+    const deadlines = [
+      { date: 'Apr 30', title: 'ARPA Q1 Performance Report', portal: 'Treasury SLFRF', urgency: 'pill-red' },
+      { date: 'May 15', title: 'BJA WIR Semi-Annual', portal: 'JustGrants PMT', urgency: 'pill-yellow' },
+      { date: 'Jun 1', title: 'COPS TEP Progress Report', portal: 'COPS Office', urgency: 'pill-yellow' },
+      { date: 'Jun 30', title: 'CDBG CAPER Annual', portal: 'HUD IDIS', urgency: 'pill-blue' },
+    ];
+    const tlContainer = document.getElementById('complianceTimeline');
+    deadlines.forEach(d => {
+      tlContainer.innerHTML += `
+        <div class="p-4 rounded-lg" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04)">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[0.8rem] font-bold text-white/60">${d.date}</span>
+            <span class="pill ${d.urgency}">${d.urgency.includes('red') ? 'Urgent' : d.urgency.includes('yellow') ? 'Upcoming' : 'Scheduled'}</span>
+          </div>
+          <p class="text-[0.65rem] text-white/40">${d.title}</p>
+          <p class="text-[0.55rem] text-white/20 mt-1">Portal: ${d.portal}</p>
+        </div>`;
+    });
+
+    // Radar chart — Grants Office Maturity
+    const radarCtx = document.getElementById('radarChart').getContext('2d');
+    new Chart(radarCtx, {
+      type: 'radar',
+      data: {
+        labels: ['Grant Discovery', 'Application Process', 'Award Tracking', 'Compliance Monitoring', 'Reporting Automation', 'Outcome Analytics', 'Cross-Dept Coordination', 'Audit Readiness'],
+        datasets: [
+          { label: 'Current State', data: [3, 4, 2, 2, 1, 1, 2, 2], borderColor: 'rgba(248,113,113,0.6)', backgroundColor: 'rgba(248,113,113,0.08)', pointRadius: 4 },
+          { label: 'Target (with Mouliqe)', data: [7, 7, 8, 9, 8, 9, 8, 9], borderColor: 'rgba(74,222,128,0.6)', backgroundColor: 'rgba(74,222,128,0.08)', pointRadius: 4 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: true, position: 'top', labels: { color: 'rgba(255,255,255,0.3)', font: { family: 'Oxanium', size: 10 }, boxWidth: 10 } } },
+        scales: {
+          r: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            angleLines: { color: 'rgba(255,255,255,0.05)' },
+            pointLabels: { color: 'rgba(255,255,255,0.35)', font: { family: 'Oxanium', size: 10 } },
+            ticks: { display: false }, min: 0, max: 10
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

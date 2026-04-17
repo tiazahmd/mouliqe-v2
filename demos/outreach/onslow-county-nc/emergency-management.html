@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onslow County — Emergency Management Cross-System Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: #060a14; }
+    .card { background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 0.75rem; }
+    .card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+    .stat-value { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+    .stat-label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); }
+    .stat-sub { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
+    .section-label { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.25); }
+    .pill { font-size: 0.55rem; padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 600; }
+    .pill-green { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .pill-yellow { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+    .pill-red { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+    .threat-level { font-size: 0.5rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 0.25rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+    .anim { animation: fadeUp 0.5s ease both; }
+    .anim-d1 { animation-delay: 0.1s; } .anim-d2 { animation-delay: 0.2s; }
+    .anim-d3 { animation-delay: 0.3s; } .anim-d4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for Onslow County, NC</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-white">Emergency Management — Unified Operations</h1>
+        <p class="text-[0.75rem] text-white/35 mt-1">EM, EMS, Fire Rescue, E-911 — integrated situational awareness for coastal resilience</p>
+      </div>
+      <div class="text-right hidden md:block">
+        <div class="threat-level" style="background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3)">Threat Level: Normal</div>
+        <p class="text-[0.55rem] text-white/20 mt-2">Stacie Miles, CEM — Deputy Director</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+
+    <!-- Operational KPIs -->
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">EMS Calls (YTD)</p>
+        <p class="stat-value mt-1">8,412</p>
+        <p class="stat-sub mt-1">+6% vs prior year</p>
+      </div>
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Avg EMS Response</p>
+        <p class="stat-value mt-1" style="color:#4ade80">7:42</p>
+        <p class="stat-sub mt-1">Urban: 5:18 | Rural: 11:24</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Fire Incidents (YTD)</p>
+        <p class="stat-value mt-1">1,247</p>
+        <p class="stat-sub mt-1">Structure: 89 | Wildland: 34</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">911 Call Volume</p>
+        <p class="stat-value mt-1">42,680</p>
+        <p class="stat-sub mt-1">YTD — avg 394/day</p>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="stat-label">Active Shelters</p>
+        <p class="stat-value mt-1" style="color:#60a5fa">0</p>
+        <p class="stat-sub mt-1">Capacity: 4,200 (6 sites)</p>
+      </div>
+    </section>
+
+    <!-- Hurricane Season Readiness -->
+    <section class="mt-8 anim anim-d3">
+      <p class="section-label mb-4">Hurricane Season Readiness — June 1 Start (47 days)</p>
+      <div class="grid md:grid-cols-4 gap-4">
+        <div class="card p-5">
+          <p class="text-[0.65rem] text-white/50 font-semibold">Evacuation Routes</p>
+          <div class="flex items-center gap-2 mt-2"><span class="pill pill-green">Verified</span></div>
+          <p class="text-[0.5rem] text-white/25 mt-2">US-17, NC-24, NC-53 — signage updated Mar 2026</p>
+        </div>
+        <div class="card p-5">
+          <p class="text-[0.65rem] text-white/50 font-semibold">Shelter Supplies</p>
+          <div class="flex items-center gap-2 mt-2"><span class="pill pill-yellow">Partial</span></div>
+          <p class="text-[0.5rem] text-white/25 mt-2">Cots: 3,800/4,200 | Generators: 4/6 tested</p>
+        </div>
+        <div class="card p-5">
+          <p class="text-[0.65rem] text-white/50 font-semibold">Mutual Aid Agreements</p>
+          <div class="flex items-center gap-2 mt-2"><span class="pill pill-green">Current</span></div>
+          <p class="text-[0.5rem] text-white/25 mt-2">Camp Lejeune, Jones County, Carteret County</p>
+        </div>
+        <div class="card p-5">
+          <p class="text-[0.65rem] text-white/50 font-semibold">Comm Systems Test</p>
+          <div class="flex items-center gap-2 mt-2"><span class="pill pill-red">Overdue</span></div>
+          <p class="text-[0.5rem] text-white/25 mt-2">Last full test: Nov 2025 — quarterly required</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Response Time Trends -->
+    <section class="mt-8 anim anim-d3">
+      <p class="section-label mb-4">EMS Response Time Trends — Monthly Average (minutes)</p>
+      <div class="card p-6" style="height: 300px;">
+        <canvas id="responseChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Incident Heatmap by Type -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Incident Distribution by Type and Time of Day</p>
+      <div class="card p-6" style="height: 300px;">
+        <canvas id="incidentChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Resource Deployment -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Resource Deployment — Current Unit Status</p>
+      <div class="card overflow-hidden">
+        <table class="w-full text-[0.6rem]">
+          <thead>
+            <tr class="text-white/25 text-left border-b border-white/5">
+              <th class="p-3 font-semibold">Unit</th>
+              <th class="p-3 font-semibold">Type</th>
+              <th class="p-3 font-semibold">Station</th>
+              <th class="p-3 font-semibold">Status</th>
+              <th class="p-3 font-semibold">Last Dispatch</th>
+              <th class="p-3 font-semibold">Calls Today</th>
+            </tr>
+          </thead>
+          <tbody id="unitTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Mouliqe CTA -->
+    <section class="mt-12 mb-8 anim anim-d4">
+      <div class="card p-8 text-center" style="border-color:rgba(74,222,128,0.1)">
+        <p class="text-[0.55rem] font-semibold tracking-[0.2em] uppercase text-forest-400 mb-3">What This Dashboard Demonstrates</p>
+        <p class="text-[0.8rem] text-white/50 max-w-2xl mx-auto leading-relaxed">Onslow County's Emergency Services division manages EMS, Fire Rescue, Emergency Management, and E-911 — but each operates on separate systems with no unified operational picture. For a coastal county adjacent to Camp Lejeune with hurricane season approaching, real-time cross-system visibility isn't a luxury — it's a necessity. This concept dashboard shows how integrating CAD, EMS records, fire incident data, and shelter management into a single analytics layer gives Deputy Director Stacie Miles the situational awareness needed for both daily operations and disaster response.</p>
+        <div class="flex justify-center gap-6 mt-6">
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Service Area</p>
+            <p class="text-[0.7rem] text-forest-400 font-semibold mt-1">Data Integration & Analytics</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Timeline</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">8–12 weeks to MVP</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Prepared by</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">mouliqe.com</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Response time trends
+    const respCtx = document.getElementById('responseChart').getContext('2d');
+    new Chart(respCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr'],
+        datasets: [
+          { label: 'Overall Avg', data: [8.1,7.9,8.3,7.8,7.6,8.2,8.5,8.8,9.1,8.4,7.9,8.0,7.8,7.6,7.5,7.7], borderColor: 'rgba(96,165,250,0.7)', fill: false, tension: 0.3, pointRadius: 3 },
+          { label: 'Urban', data: [5.4,5.2,5.5,5.1,5.0,5.3,5.6,5.8,6.1,5.5,5.2,5.3,5.2,5.1,5.0,5.3], borderColor: 'rgba(74,222,128,0.5)', fill: false, tension: 0.3, pointRadius: 2, borderDash: [4,4] },
+          { label: 'Rural', data: [11.8,11.5,12.1,11.4,11.2,12.0,12.4,12.8,13.2,12.2,11.6,11.7,11.5,11.2,11.1,11.4], borderColor: 'rgba(248,113,113,0.5)', fill: false, tension: 0.3, pointRadius: 2, borderDash: [4,4] },
+          { label: 'NFPA Target (8 min)', data: Array(16).fill(8), borderColor: 'rgba(255,255,255,0.1)', borderDash: [8,8], pointRadius: 0, fill: false }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: true, position: 'top', labels: { color: 'rgba(255,255,255,0.3)', font: { family: 'Oxanium', size: 10 }, boxWidth: 10 } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.2)', font: { family: 'Oxanium', size: 9 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 10 }, callback: v => v + ' min' }, min: 3, max: 15 }
+        }
+      }
+    });
+
+    // Incident distribution — stacked bar by time of day
+    const incCtx = document.getElementById('incidentChart').getContext('2d');
+    new Chart(incCtx, {
+      type: 'bar',
+      data: {
+        labels: ['00-04','04-08','08-12','12-16','16-20','20-24'],
+        datasets: [
+          { label: 'Medical', data: [180,220,410,480,520,340], backgroundColor: 'rgba(96,165,250,0.5)', stack: 'a' },
+          { label: 'Fire', data: [35,28,62,78,85,52], backgroundColor: 'rgba(248,113,113,0.5)', stack: 'a' },
+          { label: 'MVA', data: [42,68,95,110,125,78], backgroundColor: 'rgba(251,191,36,0.5)', stack: 'a' },
+          { label: 'Other', data: [28,35,55,62,58,42], backgroundColor: 'rgba(255,255,255,0.1)', stack: 'a' },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: true, position: 'top', labels: { color: 'rgba(255,255,255,0.3)', font: { family: 'Oxanium', size: 10 }, boxWidth: 10 } } },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.3)', font: { family: 'Oxanium', size: 10 } } },
+          y: { stacked: true, grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 10 } } }
+        }
+      }
+    });
+
+    // Unit status table
+    const units = [
+      { unit: 'Medic 1', type: 'ALS Ambulance', station: 'Station 1 (Jacksonville)', status: 'Available', last: '14:22', calls: 6 },
+      { unit: 'Medic 3', type: 'ALS Ambulance', station: 'Station 3 (Piney Green)', status: 'On Scene', last: '16:08', calls: 5 },
+      { unit: 'Engine 7', type: 'Fire Engine', station: 'Station 7 (Hubert)', status: 'Available', last: '11:45', calls: 2 },
+      { unit: 'Rescue 2', type: 'Heavy Rescue', station: 'Station 2 (Sneads Ferry)', status: 'En Route', last: '16:31', calls: 3 },
+      { unit: 'Medic 5', type: 'ALS Ambulance', station: 'Station 5 (Richlands)', status: 'Available', last: '13:55', calls: 4 },
+      { unit: 'Battalion 1', type: 'Command', station: 'HQ (Jacksonville)', status: 'Available', last: '09:20', calls: 1 },
+      { unit: 'Medic 4', type: 'ALS Ambulance', station: 'Station 4 (Swansboro)', status: 'At Hospital', last: '15:48', calls: 7 },
+      { unit: 'Engine 1', type: 'Fire Engine', station: 'Station 1 (Jacksonville)', status: 'Available', last: '12:10', calls: 3 },
+    ];
+    const unitBody = document.getElementById('unitTable');
+    units.forEach(u => {
+      const statusColor = u.status === 'Available' ? '#4ade80' : u.status === 'On Scene' || u.status === 'En Route' ? '#fbbf24' : '#60a5fa';
+      unitBody.innerHTML += `
+        <tr class="border-b border-white/3 hover:bg-white/[0.02] transition-colors">
+          <td class="p-3 text-white/60 font-semibold">${u.unit}</td>
+          <td class="p-3 text-white/40">${u.type}</td>
+          <td class="p-3 text-white/40">${u.station}</td>
+          <td class="p-3"><span style="color:${statusColor}" class="font-semibold">${u.status}</span></td>
+          <td class="p-3 text-white/30">${u.last}</td>
+          <td class="p-3 text-white/50 font-bold">${u.calls}</td>
+        </tr>`;
+    });
+  </script>
+</body>
+</html>
