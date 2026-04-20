@@ -1,0 +1,73 @@
+/* ==========================================================================
+   Process tracker — horizontal step display (homepage + process page)
+   ========================================================================== */
+
+.process-flow {
+  display: none;  /* mobile: hidden */
+  align-items: flex-start;
+}
+@media (min-width: 768px) {
+  .process-flow { display: flex; }
+}
+
+.process-flow__step {
+  flex: 1;
+  text-align: center;
+  padding: 0 var(--space-2);
+}
+
+.process-flow__num {
+  color: var(--color-accent);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--space-2);
+}
+
+.process-flow__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+  margin-bottom: var(--space-1);
+  transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.process-flow__label.highlighted {
+  color: var(--color-accent);
+  transform: scale(1.05);
+}
+
+.process-flow__desc {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+
+.process-flow__arrow {
+  display: flex;
+  align-items: center;
+  padding-top: var(--space-2);
+  color: var(--color-accent);
+  transition: color var(--dur) var(--ease);
+}
+.process-flow__arrow.highlighted { color: var(--color-accent-hover); }
+
+/* Mobile: vertical list */
+.process-flow-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+@media (min-width: 768px) {
+  .process-flow-mobile { display: none; }
+}
+.process-flow-mobile__item {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+.process-flow-mobile__num {
+  color: var(--color-accent);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-sm);
+  flex-shrink: 0;
+  width: 2rem;
+}

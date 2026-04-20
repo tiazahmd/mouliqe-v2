@@ -1,0 +1,225 @@
+/* ==========================================================================
+   Forms — inputs, labels, custom select, booking step indicator
+   ========================================================================== */
+
+.form-group { margin-bottom: var(--space-3); }
+.form-group:last-of-type { margin-bottom: 0; }
+
+.form-label {
+  display: block;
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-xxs);
+  letter-spacing: var(--tracking-widest);
+  color: var(--color-fg-faint);
+}
+
+.form-input {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-3);
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-fg);
+  letter-spacing: 0.01em;
+  outline: none;
+  transition: all var(--dur) var(--ease);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.form-input::placeholder { color: var(--color-fg-faint); }
+.form-input:focus {
+  border-color: var(--color-accent-border);
+  background: var(--color-bg-hover);
+  box-shadow: 0 0 0 2px var(--color-accent-ghost);
+  color: var(--color-fg-strong);
+}
+textarea.form-input { resize: none; min-height: 6rem; }
+
+/* ---- Form success ---- */
+.form-success {
+  display: none;
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  animation: fadeInUp 0.5s ease-out;
+}
+.form-success.show { display: block; }
+
+/* ---- Custom select ---- */
+.custom-select { position: relative; }
+.custom-select__trigger {
+  width: 100%;
+  border-radius: var(--radius);
+  box-sizing: border-box;
+  cursor: pointer;
+  padding: var(--space-3) var(--space-8) var(--space-3) var(--space-3);
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-fg-faint);
+  transition: all var(--dur) var(--ease);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='currentColor' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  text-align: left;
+}
+.custom-select__trigger.has-value { color: var(--color-fg); }
+.custom-select.open .custom-select__trigger {
+  border-color: var(--color-accent-border);
+  background-color: var(--color-bg-hover);
+  box-shadow: 0 0 0 2px var(--color-accent-ghost);
+}
+.custom-select__options {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  z-index: 60;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-raised);
+}
+.custom-select.open .custom-select__options { display: block; }
+.custom-select__option {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--color-fg-muted);
+  transition: all var(--dur-fast) var(--ease);
+}
+.custom-select__option:hover {
+  background: var(--color-accent-ghost);
+  color: var(--color-fg-strong);
+}
+.custom-select__option.selected { color: var(--color-accent); }
+
+/* ==========================================================================
+   Booking step indicator (Contact page)
+   ========================================================================== */
+
+.step-indicator { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-8); }
+.step-item { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); }
+.step-dot {
+  width: 1.5rem; height: 1.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-fg-faint);
+  transition: all var(--dur) var(--ease);
+}
+.step-dot.active {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent-border);
+  color: var(--color-accent);
+}
+.step-label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-fg-faint);
+  transition: color var(--dur) var(--ease);
+}
+.step-item.active .step-label { color: var(--color-accent); }
+.step-connector {
+  flex: 1;
+  height: 2px;
+  position: relative;
+  background: var(--color-border);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.step-connector__fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--color-accent-strong), var(--color-accent));
+  border-radius: 1px;
+  transition: width var(--dur-slow) var(--ease);
+}
+.step-connector.filled .step-connector__fill { width: 100%; }
+
+/* ---- Time/date slot buttons ---- */
+.slot-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  transition: all var(--dur) var(--ease);
+  font-family: inherit;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+}
+.slot-btn:hover {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent-border);
+  color: var(--color-fg-strong);
+}
+.time-btn {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  padding: var(--space-3);
+}
+
+.today-badge {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-accent);
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent-border);
+  padding: 0.1rem var(--space-2);
+  border-radius: var(--radius-sm);
+  margin-top: 0.1rem;
+}
+
+.skeleton-slot {
+  height: 4.5rem;
+  border-radius: var(--radius);
+  background: linear-gradient(110deg, var(--color-bg-raised) 30%, var(--color-bg-hover) 50%, var(--color-bg-raised) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border: 1px solid var(--color-border);
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---- Spinner ---- */
+.spinner {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  border-top-color: var(--color-accent);
+  border-right-color: var(--color-accent-dim);
+  border-bottom-color: var(--color-accent-ghost);
+  border-left-color: var(--color-accent-dim);
+  animation: spinSquare 1s linear infinite;
+}
+@keyframes spinSquare {
+  0%, 100% { transform: rotate(0); }
+  100%     { transform: rotate(360deg); }
+}

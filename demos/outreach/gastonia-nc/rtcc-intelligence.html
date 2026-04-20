@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Gastonia — RTCC Intelligence Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>body{background:#060a14}.card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}.card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}.stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}.stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}.stat-delta{font-size:0.65rem;font-weight:600}.delta-up{color:#4ade80}.delta-down{color:#f87171}.section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}.highlight-card{border-left:3px solid rgba(192,132,252,0.7);background:rgba(192,132,252,0.04);padding:1rem;border-radius:0 0.5rem 0.5rem 0}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}</style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the City of Gastonia</p>
+    <h1 class="text-2xl md:text-3xl font-bold text-white">Real-Time Crime Center Intelligence</h1>
+    <p class="text-[0.75rem] text-white/35 mt-1">$963K invested. 187 cameras. First drone responder. Now add the brain.</p>
+  </header>
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+    <div class="highlight-card anim anim-d1 mt-6">
+      <p class="text-[0.7rem] font-bold text-white/70">Gastonia's RTCC has the eyes. Analytics gives it the brain.</p>
+      <p class="text-[0.6rem] text-white/40 mt-1">Launched Sept 2025 with 144 downtown cameras, 22 Flock live cameras, 21 LPR readers, and NC's first drone responder (Jan 2026). Plus a $629K Rapid DNA system. All generating data — none of it connected to predictive analytics.</p>
+    </div>
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
+      <div class="card p-5 anim anim-d1"><p class="stat-label">RTCC Investment</p><p class="stat-value mt-1">$963K</p><p class="stat-delta" style="color:rgba(192,132,252,0.7)">COPS TEP funded</p></div>
+      <div class="card p-5 anim anim-d1"><p class="stat-label">Cameras</p><p class="stat-value mt-1">187</p><p class="stat-delta" style="color:rgba(96,165,250,0.7)">144 + 22 Flock + 21 LPR</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Rapid DNA</p><p class="stat-value mt-1">$629K</p><p class="stat-delta delta-up mt-1">Hours, not weeks</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Drone Responder</p><p class="stat-value mt-1">1st</p><p class="stat-delta" style="color:rgba(251,191,36,0.7)">In Gaston County</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Analytics Layer</p><p class="stat-value mt-1">None</p><p class="stat-delta delta-down mt-1">No dashboards detected</p></div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">RTCC Components</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Technology Stack — Currently Siloed</p>
+        <canvas id="stackChart" height="200"></canvas>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">What Analytics Adds</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-3">From Monitoring to Intelligence</p>
+        <div class="space-y-3">
+          <div class="p-3 rounded-lg" style="background:rgba(192,132,252,0.04);border:1px solid rgba(192,132,252,0.1)"><p class="text-[0.65rem] font-bold text-white/60">LPR Pattern Detection</p><p class="text-[0.58rem] text-white/35">21 Flock LPR readers generating thousands of daily scans. Cross-reference with incident data for vehicle-of-interest tracking.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Predictive Hotspot Mapping</p><p class="text-[0.58rem] text-white/35">ML models on historical crime data + camera feeds to predict where to deploy resources before incidents occur.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Drone + Camera Fusion</p><p class="text-[0.58rem] text-white/35">Correlate drone response data with fixed camera feeds. Optimize drone deployment zones based on coverage gaps.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Rapid DNA Case Linkage</p><p class="text-[0.58rem] text-white/35">Connect DNA profiles from the $629K system with incident data, camera footage timestamps, and LPR reads for faster case resolution.</p></div>
+        </div>
+      </div>
+    </section>
+    <section class="card mt-4 p-5 anim anim-d4">
+      <p class="section-label">Architecture</p>
+      <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-4">Connecting Gastonia's Public Safety Investments</p>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-[0.6rem] font-semibold">
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15);color:rgba(248,113,113,0.7)">Flock Safety (22+21)</span><span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);color:rgba(96,165,250,0.7)">144 Downtown Cams</span><span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15);color:rgba(192,132,252,0.7)">Drone LPR</span><span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15);color:rgba(74,222,128,0.7)">Rapid DNA</span>
+        <span class="text-white/20 mx-2">&#8594;</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)">Analytics Pipeline</span>
+        <span class="text-white/20 mx-2">&#8594;</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.25);color:rgba(74,222,128,0.9)">RTCC Intelligence</span>
+      </div>
+      <p class="text-[0.6rem] text-white/25 text-center mt-4">Your CTO position is vacant. Mouliqe fills the analytics gap while you hire.</p>
+    </section>
+    <footer class="mt-8 text-center"><p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the City of Gastonia, North Carolina</p><p class="text-[0.5rem] text-white/12 mt-1">RTCC data from WFAE, WCNC, and Gastonia PD announcements. Grant data from COPS TEP program.</p></footer>
+  </main>
+<script>
+Chart.defaults.color='rgba(255,255,255,0.35)';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family='Oxanium';Chart.defaults.font.size=11;
+new Chart(document.getElementById('stackChart'),{type:'doughnut',data:{labels:['Downtown Surveillance (144)','Flock Live Cameras (22)','Flock LPR Readers (21)','Drone Responder (1)','Rapid DNA System','COPS TEP Grant'],datasets:[{data:[40,15,15,10,10,10],backgroundColor:['rgba(96,165,250,0.6)','rgba(248,113,113,0.5)','rgba(251,191,36,0.5)','rgba(192,132,252,0.5)','rgba(74,222,128,0.5)','rgba(255,255,255,0.15)'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'right',labels:{boxWidth:8,padding:8,font:{size:9}}}}}});
+</script>
+</body>
+</html>

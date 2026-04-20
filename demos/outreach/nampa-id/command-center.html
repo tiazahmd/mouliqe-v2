@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Nampa — Command Center Intelligence Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body{background:#060a14}.card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}.card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}.stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}.stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}.stat-delta{font-size:0.65rem;font-weight:600}.delta-up{color:#4ade80}.delta-down{color:#f87171}.section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}.highlight-card{border-left:3px solid rgba(251,191,36,0.7);background:rgba(251,191,36,0.04);padding:1rem;border-radius:0 0.5rem 0.5rem 0}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the City of Nampa</p>
+    <h1 class="text-2xl md:text-3xl font-bold text-white">Command Center Intelligence Dashboard</h1>
+    <p class="text-[0.75rem] text-white/35 mt-1">$6.1M invested. 2.2M plate scans/week. Here's the analytics layer it's missing.</p>
+  </header>
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+    <div class="highlight-card anim anim-d1 mt-6">
+      <p class="text-[0.7rem] font-bold text-white/70">The Command Center monitors. Analytics predicts.</p>
+      <p class="text-[0.6rem] text-white/40 mt-1">Chief Huff's Integrated Command Center unifies Traffic Monitoring, Real-Time Crime, Crime Analysis, and Emergency Ops. But 200+ daily calls are still "more than half reactionary." This dashboard shows what proactive looks like.</p>
+    </div>
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+      <div class="card p-5 anim anim-d1"><p class="stat-label">Investment</p><p class="stat-value mt-1">$6.1M</p><p class="stat-delta" style="color:rgba(96,165,250,0.7)">Integrated Command Center</p></div>
+      <div class="card p-5 anim anim-d1"><p class="stat-label">LPR Scans/Week</p><p class="stat-value mt-1">2.2M</p><p class="stat-delta" style="color:rgba(251,191,36,0.7)">License plate reads</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Daily Calls</p><p class="stat-value mt-1">200+</p><p class="stat-delta delta-down mt-1">>50% reactionary</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Crime Index</p><p class="stat-value mt-1">65</p><p class="stat-delta delta-up mt-1">35% below national avg</p></div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Call Volume</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Daily Call Distribution by Hour</p>
+        <canvas id="callChart" height="200"></canvas>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Incident Categories</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Call Types — Reactive vs. Proactive</p>
+        <canvas id="typeChart" height="200"></canvas>
+      </div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d4">
+        <p class="section-label">Command Center Components</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-3">4 Units — Currently Siloed</p>
+        <div class="space-y-3">
+          <div class="p-3 rounded-lg" style="background:rgba(248,113,113,0.04);border:1px solid rgba(248,113,113,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Real-Time Crime Center</p><p class="text-[0.58rem] text-white/35">Camera feeds, incident monitoring. No predictive analytics or pattern detection.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Traffic Monitoring Center</p><p class="text-[0.58rem] text-white/35">Cameras at nearly all intersections. 70 signals, 5,000+ street lights. No traffic flow optimization.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Crime Analysis Unit</p><p class="text-[0.58rem] text-white/35">Manual analysis via CityProtect. No ML-powered pattern detection or predictive deployment.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Emergency Operations Center</p><p class="text-[0.58rem] text-white/35">Activated for major events. No data integration with the other 3 units.</p></div>
+        </div>
+      </div>
+      <div class="card p-5 anim anim-d4">
+        <p class="section-label">What Analytics Adds</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-3">Turning $6.1M into Intelligence</p>
+        <div class="space-y-3">
+          <div class="p-3 rounded-lg" style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.1)"><p class="text-[0.65rem] font-bold text-white/60">LPR Pattern Analysis</p><p class="text-[0.58rem] text-white/35">2.2M weekly scans → vehicle pattern detection, stolen vehicle alerts, repeat offender tracking</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Traffic + Crime Correlation</p><p class="text-[0.58rem] text-white/35">Overlay traffic camera data with incident locations. Optimize signal timing for emergency response.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(192,132,252,0.04);border:1px solid rgba(192,132,252,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Predictive Patrol Routing</p><p class="text-[0.58rem] text-white/35">ML models on 5 years of call data → shift from >50% reactionary to proactive deployment</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Unified Command Dashboard</p><p class="text-[0.58rem] text-white/35">Single view connecting all 4 units. Real-time + historical + predictive in one interface.</p></div>
+        </div>
+      </div>
+    </section>
+    <footer class="mt-8 text-center">
+      <p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the City of Nampa, Idaho</p>
+      <p class="text-[0.5rem] text-white/12 mt-1">Command Center data from KIVI TV (Jan 2024) and Idaho News coverage. Crime index from FBI UCR data.</p>
+    </footer>
+  </main>
+<script>
+Chart.defaults.color='rgba(255,255,255,0.35)';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family='Oxanium';Chart.defaults.font.size=11;
+new Chart(document.getElementById('callChart'),{type:'line',data:{labels:['12a','2a','4a','6a','8a','10a','12p','2p','4p','6p','8p','10p'],datasets:[{label:'Calls/Hour',data:[6,4,3,5,12,18,22,20,19,16,14,10],borderColor:'rgba(96,165,250,0.7)',backgroundColor:'rgba(96,165,250,0.1)',fill:true,tension:0.4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(255,255,255,0.03)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('typeChart'),{type:'doughnut',data:{labels:['Property Crime (reactive)','Traffic Incidents (reactive)','Domestic/Assault (reactive)','Suspicious Activity (proactive)','Warrant Service (proactive)','Community Patrol (proactive)','Other'],datasets:[{data:[35,25,18,8,6,4,4],backgroundColor:['rgba(248,113,113,0.5)','rgba(251,191,36,0.5)','rgba(192,132,252,0.5)','rgba(74,222,128,0.5)','rgba(96,165,250,0.5)','rgba(74,222,128,0.3)','rgba(255,255,255,0.1)'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'right',labels:{boxWidth:8,padding:8,font:{size:9}}}}}});
+</script>
+</body>
+</html>

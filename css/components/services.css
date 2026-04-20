@@ -1,0 +1,208 @@
+/* ==========================================================================
+   Services page components — question cards, before/after, service blocks
+   ========================================================================== */
+
+/* ---- Question cards (Sound Familiar section) ---- */
+.q-card {
+  display: block;
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  transition: all var(--dur) var(--ease);
+}
+.q-card:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+}
+.q-card:hover .q-card__tag { opacity: 1; }
+
+.q-card__text {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-base);
+  margin-bottom: var(--space-3);
+}
+
+.q-card__tag {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+  line-height: 1;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+.q-card__tag--ai        { color: var(--color-purple); background: color-mix(in srgb, var(--color-purple) 10%, transparent); }
+.q-card__tag--data      { color: var(--color-blue); background: var(--color-blue-dim); }
+.q-card__tag--analytics { color: var(--color-accent); background: var(--color-accent-dim); }
+
+/* ---- Before / After comparison cards ---- */
+.ba-card {
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  flex: 1;
+  min-width: 0;
+}
+.ba-card__label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-2);
+}
+.ba-card__text {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-base);
+}
+.ba-card--before {
+  background: color-mix(in srgb, var(--color-red) 3%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-red) 12%, transparent);
+}
+.ba-card--before .ba-card__label { color: var(--color-red); }
+.ba-card--after {
+  background: var(--color-accent-ghost);
+  border: 1px solid var(--color-accent-border);
+}
+.ba-card--after .ba-card__label { color: var(--color-accent); }
+
+/* ---- Deliverables panel ---- */
+.deliverables {
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+}
+.deliverables__title {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-fg-faint);
+  margin-bottom: var(--space-3);
+}
+.deliverables__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-1) var(--space-4);
+}
+.deliverables__grid p {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+.deliverables__grid p::before {
+  content: '\203A ';
+  color: var(--color-accent);
+  margin-right: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .deliverables__grid { grid-template-columns: 1fr; }
+}
+
+/* ---- Service block (alternating layout) ---- */
+.service-block {
+  display: flex;
+  gap: var(--space-8);
+  flex-direction: column;
+}
+@media (min-width: 1024px) {
+  .service-block { flex-direction: row; }
+  .service-block--reverse { flex-direction: row-reverse; }
+}
+
+.service-block__side { flex: 0 0 40%; }
+.service-block__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.service-block__num {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-2);
+}
+.service-block__title {
+  font-size: var(--fs-xl);
+  color: var(--color-fg-strong);
+  line-height: 1.35;
+  margin-bottom: var(--space-3);
+}
+.service-block__rule {
+  width: 2.5rem;
+  height: 2px;
+  margin-bottom: var(--space-5);
+  background: linear-gradient(90deg, currentColor, transparent);
+}
+.service-block__copy {
+  color: var(--color-fg-muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  margin-bottom: var(--space-4);
+}
+.service-block__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.service-block__ba {
+  display: flex;
+  gap: var(--space-4);
+  flex-direction: column;
+}
+@media (min-width: 640px) {
+  .service-block__ba { flex-direction: row; }
+}
+
+/* Accent per-service stripe */
+.service-block--ai        { --service-accent: var(--color-purple); }
+.service-block--data      { --service-accent: var(--color-blue); }
+.service-block--analytics { --service-accent: var(--color-accent); }
+.service-block__num     { color: var(--service-accent, var(--color-accent)); }
+.service-block__rule    { color: var(--service-accent, var(--color-accent)); }
+
+/* ---- Differentiator cards ---- */
+.diff-card {
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  transition: all var(--dur) var(--ease);
+}
+.diff-card:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+}
+.diff-card__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+  margin-bottom: var(--space-2);
+}
+.diff-card__text {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+
+/* ---- "Prefer email instead" link ---- */
+.email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-fg-subtle);
+  font-size: var(--fs-xs);
+  transition: color var(--dur) var(--ease);
+}
+.email-link:hover { color: var(--color-fg); }

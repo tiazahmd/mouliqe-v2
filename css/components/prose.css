@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Prose — styled paragraph/list content (used in blog and explain copy)
+   ========================================================================== */
+
+.prose p {
+  color: var(--color-fg-muted);
+  line-height: var(--lh-loose);
+  margin-bottom: var(--space-4);
+}
+.prose p:last-child { margin-bottom: 0; }
+
+.prose ul, .prose ol {
+  list-style: none;
+  padding-left: 0;
+  margin: var(--space-3) 0;
+}
+.prose li {
+  position: relative;
+  padding-left: var(--space-5);
+  margin-bottom: var(--space-2);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-loose);
+}
+.prose ul li::before {
+  content: '\203A';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: var(--fw-bold);
+}
+.prose ol { counter-reset: ol-counter; }
+.prose ol li { counter-increment: ol-counter; }
+.prose ol li::before {
+  content: counter(ol-counter) '.';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: var(--fw-bold);
+  font-size: 0.9em;
+}

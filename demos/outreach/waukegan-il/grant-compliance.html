@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Waukegan — Grant Compliance & Outcome Tracking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>body{background:#060a14}.card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}.card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}.stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}.stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}.stat-delta{font-size:0.65rem;font-weight:600}.delta-up{color:#4ade80}.section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}.dept-row{transition:all 0.2s}.dept-row:hover{background:rgba(255,255,255,0.02)}.status-pill{font-size:0.5rem;font-weight:600;padding:0.15rem 0.4rem;border-radius:0.25rem;text-transform:uppercase}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}</style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the City of Waukegan</p>
+    <h1 class="text-2xl md:text-3xl font-bold text-white">Grant Compliance & Outcome Tracking</h1>
+    <p class="text-[0.75rem] text-white/35 mt-1">$3M+ in active violence prevention grants. BJA requires outcome reporting. This automates it.</p>
+  </header>
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1"><p class="stat-label">BJA GVPI</p><p class="stat-value mt-1">$1.2M+</p><p class="stat-delta" style="color:rgba(96,165,250,0.7)">Waukegan-focused</p></div>
+      <div class="card p-5 anim anim-d1"><p class="stat-label">ICJIA (Lake County)</p><p class="stat-value mt-1">$1.55M</p><p class="stat-delta" style="color:rgba(74,222,128,0.7)">Via State's Attorney</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">State CVI Pool</p><p class="stat-value mt-1">$100M</p><p class="stat-delta" style="color:rgba(192,132,252,0.7)">Available statewide</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">CDBG (Annual)</p><p class="stat-value mt-1">~$800K</p><p class="stat-delta" style="color:rgba(251,191,36,0.7)">HUD allocation</p></div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Grant Portfolio</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Active Funding by Source</p>
+        <canvas id="grantChart" height="200"></canvas>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Outcome Requirements</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-3">What BJA Requires You to Report</p>
+        <div class="space-y-3">
+          <div class="p-3 rounded-lg" style="background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Shooting Incident Reduction</p><p class="text-[0.58rem] text-white/35">Quarterly counts of gun homicides, non-fatal shootings, and shots fired incidents vs. baseline.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Intervention Outcomes</p><p class="text-[0.58rem] text-white/35">Number of individuals served, services provided, recidivism rates, program completion rates.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(192,132,252,0.04);border:1px solid rgba(192,132,252,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Community Impact</p><p class="text-[0.58rem] text-white/35">Geographic analysis of violence reduction by neighborhood. Community engagement metrics.</p></div>
+        </div>
+      </div>
+    </section>
+    <section class="card mt-4 anim anim-d4 overflow-hidden">
+      <div class="p-5 pb-3">
+        <p class="section-label">Grant Tracker</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">All Active Grants — Compliance Status</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-[0.68rem]"><thead><tr class="border-b border-white/5"><th class="text-left px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Grant</th><th class="text-left px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Agency</th><th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Amount</th><th class="text-left px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Reporting</th><th class="text-right px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Status</th></tr></thead><tbody id="grantTable"></tbody></table>
+      </div>
+    </section>
+    <footer class="mt-8 text-center"><p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the City of Waukegan, Illinois</p><p class="text-[0.5rem] text-white/12 mt-1">Grant data from BJA.ojp.gov and ICJIA. Reporting requirements from federal grant terms.</p></footer>
+  </main>
+<script>
+Chart.defaults.color='rgba(255,255,255,0.35)';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family='Oxanium';Chart.defaults.font.size=11;
+new Chart(document.getElementById('grantChart'),{type:'doughnut',data:{labels:['BJA GVPI','ICJIA (Lake County SA)','OJJDP Youth Violence','Co-Responder Pilot','CDBG (HUD)','Other Federal/State'],datasets:[{data:[1.2,1.55,0.5,0.3,0.8,0.4],backgroundColor:['rgba(248,113,113,0.5)','rgba(96,165,250,0.5)','rgba(192,132,252,0.5)','rgba(74,222,128,0.5)','rgba(251,191,36,0.5)','rgba(255,255,255,0.15)'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'right',labels:{boxWidth:8,padding:8,font:{size:9}}}}}});
+const sm={active:'<span class="status-pill" style="color:rgba(74,222,128,0.8);background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15)">Active</span>',reporting:'<span class="status-pill" style="color:rgba(251,191,36,0.8);background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15)">Due Soon</span>'};
+const grants=[{n:'BJA Gun Violence Prevention Initiative',a:'DOJ/BJA',amt:'$1.2M+',r:'Quarterly outcomes',s:'active'},{n:'Lake County GVPI (via SA)',a:'ICJIA',amt:'$1.55M',r:'Semi-annual',s:'active'},{n:'OJJDP Youth Violence (Schools)',a:'DOJ/OJJDP',amt:'$500K',r:'Quarterly',s:'reporting'},{n:'Co-Responder Pilot Program',a:'State/Local',amt:'$300K',r:'Monthly',s:'active'},{n:'CDBG Annual Allocation',a:'HUD',amt:'~$800K',r:'Annual (CAPER)',s:'active'},{n:'State CVI Funding (available)',a:'IL ICJIA',amt:'Up to $100M pool',r:'Per award terms',s:'<span class="status-pill" style="color:rgba(96,165,250,0.8);background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15)">Available</span>'}];
+const t=document.getElementById('grantTable');grants.forEach(g=>{t.innerHTML+=`<tr class="dept-row border-b border-white/[0.03]"><td class="px-5 py-3 text-white/60 font-medium">${g.n}</td><td class="px-4 py-3 text-white/40">${g.a}</td><td class="text-right px-4 py-3 text-white/50">${g.amt}</td><td class="px-4 py-3 text-white/40">${g.r}</td><td class="text-right px-5 py-3">${typeof g.s==='string'&&g.s.startsWith('<')?g.s:sm[g.s]}</td></tr>`;});
+</script>
+</body>
+</html>

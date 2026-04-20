@@ -1,0 +1,167 @@
+/* ==========================================================================
+   Process timeline — alternating left/right stages
+   ========================================================================== */
+
+.tl {
+  position: relative;
+  padding: var(--space-8) 0;
+}
+.tl::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--color-accent-border) 5%, var(--color-accent-border) 95%, transparent);
+  transform: translateX(-50%);
+}
+
+.tl-item {
+  position: relative;
+  width: 50%;
+  padding: 0 0 var(--space-4);
+  display: flex;
+  align-items: center;
+}
+.tl-item.left  { left: 0;   padding-right: var(--space-6); justify-content: flex-end; }
+.tl-item.right { left: 50%; padding-left: var(--space-6);  justify-content: flex-start; }
+
+.tl-dot {
+  position: absolute;
+  top: 50%;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 2px solid var(--color-accent-border);
+  z-index: 2;
+  transition: all var(--dur-slow) var(--ease);
+  transform: translateY(-50%);
+}
+.tl-item.left  .tl-dot { right: -6px; }
+.tl-item.right .tl-dot { left: -6px; }
+
+.tl-item::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  height: 1px;
+  background: var(--color-accent-border);
+  transition: background var(--dur-slow) var(--ease);
+  transform: translateY(-50%);
+  opacity: 0.5;
+}
+.tl-item.left::after  { right: 6px; width: var(--space-5); }
+.tl-item.right::after { left: 6px;  width: var(--space-5); }
+.tl-item.visible::after { opacity: 1; }
+.tl-item.visible .tl-dot {
+  border-color: var(--color-accent);
+  background: var(--color-accent-dim);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-accent) 25%, transparent);
+}
+
+.tl-card {
+  width: 100%;
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  text-align: left;
+  transition: all 0.6s var(--ease);
+  opacity: 0;
+}
+.tl-item.left  .tl-card { transform: translateX(-20px); }
+.tl-item.right .tl-card { transform: translateX(20px); }
+.tl-item.visible .tl-card {
+  opacity: 1;
+  transform: translateX(0);
+}
+.tl-card:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+}
+.tl-card--highlight {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent-border);
+}
+.tl-card--highlight:hover {
+  background: color-mix(in srgb, var(--color-accent) 6%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent) 22%, transparent);
+}
+
+.tl-card__num {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  margin-bottom: 0.1rem;
+}
+.tl-card--highlight .tl-card__num { color: var(--color-accent-hover); }
+
+.tl-card__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--color-fg-strong);
+  margin-bottom: var(--space-2);
+}
+.tl-card__text {
+  color: var(--color-fg-muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  margin-bottom: var(--space-4);
+}
+
+.tl-card__cols {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+@media (min-width: 640px) {
+  .tl-card__cols { flex-direction: row; }
+}
+.tl-card__col { flex: 1; }
+.tl-card__col-label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-2);
+}
+.tl-card__col-label--get { color: var(--color-accent); }
+.tl-card__col-label--do  { color: var(--color-blue); }
+
+.del-item {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  margin: 0.15rem 0;
+  line-height: var(--lh-base);
+}
+.del-item::before {
+  content: '\203A ';
+  margin-right: 0.25rem;
+}
+.del-item--get::before { color: var(--color-accent); }
+.del-item--do::before  { color: var(--color-blue); }
+
+/* Mobile: single column, line on left */
+@media (max-width: 768px) {
+  .tl::before { left: 0.5rem; }
+  .tl-item {
+    width: 100% !important;
+    left: 0 !important;
+    padding: 0 0 var(--space-2) var(--space-6) !important;
+    justify-content: flex-start !important;
+  }
+  .tl-item .tl-dot {
+    left: -0.1rem !important;
+    right: auto !important;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .tl-item::after {
+    left: 0.55rem !important;
+    right: auto !important;
+    width: calc(var(--space-6) - 0.55rem) !important;
+  }
+  .tl-item.left .tl-card,
+  .tl-item.right .tl-card { transform: translateY(15px); }
+  .tl-item.visible .tl-card { transform: translateY(0); }
+}

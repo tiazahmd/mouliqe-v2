@@ -1,0 +1,98 @@
+/* ==========================================================================
+   Demo gallery — card grid with stage pills
+   ========================================================================== */
+
+.demo-section-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.demo-section-head__label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+}
+.demo-section-head__label--ai    { color: var(--color-purple); }
+.demo-section-head__label--local { color: var(--color-blue); }
+.demo-section-head__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.demo-card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.demo-gallery-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: inherit;
+}
+
+.demo-gallery-card__stages {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.demo-gallery-card__stage {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-semibold);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-accent-border);
+  background: var(--color-accent-ghost);
+  color: var(--color-accent);
+  letter-spacing: var(--tracking-wide);
+  line-height: 1;
+}
+.demo-gallery-card__stage--ai {
+  border-color: color-mix(in srgb, var(--color-purple) 15%, transparent);
+  background: color-mix(in srgb, var(--color-purple) 5%, transparent);
+  color: var(--color-purple);
+}
+
+.demo-gallery-card__sep {
+  color: var(--color-fg-faint);
+  font-size: var(--fs-xxs);
+}
+
+.demo-gallery-card__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--color-fg-strong);
+  margin-bottom: var(--space-2);
+}
+
+.demo-gallery-card__desc {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+
+.demo-gallery-card__cta {
+  margin-top: auto;
+  padding-top: var(--space-1);
+}
+.demo-gallery-card__cta-text {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+.demo-gallery-card__cta-arrow {
+  display: inline-block;
+  transition: transform var(--dur) var(--ease);
+}
+.demo-gallery-card:hover .demo-gallery-card__cta-arrow {
+  transform: translateX(4px);
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Pueblo — Colorado AI Act Compliance Assessment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>body{background:#060a14}.card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}.card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}.stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}.stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}.stat-delta{font-size:0.65rem;font-weight:600}.delta-up{color:#4ade80}.delta-down{color:#f87171}.section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}.alert-card{border-left:3px solid #f87171;background:rgba(248,113,113,0.04);padding:1rem;border-radius:0 0.5rem 0.5rem 0}.dept-row{transition:all 0.2s}.dept-row:hover{background:rgba(255,255,255,0.02)}.risk-high{color:rgba(248,113,113,0.8);background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15)}.risk-med{color:rgba(251,191,36,0.8);background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15)}.risk-low{color:rgba(74,222,128,0.8);background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15)}.risk-pill{font-size:0.5rem;font-weight:600;padding:0.15rem 0.4rem;border-radius:0.25rem;text-transform:uppercase}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}</style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the City of Pueblo</p>
+    <h1 class="text-2xl md:text-3xl font-bold text-white">Colorado AI Act Compliance Assessment</h1>
+    <p class="text-[0.75rem] text-white/35 mt-1">CAIA deadline: June 30, 2026. ShotSpotter. Genetec. CopLink. LPRs. Red light cameras. Are they compliant?</p>
+  </header>
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+    <div class="alert-card anim anim-d1 mt-6">
+      <p class="text-[0.7rem] font-bold text-white/70">~80 days until CAIA compliance deadline. Pueblo has at least 5 AI systems that likely qualify as "high-risk."</p>
+      <p class="text-[0.6rem] text-white/40 mt-1">The Colorado AI Act (SB24-205) requires deployers of high-risk AI systems to complete impact assessments, implement governance frameworks, and provide public notice by June 30, 2026. Pueblo's RTCC systems — ShotSpotter, Genetec, CopLink, LPRs, and red light cameras — almost certainly qualify. No AI governance framework is visible.</p>
+    </div>
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+      <div class="card p-5 anim anim-d1"><p class="stat-label">CAIA Deadline</p><p class="stat-value mt-1" style="color:rgba(248,113,113,0.85)">Jun 30</p><p class="stat-delta delta-down mt-1">~80 days remaining</p></div>
+      <div class="card p-5 anim anim-d1"><p class="stat-label">AI Systems Identified</p><p class="stat-value mt-1">5+</p><p class="stat-delta delta-down mt-1">Likely high-risk</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">AI Governance</p><p class="stat-value mt-1">None</p><p class="stat-delta delta-down mt-1">No framework visible</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">ShotSpotter Detections</p><p class="stat-value mt-1">676</p><p class="stat-delta" style="color:rgba(96,165,250,0.7)">In 5 months (97% accuracy)</p></div>
+    </section>
+    <!-- AI Systems Assessment Table -->
+    <section class="card mt-4 anim anim-d3 overflow-hidden">
+      <div class="p-5 pb-3">
+        <p class="section-label">AI System Inventory</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Systems Requiring CAIA Assessment</p>
+        <p class="text-[0.6rem] text-white/25 mt-1">High-risk AI systems that make or substantially inform consequential decisions affecting Colorado residents</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-[0.68rem]"><thead><tr class="border-b border-white/5"><th class="text-left px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">System</th><th class="text-left px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Vendor</th><th class="text-left px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Function</th><th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">CAIA Risk</th><th class="text-right px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Status</th></tr></thead><tbody id="systemTable"></tbody></table>
+      </div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d4">
+        <p class="section-label">CAIA Requirements</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-3">What Deployers Must Do by June 30</p>
+        <div class="space-y-3">
+          <div class="p-3 rounded-lg" style="background:rgba(248,113,113,0.04);border:1px solid rgba(248,113,113,0.1)"><p class="text-[0.65rem] font-bold text-white/60">1. AI Impact Assessment</p><p class="text-[0.58rem] text-white/35">Document each high-risk AI system: purpose, data inputs, outputs, potential for algorithmic discrimination, mitigation measures.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.1)"><p class="text-[0.65rem] font-bold text-white/60">2. Governance Framework</p><p class="text-[0.58rem] text-white/35">Establish policies for AI system oversight, human review processes, and ongoing monitoring. Assign accountability.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.1)"><p class="text-[0.65rem] font-bold text-white/60">3. Public Notice</p><p class="text-[0.58rem] text-white/35">Publish notice that AI systems are in use, what decisions they inform, and how residents can contest AI-influenced decisions.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.1)"><p class="text-[0.65rem] font-bold text-white/60">4. Ongoing Monitoring</p><p class="text-[0.58rem] text-white/35">Continuous monitoring for bias, accuracy degradation, and unintended consequences. Annual reassessment required.</p></div>
+        </div>
+      </div>
+      <div class="card p-5 anim anim-d4">
+        <p class="section-label">Mouliqe Deliverables</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-3">CAIA Compliance Package — 60 Days</p>
+        <div class="space-y-3">
+          <div class="p-3 rounded-lg" style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Week 1-2: AI System Inventory</p><p class="text-[0.58rem] text-white/35">Catalog all AI/ML systems across departments. Classify risk levels per CAIA definitions.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Week 3-5: Impact Assessments</p><p class="text-[0.58rem] text-white/35">Complete impact assessment for each high-risk system. Document data flows, decision processes, bias mitigation.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(192,132,252,0.04);border:1px solid rgba(192,132,252,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Week 6-7: Governance Framework</p><p class="text-[0.58rem] text-white/35">Draft AI governance policy, oversight procedures, public notice templates, and monitoring protocols.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Week 8: Implementation</p><p class="text-[0.58rem] text-white/35">Publish public notices, train staff, establish monitoring dashboards, file compliance documentation.</p></div>
+        </div>
+      </div>
+    </section>
+    <footer class="mt-8 text-center"><p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the City of Pueblo, Colorado</p><p class="text-[0.5rem] text-white/12 mt-1">CAIA requirements from SB24-205. ShotSpotter data from KRDO (July 2024). RTCC grant from DOLA ($1M, Fox21).</p></footer>
+  </main>
+<script>
+const systems=[{s:'ShotSpotter (SoundThinking)',v:'SoundThinking',f:'Gunshot detection — acoustic sensors classify sounds as gunfire',r:'<span class="risk-pill risk-high">High Risk</span>',st:'<span style="color:rgba(248,113,113,0.7)">No assessment</span>'},{s:'Genetec Video Analytics',v:'Genetec',f:'Video surveillance with object/behavior detection algorithms',r:'<span class="risk-pill risk-high">High Risk</span>',st:'<span style="color:rgba(248,113,113,0.7)">No assessment</span>'},{s:'CopLink Intelligence',v:'Forensic Logic',f:'Cross-jurisdictional data mining and pattern analysis',r:'<span class="risk-pill risk-high">High Risk</span>',st:'<span style="color:rgba(248,113,113,0.7)">No assessment</span>'},{s:'License Plate Readers (LPR)',v:'Multiple',f:'Automated plate recognition with hotlist matching',r:'<span class="risk-pill risk-med">Medium-High</span>',st:'<span style="color:rgba(248,113,113,0.7)">No assessment</span>'},{s:'Red Light Cameras',v:'Unknown',f:'Automated traffic violation detection and citation',r:'<span class="risk-pill risk-med">Medium-High</span>',st:'<span style="color:rgba(248,113,113,0.7)">No assessment</span>'},{s:'Blitz AI (County)',v:'Blitz',f:'AI-powered government operations (Pueblo County adopted)',r:'<span class="risk-pill risk-med">Medium</span>',st:'<span style="color:rgba(251,191,36,0.7)">County only</span>'}];
+const t=document.getElementById('systemTable');systems.forEach(s=>{t.innerHTML+=`<tr class="dept-row border-b border-white/[0.03]"><td class="px-5 py-3 text-white/60 font-medium">${s.s}</td><td class="px-4 py-3 text-white/40">${s.v}</td><td class="px-4 py-3 text-white/40">${s.f}</td><td class="text-right px-4 py-3">${s.r}</td><td class="text-right px-5 py-3">${s.st}</td></tr>`;});
+</script>
+</body>
+</html>

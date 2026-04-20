@@ -1,0 +1,246 @@
+/* ==========================================================================
+   Resume page — cards, bullets, skill pills, export bar
+   ========================================================================== */
+
+/* ---- Export button bar (fixed top-right) ---- */
+.export-bar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: var(--z-backtotop);
+  padding: var(--space-4) var(--space-6);
+}
+.export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius);
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: #0a2e18;
+  background: var(--color-accent);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--dur) var(--ease);
+  text-decoration: none;
+}
+.export-btn:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+/* ---- Resume card ---- */
+.r-card {
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  position: relative;
+  transition: all var(--dur) var(--ease);
+}
+.r-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--space-6);
+  right: var(--space-6);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-accent-border), transparent);
+}
+.r-card:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+}
+.r-card--highlight {
+  border-color: var(--color-accent-border);
+  background: var(--color-accent-ghost);
+}
+
+.r-card__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--color-fg-strong);
+  margin-bottom: 0.15rem;
+}
+.r-card__tech {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-faint);
+  margin-bottom: var(--space-3);
+}
+.r-card__bullets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* ---- Tags (small rectangular labels) ---- */
+.r-tag {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  display: inline-block;
+}
+.r-tag--green  { color: var(--color-accent); background: var(--color-accent-dim); }
+.r-tag--blue   { color: var(--color-blue);   background: var(--color-blue-dim); }
+.r-tag--purple { color: var(--color-purple); background: color-mix(in srgb, var(--color-purple) 10%, transparent); }
+.r-tag--amber  { color: var(--color-amber);  background: var(--color-amber-dim); }
+
+/* ---- Bullets ---- */
+.r-bullet {
+  position: relative;
+  padding-left: var(--space-4);
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-loose);
+}
+.r-bullet::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+/* ---- Skill pill (smaller than .pill) ---- */
+.skill-pill {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  color: var(--color-fg-subtle);
+  transition: all var(--dur) var(--ease);
+}
+.skill-pill:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+  color: var(--color-fg);
+}
+
+/* ---- Experience sub-role ---- */
+.r-subrole {
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--color-border);
+}
+.r-subrole--ai   { border-left-color: color-mix(in srgb, var(--color-purple) 20%, transparent); }
+.r-subrole--dev  { border-left-color: color-mix(in srgb, var(--color-blue)   20%, transparent); }
+
+.r-subrole__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+.r-subrole__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+.r-subrole__title--ai  { color: var(--color-purple); }
+.r-subrole__title--dev { color: var(--color-blue); }
+.r-subrole__title--old { color: var(--color-fg-subtle); }
+.r-subrole__date {
+  font-size: var(--fs-xxs);
+  color: var(--color-fg-faint);
+}
+
+/* ---- Experience card company header ---- */
+.r-company-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: 0.15rem;
+}
+.r-company {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--color-fg-strong);
+}
+.r-company--mouliqe { color: var(--color-accent); letter-spacing: var(--tracking-wider); text-transform: uppercase; }
+.r-company--aws     { color: var(--color-blue); }
+.r-date {
+  font-size: var(--fs-xxs);
+  color: var(--color-fg-faint);
+}
+.r-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg-subtle);
+  margin-bottom: var(--space-3);
+}
+
+/* ---- Contact row ---- */
+.r-contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+.r-contact-btn {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition: all var(--dur) var(--ease);
+  text-decoration: none;
+}
+.r-contact-btn:hover {
+  color: var(--color-fg);
+  border-color: var(--color-border-strong);
+}
+
+/* ---- Category label ---- */
+.r-cat-label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-3);
+}
+.r-cat-label--green  { color: var(--color-accent); }
+.r-cat-label--blue   { color: var(--color-blue); }
+.r-cat-label--amber  { color: var(--color-amber); }
+.r-cat-label--purple { color: var(--color-purple); }
+.r-cat-label--red    { color: var(--color-red); }
+.r-cat-label--muted  { color: var(--color-fg-faint); }
+
+/* ---- Print styles: hide chrome, simple black-on-white ---- */
+@media print {
+  .sidebar,
+  .mobile-toggle,
+  .mobile-menu,
+  .mobile-overlay,
+  .back-to-top,
+  .export-bar { display: none !important; }
+  .main-content { margin-left: 0 !important; }
+  body { background: #fff !important; color: #1a1a1a !important; font-size: 11px !important; }
+  .r-card { border-color: #e5e5e5 !important; background: #fafafa !important; }
+  .r-card::before { display: none; }
+  section { padding-block: var(--space-2) !important; }
+  * { color: #1a1a1a !important; }
+  .r-bullet::before { background: #22c55e !important; }
+}

@@ -1,0 +1,103 @@
+/* ==========================================================================
+   Buttons — primary (filled green), secondary (amber outline), accent (blue outline)
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  line-height: 1.2;
+  border-radius: var(--radius);
+  font-weight: var(--fw-semibold);
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--dur) var(--ease);
+  font-family: inherit;
+}
+
+.btn:disabled { opacity: 0.5; pointer-events: none; }
+
+/* ---- Primary: filled forest green ---- */
+.btn--primary {
+  background: linear-gradient(135deg, var(--color-accent-strong), var(--color-accent-hover));
+  color: #dcfce7;
+}
+:root[data-theme="light"] .btn--primary { color: #f0fdf4; }
+.btn--primary:hover {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-raised);
+}
+
+/* ---- Secondary: amber outline ---- */
+.btn--secondary {
+  color: var(--color-amber);
+  border-color: var(--color-amber-border);
+  background: var(--color-amber-dim);
+}
+.btn--secondary:hover {
+  color: var(--color-amber);
+  border-color: var(--color-amber);
+  background: color-mix(in srgb, var(--color-amber) 12%, transparent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* ---- Accent: blue outline ---- */
+.btn--accent {
+  color: var(--color-blue);
+  border-color: var(--color-blue-border);
+  background: var(--color-blue-dim);
+}
+.btn--accent:hover {
+  color: var(--color-blue);
+  border-color: var(--color-blue);
+  background: color-mix(in srgb, var(--color-blue) 10%, transparent);
+  transform: translateY(-2px);
+}
+
+/* ---- Ghost: subtle text link with arrow ---- */
+.btn--ghost {
+  padding: var(--space-2) 0;
+  color: var(--color-accent);
+  border: none;
+  background: none;
+  text-transform: uppercase;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wider);
+}
+.btn--ghost .arrow { transition: transform var(--dur) var(--ease); display: inline-block; }
+.btn--ghost:hover .arrow { transform: translateX(4px); }
+
+/* ---- Back to top ---- */
+.back-to-top {
+  position: fixed;
+  bottom: var(--space-8);
+  right: var(--space-8);
+  z-index: var(--z-backtotop);
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-fg-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--dur) var(--ease);
+}
+.back-to-top.visible { opacity: 1; pointer-events: auto; }
+.back-to-top:hover {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent-border);
+  color: var(--color-accent);
+}

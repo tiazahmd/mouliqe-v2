@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Greeley — Executive Dashboard Concept</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">☀</span><span class="demo-theme-moon">☾</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div class="demo-flex demo-justify-between demo-items-center">
+      <div>
+        <p class="demo-eyebrow">Prepared by Mouliqe for the City of Greeley</p>
+        <h1 class="demo-title">Executive Performance Dashboard</h1>
+        <p class="demo-subtitle">Cross-department visibility — unified from 6 city platforms</p>
+      </div>
+      <div class="demo-text-right" style="display:none" id="updatedWrap">
+        <p class="demo-meta-label">Last updated</p>
+        <p class="demo-meta-value" id="lastUpdated"></p>
+      </div>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--blue">CitySourced 311</span>
+      <span class="demo-tag demo-tag--green">Questica Budget</span>
+      <span class="demo-tag demo-tag--amber">RTIC Public Safety</span>
+      <span class="demo-tag demo-tag--purple">SpeakUp Engagement</span>
+      <span class="demo-tag demo-tag--red">CivicClerk Legislative</span>
+      <span class="demo-tag demo-tag--neutral">GovDelivery Comms</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <!-- KPI Cards -->
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">311 Requests (YTD)</p>
+        <p class="demo-stat-value">4,218</p>
+        <p class="demo-stat-delta demo-stat-delta--down">-12% vs prior year</p>
+        <p class="demo-stat-source">Source: CitySourced</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Violent Crime (2025)</p>
+        <p class="demo-stat-value">626</p>
+        <p class="demo-stat-delta demo-stat-delta--up">-27% vs 2024</p>
+        <p class="demo-stat-source">Source: RTIC / GPD</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Budget Execution</p>
+        <p class="demo-stat-value">68.2%</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Q3 of $541.8M</p>
+        <p class="demo-stat-source">Source: Questica</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Citizen Engagement</p>
+        <p class="demo-stat-value">2,847</p>
+        <p class="demo-stat-delta demo-stat-delta--up">+34% vs prior year</p>
+        <p class="demo-stat-source">Source: SpeakUp</p>
+      </div>
+    </section>
+
+    <!-- Charts Row 1 -->
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div class="demo-flex demo-justify-between demo-items-center" style="margin-bottom:1rem">
+          <div>
+            <p class="demo-section-label">Public Safety</p>
+            <p class="demo-section-title">Crime Trends — Greeley PD</p>
+          </div>
+          <span class="demo-tag demo-tag--amber">RTIC</span>
+        </div>
+        <canvas id="crimeChart" height="200"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div class="demo-flex demo-justify-between demo-items-center" style="margin-bottom:1rem">
+          <div>
+            <p class="demo-section-label">Citizen Services</p>
+            <p class="demo-section-title">311 Requests by Category</p>
+          </div>
+          <span class="demo-tag demo-tag--blue">CitySourced</span>
+        </div>
+        <canvas id="requestsChart" height="200"></canvas>
+      </div>
+    </section>
+
+    <!-- Charts Row 2 -->
+    <section class="demo-grid demo-grid--2-3 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div class="demo-flex demo-justify-between demo-items-center" style="margin-bottom:1rem">
+          <div>
+            <p class="demo-section-label">Finance</p>
+            <p class="demo-section-title">Budget Execution by Department</p>
+          </div>
+          <span class="demo-tag demo-tag--green">Questica</span>
+        </div>
+        <canvas id="budgetChart" height="180"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div class="demo-flex demo-justify-between demo-items-center" style="margin-bottom:1rem">
+          <div>
+            <p class="demo-section-label">Engagement</p>
+            <p class="demo-section-title">SpeakUp Projects</p>
+          </div>
+          <span class="demo-tag demo-tag--purple">SpeakUp</span>
+        </div>
+        <canvas id="engagementChart" height="180"></canvas>
+      </div>
+    </section>
+
+    <!-- Department Scorecard Table -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Innovation & High Performance</p>
+        <p class="demo-section-title">Department Performance Scorecard</p>
+        <p class="demo-section-sub">Cross-referenced from all 6 data sources — PMO view for Kylie Jackson's team</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead>
+            <tr>
+              <th>Department</th>
+              <th class="demo-right">311 Open</th>
+              <th class="demo-right">Avg Response</th>
+              <th class="demo-right">Budget Used</th>
+              <th class="demo-right">Satisfaction</th>
+              <th class="demo-right">Trend</th>
+            </tr>
+          </thead>
+          <tbody id="deptTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Data Architecture -->
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <p class="demo-section-label">Data Architecture</p>
+      <p class="demo-section-title" style="margin-bottom:1rem">How This Dashboard Works</p>
+      <div class="demo-flex-wrap demo-items-center demo-text-center demo-gap-3" style="justify-content:center">
+        <span class="demo-node demo-node--blue">CitySourced 311</span>
+        <span class="demo-node-plus">+</span>
+        <span class="demo-node demo-node--green">Questica Budget</span>
+        <span class="demo-node-plus">+</span>
+        <span class="demo-node demo-node--amber">RTIC / GPD</span>
+        <span class="demo-node-plus">+</span>
+        <span class="demo-node demo-node--purple">SpeakUp</span>
+        <span class="demo-node-arrow">&#8594;</span>
+        <span class="demo-node demo-node--neutral">ETL Pipeline</span>
+        <span class="demo-node-arrow">&#8594;</span>
+        <span class="demo-node demo-node--final">Unified Dashboard</span>
+      </div>
+      <p class="demo-section-sub demo-text-center" style="margin-top:1rem">Mouliqe connects your existing platforms — no rip-and-replace required</p>
+    </section>
+
+    <footer class="demo-footer">
+      <p class="demo-footer-main">Concept prepared by <span class="demo-brand">Mouliqe</span> for the City of Greeley, Colorado</p>
+      <p class="demo-footer-sub">Data shown is illustrative, based on publicly available city statistics. A live implementation would connect directly to your systems.</p>
+    </footer>
+  </main>
+
+  <script src="/demos/_demo.js?v=8"></script>
+  <script>
+    var updated = document.getElementById('lastUpdated');
+    if (updated) {
+      updated.textContent = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      document.getElementById('updatedWrap').style.display = 'block';
+    }
+
+    var charts = [];
+    function gridColor(){ return demoCssVar('--color-border-soft') || 'rgba(127,127,127,0.06)'; }
+    function axisColor(){ return demoCssVar('--color-fg-faint') || 'rgba(127,127,127,0.4)'; }
+
+    function buildCharts() {
+      charts.forEach(function(c){ c.destroy(); });
+      charts = [];
+
+      var gc = gridColor(), ac = axisColor();
+
+      charts.push(new Chart(document.getElementById('crimeChart'), {
+        type: 'bar',
+        data: {
+          labels: ['2020','2021','2022','2023','2024','2025'],
+          datasets: [
+            { label: 'Violent Crime',  data: [780, 820, 890, 856, 857, 626],  backgroundColor: 'rgba(248,113,113,0.55)', borderRadius: 4 },
+            { label: 'Property Crime', data: [4100,4350,4500,4200,3990,3254], backgroundColor: 'rgba(251,191,36,0.5)',  borderRadius: 4 }
+          ]
+        },
+        options: { responsive:true, plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, padding:15, font:{size:10}, color: ac } } }, scales:{ y:{ grid:{ color: gc }, ticks:{ color: ac } }, x:{ grid:{ display:false }, ticks:{ color: ac } } } }
+      }));
+
+      charts.push(new Chart(document.getElementById('requestsChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Road/Pothole','Code Violation','Water/Sewer','Noise Complaint','Parks/Trees','Graffiti','Parking','Other'],
+          datasets: [{ data: [890,720,580,410,380,340,298,600], backgroundColor: ['rgba(96,165,250,0.65)','rgba(248,113,113,0.55)','rgba(74,222,128,0.55)','rgba(251,191,36,0.55)','rgba(192,132,252,0.55)','rgba(127,127,127,0.35)','rgba(96,165,250,0.35)','rgba(127,127,127,0.2)'], borderWidth: 0 }]
+        },
+        options: { responsive:true, cutout:'60%', plugins:{ legend:{ position:'right', labels:{ boxWidth:8, padding:8, font:{size:9}, color: ac } } } }
+      }));
+
+      charts.push(new Chart(document.getElementById('budgetChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Public Safety','Public Works','Water & Sewer','Community Dev','Parks & Rec','Finance','IT','Innovation','Other'],
+          datasets: [
+            { label: 'Spent',     data: [98.2,52.1,68.4,18.3,14.7,8.2,6.8,1.2,101.5], backgroundColor: 'rgba(74,222,128,0.55)', borderRadius: 4 },
+            { label: 'Remaining', data: [32.8,17.9,22.6,6.7,5.3,2.8,2.2,0.8,33.5],   backgroundColor: gc, borderRadius: 4 }
+          ]
+        },
+        options: { responsive:true, indexAxis:'y', plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, padding:15, font:{size:10}, color: ac } } }, scales:{ x:{ stacked:true, grid:{ color: gc }, ticks:{ color: ac, callback: v => '$'+v+'M' } }, y:{ stacked:true, grid:{ display:false }, ticks:{ color: ac } } } }
+      }));
+
+      charts.push(new Chart(document.getElementById('engagementChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Cascadia','Civic Campus','Transit Plan','Parks Master','Budget Input','Code Update'],
+          datasets: [{ data: [1240,680,420,280,145,82], backgroundColor: 'rgba(192,132,252,0.55)', borderRadius: 4 }]
+        },
+        options: { responsive:true, indexAxis:'y', plugins:{ legend:{ display:false } }, scales:{ x:{ grid:{ color: gc }, ticks:{ color: ac } }, y:{ grid:{ display:false }, ticks:{ color: ac } } } }
+      }));
+    }
+
+    window.demoRerenderCharts = buildCharts;
+    document.addEventListener('DOMContentLoaded', buildCharts);
+
+    var depts = [
+      { name:'Public Safety (Police)',        open:42,  resp:'4.2 min',  budget:'75%', sat:'82%', trend:'up'   },
+      { name:'Public Works & Transportation', open:187, resp:'3.1 days', budget:'74%', sat:'71%', trend:'flat' },
+      { name:'Water & Sewer',                 open:63,  resp:'1.8 days', budget:'75%', sat:'78%', trend:'up'   },
+      { name:'Community Development',         open:94,  resp:'4.7 days', budget:'73%', sat:'65%', trend:'down' },
+      { name:'Code Compliance',               open:156, resp:'6.2 days', budget:'68%', sat:'58%', trend:'down' },
+      { name:'Parks, Recreation & Culture',   open:38,  resp:'2.4 days', budget:'74%', sat:'84%', trend:'up'   },
+      { name:'Housing Solutions',             open:27,  resp:'5.1 days', budget:'71%', sat:'62%', trend:'flat' },
+      { name:'Finance',                       open:12,  resp:'1.2 days', budget:'75%', sat:'88%', trend:'up'   },
+      { name:'Innovation & High Performance', open:0,   resp:'—',        budget:'60%', sat:'—',   trend:'new'  },
+    ];
+    var tbody = document.getElementById('deptTable');
+    depts.forEach(function(d){
+      var trend = d.trend === 'up'   ? '<span class="demo-text-accent">▲</span>'
+                : d.trend === 'down' ? '<span class="demo-text-red">▼</span>'
+                : d.trend === 'new'  ? '<span class="demo-text-blue" style="font-size:0.5rem;font-weight:700">NEW</span>'
+                : '<span class="demo-fg-dim">▬</span>';
+      var satN = parseFloat(d.sat);
+      var satCls = isNaN(satN) ? 'demo-fg-dim' : satN >= 80 ? 'demo-text-accent' : satN >= 70 ? 'demo-text-amber' : 'demo-text-red';
+      tbody.insertAdjacentHTML('beforeend',
+        '<tr><td>'+d.name+'</td>'
+        +'<td class="demo-right">'+d.open+'</td>'
+        +'<td class="demo-right">'+d.resp+'</td>'
+        +'<td class="demo-right">'+d.budget+'</td>'
+        +'<td class="demo-right '+satCls+'">'+d.sat+'</td>'
+        +'<td class="demo-right">'+trend+'</td></tr>');
+    });
+  </script>
+</body>
+</html>

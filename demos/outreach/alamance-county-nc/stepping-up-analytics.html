@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alamance County — Stepping Up Initiative Analytics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: #060a14; }
+    .card { background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 0.75rem; }
+    .card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+    .stat-value { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+    .stat-label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); }
+    .stat-sub { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
+    .section-label { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.25); }
+    .toggle-btn { font-size: 0.6rem; padding: 0.3rem 0.7rem; border-radius: 9999px; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: rgba(255,255,255,0.35); }
+    .toggle-btn.active { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.3); color: #4ade80; }
+    .risk-high { color: #f87171; }
+    .risk-med { color: #fbbf24; }
+    .risk-low { color: #4ade80; }
+    .progress-bg { background: rgba(255,255,255,0.05); border-radius: 9999px; height: 6px; }
+    .progress-fill { border-radius: 9999px; height: 6px; transition: width 0.8s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    .anim { animation: fadeUp 0.5s ease both; }
+    .anim-d1 { animation-delay: 0.1s; } .anim-d2 { animation-delay: 0.2s; }
+    .anim-d3 { animation-delay: 0.3s; } .anim-d4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for Alamance County, NC</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-white">Stepping Up Initiative — Analytics Dashboard</h1>
+        <p class="text-[0.75rem] text-white/35 mt-1">Behavioral health + criminal justice data integration — cross-agency visibility</p>
+      </div>
+      <div class="text-right hidden md:block">
+        <p class="text-[0.6rem] text-white/25">Data period</p>
+        <p class="text-[0.75rem] text-white/50 font-semibold">Jan – Dec 2025</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-4">
+      <span class="toggle-btn active" style="color:rgba(192,132,252,0.7);background:rgba(192,132,252,0.08);border-color:rgba(192,132,252,0.15)">Detention Center</span>
+      <span class="toggle-btn active" style="color:rgba(96,165,250,0.7);background:rgba(96,165,250,0.08);border-color:rgba(96,165,250,0.15)">Vaya Health / RHA</span>
+      <span class="toggle-btn active" style="color:rgba(251,191,36,0.7);background:rgba(251,191,36,0.08);border-color:rgba(251,191,36,0.15)">Sheriff's Office</span>
+      <span class="toggle-btn active" style="color:rgba(74,222,128,0.7);background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.15)">Social Services</span>
+      <span class="toggle-btn active" style="color:rgba(248,113,113,0.7);background:rgba(248,113,113,0.08);border-color:rgba(248,113,113,0.15)">Family Justice Center</span>
+    </div>
+  </header>
+
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+
+    <!-- KPI Cards -->
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Inmates Seen by BH</p>
+        <p class="stat-value mt-1">659</p>
+        <p class="stat-sub mt-1">Annual total (2025)</p>
+        <p class="text-[0.5rem] text-white/20 mt-2">Source: Detention BH Records</p>
+      </div>
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Suicide Watch</p>
+        <p class="stat-value mt-1 risk-high">179</p>
+        <p class="stat-sub mt-1">Avg 14.9/month</p>
+        <p class="text-[0.5rem] text-white/20 mt-2">Source: Detention Center</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">BH Medications</p>
+        <p class="stat-value mt-1">533</p>
+        <p class="stat-sub mt-1">Administered in detention</p>
+        <p class="text-[0.5rem] text-white/20 mt-2">Source: Detention Pharmacy</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Crisis Hub Diverted</p>
+        <p class="stat-value mt-1 risk-low">~240</p>
+        <p class="stat-sub mt-1">Est. since Apr 2025 launch</p>
+        <p class="text-[0.5rem] text-white/20 mt-2">Source: Vaya Health / RHA</p>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="stat-label">Recidivism (BH)</p>
+        <p class="stat-value mt-1 risk-med">—</p>
+        <p class="stat-sub mt-1">Not currently tracked</p>
+        <p class="text-[0.5rem] text-white/15 mt-2 italic">Gap: no cross-system linkage</p>
+      </div>
+    </section>
+
+    <!-- Monthly Trends Chart -->
+    <section class="mt-8 anim anim-d3">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="section-label">Monthly Behavioral Health Trends — Detention Center</p>
+          <p class="text-[0.65rem] text-white/25 mt-1">Inmates seen, suicide watch placements, and medication administration</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="toggle-btn active" onclick="toggleDataset(0, this)">BH Seen</button>
+          <button class="toggle-btn active" onclick="toggleDataset(1, this)">Suicide Watch</button>
+          <button class="toggle-btn active" onclick="toggleDataset(2, this)">Medications</button>
+        </div>
+      </div>
+      <div class="card p-6" style="height: 320px;">
+        <canvas id="trendsChart"></canvas>
+      </div>
+    </section>
+
+
+    <!-- Cross-Agency Data Flow -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Cross-Agency Intervention Pipeline — Current vs. Integrated</p>
+      <div class="grid md:grid-cols-2 gap-4">
+        <!-- Current State -->
+        <div class="card p-6">
+          <p class="text-[0.7rem] font-semibold text-white/50 mb-4">Current State <span class="risk-high text-[0.6rem]">(Siloed)</span></p>
+          <div class="space-y-3" id="currentFlow">
+            <div class="flex items-center gap-3">
+              <div class="w-2 h-2 rounded-full bg-purple-400/60"></div>
+              <div class="flex-1 text-[0.65rem] text-white/40">Arrest / Booking</div>
+              <div class="text-[0.55rem] text-white/20">Sheriff RMS</div>
+            </div>
+            <div class="w-px h-4 bg-white/5 ml-1"></div>
+            <div class="flex items-center gap-3">
+              <div class="w-2 h-2 rounded-full bg-blue-400/60"></div>
+              <div class="flex-1 text-[0.65rem] text-white/40">BH Screening</div>
+              <div class="text-[0.55rem] text-white/20">Paper forms → manual entry</div>
+            </div>
+            <div class="w-px h-4 bg-white/5 ml-1"></div>
+            <div class="flex items-center gap-3">
+              <div class="w-2 h-2 rounded-full bg-yellow-400/60"></div>
+              <div class="flex-1 text-[0.65rem] text-white/40">Treatment Referral</div>
+              <div class="text-[0.55rem] text-white/20">Fax to Vaya Health</div>
+            </div>
+            <div class="w-px h-4 bg-white/5 ml-1"></div>
+            <div class="flex items-center gap-3">
+              <div class="w-2 h-2 rounded-full bg-red-400/60"></div>
+              <div class="flex-1 text-[0.65rem] text-white/40">Release / Outcome</div>
+              <div class="text-[0.55rem] text-white/20">No tracking post-release</div>
+            </div>
+            <div class="mt-4 p-3 rounded-lg" style="background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.1)">
+              <p class="text-[0.6rem] risk-high font-semibold">Data Gaps</p>
+              <ul class="text-[0.55rem] text-white/30 mt-1 space-y-1">
+                <li>- No linkage between booking and BH screening outcomes</li>
+                <li>- Referral completion rate unknown</li>
+                <li>- Post-release recidivism not tracked</li>
+                <li>- Crisis Hub diversions not connected to jail data</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- Integrated State -->
+        <div class="card p-6">
+          <p class="text-[0.7rem] font-semibold text-white/50 mb-4">Integrated State <span class="risk-low text-[0.6rem]">(Mouliqe)</span></p>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-2 h-2 rounded-full bg-green-400"></div>
+              <div class="flex-1 text-[0.65rem] text-white/60">Arrest / Booking</div>
+              <div class="text-[0.55rem] text-green-400/50">Auto-flagged BH history</div>
+            </div>
+            <div class="w-px h-4 bg-green-400/10 ml-1"></div>
+            <div class="flex items-center gap-3">
+              <div class="w-2 h-2 rounded-full bg-green-400"></div>
+              <div class="flex-1 text-[0.65rem] text-white/60">BH Screening</div>
+              <div class="text-[0.55rem] text-green-400/50">Digital intake → linked record</div>
+            </div>
+            <div class="w-px h-4 bg-green-400/10 ml-1"></div>
+            <div class="flex items-center gap-3">
+              <div class="w-2 h-2 rounded-full bg-green-400"></div>
+              <div class="flex-1 text-[0.65rem] text-white/60">Treatment / Diversion</div>
+              <div class="text-[0.55rem] text-green-400/50">Real-time referral tracking</div>
+            </div>
+            <div class="w-px h-4 bg-green-400/10 ml-1"></div>
+            <div class="flex items-center gap-3">
+              <div class="w-2 h-2 rounded-full bg-green-400"></div>
+              <div class="flex-1 text-[0.65rem] text-white/60">Outcome Tracking</div>
+              <div class="text-[0.55rem] text-green-400/50">30/60/90-day follow-up</div>
+            </div>
+            <div class="mt-4 p-3 rounded-lg" style="background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.1)">
+              <p class="text-[0.6rem] risk-low font-semibold">Unlocked Metrics</p>
+              <ul class="text-[0.55rem] text-white/30 mt-1 space-y-1">
+                <li>+ Screening-to-treatment conversion rate</li>
+                <li>+ BH recidivism rate (30/60/90 day)</li>
+                <li>+ Crisis Hub diversion effectiveness</li>
+                <li>+ Cost-per-outcome for grant reporting</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Risk Stratification -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Simulated Risk Stratification — Detention Population by BH Acuity</p>
+      <div class="card p-6">
+        <div class="flex items-center gap-6 mb-6">
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded" style="background:rgba(248,113,113,0.6)"></div><span class="text-[0.6rem] text-white/35">High Acuity (active crisis / suicide watch)</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded" style="background:rgba(251,191,36,0.5)"></div><span class="text-[0.6rem] text-white/35">Moderate (BH medication, stable)</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded" style="background:rgba(74,222,128,0.4)"></div><span class="text-[0.6rem] text-white/35">Low / Screening Only</span></div>
+        </div>
+        <div class="grid grid-cols-12 gap-1" id="heatmapGrid"></div>
+        <div class="flex justify-between mt-4">
+          <span class="text-[0.5rem] text-white/20">Jan</span><span class="text-[0.5rem] text-white/20">Feb</span><span class="text-[0.5rem] text-white/20">Mar</span>
+          <span class="text-[0.5rem] text-white/20">Apr</span><span class="text-[0.5rem] text-white/20">May</span><span class="text-[0.5rem] text-white/20">Jun</span>
+          <span class="text-[0.5rem] text-white/20">Jul</span><span class="text-[0.5rem] text-white/20">Aug</span><span class="text-[0.5rem] text-white/20">Sep</span>
+          <span class="text-[0.5rem] text-white/20">Oct</span><span class="text-[0.5rem] text-white/20">Nov</span><span class="text-[0.5rem] text-white/20">Dec</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Individual Pathway Tracker (simulated) -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Individual Pathway Tracker — Anonymized Sample Cases</p>
+      <div class="card overflow-hidden">
+        <table class="w-full text-[0.65rem]">
+          <thead>
+            <tr class="text-white/25 text-left border-b border-white/5">
+              <th class="p-4 font-semibold">Case ID</th>
+              <th class="p-4 font-semibold">Bookings (12mo)</th>
+              <th class="p-4 font-semibold">BH Diagnosis</th>
+              <th class="p-4 font-semibold">Screening</th>
+              <th class="p-4 font-semibold">Referral</th>
+              <th class="p-4 font-semibold">Treatment</th>
+              <th class="p-4 font-semibold">30-Day Status</th>
+              <th class="p-4 font-semibold">Risk</th>
+            </tr>
+          </thead>
+          <tbody id="pathwayTable"></tbody>
+        </table>
+      </div>
+      <p class="text-[0.5rem] text-white/15 mt-2 italic">Note: All case data is simulated for demonstration purposes. Real implementation would integrate Sheriff RMS, Vaya Health, and DSS records.</p>
+    </section>
+
+
+    <!-- Cost-Per-Outcome Analysis -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Cost-Per-Outcome Analysis — Jail vs. Diversion</p>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="card p-6 text-center">
+          <p class="stat-label">Avg Daily Jail Cost</p>
+          <p class="stat-value mt-2 risk-high">$85</p>
+          <p class="stat-sub mt-1">NC statewide avg (2025)</p>
+          <div class="mt-4">
+            <p class="text-[0.6rem] text-white/25">179 suicide watch placements</p>
+            <p class="text-[0.6rem] text-white/25">× avg 3.2 days × $85/day</p>
+            <p class="text-[0.75rem] font-bold risk-high mt-1">≈ $48,688 / year</p>
+            <p class="text-[0.5rem] text-white/15 mt-1">Suicide watch only — excludes general BH detention costs</p>
+          </div>
+        </div>
+        <div class="card p-6 text-center">
+          <p class="stat-label">Crisis Hub Diversion Cost</p>
+          <p class="stat-value mt-2 risk-low">$35</p>
+          <p class="stat-sub mt-1">Per encounter (est.)</p>
+          <div class="mt-4">
+            <p class="text-[0.6rem] text-white/25">~240 diversions since launch</p>
+            <p class="text-[0.6rem] text-white/25">× $35/encounter</p>
+            <p class="text-[0.75rem] font-bold risk-low mt-1">≈ $8,400</p>
+            <p class="text-[0.5rem] text-white/15 mt-1">vs. equivalent jail cost: ~$65,280</p>
+          </div>
+        </div>
+        <div class="card p-6 text-center">
+          <p class="stat-label">Estimated Annual Savings</p>
+          <p class="stat-value mt-2" style="color:rgba(96,165,250,0.8)">$56,880</p>
+          <p class="stat-sub mt-1">Crisis Hub diversions alone</p>
+          <div class="mt-4 p-3 rounded-lg" style="background:rgba(96,165,250,0.05);border:1px solid rgba(96,165,250,0.1)">
+            <p class="text-[0.55rem] text-white/30">With integrated data tracking, this number becomes <span class="font-bold text-white/50">provable</span> — critical for BJA grant renewals and Stepping Up Innovation County status.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mouliqe CTA -->
+    <section class="mt-12 mb-8 anim anim-d4">
+      <div class="card p-8 text-center" style="border-color:rgba(74,222,128,0.1)">
+        <p class="text-[0.55rem] font-semibold tracking-[0.2em] uppercase text-forest-400 mb-3">What This Dashboard Demonstrates</p>
+        <p class="text-[0.8rem] text-white/50 max-w-2xl mx-auto leading-relaxed">Alamance County's Stepping Up Initiative generates valuable cross-agency data across the Sheriff's Office, Detention Center, Vaya Health, Social Services, and the Family Justice Center — but today that data lives in separate systems with no unified view. This concept dashboard shows what becomes possible when those data streams are integrated: real-time risk stratification, outcome tracking, cost-per-diversion analysis, and the grant-ready metrics needed for BJA reporting and Stepping Up Innovation County recognition.</p>
+        <div class="flex justify-center gap-6 mt-6">
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Service Area</p>
+            <p class="text-[0.7rem] text-forest-400 font-semibold mt-1">Data Integration & Analytics</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Timeline</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">8–12 weeks to MVP</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Prepared by</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">mouliqe.com</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <script>
+    // Real data from Alamance County Stepping Up published statistics
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const bhSeen =     [47, 45, 52, 43, 60, 55, 48, 62, 54, 64, 71, 58];
+    const suicideWatch=[12, 12, 12, 13, 11, 16, 13, 21, 13, 27, 20,  9];
+    const bhMeds =     [40, 46, 42, 47, 51, 42, 29, 43, 45, 54, 49, 45];
+
+    // Monthly Trends Chart
+    const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+    const trendsChart = new Chart(trendsCtx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          { label: 'Inmates Seen by BH', data: bhSeen, borderColor: 'rgba(192,132,252,0.7)', backgroundColor: 'rgba(192,132,252,0.05)', fill: true, tension: 0.3, pointRadius: 4, pointHoverRadius: 7 },
+          { label: 'Suicide Watch', data: suicideWatch, borderColor: 'rgba(248,113,113,0.7)', backgroundColor: 'rgba(248,113,113,0.05)', fill: true, tension: 0.3, pointRadius: 4, pointHoverRadius: 7 },
+          { label: 'BH Medications', data: bhMeds, borderColor: 'rgba(96,165,250,0.7)', backgroundColor: 'rgba(96,165,250,0.05)', fill: true, tension: 0.3, pointRadius: 4, pointHoverRadius: 7 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(6,10,20,0.95)', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1,
+            titleFont: { family: 'Oxanium', size: 11 }, bodyFont: { family: 'Oxanium', size: 11 },
+            callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}` }
+          }
+        },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 10 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 10 } } }
+        }
+      }
+    });
+
+    function toggleDataset(idx, btn) {
+      const meta = trendsChart.getDatasetMeta(idx);
+      meta.hidden = !meta.hidden;
+      btn.classList.toggle('active');
+      trendsChart.update();
+    }
+
+    // Heatmap Grid — risk distribution by month (based on real ratios)
+    const grid = document.getElementById('heatmapGrid');
+    const highColor = 'rgba(248,113,113,';
+    const medColor = 'rgba(251,191,36,';
+    const lowColor = 'rgba(74,222,128,';
+
+    for (let m = 0; m < 12; m++) {
+      const total = bhSeen[m];
+      const high = suicideWatch[m];
+      const med = bhMeds[m] - high; // meds minus those on suicide watch
+      const low = total - bhMeds[m];
+      const rows = 5;
+      for (let r = 0; r < rows; r++) {
+        const cell = document.createElement('div');
+        const ratio = r / rows;
+        let color, opacity;
+        if (ratio < high / total) { color = highColor; opacity = 0.4 + (0.3 * (1 - ratio)); }
+        else if (ratio < (high + med) / total) { color = medColor; opacity = 0.3 + (0.2 * Math.random()); }
+        else { color = lowColor; opacity = 0.2 + (0.15 * Math.random()); }
+        cell.style.cssText = `background:${color}${opacity});height:18px;border-radius:3px;transition:all 0.3s;cursor:pointer;`;
+        cell.title = `${months[m]}: ${high} high / ${med > 0 ? med : 0} moderate / ${low > 0 ? low : 0} low`;
+        cell.addEventListener('mouseenter', () => { cell.style.transform = 'scale(1.15)'; cell.style.zIndex = '10'; });
+        cell.addEventListener('mouseleave', () => { cell.style.transform = 'scale(1)'; cell.style.zIndex = '1'; });
+        grid.appendChild(cell);
+      }
+    }
+
+    // Pathway Table — simulated anonymized cases
+    const cases = [
+      { id: 'AC-2025-0142', bookings: 4, dx: 'Bipolar I + SUD', screen: 'Positive', referral: 'Vaya Health', treatment: 'In progress', status: 'Engaged', risk: 'High' },
+      { id: 'AC-2025-0287', bookings: 7, dx: 'Schizophrenia', screen: 'Positive', referral: 'Crisis Hub', treatment: 'Completed', status: 'Stable housing', risk: 'High' },
+      { id: 'AC-2025-0391', bookings: 2, dx: 'MDD + Anxiety', screen: 'Positive', referral: 'DSS', treatment: 'Waitlisted', status: 'Unknown', risk: 'Medium' },
+      { id: 'AC-2025-0455', bookings: 1, dx: 'PTSD', screen: 'Positive', referral: 'FJC', treatment: 'Completed', status: 'No re-arrest', risk: 'Low' },
+      { id: 'AC-2025-0518', bookings: 5, dx: 'SUD (opioid)', screen: 'Positive', referral: 'Vaya Health', treatment: 'Dropped out', status: 'Re-arrested', risk: 'High' },
+      { id: 'AC-2025-0623', bookings: 3, dx: 'Bipolar II', screen: 'Positive', referral: 'Pending', treatment: '—', status: '—', risk: 'Medium' },
+      { id: 'AC-2025-0744', bookings: 1, dx: 'Anxiety NOS', screen: 'Negative', referral: 'N/A', treatment: 'N/A', status: 'Released', risk: 'Low' },
+    ];
+
+    const tbody = document.getElementById('pathwayTable');
+    cases.forEach(c => {
+      const riskClass = c.risk === 'High' ? 'risk-high' : c.risk === 'Medium' ? 'risk-med' : 'risk-low';
+      const statusColor = c.status === 'Re-arrested' ? 'risk-high' : c.status === 'Unknown' ? 'risk-med' : 'text-white/40';
+      const row = document.createElement('tr');
+      row.className = 'border-b border-white/3 hover:bg-white/[0.02] transition-colors cursor-pointer';
+      row.innerHTML = `
+        <td class="p-4 text-white/50 font-mono">${c.id}</td>
+        <td class="p-4 text-white/50 font-bold">${c.bookings}</td>
+        <td class="p-4 text-white/40">${c.dx}</td>
+        <td class="p-4"><span class="${c.screen === 'Positive' ? 'text-purple-400/70' : 'text-white/25'}">${c.screen}</span></td>
+        <td class="p-4 text-white/40">${c.referral}</td>
+        <td class="p-4 text-white/40">${c.treatment}</td>
+        <td class="p-4 ${statusColor}">${c.status}</td>
+        <td class="p-4 ${riskClass} font-semibold">${c.risk}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  </script>
+</body>
+</html>

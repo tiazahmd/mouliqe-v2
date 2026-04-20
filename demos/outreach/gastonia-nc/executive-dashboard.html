@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Gastonia — Executive Performance Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>body{background:#060a14}.card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}.card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}.stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}.stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}.stat-delta{font-size:0.65rem;font-weight:600}.delta-up{color:#4ade80}.section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}.dept-row{transition:all 0.2s}.dept-row:hover{background:rgba(255,255,255,0.02)}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}</style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the City of Gastonia</p>
+    <h1 class="text-2xl md:text-3xl font-bold text-white">Executive Performance Dashboard</h1>
+    <p class="text-[0.75rem] text-white/35 mt-1">$332.5M budget. $15.6M ARPA. $100M+ downtown investment. One unified view.</p>
+  </header>
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1"><p class="stat-label">FY2026 Budget</p><p class="stat-value mt-1">$332.5M</p><p class="stat-delta delta-up mt-1">No tax increase</p></div>
+      <div class="card p-5 anim anim-d1"><p class="stat-label">ARPA Funds</p><p class="stat-value mt-1">$15.6M</p><p class="stat-delta" style="color:rgba(96,165,250,0.7)">Being expended</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Downtown Investment</p><p class="stat-value mt-1">$100M+</p><p class="stat-delta delta-up mt-1">CIP grants active</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">ERP Status</p><p class="stat-value mt-1">RFP</p><p class="stat-delta" style="color:rgba(251,191,36,0.7)">Consultant sought</p></div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Budget Allocation</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">FY2026 Spending by Department</p>
+        <canvas id="budgetChart" height="220"></canvas>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Investment Pipeline</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Active Grants & Capital Projects</p>
+        <canvas id="grantChart" height="220"></canvas>
+      </div>
+    </section>
+    <section class="card mt-4 anim anim-d4 overflow-hidden">
+      <div class="p-5 pb-3">
+        <p class="section-label">Department Scorecard</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Cross-Department Performance View</p>
+        <p class="text-[0.6rem] text-white/25 mt-1">What CIO Chris Koltyk's team could deliver — unified from disconnected platforms</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-[0.68rem]"><thead><tr class="border-b border-white/5"><th class="text-left px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Department</th><th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Key Metric</th><th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Data Source</th><th class="text-right px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Trend</th></tr></thead><tbody id="deptTable"></tbody></table>
+      </div>
+    </section>
+    <footer class="mt-8 text-center"><p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the City of Gastonia, North Carolina</p><p class="text-[0.5rem] text-white/12 mt-1">Budget data from FY2026 adopted budget (WCNC). Grant data from public announcements.</p></footer>
+  </main>
+<script>
+Chart.defaults.color='rgba(255,255,255,0.35)';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family='Oxanium';Chart.defaults.font.size=11;
+new Chart(document.getElementById('budgetChart'),{type:'bar',data:{labels:['Police','Fire','Public Works','Utilities','Parks & Rec','Planning','Finance','Technology','Other'],datasets:[{data:[52,38,42,65,18,12,10,8,87.5],backgroundColor:'rgba(74,222,128,0.5)',borderRadius:4}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{callback:v=>'$'+v+'M'}},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('grantChart'),{type:'bar',data:{labels:['ARPA','COPS TEP (RTCC)','Rapid DNA Grant','CIP Tax Grants','Veterans Court','State/Federal Other'],datasets:[{data:[15.6,0.567,0.629,8.5,0.95,2.8],backgroundColor:['rgba(96,165,250,0.5)','rgba(192,132,252,0.5)','rgba(74,222,128,0.5)','rgba(251,191,36,0.5)','rgba(248,113,113,0.4)','rgba(255,255,255,0.15)'],borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{callback:v=>'$'+v+'M'}},x:{grid:{display:false}}}}});
+const depts=[{n:'Police (RTCC)',m:'187 cameras active',s:'Flock Safety',t:'<span style="color:#4ade80">&#9650;</span>'},{n:'Fire Department',m:'Response time on target',s:'CAD System',t:'<span style="color:#4ade80">&#9650;</span>'},{n:'Public Works',m:'$42M allocated',s:'ERP (pending)',t:'<span style="color:rgba(251,191,36,0.7)">&#9644;</span>'},{n:'Planning & Development',m:'CIP grants active',s:'Esri GIS',t:'<span style="color:#4ade80">&#9650;</span>'},{n:'Technology Services',m:'CTO position vacant',s:'Internal',t:'<span style="color:rgba(248,113,113,0.7)">&#9660;</span>'},{n:'Finance',m:'ERP RFP active',s:'Legacy system',t:'<span style="color:rgba(251,191,36,0.7)">&#9644;</span>'},{n:'Parks & Recreation',m:'18 parks maintained',s:'NEOGOV (HR)',t:'<span style="color:#4ade80">&#9650;</span>'},{n:'Utilities',m:'Rate increases approved',s:'Billing system',t:'<span style="color:rgba(251,191,36,0.7)">&#9644;</span>'}];
+const t=document.getElementById('deptTable');depts.forEach(d=>{t.innerHTML+=`<tr class="dept-row border-b border-white/[0.03]"><td class="px-5 py-3 text-white/60 font-medium">${d.n}</td><td class="text-right px-4 py-3 text-white/50">${d.m}</td><td class="text-right px-4 py-3 text-white/40">${d.s}</td><td class="text-right px-5 py-3">${d.t}</td></tr>`;});
+</script>
+</body>
+</html>

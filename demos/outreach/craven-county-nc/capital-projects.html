@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Craven County — Capital Projects Portfolio Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: #060a14; }
+    .card { background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 0.75rem; }
+    .card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+    .stat-value { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+    .stat-label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); }
+    .stat-sub { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
+    .section-label { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.25); }
+    .pill { font-size: 0.55rem; padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 600; }
+    .pill-green { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .pill-yellow { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+    .pill-red { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+    .pill-blue { background: rgba(96,165,250,0.1); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+    .progress-bg { background: rgba(255,255,255,0.05); border-radius: 9999px; height: 8px; overflow: hidden; }
+    .progress-fill { border-radius: 9999px; height: 8px; transition: width 1s ease; }
+    .project-row { transition: all 0.2s; cursor: pointer; }
+    .project-row:hover { background: rgba(255,255,255,0.02); }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    .anim { animation: fadeUp 0.5s ease both; }
+    .anim-d1 { animation-delay: 0.1s; } .anim-d2 { animation-delay: 0.2s; }
+    .anim-d3 { animation-delay: 0.3s; } .anim-d4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for Craven County, NC</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-white">Capital Projects — Portfolio Tracker</h1>
+        <p class="text-[0.75rem] text-white/35 mt-1">$30M+ active portfolio — budget, timeline, and risk visibility for Gene Hodges' office</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+
+    <!-- Portfolio KPIs -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Active Projects</p>
+        <p class="stat-value mt-1">18</p>
+        <p class="stat-sub mt-1">$30.4M total budget</p>
+      </div>
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">On Schedule</p>
+        <p class="stat-value mt-1" style="color:#4ade80">11</p>
+        <p class="stat-sub mt-1">61% of portfolio</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">At Risk / Delayed</p>
+        <p class="stat-value mt-1" style="color:#fbbf24">5</p>
+        <p class="stat-sub mt-1">$12.8M at risk</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Over Budget</p>
+        <p class="stat-value mt-1" style="color:#f87171">2</p>
+        <p class="stat-sub mt-1">$1.4M combined overrun</p>
+      </div>
+    </section>
+
+    <!-- Budget Allocation by Category -->
+    <section class="mt-8 anim anim-d3">
+      <p class="section-label mb-4">Capital Budget by Category</p>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card p-6" style="height: 300px;">
+          <canvas id="categoryChart"></canvas>
+        </div>
+        <div class="card p-6" style="height: 300px;">
+          <canvas id="timelineChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project List -->
+    <section class="mt-8 anim anim-d3">
+      <p class="section-label mb-4">Active Projects — Click to expand</p>
+      <div class="card overflow-hidden">
+        <table class="w-full text-[0.6rem]">
+          <thead>
+            <tr class="text-white/25 text-left border-b border-white/5">
+              <th class="p-3 font-semibold">Project</th>
+              <th class="p-3 font-semibold">Category</th>
+              <th class="p-3 font-semibold">Budget</th>
+              <th class="p-3 font-semibold">Spent</th>
+              <th class="p-3 font-semibold">Progress</th>
+              <th class="p-3 font-semibold">Completion</th>
+              <th class="p-3 font-semibold">Status</th>
+            </tr>
+          </thead>
+          <tbody id="projectTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Funding Sources -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Funding Source Mix</p>
+      <div class="card p-6" style="height: 260px;">
+        <canvas id="fundingChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Mouliqe CTA -->
+    <section class="mt-12 mb-8 anim anim-d4">
+      <div class="card p-8 text-center" style="border-color:rgba(74,222,128,0.1)">
+        <p class="text-[0.55rem] font-semibold tracking-[0.2em] uppercase text-forest-400 mb-3">What This Dashboard Demonstrates</p>
+        <p class="text-[0.8rem] text-white/50 max-w-2xl mx-auto leading-relaxed">Assistant County Manager Gene Hodges oversees $30M+ in active capital projects — from water system expansions to facility renovations to emergency infrastructure. Today, project status lives in contractor reports, spreadsheets, and meeting updates. This concept dashboard shows how a unified project portfolio tracker can give the County Manager's office real-time visibility into budget execution, timeline risk, and funding source compliance across all 18 active projects — replacing the manual status-gathering process with automated, data-driven oversight.</p>
+        <div class="flex justify-center gap-6 mt-6">
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Service Area</p>
+            <p class="text-[0.7rem] text-forest-400 font-semibold mt-1">Analytics & Business Intelligence</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Timeline</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">6–10 weeks to MVP</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Prepared by</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">mouliqe.com</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Category donut
+    const catCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(catCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Water/Sewer', 'Facilities', 'Roads/Bridges', 'Emergency Infra', 'Parks', 'IT/Technology'],
+        datasets: [{ data: [10.2, 7.8, 5.4, 3.2, 2.1, 1.7], backgroundColor: ['rgba(96,165,250,0.6)','rgba(192,132,252,0.6)','rgba(251,191,36,0.6)','rgba(248,113,113,0.6)','rgba(74,222,128,0.6)','rgba(45,212,191,0.6)'], borderWidth: 0, hoverOffset: 6 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '60%',
+        plugins: { legend: { display: true, position: 'right', labels: { color: 'rgba(255,255,255,0.3)', font: { family: 'Oxanium', size: 10 }, boxWidth: 10 } }, tooltip: { callbacks: { label: ctx => ctx.label + ': $' + ctx.parsed + 'M' } } }
+      }
+    });
+
+    // Timeline Gantt-style
+    const tlCtx = document.getElementById('timelineChart').getContext('2d');
+    new Chart(tlCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Water Main Ext.','Courthouse Reno','Bridge #247','EMS Station 5','Landfill Phase 3','IT Network Upgrade'],
+        datasets: [
+          { label: 'Completed', data: [65,40,80,25,55,90], backgroundColor: 'rgba(74,222,128,0.4)' },
+          { label: 'Remaining', data: [35,60,20,75,45,10], backgroundColor: 'rgba(255,255,255,0.06)' }
+        ]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: true, position: 'bottom', labels: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 9 }, boxWidth: 8 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.x + '%' } } },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.2)', font: { family: 'Oxanium', size: 9 }, callback: v => v + '%' }, max: 100 },
+          y: { stacked: true, grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.35)', font: { family: 'Oxanium', size: 9 } } }
+        }
+      }
+    });
+
+    // Project table
+    const projects = [
+      { name: 'Water Main Extension — Havelock', cat: 'Water/Sewer', budget: 4200000, spent: 2730000, pct: 65, date: 'Sep 2026', status: 'on-track' },
+      { name: 'Courthouse HVAC Renovation', cat: 'Facilities', budget: 3100000, spent: 1240000, pct: 40, date: 'Mar 2027', status: 'on-track' },
+      { name: 'Bridge #247 Replacement', cat: 'Roads', budget: 2800000, spent: 2240000, pct: 80, date: 'Jun 2026', status: 'on-track' },
+      { name: 'EMS Station 5 Construction', cat: 'Emergency', budget: 2400000, spent: 600000, pct: 25, date: 'Dec 2027', status: 'delayed' },
+      { name: 'Landfill Cell Phase 3', cat: 'Facilities', budget: 1900000, spent: 1045000, pct: 55, date: 'Aug 2026', status: 'on-track' },
+      { name: 'County Network Upgrade', cat: 'IT', budget: 1700000, spent: 1530000, pct: 90, date: 'May 2026', status: 'on-track' },
+      { name: 'Sewer Lift Station Rehab', cat: 'Water/Sewer', budget: 1500000, spent: 900000, pct: 60, date: 'Oct 2026', status: 'at-risk' },
+      { name: 'Emergency Ops Center Upgrade', cat: 'Emergency', budget: 1200000, spent: 480000, pct: 40, date: 'Feb 2027', status: 'on-track' },
+      { name: 'Parks Master Plan Implementation', cat: 'Parks', budget: 2100000, spent: 840000, pct: 40, date: 'Jun 2027', status: 'delayed' },
+      { name: 'DSS Building Expansion', cat: 'Facilities', budget: 3200000, spent: 3520000, pct: 95, date: 'May 2026', status: 'over-budget' },
+    ];
+    const projBody = document.getElementById('projectTable');
+    projects.forEach(p => {
+      const statusPill = p.status === 'on-track' ? 'pill-green' : p.status === 'at-risk' || p.status === 'delayed' ? 'pill-yellow' : 'pill-red';
+      const statusLabel = p.status === 'on-track' ? 'On Track' : p.status === 'at-risk' ? 'At Risk' : p.status === 'delayed' ? 'Delayed' : 'Over Budget';
+      const barColor = p.status === 'on-track' ? '#4ade80' : p.status === 'over-budget' ? '#f87171' : '#fbbf24';
+      projBody.innerHTML += `
+        <tr class="project-row border-b border-white/3">
+          <td class="p-3 text-white/60 font-semibold">${p.name}</td>
+          <td class="p-3 text-white/30">${p.cat}</td>
+          <td class="p-3 text-white/50">$${(p.budget/1000000).toFixed(1)}M</td>
+          <td class="p-3 text-white/40">$${(p.spent/1000000).toFixed(1)}M</td>
+          <td class="p-3" style="min-width:100px"><div class="progress-bg"><div class="progress-fill" style="width:${p.pct}%;background:${barColor}"></div></div><p class="text-[0.5rem] text-white/20 mt-1">${p.pct}%</p></td>
+          <td class="p-3 text-white/40">${p.date}</td>
+          <td class="p-3"><span class="pill ${statusPill}">${statusLabel}</span></td>
+        </tr>`;
+    });
+
+    // Funding sources
+    const fundCtx = document.getElementById('fundingChart').getContext('2d');
+    new Chart(fundCtx, {
+      type: 'bar',
+      data: {
+        labels: ['County Bonds', 'Federal Grants', 'State Grants', 'ARPA', 'General Fund', 'Special Revenue'],
+        datasets: [{ data: [12.5, 6.8, 4.2, 3.1, 2.4, 1.4], backgroundColor: ['rgba(96,165,250,0.5)','rgba(74,222,128,0.5)','rgba(192,132,252,0.5)','rgba(251,191,36,0.5)','rgba(248,113,113,0.5)','rgba(255,255,255,0.1)'], borderRadius: 6 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y + 'M' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.3)', font: { family: 'Oxanium', size: 10 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 10 }, callback: v => '$' + v + 'M' } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

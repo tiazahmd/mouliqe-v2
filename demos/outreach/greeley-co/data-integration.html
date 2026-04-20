@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greeley Data Integration — Architecture Concept</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <style>
+    .src-list { list-style: none; padding: 0; margin: 0.5rem 0 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .src-list li { font-size: 0.65rem; line-height: 1.5; }
+    .src-flow-arrows { font-size: 1.1rem; color: var(--color-fg-dim); letter-spacing: 0.35em; }
+    .phase-tag {
+      display: inline-block;
+      font-size: 0.55rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .phase-list { list-style: none; padding: 0; margin: 0.5rem 0 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .phase-list li { font-size: 0.6rem; color: var(--color-fg-faint); line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">☀</span><span class="demo-theme-moon">☾</span>
+  </button>
+
+  <header class="demo-container demo-container--md demo-anim">
+    <p class="demo-eyebrow">Prepared by Mouliqe for the City of Greeley</p>
+    <h1 class="demo-title">Data Integration Architecture</h1>
+    <p class="demo-subtitle">Connecting 6 disconnected platforms into a unified data layer — no rip-and-replace</p>
+  </header>
+
+  <main class="demo-container demo-container--md" style="padding-top:0;padding-bottom:4rem">
+
+    <!-- Current State -->
+    <section class="demo-card demo-mt-6 demo-anim">
+      <p class="demo-section-label">Current State</p>
+      <p class="demo-section-title">Greeley's Platform Landscape — Click any system to see details</p>
+      <p class="demo-section-sub" style="margin-bottom:1.25rem">Each platform operates independently. Data stays siloed within each system.</p>
+
+      <div class="demo-grid demo-grid--3" style="gap:0.75rem" id="sourceGrid">
+        <div class="demo-source-node demo-node--blue" onclick="selectSource(0)">
+          <p class="demo-section-label" style="color:var(--color-blue)">Citizen Services</p>
+          <p style="font-size:0.8rem;font-weight:700;margin-top:0.25rem;color:var(--color-blue)">CitySourced 311</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">~4,200 requests/year</p>
+        </div>
+        <div class="demo-source-node demo-node--green" onclick="selectSource(1)">
+          <p class="demo-section-label" style="color:var(--color-accent)">Finance</p>
+          <p style="font-size:0.8rem;font-weight:700;margin-top:0.25rem;color:var(--color-accent)">Questica OpenBook</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">$541.8M budget data</p>
+        </div>
+        <div class="demo-source-node demo-node--amber" onclick="selectSource(2)">
+          <p class="demo-section-label" style="color:var(--color-amber)">Public Safety</p>
+          <p style="font-size:0.8rem;font-weight:700;margin-top:0.25rem;color:var(--color-amber)">RTIC / GPD Systems</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">Real-time + CAD + RMS</p>
+        </div>
+        <div class="demo-source-node demo-node--purple" onclick="selectSource(3)">
+          <p class="demo-section-label" style="color:var(--color-purple)">Engagement</p>
+          <p style="font-size:0.8rem;font-weight:700;margin-top:0.25rem;color:var(--color-purple)">SpeakUp Greeley</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">~2,800 participants/year</p>
+        </div>
+        <div class="demo-source-node demo-node--red" onclick="selectSource(4)">
+          <p class="demo-section-label" style="color:var(--color-red)">Legislative</p>
+          <p style="font-size:0.8rem;font-weight:700;margin-top:0.25rem;color:var(--color-red)">CivicClerk</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">Agendas, minutes, votes</p>
+        </div>
+        <div class="demo-source-node demo-node--neutral" onclick="selectSource(5)">
+          <p class="demo-section-label">Communications</p>
+          <p style="font-size:0.8rem;font-weight:700;margin-top:0.25rem;color:var(--color-fg-subtle)">GovDelivery</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">Email campaigns, alerts</p>
+        </div>
+      </div>
+
+      <div class="demo-detail-panel demo-mt-4" id="detailPanel">
+        <p class="demo-fg-faint demo-text-center" style="font-size:0.7rem;margin-top:2rem">Click a platform above to see what data it holds and what's currently invisible</p>
+      </div>
+    </section>
+
+    <!-- Architecture Diagram -->
+    <section class="demo-card demo-mt-4 demo-anim">
+      <p class="demo-section-label">Proposed Architecture</p>
+      <p class="demo-section-title" style="margin-bottom:1.25rem">How Mouliqe Connects Everything</p>
+
+      <div class="demo-flex-col" style="gap:1rem">
+        <!-- Source layer -->
+        <div class="demo-flex-wrap demo-gap-2" style="justify-content:center">
+          <span class="demo-node demo-node--blue">CitySourced</span>
+          <span class="demo-node demo-node--green">Questica</span>
+          <span class="demo-node demo-node--amber">RTIC/GPD</span>
+          <span class="demo-node demo-node--purple">SpeakUp</span>
+          <span class="demo-node demo-node--red">CivicClerk</span>
+          <span class="demo-node demo-node--neutral">GovDelivery</span>
+        </div>
+
+        <div class="demo-text-center src-flow-arrows demo-pulse">↓ ↓ ↓ ↓ ↓ ↓</div>
+
+        <!-- ETL layer -->
+        <div class="demo-node demo-node--neutral" style="margin:0 auto;max-width:420px;flex-direction:column;padding:0.75rem 1.5rem;text-align:center">
+          <p class="demo-section-label">Integration Layer</p>
+          <p class="demo-fg" style="font-size:0.85rem;font-weight:700;margin-top:0.25rem">ETL Pipeline + API Connectors</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">Extract, transform, normalize, load — scheduled + real-time</p>
+        </div>
+
+        <div class="demo-text-center src-flow-arrows demo-pulse">↓</div>
+
+        <!-- Warehouse -->
+        <div class="demo-node demo-node--final" style="margin:0 auto;max-width:420px;flex-direction:column;padding:0.75rem 1.5rem;text-align:center">
+          <p class="demo-section-label" style="color:var(--color-accent)">Central Data Store</p>
+          <p style="font-size:0.85rem;font-weight:700;margin-top:0.25rem;color:var(--color-accent)">Greeley Data Warehouse</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">Single source of truth — all departments, all platforms, all history</p>
+        </div>
+
+        <div class="demo-text-center src-flow-arrows demo-pulse">↓ ↓ ↓</div>
+
+        <!-- Output layer -->
+        <div class="demo-flex-wrap demo-gap-3" style="justify-content:center">
+          <div class="demo-node demo-node--green" style="flex-direction:column;padding:0.75rem 1rem;text-align:center;min-width:150px">
+            <p class="demo-section-label" style="color:var(--color-accent)">Output</p>
+            <p style="font-size:0.7rem;font-weight:700;margin-top:0.25rem;color:var(--color-accent)">Executive Dashboard</p>
+            <p class="demo-fg-dim" style="font-size:0.5rem;margin-top:0.25rem">City Manager + Council</p>
+          </div>
+          <div class="demo-node demo-node--amber" style="flex-direction:column;padding:0.75rem 1rem;text-align:center;min-width:150px">
+            <p class="demo-section-label" style="color:var(--color-amber)">Output</p>
+            <p style="font-size:0.7rem;font-weight:700;margin-top:0.25rem;color:var(--color-amber)">Safety Analytics</p>
+            <p class="demo-fg-dim" style="font-size:0.5rem;margin-top:0.25rem">Police Chief + RTIC</p>
+          </div>
+          <div class="demo-node demo-node--purple" style="flex-direction:column;padding:0.75rem 1rem;text-align:center;min-width:150px">
+            <p class="demo-section-label" style="color:var(--color-purple)">Output</p>
+            <p style="font-size:0.7rem;font-weight:700;margin-top:0.25rem;color:var(--color-purple)">PMO Tracker</p>
+            <p class="demo-fg-dim" style="font-size:0.5rem;margin-top:0.25rem">Innovation Dept</p>
+          </div>
+          <div class="demo-node demo-node--blue" style="flex-direction:column;padding:0.75rem 1rem;text-align:center;min-width:150px">
+            <p class="demo-section-label" style="color:var(--color-blue)">Output</p>
+            <p style="font-size:0.7rem;font-weight:700;margin-top:0.25rem;color:var(--color-blue)">Open Data Portal</p>
+            <p class="demo-fg-dim" style="font-size:0.5rem;margin-top:0.25rem">Citizens + Media</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Implementation Roadmap -->
+    <section class="demo-mt-4 demo-anim">
+      <p class="demo-section-label" style="margin-bottom:0.75rem">Implementation Roadmap</p>
+      <div class="demo-grid demo-grid--3">
+        <div class="demo-phase-card">
+          <div class="demo-flex demo-items-center demo-gap-2" style="margin-bottom:0.75rem">
+            <span class="phase-tag" style="background:var(--color-accent-dim);color:var(--color-accent)">Phase 1</span>
+            <span class="demo-fg-dim" style="font-size:0.5rem">Weeks 1-4</span>
+          </div>
+          <p class="demo-fg-muted" style="font-size:0.75rem;font-weight:700">Foundation</p>
+          <ul class="phase-list">
+            <li>• Data audit across all 6 platforms</li>
+            <li>• API access + connector setup</li>
+            <li>• Data warehouse provisioning</li>
+            <li>• CitySourced + Questica integration</li>
+            <li>• First executive dashboard (311 + budget)</li>
+          </ul>
+          <p class="demo-text-accent" style="font-size:0.55rem;margin-top:0.75rem">Quick win: Cross-department 311 + budget view</p>
+        </div>
+        <div class="demo-phase-card">
+          <div class="demo-flex demo-items-center demo-gap-2" style="margin-bottom:0.75rem">
+            <span class="phase-tag" style="background:var(--color-blue-dim);color:var(--color-blue)">Phase 2</span>
+            <span class="demo-fg-dim" style="font-size:0.5rem">Weeks 5-8</span>
+          </div>
+          <p class="demo-fg-muted" style="font-size:0.75rem;font-weight:700">Public Safety + Engagement</p>
+          <ul class="phase-list">
+            <li>• RTIC data feed integration</li>
+            <li>• SpeakUp engagement data pipeline</li>
+            <li>• Crime analytics dashboard</li>
+            <li>• Citizen engagement correlation</li>
+            <li>• PMO tracking for Innovation dept</li>
+          </ul>
+          <p class="demo-text-blue" style="font-size:0.55rem;margin-top:0.75rem">Quick win: RTIC analytics layer goes live</p>
+        </div>
+        <div class="demo-phase-card">
+          <div class="demo-flex demo-items-center demo-gap-2" style="margin-bottom:0.75rem">
+            <span class="phase-tag" style="background:var(--color-purple-dim);color:var(--color-purple)">Phase 3</span>
+            <span class="demo-fg-dim" style="font-size:0.5rem">Weeks 9-12</span>
+          </div>
+          <p class="demo-fg-muted" style="font-size:0.75rem;font-weight:700">Intelligence + Optimization</p>
+          <ul class="phase-list">
+            <li>• Predictive models (crime, demand, budget)</li>
+            <li>• CivicClerk + GovDelivery integration</li>
+            <li>• Automated reporting (BJA grant compliance)</li>
+            <li>• Open data portal for citizens</li>
+            <li>• AI governance framework (CAIA compliance)</li>
+          </ul>
+          <p class="demo-text-purple" style="font-size:0.55rem;margin-top:0.75rem">Quick win: Automated grant reporting + public portal</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Principle -->
+    <section class="demo-card demo-mt-4 demo-text-center demo-anim">
+      <p class="demo-fg-muted" style="font-size:0.85rem;font-weight:700">The key principle: <span class="demo-text-accent">connect, don't replace.</span></p>
+      <p class="demo-fg-faint" style="font-size:0.65rem;margin-top:0.5rem;max-width:32rem;margin-left:auto;margin-right:auto">Every platform Greeley uses today stays in place. Mouliqe builds the connective tissue between them — so your teams keep their tools while leadership gets the full picture.</p>
+    </section>
+
+    <footer class="demo-footer">
+      <p class="demo-footer-main">Concept prepared by <span class="demo-brand">Mouliqe</span> for the City of Greeley, Colorado</p>
+      <p class="demo-footer-sub">Platform names and data volumes based on publicly available information.</p>
+    </footer>
+  </main>
+
+  <script src="/demos/_demo.js?v=8"></script>
+  <script>
+    var sources = [
+      { name: 'CitySourced 311', color: 'blue',
+        has: ['Service request categories (road, water, code, noise, parks)', 'Request status and resolution times', 'Geographic location of each request', 'Submitter information', 'Department routing and assignment'],
+        missing: ['No connection to budget data (cost per request unknown)', 'No correlation with crime data (safety-related 311 calls invisible to PD)', 'No trend analysis or predictive modeling', 'No department performance benchmarking', 'Historical data trapped in CitySourced — not exportable to other tools'] },
+      { name: 'Questica OpenBook', color: 'accent',
+        has: ['Department-level budget allocations', 'Revenue sources and projections', 'Year-over-year comparisons', 'Fund balance tracking', 'Public-facing transparency portal'],
+        missing: ['No connection to actual service delivery metrics (spending vs outcomes)', 'No real-time spend tracking (updated periodically, not live)', 'No project-level cost tracking for CIP', 'No grant fund tracking (federal grants managed separately)', 'Cannot answer: "Are we getting value for money in Public Safety?"'] },
+      { name: 'RTIC / GPD Systems', color: 'amber',
+        has: ['Real-time camera feeds across the city', 'Drone deployment coordination', 'CAD (Computer-Aided Dispatch) data', 'RMS (Records Management System)', 'Live incident monitoring and response'],
+        missing: ['No historical trend analysis (real-time only)', 'No predictive hotspot mapping', 'No resource optimization modeling', 'No automated reporting for BJA grant compliance', 'No connection to 311 data (safety-related citizen complaints invisible)', 'No community-facing transparency dashboard'] },
+      { name: 'SpeakUp Greeley', color: 'purple',
+        has: ['Project-specific engagement pages', 'Survey responses and feedback', 'Participant demographics', 'Comment threads and sentiment', 'Project timeline tracking'],
+        missing: ['No connection to actual project outcomes (did feedback change anything?)', 'No correlation with 311 complaints (are engaged citizens also filing requests?)', 'No aggregate engagement metrics across projects', 'No sentiment analysis or trend detection', 'Data stays in Granicus — not available for city-wide reporting'] },
+      { name: 'CivicClerk', color: 'red',
+        has: ['Council meeting agendas and minutes', 'Voting records', 'Legislation tracking', 'Board and commission meetings', 'Public hearing records'],
+        missing: ['No connection to project status (legislation passed but is it implemented?)', 'No automated tracking of action items from meetings', 'No searchable database of decisions by topic', 'No correlation with budget allocations or 311 impact'] },
+      { name: 'GovDelivery', color: 'fg-subtle',
+        has: ['Email campaign delivery and open rates', 'Subscriber lists by topic', 'Alert distribution', 'Newsletter engagement metrics'],
+        missing: ['No connection to citizen behavior (do informed citizens file fewer 311 requests?)', 'No A/B testing or optimization', 'No correlation with SpeakUp engagement', 'Subscriber data not connected to any other city system'] }
+    ];
+
+    function selectSource(idx) {
+      var s = sources[idx];
+      document.querySelectorAll('.demo-source-node').forEach(function(n,i){ n.classList.toggle('selected', i === idx); });
+
+      var colorVar = s.color === 'fg-subtle' ? '--color-fg-subtle' : '--color-' + s.color;
+      var hasList = s.has.map(function(h){
+        return '<li class="demo-fg-subtle"><span style="color:var('+colorVar+')">✓</span> ' + h + '</li>';
+      }).join('');
+      var missingList = s.missing.map(function(m){
+        return '<li class="demo-fg-faint"><span class="demo-text-red">✗</span> ' + m + '</li>';
+      }).join('');
+
+      document.getElementById('detailPanel').innerHTML =
+        '<div class="demo-grid demo-grid--2" style="gap:1rem">'
+        + '<div>'
+        +   '<p style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var('+colorVar+')">What ' + s.name + ' Knows</p>'
+        +   '<ul class="src-list">' + hasList + '</ul>'
+        + '</div>'
+        + '<div>'
+        +   '<p class="demo-text-red" style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">What\'s Invisible Today</p>'
+        +   '<ul class="src-list">' + missingList + '</ul>'
+        + '</div>'
+        + '</div>'
+        + '<p class="demo-fg-faint demo-text-center" style="font-size:0.55rem;margin-top:1rem">With Mouliqe\'s integration layer, the data on the left connects to every other platform — making the gaps on the right disappear.</p>';
+    }
+    window.selectSource = selectSource;
+  </script>
+</body>
+</html>

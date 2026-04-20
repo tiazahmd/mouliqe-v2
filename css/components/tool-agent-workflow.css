@@ -1,0 +1,370 @@
+/* ==========================================================================
+   Tool: Agent Workflow — 5 agentic pattern visualizations
+   Pattern badges, agent nodes, tool logs, flow arrows, checkpoint gates,
+   ReAct iteration headers.
+   ========================================================================== */
+
+/* ---- Preset picker (richer than generic tool-sample-btn) ---- */
+.agent-preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.agent-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: all var(--dur) var(--ease);
+}
+.agent-preset-btn:hover {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent-border);
+}
+.agent-preset-btn.active {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent);
+}
+.agent-preset-btn__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+}
+.agent-preset-btn__sub {
+  font-size: 0.6rem;
+  color: var(--color-fg-faint);
+}
+
+/* ---- Pattern badges (used in preset subs + analysis card) ---- */
+.pattern-badge {
+  display: inline-block;
+  font-size: 0.55rem;
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  padding: 0.25rem 0.4rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  line-height: 1;
+}
+.pattern-badge--fan-out    { color: var(--color-purple); background: color-mix(in srgb, var(--color-purple) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-purple) 20%, transparent); }
+.pattern-badge--router     { color: var(--color-amber);  background: var(--color-amber-dim);                                       border: 1px solid color-mix(in srgb, var(--color-amber)  20%, transparent); }
+.pattern-badge--map-reduce { color: var(--color-blue);   background: var(--color-blue-dim);                                        border: 1px solid color-mix(in srgb, var(--color-blue)   20%, transparent); }
+.pattern-badge--chain      { color: var(--color-accent); background: var(--color-accent-ghost);                                    border: 1px solid var(--color-accent-border); }
+.pattern-badge--react      { color: var(--color-red);    background: color-mix(in srgb, var(--color-red)    6%, transparent); border: 1px solid color-mix(in srgb, var(--color-red)    20%, transparent); }
+
+/* ---- Agent graph container ---- */
+.agent-graph { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-4); }
+.agent-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+@media (min-width: 720px) {
+  .agent-grid--2 { grid-template-columns: repeat(2, 1fr); }
+  .agent-grid--3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ---- Agent node ---- */
+.agent-node {
+  position: relative;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  transition: all 0.5s var(--ease);
+  animation: fadeInUp 0.4s ease-out;
+}
+.agent-node.executing {
+  border-color: color-mix(in srgb, var(--color-amber) 30%, transparent);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-amber) 8%, transparent);
+}
+.agent-node.complete {
+  border-color: var(--color-accent-border);
+}
+.agent-node.dimmed {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.agent-node__tag {
+  font-size: 0.55rem;
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-fg-faint);
+  margin-bottom: 0.15rem;
+}
+.agent-node__role {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+  margin-bottom: 0.25rem;
+}
+.agent-node__desc {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+  margin-bottom: var(--space-2);
+}
+.agent-node__check,
+.agent-node__skip {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  font-size: 0.75rem;
+  display: none;
+}
+.agent-node__check { color: var(--color-accent); }
+.agent-node__skip  { color: var(--color-fg-faint); }
+.agent-node.complete .agent-node__check { display: block; }
+.agent-node.dimmed   .agent-node__skip  { display: block; }
+
+/* ---- Tool pills inside agent node ---- */
+.agent-tools { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.agent-tool-pill {
+  display: inline-block;
+  padding: 0.2rem 0.45rem;
+  border-radius: 9rem;
+  font-size: 0.55rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.03em;
+  line-height: 1;
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-fg-faint);
+  transition: all 0.3s var(--ease);
+}
+.agent-node.executing .agent-tool-pill { border-color: color-mix(in srgb, var(--color-amber)  25%, transparent); color: color-mix(in srgb, var(--color-amber)  80%, var(--color-fg-faint)); }
+.agent-node.complete  .agent-tool-pill { border-color: var(--color-accent-border); color: color-mix(in srgb, var(--color-accent) 70%, var(--color-fg-faint)); }
+
+/* ---- Live tool log inside agent node ---- */
+.agent-log {
+  margin-top: var(--space-2);
+  font-family: inherit;
+  font-size: 0.7rem;
+  line-height: 1.8;
+  color: var(--color-fg-subtle);
+}
+.agent-log__line {
+  animation: fadeInUp 0.25s ease-out forwards;
+  opacity: 0;
+}
+.agent-log__line .arrow-out { color: var(--color-amber); margin-right: 0.25rem; }
+.agent-log__line .arrow-in  { color: var(--color-accent); margin-right: 0.25rem; }
+
+.agent-log__result {
+  margin-top: var(--space-2);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-ghost);
+  border: 1px solid var(--color-accent-border);
+  font-size: var(--fs-xs);
+  color: var(--color-accent);
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* ---- Flow arrow between agents/phases ---- */
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) 0;
+  color: var(--color-border);
+  transition: color 0.4s var(--ease);
+}
+.flow-arrow.active { color: var(--color-amber); }
+.flow-arrow.done   { color: color-mix(in srgb, var(--color-accent) 45%, transparent); }
+
+/* ---- Phase label (map phase, reduce phase) ---- */
+.agent-phase-label {
+  font-size: 0.55rem;
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-blue);
+  margin: var(--space-3) 0 var(--space-1);
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* ---- Router decision pill (inside router agent log) ---- */
+.router-decision {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-amber-dim);
+  border: 1px solid color-mix(in srgb, var(--color-amber) 20%, transparent);
+  margin-top: var(--space-2);
+  font-size: var(--fs-xs);
+  color: var(--color-amber);
+  font-weight: var(--fw-semibold);
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* ---- Checkpoint gate (sequential chain) ---- */
+.checkpoint-gate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  color: var(--color-fg-faint);
+  transition: color 0.4s var(--ease);
+  animation: fadeInUp 0.3s ease-out;
+}
+.checkpoint-gate.passed { color: var(--color-accent); }
+.checkpoint-gate__line { flex: 1; height: 1px; background: currentColor; opacity: 0.4; }
+.checkpoint-gate__icon {
+  font-size: 0.6rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+}
+.checkpoint-gate__check { margin-right: 0.3rem; }
+.checkpoint-detail {
+  text-align: center;
+  font-size: 0.6rem;
+  color: color-mix(in srgb, var(--color-accent) 60%, transparent);
+  margin-top: calc(-1 * var(--space-1));
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* ---- ReAct iteration header + phase rows ---- */
+.iteration-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 var(--space-1);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-red) 3%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-red) 12%, transparent);
+  animation: fadeInUp 0.3s ease-out;
+}
+.iteration-header__num {
+  font-size: 0.55rem;
+  font-weight: var(--fw-bold);
+  color: var(--color-red);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+}
+.iteration-header__phase {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  font-weight: var(--fw-semibold);
+}
+
+.iteration-phase {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  padding: 0.3rem 0.6rem;
+  animation: fadeInUp 0.25s ease-out;
+}
+.iteration-phase__icon {
+  flex-shrink: 0;
+  width: 1rem;
+  text-align: center;
+  font-size: var(--fs-xs);
+}
+.iteration-phase--observe .iteration-phase__icon { color: var(--color-blue); }
+.iteration-phase--result  .iteration-phase__icon { color: var(--color-accent); }
+.iteration-phase--think   .iteration-phase__icon { color: var(--color-amber); }
+.iteration-phase--act     .iteration-phase__icon { color: var(--color-red); }
+.iteration-phase__text {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+
+.iteration-loop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.3rem 0;
+  color: color-mix(in srgb, var(--color-red) 30%, transparent);
+  animation: fadeInUp 0.3s ease-out;
+}
+.iteration-loop__label {
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  font-weight: var(--fw-bold);
+}
+
+/* ---- Analysis card extras ---- */
+.analysis-desc {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+  margin: var(--space-2) 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+}
+.analysis-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem var(--space-3);
+}
+.analysis-grid__label {
+  font-size: 0.6rem;
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg-faint);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+.analysis-grid__value {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+
+/* ---- Deliverable key-value rows ---- */
+.deliver-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.deliver-row:last-child { border-bottom: 0; }
+.deliver-row__label {
+  font-size: 0.6rem;
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg-faint);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  flex-shrink: 0;
+}
+.deliver-row__value {
+  font-size: var(--fs-xs);
+  color: var(--color-fg);
+  text-align: right;
+}
+
+/* ---- Synthesizer summary rows ---- */
+.synth-summary { margin-top: var(--space-2); display: flex; flex-direction: column; gap: var(--space-1); }
+.synth-summary__row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+  animation: fadeInUp 0.3s ease-out;
+}
+.synth-summary__check { color: var(--color-accent); flex-shrink: 0; }
+.synth-summary__row strong { color: var(--color-fg); }

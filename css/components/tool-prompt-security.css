@@ -1,0 +1,203 @@
+/* ==========================================================================
+   Prompt Security demo — guardrails toggle, security check list, verdict cards
+   ========================================================================== */
+
+/* ---- Guardrails toggle row ---- */
+.guard-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.guard-row__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+  margin-bottom: 0.15rem;
+}
+.guard-row__sub {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+}
+
+/* Toggle (two-state pill) */
+.guard-toggle {
+  width: 2.5rem;
+  height: 1.25rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  position: relative;
+  padding: 0;
+  flex-shrink: 0;
+}
+.guard-toggle--on {
+  background: var(--color-accent-dim);
+  border: 1px solid var(--color-accent-border);
+}
+.guard-toggle--off {
+  background: color-mix(in srgb, var(--color-red) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-red) 25%, transparent);
+}
+.guard-toggle__thumb {
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all var(--dur) var(--ease);
+  display: block;
+}
+.guard-toggle--on .guard-toggle__thumb {
+  left: calc(100% - 1.1rem);
+  background: var(--color-accent);
+}
+.guard-toggle--off .guard-toggle__thumb {
+  left: 0.15rem;
+  background: var(--color-red);
+}
+
+/* ---- Input prompt preview ---- */
+.prompt-preview {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-base);
+  margin-top: var(--space-2);
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  padding: var(--space-3);
+  background: color-mix(in srgb, var(--color-bg) 50%, var(--color-bg-raised));
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ---- Security check list rows ---- */
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  animation: fadeInUp 0.3s ease-out;
+}
+.check-row:last-child { border-bottom: 0; }
+.check-row__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.check-row__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+}
+.check-row__badge { margin-left: auto; }
+
+/* Check row color states via token colors */
+.check-row--pass  .check-row__dot { background: var(--color-accent); }
+.check-row--warn  .check-row__dot { background: var(--color-amber); }
+.check-row--block .check-row__dot { background: var(--color-red); }
+.check-row--skip  .check-row__dot { background: var(--color-fg-faint); }
+.check-row--skip .check-row__label { color: var(--color-fg-subtle); }
+
+/* Reuse .tool-badge variants for pass/warn/block */
+.tool-badge--pass  { color: var(--color-accent); background: var(--color-accent-dim); }
+.tool-badge--block { color: var(--color-red);    background: color-mix(in srgb, var(--color-red)    8%, transparent); }
+.tool-badge--skip  { color: var(--color-fg-subtle); background: var(--color-bg-raised); }
+
+/* ---- PII detection chips ---- */
+.pii-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  animation: fadeInUp 0.3s ease-out;
+  flex-wrap: wrap;
+}
+.pii-row:last-child { border-bottom: 0; }
+.pii-chip {
+  font-size: var(--fs-xs);
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-sm);
+}
+.pii-chip--detected {
+  background: color-mix(in srgb, var(--color-red) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-red) 20%, transparent);
+  color: var(--color-fg);
+}
+.pii-chip--redacted {
+  background: var(--color-accent-ghost);
+  border: 1px solid var(--color-accent-border);
+  color: var(--color-accent);
+}
+.pii-arrow {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* ---- Verdict card ---- */
+.verdict-card {
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-top: var(--space-3);
+  animation: fadeInUp 0.4s ease-out;
+}
+.verdict-card--safe    { border: 1px solid var(--color-accent-border); background: var(--color-accent-ghost); }
+.verdict-card--blocked { border: 1px solid color-mix(in srgb, var(--color-red)    20%, transparent); background: color-mix(in srgb, var(--color-red)    3%, transparent); }
+.verdict-card--warning { border: 1px solid color-mix(in srgb, var(--color-amber)  20%, transparent); background: color-mix(in srgb, var(--color-amber)  3%, transparent); }
+.verdict-card--unsafe  { border: 1px solid color-mix(in srgb, var(--color-red)    30%, transparent); background: color-mix(in srgb, var(--color-red)    5%, transparent); }
+
+.verdict-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+.verdict-card__label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-fg-faint);
+}
+.verdict-card__response-label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-fg-faint);
+  margin-bottom: var(--space-2);
+}
+.verdict-card__response {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-loose);
+  white-space: pre-wrap;
+  font-family: inherit;
+  margin: 0;
+}
+
+/* ---- What-just-happened callout ---- */
+.danger-callout {
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--color-red) 20%, transparent);
+  background: color-mix(in srgb, var(--color-red) 3%, transparent);
+  animation: fadeInUp 0.4s ease-out;
+}
+.danger-callout__title {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--color-red);
+  margin-bottom: var(--space-1);
+}
+.danger-callout__text {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-base);
+}

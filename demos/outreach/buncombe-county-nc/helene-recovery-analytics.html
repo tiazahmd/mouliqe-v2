@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buncombe County — Helene Recovery Analytics & CDBG-DR Compliance</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: #060a14; }
+    .card { background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 0.75rem; }
+    .card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+    .stat-value { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+    .stat-label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); }
+    .stat-sub { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
+    .section-label { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.25); }
+    .pill { font-size: 0.55rem; padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 600; }
+    .pill-green { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .pill-yellow { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+    .pill-red { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+    .pill-blue { background: rgba(96,165,250,0.1); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+    .pill-purple { background: rgba(192,132,252,0.1); color: #c084fc; border: 1px solid rgba(192,132,252,0.2); }
+    .progress-bg { background: rgba(255,255,255,0.05); border-radius: 9999px; height: 6px; overflow: hidden; }
+    .progress-fill { border-radius: 9999px; height: 6px; transition: width 1s ease; }
+    .jur-btn { font-size: 0.6rem; padding: 0.3rem 0.7rem; border-radius: 9999px; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: rgba(255,255,255,0.35); }
+    .jur-btn.active { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.3); color: #4ade80; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    .anim { animation: fadeUp 0.5s ease both; }
+    .anim-d1 { animation-delay: 0.1s; } .anim-d2 { animation-delay: 0.2s; }
+    .anim-d3 { animation-delay: 0.3s; } .anim-d4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for Buncombe County, NC</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-white">Helene Recovery — Analytics & CDBG-DR Compliance</h1>
+        <p class="text-[0.75rem] text-white/35 mt-1">114 projects across 7 jurisdictions — $1.4B in federal recovery funding</p>
+      </div>
+      <div class="text-right hidden md:block">
+        <p class="text-[0.6rem] text-white/25">Hurricane Helene</p>
+        <p class="text-[0.75rem] text-white/50 font-semibold">Sep 27, 2024</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-4">
+      <button class="jur-btn active" onclick="filterJur('all',this)">All Jurisdictions</button>
+      <button class="jur-btn" onclick="filterJur('buncombe',this)">Buncombe County (31)</button>
+      <button class="jur-btn" onclick="filterJur('asheville',this)">Asheville (42)</button>
+      <button class="jur-btn" onclick="filterJur('woodfin',this)">Woodfin (17)</button>
+      <button class="jur-btn" onclick="filterJur('black-mountain',this)">Black Mountain (9)</button>
+      <button class="jur-btn" onclick="filterJur('weaverville',this)">Weaverville (8)</button>
+      <button class="jur-btn" onclick="filterJur('montreat',this)">Montreat (4)</button>
+      <button class="jur-btn" onclick="filterJur('biltmore',this)">Biltmore Forest (3)</button>
+    </div>
+  </header>
+
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+
+    <!-- Funding Overview -->
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">CDBG-DR (NC Total)</p>
+        <p class="stat-value mt-1">$1.43B</p>
+        <p class="stat-sub mt-1">HUD allocation to NC</p>
+      </div>
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">FEMA Public Assist.</p>
+        <p class="stat-value mt-1">$1.0B+</p>
+        <p class="stat-sub mt-1">WNC total (ongoing)</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Recovery Projects</p>
+        <p class="stat-value mt-1">114</p>
+        <p class="stat-sub mt-1">Across 7 jurisdictions</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Highly Complex</p>
+        <p class="stat-value mt-1" style="color:#f87171">22</p>
+        <p class="stat-sub mt-1">High cost + long timeline</p>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="stat-label">County Budget Impact</p>
+        <p class="stat-value mt-1" style="color:#fbbf24">$14M</p>
+        <p class="stat-sub mt-1">FY26 recovery office budget</p>
+      </div>
+    </section>
+
+    <!-- Project Category Breakdown -->
+    <section class="mt-8 anim anim-d3">
+      <p class="section-label mb-4">Recovery Projects by Category — 114 Total</p>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card p-6" style="height: 320px;">
+          <canvas id="categoryChart"></canvas>
+        </div>
+        <div class="card p-6">
+          <p class="text-[0.7rem] font-semibold text-white/50 mb-4">Project Status Overview</p>
+          <div class="space-y-3" id="statusList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Funding Source Waterfall -->
+    <section class="mt-8 anim anim-d3">
+      <p class="section-label mb-4">Funding Source Mix — Multiple Federal Programs</p>
+      <div class="card p-6" style="height: 300px;">
+        <canvas id="fundingChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Jurisdiction Comparison -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">Projects by Jurisdiction — Scope & Complexity</p>
+      <div class="card p-6">
+        <div class="space-y-4" id="jurBars"></div>
+      </div>
+    </section>
+
+    <!-- CDBG-DR Compliance Requirements -->
+    <section class="mt-8 anim anim-d4">
+      <p class="section-label mb-4">HUD CDBG-DR Compliance — 2 CFR Part 200 Requirements</p>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="card p-5">
+          <p class="text-[0.7rem] font-semibold text-white/50 mb-3">Reporting Requirements</p>
+          <div class="space-y-2">
+            <div class="flex items-center gap-2"><span class="pill pill-red">Quarterly</span><span class="text-[0.6rem] text-white/40">QPR to HUD — expenditures, outcomes, beneficiaries</span></div>
+            <div class="flex items-center gap-2"><span class="pill pill-yellow">Annual</span><span class="text-[0.6rem] text-white/40">CAPER — comprehensive performance report</span></div>
+            <div class="flex items-center gap-2"><span class="pill pill-blue">Ongoing</span><span class="text-[0.6rem] text-white/40">DRGR system — draw-down requests + activity updates</span></div>
+            <div class="flex items-center gap-2"><span class="pill pill-purple">As needed</span><span class="text-[0.6rem] text-white/40">Action Plan amendments for scope/budget changes</span></div>
+          </div>
+        </div>
+        <div class="card p-5">
+          <p class="text-[0.7rem] font-semibold text-white/50 mb-3">Data Collection Burden</p>
+          <div class="space-y-2">
+            <p class="text-[0.6rem] text-white/35">Per project, HUD requires:</p>
+            <ul class="text-[0.55rem] text-white/30 space-y-1">
+              <li>- Beneficiary demographics (race, income, disability)</li>
+              <li>- National objective documentation (LMI, urgent need, slum/blight)</li>
+              <li>- Environmental review records (NEPA)</li>
+              <li>- Procurement documentation (competitive bidding)</li>
+              <li>- Davis-Bacon wage compliance (construction)</li>
+              <li>- Section 3 hiring/contracting reports</li>
+              <li>- Duplication of Benefits (DOB) analysis</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card p-5">
+          <p class="text-[0.7rem] font-semibold text-white/50 mb-3">Current Gap Assessment</p>
+          <div class="p-4 rounded-lg" style="background:rgba(248,113,113,0.04);border:1px solid rgba(248,113,113,0.1)">
+            <p class="text-[0.6rem] text-white/40 leading-relaxed">114 projects across 7 jurisdictions, each with different data systems. Tetra Tech handles PPDR intake but no analytics vendor identified for cross-project tracking, compliance dashboards, or automated DRGR reporting. Kevin Madsen's Recovery Office is 18 months old — still building systems.</p>
+          </div>
+          <div class="mt-3 p-4 rounded-lg" style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.1)">
+            <p class="text-[0.6rem] text-forest-400 font-semibold">Mouliqe Fit</p>
+            <p class="text-[0.55rem] text-white/30 mt-1">Unified analytics layer across all 7 jurisdictions — project tracking, compliance monitoring, automated QPR generation, and real-time dashboards for the Recovery Officer and Board of Commissioners.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mouliqe CTA -->
+    <section class="mt-12 mb-8 anim anim-d4">
+      <div class="card p-8 text-center" style="border-color:rgba(74,222,128,0.1)">
+        <p class="text-[0.55rem] font-semibold tracking-[0.2em] uppercase text-forest-400 mb-3">What This Dashboard Demonstrates</p>
+        <p class="text-[0.8rem] text-white/50 max-w-2xl mx-auto leading-relaxed">Buncombe County's Helene recovery is one of the largest disaster recovery programs in North Carolina history — 114 projects, 7 jurisdictions, $1.4B+ in federal funding, and HUD CDBG-DR compliance requirements that demand granular tracking of every dollar, beneficiary, and outcome. This concept dashboard shows how a unified analytics platform can give Recovery Officer Kevin Madsen and the Strategy & Innovation team real-time visibility across all projects, automate the quarterly performance reports HUD requires, and ensure the county stays ahead of compliance requirements rather than scrambling at reporting deadlines.</p>
+        <div class="flex justify-center gap-6 mt-6">
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Service Area</p>
+            <p class="text-[0.7rem] text-forest-400 font-semibold mt-1">Data Integration & Analytics</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Timeline</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">12–16 weeks to MVP</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Prepared by</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">mouliqe.com</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Category breakdown
+    const catCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(catCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Housing', 'Infrastructure', 'Parks & Green Space', 'Commercial Revitalization', 'Emergency Facilities', 'Water/Sewer', 'Other'],
+        datasets: [{
+          data: [28, 24, 19, 15, 12, 10, 6],
+          backgroundColor: ['rgba(96,165,250,0.6)','rgba(192,132,252,0.6)','rgba(74,222,128,0.6)','rgba(251,191,36,0.6)','rgba(248,113,113,0.6)','rgba(45,212,191,0.6)','rgba(255,255,255,0.15)'],
+          borderWidth: 0, hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '60%',
+        plugins: {
+          legend: { display: true, position: 'right', labels: { color: 'rgba(255,255,255,0.35)', font: { family: 'Oxanium', size: 10 }, boxWidth: 10, padding: 12 } },
+          tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed} projects` } }
+        }
+      }
+    });
+
+    // Status list
+    const statuses = [
+      { label: 'Planning / Design', count: 38, pct: 33, color: '#60a5fa' },
+      { label: 'Environmental Review', count: 22, pct: 19, color: '#c084fc' },
+      { label: 'Procurement', count: 18, pct: 16, color: '#fbbf24' },
+      { label: 'Under Construction', count: 14, pct: 12, color: '#4ade80' },
+      { label: 'Completed', count: 8, pct: 7, color: '#2dd4bf' },
+      { label: 'On Hold / Blocked', count: 14, pct: 12, color: '#f87171' },
+    ];
+    const statusContainer = document.getElementById('statusList');
+    statuses.forEach(s => {
+      statusContainer.innerHTML += `
+        <div>
+          <div class="flex justify-between mb-1">
+            <span class="text-[0.6rem] text-white/40">${s.label}</span>
+            <span class="text-[0.6rem] font-bold" style="color:${s.color}">${s.count} (${s.pct}%)</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" style="width:${s.pct}%;background:${s.color}"></div></div>
+        </div>`;
+    });
+
+    // Funding sources
+    const fundCtx = document.getElementById('fundingChart').getContext('2d');
+    new Chart(fundCtx, {
+      type: 'bar',
+      data: {
+        labels: ['CDBG-DR\n(HUD)', 'FEMA PA\n(Public Assist)', 'FEMA HMGP\n(Mitigation)', 'ARPA\n(Remaining)', 'State\n(NC Commerce)', 'Insurance\n(Proceeds)', 'Local\n(County/City)'],
+        datasets: [{
+          data: [420, 380, 85, 45, 62, 180, 42],
+          backgroundColor: ['rgba(96,165,250,0.6)','rgba(192,132,252,0.6)','rgba(74,222,128,0.6)','rgba(251,191,36,0.6)','rgba(248,113,113,0.6)','rgba(45,212,191,0.6)','rgba(255,255,255,0.15)'],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y + 'M' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.3)', font: { family: 'Oxanium', size: 10 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 10 }, callback: v => '$' + v + 'M' } }
+        }
+      }
+    });
+
+    // Jurisdiction bars
+    const jurisdictions = [
+      { name: 'City of Asheville', projects: 42, complex: 10, color: 'rgba(96,165,250,0.5)' },
+      { name: 'Buncombe County', projects: 31, complex: 8, color: 'rgba(192,132,252,0.5)' },
+      { name: 'Town of Woodfin', projects: 17, complex: 2, color: 'rgba(74,222,128,0.5)' },
+      { name: 'Town of Black Mountain', projects: 9, complex: 1, color: 'rgba(251,191,36,0.5)' },
+      { name: 'Town of Weaverville', projects: 8, complex: 1, color: 'rgba(248,113,113,0.5)' },
+      { name: 'Town of Montreat', projects: 4, complex: 0, color: 'rgba(45,212,191,0.5)' },
+      { name: 'Village of Biltmore Forest', projects: 3, complex: 0, color: 'rgba(244,114,182,0.5)' },
+    ];
+    const jurContainer = document.getElementById('jurBars');
+    const maxProj = 42;
+    jurisdictions.forEach(j => {
+      jurContainer.innerHTML += `
+        <div class="flex items-center gap-4">
+          <div class="text-[0.6rem] text-white/35 text-right" style="min-width:160px">${j.name}</div>
+          <div class="flex-1 flex gap-1">
+            <div style="width:${(j.projects/maxProj)*100}%;background:${j.color};height:24px;border-radius:4px;position:relative;transition:all 0.5s" class="flex items-center px-2">
+              <span class="text-[0.55rem] font-bold text-white/70">${j.projects} projects</span>
+            </div>
+            ${j.complex > 0 ? `<div style="width:${(j.complex/maxProj)*100}%;background:rgba(248,113,113,0.3);height:24px;border-radius:4px" class="flex items-center px-2"><span class="text-[0.5rem] text-red-400/70">${j.complex} complex</span></div>` : ''}
+          </div>
+        </div>`;
+    });
+
+    function filterJur(jur, btn) {
+      document.querySelectorAll('.jur-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // In a real implementation, this would filter all charts and data
+    }
+  </script>
+</body>
+</html>

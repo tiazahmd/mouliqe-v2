@@ -1,0 +1,117 @@
+/* ==========================================================================
+   ETL Pipeline demo — table with row states, cell badges, source tags
+   ========================================================================== */
+
+.etl-scroll { overflow-x: auto; margin-top: var(--space-2); }
+
+.etl-table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+}
+.etl-table th {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-fg-faint);
+  font-weight: var(--fw-semibold);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.etl-table td {
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-fg-subtle);
+  border-bottom: 1px solid var(--color-border);
+  transition: all var(--dur) var(--ease);
+  vertical-align: top;
+  line-height: var(--lh-base);
+}
+
+@keyframes rowFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.etl-table tr { animation: rowFadeIn 0.3s ease-out forwards; }
+
+.etl-table tr.row-flagged td { background: var(--color-amber-dim); }
+.etl-table tr.row-removed td {
+  text-decoration: line-through;
+  color: var(--color-fg-faint);
+  background: color-mix(in srgb, var(--color-red) 3%, transparent);
+}
+.etl-table tr.row-new td { background: var(--color-accent-ghost); }
+
+/* Cell inline badges */
+.cell-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  white-space: nowrap;
+}
+.cell-badge--warn  { color: var(--color-amber);  background: var(--color-amber-dim); }
+.cell-badge--error { color: var(--color-red);    background: color-mix(in srgb, var(--color-red) 8%, transparent); }
+.cell-badge--fixed { color: var(--color-accent); background: var(--color-accent-dim); }
+
+.cell-highlight { color: var(--color-accent) !important; }
+
+/* Source tag */
+.source-tag {
+  display: inline-block;
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  padding: 0.15rem var(--space-1);
+  border-radius: var(--radius-sm);
+  margin-right: 0.25rem;
+  line-height: 1;
+}
+.source-tag--crm      { color: var(--color-blue);   background: var(--color-blue-dim); }
+.source-tag--email    { color: var(--color-purple); background: color-mix(in srgb, var(--color-purple) 10%, transparent); }
+.source-tag--support  { color: var(--color-amber);  background: var(--color-amber-dim); }
+.source-tag--sales    { color: var(--color-accent); background: var(--color-accent-dim); }
+.source-tag--events   { color: var(--color-amber);  background: var(--color-amber-dim); }
+
+/* ETL stats row */
+.etl-stats {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-3);
+}
+.etl-stat {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-faint);
+}
+.etl-stat strong {
+  color: var(--color-fg);
+  font-weight: var(--fw-bold);
+}
+
+/* Final quality card */
+.quality-summary {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-10);
+  flex-wrap: wrap;
+  padding: var(--space-4) 0;
+}
+.quality-summary__item { text-align: center; }
+.quality-summary__value {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-fg-strong);
+  line-height: 1;
+}
+.quality-summary__label {
+  font-size: var(--fs-xxs);
+  color: var(--color-fg-faint);
+  margin-top: var(--space-1);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}

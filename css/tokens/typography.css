@@ -1,0 +1,49 @@
+/* ==========================================================================
+   Typography tokens
+   Self-hosted Oxanium variable font. Fallback to system sans.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Oxanium';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url('/assets/fonts/oxanium.woff2') format('woff2-variations'),
+       url('/assets/fonts/oxanium.woff2') format('woff2');
+}
+
+:root {
+  --font-family: 'Oxanium', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Type scale — 17px root. Readable by default. */
+  --fs-xxs: 0.6875rem;  /* ~11.7px — uppercase labels only */
+  --fs-xs:  0.8125rem;  /* ~13.8px — fine print */
+  --fs-sm:  0.9375rem;  /* ~15.9px — small body */
+  --fs-base: 1rem;      /* 17px — body */
+  --fs-md:  1.125rem;   /* ~19.1px — lead */
+  --fs-lg:  1.3125rem;  /* ~22.3px */
+  --fs-xl:  1.625rem;   /* ~27.6px — section h2 */
+  --fs-2xl: 2rem;       /* 34px */
+  --fs-3xl: 2.5rem;     /* 42.5px — hero h1 desktop */
+  --fs-4xl: 3.25rem;    /* 55.25px */
+
+  /* Line heights */
+  --lh-tight: 1.15;
+  --lh-snug:  1.35;
+  --lh-base:  1.65;
+  --lh-loose: 1.85;
+
+  /* Weights */
+  --fw-light:   300;
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold: 600;
+  --fw-bold:    700;
+
+  /* Tracking */
+  --tracking-tight:  -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.05em;
+  --tracking-wider:  0.12em;
+  --tracking-widest: 0.2em;
+}

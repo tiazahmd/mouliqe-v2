@@ -1,0 +1,388 @@
+/* ==========================================================================
+   Mouliqe v2 — Outreach Demo Stylesheet
+   Self-contained: includes tokens, base styles, and component styles
+   used by outreach demo pages (no dependency on /css/main.css).
+   Supports light + dark mode via data-theme attribute on <html>.
+   ========================================================================== */
+
+/* ---- Design tokens ---- */
+:root,
+:root[data-theme="dark"] {
+  --color-bg:           #060a14;
+  --color-bg-raised:    rgba(255,255,255,0.015);
+  --color-bg-hover:     rgba(255,255,255,0.03);
+  --color-fg:           #f0f4fa;
+  --color-fg-strong:    #ffffff;
+  --color-fg-muted:     rgba(255,255,255,0.78);
+  --color-fg-subtle:    rgba(255,255,255,0.55);
+  --color-fg-faint:     rgba(255,255,255,0.32);
+  --color-fg-dim:       rgba(255,255,255,0.18);
+  --color-border:       rgba(255,255,255,0.08);
+  --color-border-soft:  rgba(255,255,255,0.04);
+  --color-accent:       #4ade80;
+  --color-accent-dim:   rgba(74,222,128,0.12);
+  --color-accent-ghost: rgba(74,222,128,0.04);
+  --color-amber:        #fbbf24;
+  --color-amber-dim:    rgba(251,191,36,0.10);
+  --color-blue:         #60a5fa;
+  --color-blue-dim:     rgba(96,165,250,0.10);
+  --color-purple:       #c084fc;
+  --color-purple-dim:   rgba(192,132,252,0.10);
+  --color-red:          #f87171;
+  --color-red-dim:      rgba(248,113,113,0.10);
+}
+
+:root[data-theme="light"] {
+  --color-bg:           #f6f7f9;
+  --color-bg-raised:    rgba(10,16,32,0.025);
+  --color-bg-hover:     rgba(10,16,32,0.05);
+  --color-fg:           #0a1020;
+  --color-fg-strong:    #000000;
+  --color-fg-muted:     #2a3441;
+  --color-fg-subtle:    #4a5566;
+  --color-fg-faint:     #7a8595;
+  --color-fg-dim:       #a0aab8;
+  --color-border:       rgba(10,16,32,0.1);
+  --color-border-soft:  rgba(10,16,32,0.05);
+  --color-accent:       #16a34a;
+  --color-accent-dim:   rgba(22,163,74,0.14);
+  --color-accent-ghost: rgba(22,163,74,0.06);
+  --color-amber:        #b45309;
+  --color-amber-dim:    rgba(180,83,9,0.12);
+  --color-blue:         #1d4ed8;
+  --color-blue-dim:     rgba(29,78,216,0.10);
+  --color-purple:       #7c3aed;
+  --color-purple-dim:   rgba(124,58,237,0.10);
+  --color-red:          #dc2626;
+  --color-red-dim:      rgba(220,38,38,0.10);
+}
+
+/* ---- Base reset + typography ---- */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 15.3px; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-fg-muted);
+  font-family: 'Oxanium', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+h1, h2, h3, h4, h5, h6 { margin: 0; color: var(--color-fg-strong); font-weight: 700; }
+p { margin: 0; }
+table { border-collapse: collapse; }
+th, td { padding: 0; }
+canvas { max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* ---- Layout utilities (the few we actually need) ---- */
+.demo-container { max-width: 80rem; margin: 0 auto; padding: 2rem 1.5rem; }
+@media (min-width: 768px) { .demo-container { padding: 2rem 2.5rem; } }
+.demo-container--md { max-width: 72rem; }
+
+.demo-grid { display: grid; gap: 1rem; }
+.demo-grid--2 { grid-template-columns: repeat(2, 1fr); }
+.demo-grid--3 { grid-template-columns: repeat(3, 1fr); }
+.demo-grid--4 { grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 768px) {
+  .demo-grid--4 { grid-template-columns: repeat(4, 1fr); }
+  .demo-grid--2-3 { grid-template-columns: 2fr 1fr; }
+}
+
+.demo-flex     { display: flex; }
+.demo-flex-col { display: flex; flex-direction: column; }
+.demo-flex-wrap { display: flex; flex-wrap: wrap; }
+.demo-items-center  { align-items: center; }
+.demo-justify-between { justify-content: space-between; }
+.demo-gap-2 { gap: 0.5rem; }
+.demo-gap-3 { gap: 0.75rem; }
+.demo-gap-4 { gap: 1rem; }
+.demo-mt-4  { margin-top: 1rem; }
+.demo-mt-6  { margin-top: 1.5rem; }
+.demo-mt-8  { margin-top: 2rem; }
+.demo-text-right  { text-align: right; }
+.demo-text-center { text-align: center; }
+
+/* ---- Header / Hero ---- */
+.demo-eyebrow {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.demo-title {
+  font-size: 1.5rem;
+  color: var(--color-fg-strong);
+  line-height: 1.15;
+}
+@media (min-width: 768px) { .demo-title { font-size: 1.875rem; } }
+.demo-subtitle {
+  font-size: 0.75rem;
+  color: var(--color-fg-faint);
+  margin-top: 0.25rem;
+}
+.demo-meta-label { font-size: 0.6rem; color: var(--color-fg-dim); }
+.demo-meta-value { font-size: 0.75rem; color: var(--color-fg-subtle); font-weight: 600; }
+
+/* ---- Card ---- */
+.demo-card {
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+.demo-card:hover { background: var(--color-bg-hover); }
+.demo-card--flush { padding: 0; overflow: hidden; }
+
+/* ---- Stats ---- */
+.demo-stat-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-fg-faint);
+}
+.demo-stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-fg);
+  line-height: 1.1;
+  margin-top: 0.25rem;
+}
+.demo-stat-delta {
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+.demo-stat-delta--up   { color: var(--color-accent); }
+.demo-stat-delta--down { color: var(--color-red); }
+.demo-stat-delta--info { color: var(--color-blue); }
+.demo-stat-source {
+  font-size: 0.5rem;
+  color: var(--color-fg-dim);
+  margin-top: 0.5rem;
+}
+
+/* ---- Section label (small eyebrow used inside cards) ---- */
+.demo-section-label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-fg-faint);
+}
+.demo-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-fg-muted);
+  margin-top: 0.25rem;
+}
+.demo-section-sub {
+  font-size: 0.6rem;
+  color: var(--color-fg-dim);
+  margin-top: 0.25rem;
+}
+
+/* ---- Source / tool tags (colored pills) ---- */
+.demo-tag {
+  display: inline-block;
+  font-size: 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  line-height: 1;
+}
+.demo-tag--blue    { color: var(--color-blue);    background: var(--color-blue-dim);    border-color: color-mix(in srgb, var(--color-blue)    25%, transparent); }
+.demo-tag--green   { color: var(--color-accent);  background: var(--color-accent-dim);  border-color: color-mix(in srgb, var(--color-accent)  25%, transparent); }
+.demo-tag--amber   { color: var(--color-amber);   background: var(--color-amber-dim);   border-color: color-mix(in srgb, var(--color-amber)   25%, transparent); }
+.demo-tag--purple  { color: var(--color-purple);  background: var(--color-purple-dim);  border-color: color-mix(in srgb, var(--color-purple)  25%, transparent); }
+.demo-tag--red     { color: var(--color-red);     background: var(--color-red-dim);     border-color: color-mix(in srgb, var(--color-red)     25%, transparent); }
+.demo-tag--neutral { color: var(--color-fg-subtle); background: var(--color-bg-raised); border-color: var(--color-border); }
+
+/* ---- Pipeline / architecture node ---- */
+.demo-node {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  border: 1px solid;
+  line-height: 1.3;
+}
+.demo-node--blue    { color: var(--color-blue);    background: var(--color-blue-dim);    border-color: color-mix(in srgb, var(--color-blue)    25%, transparent); }
+.demo-node--green   { color: var(--color-accent);  background: var(--color-accent-dim);  border-color: color-mix(in srgb, var(--color-accent)  25%, transparent); }
+.demo-node--amber   { color: var(--color-amber);   background: var(--color-amber-dim);   border-color: color-mix(in srgb, var(--color-amber)   25%, transparent); }
+.demo-node--purple  { color: var(--color-purple);  background: var(--color-purple-dim);  border-color: color-mix(in srgb, var(--color-purple)  25%, transparent); }
+.demo-node--red     { color: var(--color-red);     background: var(--color-red-dim);     border-color: color-mix(in srgb, var(--color-red)     25%, transparent); }
+.demo-node--neutral { color: var(--color-fg-subtle); background: var(--color-bg-raised); border-color: var(--color-border); }
+.demo-node--final   { color: var(--color-accent);  background: color-mix(in srgb, var(--color-accent) 18%, transparent); border-color: color-mix(in srgb, var(--color-accent) 45%, transparent); font-weight: 700; }
+.demo-node-plus  { color: var(--color-fg-dim); font-weight: 700; }
+.demo-node-arrow { color: var(--color-fg-dim); margin: 0 0.5rem; }
+
+/* ---- Table (department perf, etc) ---- */
+.demo-table { width: 100%; font-size: 0.68rem; border-collapse: collapse; }
+.demo-table thead tr { border-bottom: 1px solid var(--color-border); }
+.demo-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  color: var(--color-fg-faint);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.5rem;
+}
+.demo-table th.demo-right { text-align: right; }
+.demo-table td {
+  padding: 0.75rem 1rem;
+  color: var(--color-fg-subtle);
+  border-bottom: 1px solid var(--color-border-soft);
+}
+.demo-table td:first-child { color: var(--color-fg); font-weight: 500; }
+.demo-table td.demo-right { text-align: right; }
+.demo-table tbody tr { transition: background 0.15s; }
+.demo-table tbody tr:hover { background: var(--color-bg-hover); }
+
+/* ---- Insight / recommendation cards ---- */
+.demo-insight {
+  background: color-mix(in srgb, var(--color-amber) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-amber) 18%, transparent);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+.demo-rec {
+  background: color-mix(in srgb, var(--color-accent) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 18%, transparent);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+/* ---- Pipeline step (for data-integration demo) ---- */
+.demo-pipeline-step {
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s;
+}
+.demo-pipeline-step.active { background: var(--color-amber-dim); border-color: color-mix(in srgb, var(--color-amber) 30%, transparent); }
+.demo-pipeline-step.done   { background: var(--color-accent-dim); border-color: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+/* ---- Source node (data-integration interactive) ---- */
+.demo-source-node {
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  border: 1px solid;
+}
+.demo-source-node:hover { transform: translateY(-2px); }
+.demo-source-node.selected {
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 20%, transparent);
+  border-color: var(--color-accent);
+}
+
+.demo-layer-label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-fg-dim);
+}
+.demo-detail-panel {
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  min-height: 200px;
+}
+
+/* ---- Phase card (data-integration phases) ---- */
+.demo-phase-card {
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: all 0.3s;
+}
+.demo-phase-card:hover { background: var(--color-bg-hover); border-color: color-mix(in srgb, var(--color-border) 180%, transparent); }
+
+/* ---- Typing cursor (public-safety-analytics) ---- */
+.demo-typing {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid color-mix(in srgb, var(--color-amber) 50%, transparent);
+  animation: demoBlink 0.7s step-end infinite;
+}
+@keyframes demoBlink { 50% { border-color: transparent; } }
+
+/* ---- Footer ---- */
+.demo-footer { margin-top: 2rem; text-align: center; }
+.demo-footer-main { font-size: 0.6rem; color: var(--color-fg-dim); }
+.demo-footer-sub  { font-size: 0.5rem; color: var(--color-fg-dim); opacity: 0.7; margin-top: 0.25rem; }
+.demo-brand       { color: color-mix(in srgb, var(--color-accent) 70%, transparent); }
+
+/* ---- Theme toggle button (floating, top-right) ---- */
+.demo-theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-fg-subtle);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.demo-theme-toggle:hover { background: var(--color-bg-hover); color: var(--color-fg); }
+:root[data-theme="dark"]  .demo-theme-toggle .demo-theme-sun  { display: block; }
+:root[data-theme="dark"]  .demo-theme-toggle .demo-theme-moon { display: none; }
+:root[data-theme="light"] .demo-theme-toggle .demo-theme-sun  { display: none; }
+:root[data-theme="light"] .demo-theme-toggle .demo-theme-moon { display: block; }
+
+/* ---- Animations ---- */
+@keyframes demoFadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+.demo-anim     { animation: demoFadeUp 0.5s ease both; }
+.demo-anim-d1  { animation-delay: 0.1s; }
+.demo-anim-d2  { animation-delay: 0.2s; }
+.demo-anim-d3  { animation-delay: 0.3s; }
+.demo-anim-d4  { animation-delay: 0.4s; }
+
+@keyframes demoPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+.demo-pulse { animation: demoPulse 2s ease infinite; }
+
+/* ---- Utility colors (for inline use) ---- */
+.demo-fg         { color: var(--color-fg); }
+.demo-fg-muted   { color: var(--color-fg-muted); }
+.demo-fg-subtle  { color: var(--color-fg-subtle); }
+.demo-fg-faint   { color: var(--color-fg-faint); }
+.demo-fg-dim     { color: var(--color-fg-dim); }
+.demo-text-accent  { color: var(--color-accent); }
+.demo-text-amber   { color: var(--color-amber); }
+.demo-text-blue    { color: var(--color-blue); }
+.demo-text-purple  { color: var(--color-purple); }
+.demo-text-red     { color: var(--color-red); }

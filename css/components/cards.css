@@ -1,0 +1,86 @@
+/* ==========================================================================
+   Cards — base, highlight, sidebar (used on contact)
+   ========================================================================== */
+
+.card {
+  display: block;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-8);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  transition: all var(--dur-slow) var(--ease);
+}
+.card:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+}
+
+.card--highlight {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent-border);
+}
+.card--highlight:hover {
+  background: color-mix(in srgb, var(--color-accent) 6%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.card__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg-strong);
+  margin-bottom: var(--space-3);
+}
+
+.card__text {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+  color: var(--color-fg-subtle);
+  margin-bottom: var(--space-5);
+}
+
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-accent);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+}
+.card__cta .arrow { display: inline-block; transition: transform var(--dur) var(--ease); }
+.card:hover .card__cta .arrow { transform: translateX(4px); }
+
+/* ---- Sidebar card (used on contact page rail) ---- */
+.sidebar-card {
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-accent-ghost);
+  border: 1px solid var(--color-accent-border);
+  position: relative;
+  overflow: hidden;
+}
+.sidebar-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-accent-border), transparent);
+}
+
+/* ---- Callout ---- */
+.callout {
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-10);
+  background: var(--color-accent-ghost);
+  border: 1px solid var(--color-accent-border);
+  position: relative;
+  overflow: hidden;
+}
+.callout::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-accent-border), transparent);
+}

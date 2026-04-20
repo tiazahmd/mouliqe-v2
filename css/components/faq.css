@@ -1,0 +1,168 @@
+/* ==========================================================================
+   FAQ page — search, tabs, accordion
+   ========================================================================== */
+
+.faq-search-wrap {
+  position: relative;
+  margin-bottom: var(--space-6);
+}
+.faq-search-wrap svg {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-fg-faint);
+  pointer-events: none;
+}
+
+.faq-search {
+  font-family: inherit;
+  width: 100%;
+  padding: var(--space-3) var(--space-4) var(--space-3) 2.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  color: var(--color-fg);
+  font-size: var(--fs-sm);
+  outline: none;
+  transition: all var(--dur) var(--ease);
+}
+.faq-search:focus {
+  border-color: var(--color-accent-border);
+  background: var(--color-bg-hover);
+  box-shadow: 0 0 0 2px var(--color-accent-ghost);
+}
+.faq-search::placeholder { color: var(--color-fg-faint); }
+
+/* ---- Tabs ---- */
+.faq-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+}
+.faq-tab {
+  font-family: inherit;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  color: var(--color-fg-subtle);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+}
+.faq-tab:hover { border-color: var(--color-border-strong); color: var(--color-fg); }
+.faq-tab.active {
+  border-color: var(--color-accent-border);
+  background: var(--color-accent-ghost);
+  color: var(--color-accent);
+}
+.faq-tab__count {
+  font-size: var(--fs-xxs);
+  margin-left: var(--space-1);
+  opacity: 0.5;
+}
+
+/* ---- List ---- */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.faq-item {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  overflow: hidden;
+  transition: all var(--dur) var(--ease);
+}
+.faq-item:hover {
+  border-color: var(--color-border-strong);
+  background: var(--color-bg-hover);
+}
+.faq-item.open {
+  border-color: var(--color-accent-border);
+  background: var(--color-accent-ghost);
+}
+
+.faq-q {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  cursor: pointer;
+  user-select: none;
+}
+.faq-q__text {
+  flex: 1;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+  line-height: var(--lh-snug);
+  transition: color var(--dur) var(--ease);
+}
+.faq-item.open .faq-q__text { color: var(--color-fg-strong); }
+
+.faq-chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--color-fg-faint);
+  transition: all var(--dur) var(--ease);
+}
+.faq-item.open .faq-chevron {
+  color: var(--color-accent);
+  transform: rotate(180deg);
+}
+
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+.faq-item.open .faq-a {
+  max-height: 500px;
+  padding: 0 var(--space-5) var(--space-5) var(--space-5);
+}
+
+.faq-a__inner {
+  border-left: 2px solid var(--color-accent-border);
+  padding-left: var(--space-4);
+  font-size: var(--fs-sm);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-loose);
+}
+.faq-a__inner a {
+  color: var(--color-accent);
+  transition: color var(--dur) var(--ease);
+}
+.faq-a__inner a:hover { color: var(--color-accent-hover); }
+
+.faq-cat-pill {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.faq-cat-pill--ai      { color: var(--color-purple); background: color-mix(in srgb, var(--color-purple) 10%, transparent); }
+.faq-cat-pill--data    { color: var(--color-blue);   background: var(--color-blue-dim); }
+.faq-cat-pill--working { color: var(--color-accent); background: var(--color-accent-dim); }
+.faq-cat-pill--cost    { color: var(--color-amber);  background: var(--color-amber-dim); }
+
+.faq-hidden { display: none !important; }
+
+.faq-empty {
+  text-align: center;
+  padding: var(--space-12) var(--space-4);
+  color: var(--color-fg-faint);
+  font-size: var(--fs-sm);
+}

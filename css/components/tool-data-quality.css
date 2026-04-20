@@ -1,0 +1,215 @@
+/* ==========================================================================
+   Data Quality tool — file upload, severity badges, column breakdown
+   ========================================================================== */
+
+/* File upload trigger */
+.dq-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius);
+  background: var(--color-bg-raised);
+  border: 1px dashed var(--color-border-strong);
+  color: var(--color-fg-muted);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.dq-upload:hover {
+  border-color: var(--color-accent-border);
+  background: var(--color-accent-ghost);
+  color: var(--color-accent);
+}
+.dq-upload-name {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  margin-top: var(--space-2);
+  min-height: 1em;
+}
+
+/* Severity badges */
+.severity-badge {
+  display: inline-block;
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.severity-badge--high   { color: var(--color-red);   background: color-mix(in srgb, var(--color-red) 8%, transparent); }
+.severity-badge--medium { color: var(--color-amber); background: var(--color-amber-dim); }
+.severity-badge--low    { color: var(--color-blue);  background: var(--color-blue-dim); }
+
+/* Overall score card */
+.dq-score-card {
+  text-align: center;
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  border-width: 1px;
+  border-style: solid;
+}
+.dq-score-card--good    { background: var(--color-accent-ghost);                                           border-color: var(--color-accent-border); color: var(--color-accent); }
+.dq-score-card--warn    { background: var(--color-amber-dim);                                              border-color: var(--color-amber-border); color: var(--color-amber); }
+.dq-score-card--poor    { background: color-mix(in srgb, var(--color-red) 5%, transparent);               border-color: color-mix(in srgb, var(--color-red) 18%, transparent); color: var(--color-red); }
+.dq-score-card__eyebrow {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--color-fg-faint);
+  margin-bottom: var(--space-3);
+}
+.dq-score-card__value {
+  font-size: 3rem;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  margin-bottom: var(--space-1);
+}
+.dq-score-card__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  opacity: 0.8;
+  margin-bottom: var(--space-2);
+}
+.dq-score-card__meta {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+}
+
+/* Column tiles */
+.dq-col-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+@media (min-width: 640px) { .dq-col-grid { grid-template-columns: 1fr 1fr; } }
+
+.dq-col-tile {
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+}
+.dq-col-tile--good { background: var(--color-accent-ghost);                                             border-color: var(--color-accent-border); }
+.dq-col-tile--warn { background: var(--color-amber-dim);                                                border-color: var(--color-amber-border); }
+.dq-col-tile--poor { background: color-mix(in srgb, var(--color-red) 4%, transparent);                  border-color: color-mix(in srgb, var(--color-red) 12%, transparent); }
+
+.dq-col-tile__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+.dq-col-tile__name {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+}
+.dq-col-tile__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-xxs);
+  color: var(--color-fg-faint);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+.dq-col-tile__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+/* Issue detail list (expandable) */
+.dq-issue-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dq-issue-chevron {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-faint);
+  transition: transform var(--dur) var(--ease);
+  display: inline-block;
+}
+.dq-issue-list {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--dur) var(--ease);
+}
+.dq-issue-list.open {
+  max-height: 600px;
+  overflow-y: auto;
+}
+.dq-issue-item {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.dq-issue-item:last-child { border-bottom: 0; }
+.dq-issue-item__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+  flex-wrap: wrap;
+}
+.dq-issue-item__col {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg-subtle);
+}
+.dq-issue-item__row {
+  font-size: var(--fs-xxs);
+  color: var(--color-fg-faint);
+}
+.dq-issue-item__desc {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-base);
+  margin: 0 0 var(--space-1) 0;
+}
+.dq-issue-item__fix {
+  font-size: var(--fs-xs);
+  color: var(--color-accent);
+  line-height: var(--lh-base);
+  margin: 0;
+}
+.dq-issue-item__fix strong {
+  font-weight: var(--fw-semibold);
+}
+
+/* Data preview table */
+.dq-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+}
+.dq-preview-table th {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-fg-faint);
+  font-weight: var(--fw-semibold);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.dq-preview-table td {
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-fg-subtle);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.dq-preview-table td.flagged-warn  { color: var(--color-amber); }
+.dq-preview-table td.flagged-high  { color: var(--color-red); }
+.dq-preview-table td .null-val     { color: var(--color-fg-faint); font-style: italic; }
+.dq-preview-table__more {
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-fg-faint);
+  font-style: italic;
+}

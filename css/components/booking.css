@@ -1,0 +1,157 @@
+/* ==========================================================================
+   Booking wizard — date/time picker + details form
+   ========================================================================== */
+
+.booking-card {
+  padding: var(--space-8);
+}
+
+.booking-step { }
+
+.booking-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+@media (min-width: 1024px) {
+  .booking-layout { flex-direction: row; }
+}
+
+.booking-main { flex: 1; min-width: 0; }
+
+.booking-side {
+  width: 100%;
+  flex-shrink: 0;
+}
+@media (min-width: 1024px) {
+  .booking-side { width: 15rem; }
+  .booking-side__sticky { position: sticky; top: var(--space-6); display: flex; flex-direction: column; gap: var(--space-5); }
+}
+
+/* ---- Slot summary banner ---- */
+.slot-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-accent-ghost);
+  border: 1px solid var(--color-accent-border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-5);
+  color: var(--color-fg-muted);
+  font-size: var(--fs-sm);
+}
+.slot-summary svg { color: var(--color-accent); flex-shrink: 0; }
+
+/* ---- Step back button ---- */
+.step-back {
+  color: var(--color-fg-subtle);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0;
+}
+.step-back:hover { color: var(--color-fg); }
+
+/* ---- Date / Time grids ---- */
+.date-grid, .time-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+@media (min-width: 640px) { .date-grid, .time-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 768px) { .date-grid, .time-grid { grid-template-columns: repeat(5, 1fr); } }
+
+.date-btn { gap: var(--space-1); }
+.date-btn__dow { font-size: var(--fs-xxs); color: var(--color-fg-faint); text-transform: uppercase; letter-spacing: var(--tracking-wide); }
+.date-btn__num { font-size: var(--fs-lg); font-weight: var(--fw-semibold); color: var(--color-fg); }
+.date-btn__mon { font-size: var(--fs-xxs); color: var(--color-fg-subtle); }
+.date-btn__count { font-size: var(--fs-xxs); color: var(--color-fg-faint); margin-top: 0.1rem; }
+
+/* ---- Success screen ---- */
+.booking-success {
+  text-align: center;
+  padding: var(--space-10) var(--space-4);
+}
+.booking-success__icon {
+  width: 36px; height: 36px;
+  color: var(--color-accent);
+  margin: 0 auto var(--space-4);
+}
+.booking-success__title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg-strong);
+  margin-bottom: var(--space-2);
+}
+.booking-success__detail {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+.booking-success__note {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-faint);
+  margin-top: var(--space-4);
+}
+
+/* ---- Empty state in date grid ---- */
+.booking-empty {
+  grid-column: 1 / -1;
+  padding: var(--space-8) 0;
+  text-align: center;
+  color: var(--color-fg-faint);
+  font-size: var(--fs-sm);
+}
+
+/* ---- Expect cards ---- */
+.expect-card {
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+.expect-card__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+  margin-bottom: var(--space-2);
+}
+.expect-card__text {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+
+/* ---- Sidebar info list ---- */
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.info-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+}
+.info-list__item svg { color: var(--color-accent); flex-shrink: 0; }
+
+.sidebar-card__title {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  margin-bottom: var(--space-3);
+}
+.sidebar-card__body {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+  margin-bottom: var(--space-3);
+}

@@ -1,0 +1,513 @@
+/* ==========================================================================
+   Tool page shared components — pipeline, context log, result cards, sidebar
+   Used by all 11 tool demo pages.
+   ========================================================================== */
+
+/* ---- Tool hero ---- */
+.tool-hero {
+  padding-top: var(--space-20);
+  padding-bottom: var(--space-6);
+}
+.tool-hero__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  flex-wrap: wrap;
+}
+.tool-hero__title {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-fg-strong);
+}
+@media (min-width: 768px) { .tool-hero__title { font-size: var(--fs-3xl); } }
+.tool-hero__lead {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-subtle);
+  max-width: 36rem;
+  line-height: var(--lh-loose);
+}
+.tool-hero__badge {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  white-space: nowrap;
+  margin-top: 0.3rem;
+}
+.tool-hero__badge--ai    { color: var(--color-purple); background: color-mix(in srgb, var(--color-purple) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-purple) 20%, transparent); }
+.tool-hero__badge--local { color: var(--color-blue);   background: var(--color-blue-dim); border: 1px solid var(--color-blue-border); }
+
+/* ---- Tool layout ---- */
+.tool-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+@media (min-width: 900px) {
+  .tool-layout { flex-direction: row; }
+}
+.tool-main { flex: 1; min-width: 0; }
+.tool-side {
+  width: 100%;
+  flex-shrink: 0;
+}
+.tool-side__sticky { display: flex; flex-direction: column; gap: var(--space-5); }
+@media (min-width: 900px) {
+  .tool-side { width: 16rem; }
+  .tool-side__sticky { position: sticky; top: var(--space-6); }
+}
+
+/* ---- Section heading inside a tool card ---- */
+.tool-section-label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  margin-bottom: var(--space-4);
+}
+
+/* ==========================================================================
+   Pipeline — horizontal stage flow
+   ========================================================================== */
+.tool-pipeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: var(--space-5) 0;
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+}
+
+.tool-stage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: all 0.4s var(--ease);
+  position: relative;
+}
+.tool-stage__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--color-fg-faint);
+  transition: all 0.4s var(--ease);
+  margin-top: -1px;
+}
+.tool-stage__label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-fg-faint);
+  transition: all 0.4s var(--ease);
+  white-space: nowrap;
+  line-height: 1;
+}
+.tool-stage__connector {
+  flex: 1;
+  min-width: 1.5rem;
+  height: 1px;
+  background: var(--color-border);
+  transition: background 0.4s var(--ease);
+}
+
+/* Stage states */
+.tool-stage.pending .tool-stage__dot   { background: var(--color-border-strong); }
+.tool-stage.pending .tool-stage__label { color: var(--color-fg-faint); }
+
+.tool-stage.active { background: color-mix(in srgb, var(--color-amber) 5%, transparent); }
+.tool-stage.active .tool-stage__dot   { background: var(--color-amber); box-shadow: 0 0 8px color-mix(in srgb, var(--color-amber) 40%, transparent); }
+.tool-stage.active .tool-stage__label { color: var(--color-amber); animation: stagePulse 1.5s ease-in-out infinite; }
+
+.tool-stage.done .tool-stage__dot   { background: var(--color-accent); }
+.tool-stage.done .tool-stage__label { color: var(--color-fg-subtle); }
+
+.tool-stage__connector.active    { background: color-mix(in srgb, var(--color-amber)  30%, transparent); }
+.tool-stage__connector.active-ai { background: color-mix(in srgb, var(--color-purple) 30%, transparent); }
+.tool-stage__connector.done      { background: color-mix(in srgb, var(--color-accent) 25%, transparent); }
+
+/* AI stage variant */
+.tool-stage[data-ai] .tool-stage__label::after {
+  content: 'AI';
+  font-size: 0.55rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+  margin-left: 0.3rem;
+  padding: 0.08rem 0.2rem 0.04rem;
+  border-radius: 0.15rem;
+  vertical-align: baseline;
+  color: var(--color-purple);
+  background: color-mix(in srgb, var(--color-purple) 10%, transparent);
+}
+.tool-stage.active[data-ai] { background: color-mix(in srgb, var(--color-purple) 5%, transparent); }
+.tool-stage.active[data-ai] .tool-stage__dot   { background: var(--color-purple); box-shadow: 0 0 8px color-mix(in srgb, var(--color-purple) 40%, transparent); }
+.tool-stage.active[data-ai] .tool-stage__label { color: var(--color-purple); }
+
+@keyframes stagePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* Responsive — wrap pipeline stages on narrow viewports */
+@media (max-width: 900px) {
+  .tool-pipeline {
+    flex-wrap: wrap !important;
+    gap: var(--space-2) !important;
+    padding: var(--space-3) !important;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .tool-stage {
+    padding: var(--space-1) var(--space-2) !important;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  .tool-stage__label { font-size: 0.625rem !important; }
+  .tool-stage__connector { display: none !important; }
+}
+
+/* ==========================================================================
+   Context log — live narrative during pipeline execution
+   ========================================================================== */
+.tool-context {
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  margin-top: var(--space-3);
+  background: var(--color-accent-ghost);
+  border: 1px solid var(--color-accent-border);
+  font-size: var(--fs-xs);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-base);
+  transition: all 0.4s var(--ease);
+}
+.tool-context.pulsing { animation: contextPulse 2s ease-in-out infinite; }
+@keyframes contextPulse {
+  0%, 100% { border-color: color-mix(in srgb, var(--color-amber) 10%, transparent); }
+  50%      { border-color: color-mix(in srgb, var(--color-amber) 35%, transparent); }
+}
+
+.tool-context__entry {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  margin-bottom: var(--space-3);
+  animation: fadeInUp 0.3s ease-out forwards;
+}
+.tool-context__entry:last-child { margin-bottom: 0; }
+
+.tool-context__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-top: 0.35rem;
+  flex-shrink: 0;
+  background: var(--color-amber);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-amber) 40%, transparent);
+}
+.tool-context__entry--ai .tool-context__dot {
+  background: var(--color-purple);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-purple) 40%, transparent);
+}
+.tool-context__entry.done .tool-context__dot {
+  background: var(--color-accent);
+  box-shadow: none;
+}
+
+.tool-context__body { flex: 1; min-width: 0; }
+
+.tool-context__title {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-amber);
+  margin-bottom: 0.2rem;
+}
+.tool-context__entry--ai .tool-context__title { color: var(--color-purple); }
+.tool-context__entry.done .tool-context__title { color: var(--color-accent); }
+
+.tool-context__text {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-base);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Result card — generic container for dynamic output
+   ========================================================================== */
+.tool-result-card {
+  border-radius: var(--radius);
+  padding: var(--space-4) var(--space-5);
+  margin-top: var(--space-3);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  animation: fadeInUp 0.4s ease-out;
+}
+.tool-result-card--success {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent-border);
+}
+
+.tool-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+.tool-result-label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-fg-faint);
+}
+.tool-result-meta {
+  font-size: var(--fs-xxs);
+  color: var(--color-fg-faint);
+}
+
+/* Score pill (inside tool-result-header) */
+.tool-score {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  line-height: 1;
+}
+.tool-score--high   { color: var(--color-accent); background: var(--color-accent-dim); }
+.tool-score--medium { color: var(--color-amber);  background: var(--color-amber-dim); }
+.tool-score--low    { color: var(--color-red);    background: color-mix(in srgb, var(--color-red) 8%, transparent); }
+
+/* ==========================================================================
+   Stat box — used inside result cards for metrics
+   ========================================================================== */
+.tool-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+@media (max-width: 640px) { .tool-stat-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.tool-stat {
+  text-align: center;
+  padding: var(--space-3);
+}
+.tool-stat__value {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-fg-strong);
+  line-height: 1;
+}
+.tool-stat__value--accent  { color: var(--color-accent); }
+.tool-stat__value--purple  { color: var(--color-purple); }
+.tool-stat__value--amber   { color: var(--color-amber); }
+.tool-stat__value--blue    { color: var(--color-blue); }
+.tool-stat__value--red     { color: var(--color-red); }
+.tool-stat__value--success { color: var(--color-accent); }
+.tool-stat__value--danger  { color: var(--color-red); }
+
+.tool-stat__label {
+  font-size: var(--fs-xxs);
+  color: var(--color-fg-faint);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-top: var(--space-1);
+}
+
+/* ==========================================================================
+   Alert card — used by anomaly-detection and other tools for severity items
+   ========================================================================== */
+.tool-alert {
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-2);
+  animation: fadeInUp 0.4s ease-out;
+}
+.tool-alert--critical { border: 1px solid color-mix(in srgb, var(--color-red)    20%, transparent); background: color-mix(in srgb, var(--color-red)    3%, transparent); }
+.tool-alert--warning  { border: 1px solid color-mix(in srgb, var(--color-amber)  15%, transparent); background: color-mix(in srgb, var(--color-amber)  2%, transparent); }
+.tool-alert--info     { border: 1px solid color-mix(in srgb, var(--color-blue)   15%, transparent); background: color-mix(in srgb, var(--color-blue)   2%, transparent); }
+.tool-alert--success  { border: 1px solid var(--color-accent-border); background: var(--color-accent-ghost); }
+
+.tool-alert__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  flex-wrap: wrap;
+}
+.tool-alert__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+  margin-bottom: var(--space-1);
+}
+.tool-alert__text {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+  margin-bottom: var(--space-2);
+}
+
+.tool-alert__meta {
+  font-size: var(--fs-xxs);
+  color: var(--color-fg-faint);
+}
+
+/* Severity + method badges */
+.tool-badge {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.tool-badge--critical { color: var(--color-red);    background: color-mix(in srgb, var(--color-red)    8%, transparent); }
+.tool-badge--warning  { color: var(--color-amber);  background: var(--color-amber-dim); }
+.tool-badge--info     { color: var(--color-blue);   background: var(--color-blue-dim); }
+.tool-badge--success  { color: var(--color-accent); background: var(--color-accent-dim); }
+.tool-badge--ai       { color: var(--color-purple); background: color-mix(in srgb, var(--color-purple) 10%, transparent); font-weight: var(--fw-semibold); text-transform: none; letter-spacing: 0.04em; }
+
+/* ==========================================================================
+   Compare panel — side-by-side (e.g. threshold vs AI, before vs after)
+   ========================================================================== */
+.tool-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+@media (max-width: 520px) { .tool-compare { grid-template-columns: 1fr; } }
+
+.tool-compare__panel {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+}
+.tool-compare__panel--danger  { background: color-mix(in srgb, var(--color-red)    3%, transparent); border: 1px solid color-mix(in srgb, var(--color-red)    8%, transparent); }
+.tool-compare__panel--success { background: var(--color-accent-ghost); border: 1px solid var(--color-accent-border); }
+
+.tool-compare__label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-1);
+}
+.tool-compare__panel--danger  .tool-compare__label { color: var(--color-red); }
+.tool-compare__panel--success .tool-compare__label { color: var(--color-accent); }
+
+.tool-compare__text {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+
+/* ==========================================================================
+   Scenario / sample picker — buttons
+   ========================================================================== */
+.tool-sample-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tool-sample-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  transition: all var(--dur) var(--ease);
+  font-family: inherit;
+  text-align: left;
+}
+.tool-sample-btn:hover {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent-border);
+}
+.tool-sample-btn.active {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent);
+}
+.tool-sample-btn__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-fg);
+}
+.tool-sample-btn__sub {
+  font-size: var(--fs-xxs);
+  color: var(--color-fg-faint);
+}
+
+/* ==========================================================================
+   Tool sidebar card — explainer + CTA
+   ========================================================================== */
+.tool-sidebar-card {
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+.tool-sidebar-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-accent-border), transparent);
+}
+
+.tool-sidebar-card__label {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  margin-bottom: var(--space-3);
+}
+.tool-sidebar-card__body {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+  margin-bottom: var(--space-3);
+}
+.tool-sidebar-card__body:last-child { margin-bottom: 0; }
+
+.tool-sidebar-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.tool-sidebar-bullets p {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+.tool-sidebar-bullets p::before {
+  content: '\203A ';
+  color: var(--color-accent);
+  margin-right: 0.25rem;
+}
+
+/* Shared CTA block inside tool sidebar (reuse .sidebar-cta from blog.css) */
+
+/* Revealed sidebar animation */
+.tool-side--revealed { animation: fadeInUp 0.5s ease-out; }

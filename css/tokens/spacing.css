@@ -1,0 +1,48 @@
+/* ==========================================================================
+   Spacing, sizing, radius, z-index, timing tokens
+   ========================================================================== */
+
+:root {
+  /* Space scale */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Radius */
+  --radius-sm: 0.3rem;
+  --radius:    0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-pill: 9rem;
+  --radius-full: 9999px;
+
+  /* Content widths */
+  --content-max: 72rem;   /* ~1152px — matches current max-w-6xl */
+  --content-narrow: 48rem;
+  --sidebar-width: 200px;
+
+  /* Z-index */
+  --z-base: 1;
+  --z-sticky: 30;
+  --z-sidebar: 50;
+  --z-backtotop: 40;
+  --z-overlay: 99;
+  --z-modal: 100;
+
+  /* Motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 0.2s;
+  --dur:      0.3s;
+  --dur-slow: 0.5s;
+}

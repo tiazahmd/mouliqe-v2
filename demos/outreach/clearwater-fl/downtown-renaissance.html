@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Clearwater — Downtown Renaissance Project Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>body{background:#060a14}.card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}.card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}.stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}.stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}.stat-delta{font-size:0.65rem;font-weight:600}.delta-up{color:#4ade80}.section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}.dept-row{transition:all 0.2s}.dept-row:hover{background:rgba(255,255,255,0.02)}.progress-bar{height:8px;border-radius:4px;background:rgba(255,255,255,0.06);overflow:hidden}.progress-fill{height:100%;border-radius:4px}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}</style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the City of Clearwater</p>
+    <h1 class="text-2xl md:text-3xl font-bold text-white">Downtown Renaissance Project Tracker</h1>
+    <p class="text-[0.75rem] text-white/35 mt-1">$100M+ in construction. New City Hall. 28-story tower. 10-story hotel. All tracked in real time.</p>
+  </header>
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1"><p class="stat-label">New City Hall</p><p class="stat-value mt-1">$31.6M</p><p class="stat-delta" style="color:rgba(96,165,250,0.7)">Completion late 2026</p></div>
+      <div class="card p-5 anim anim-d1"><p class="stat-label">The Bluffs</p><p class="stat-value mt-1">28 floors</p><p class="stat-delta" style="color:rgba(74,222,128,0.7)">400 units, Apr 2028</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Hotel</p><p class="stat-value mt-1">10 stories</p><p class="stat-delta" style="color:rgba(251,191,36,0.7)">169-space garage</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">BayCare Sound</p><p class="stat-value mt-1">336K+</p><p class="stat-delta delta-up mt-1">visitors since 2023</p></div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Investment Breakdown</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Downtown Project Portfolio</p>
+        <canvas id="investChart" height="200"></canvas>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Construction Timeline</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Project Milestones (2025-2028)</p>
+        <canvas id="timelineChart" height="200"></canvas>
+      </div>
+    </section>
+    <section class="card mt-4 anim anim-d4 overflow-hidden">
+      <div class="p-5 pb-3">
+        <p class="section-label">Project Status</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Downtown Renaissance — Active Projects</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-[0.68rem]"><thead><tr class="border-b border-white/5"><th class="text-left px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Project</th><th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Investment</th><th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Completion</th><th class="px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]" style="width:120px">Progress</th></tr></thead><tbody id="projectTable"></tbody></table>
+      </div>
+    </section>
+    <footer class="mt-8 text-center"><p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the City of Clearwater, Florida</p><p class="text-[0.5rem] text-white/12 mt-1">Project data from city GovDelivery bulletins, Fox13, and Business Observer reporting.</p></footer>
+  </main>
+<script>
+Chart.defaults.color='rgba(255,255,255,0.35)';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family='Oxanium';Chart.defaults.font.size=11;
+new Chart(document.getElementById('investChart'),{type:'doughnut',data:{labels:['New City Hall','The Bluffs (28-story)','Hotel + Garage','Osceola Parking Garage','Streetscape Improvements','Coachman Park (completed)'],datasets:[{data:[31.6,85,28,12,8,15],backgroundColor:['rgba(96,165,250,0.6)','rgba(74,222,128,0.5)','rgba(251,191,36,0.5)','rgba(192,132,252,0.5)','rgba(248,113,113,0.4)','rgba(255,255,255,0.15)'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'right',labels:{boxWidth:8,padding:8,font:{size:9}}}}}});
+new Chart(document.getElementById('timelineChart'),{type:'bar',data:{labels:['2025 Q3-Q4','2026 Q1-Q2','2026 Q3-Q4','2027','2028'],datasets:[{label:'City Hall',data:[30,60,100,0,0],backgroundColor:'rgba(96,165,250,0.5)',borderRadius:4},{label:'The Bluffs',data:[5,15,25,60,100],backgroundColor:'rgba(74,222,128,0.4)',borderRadius:4},{label:'Hotel',data:[20,45,70,100,0],backgroundColor:'rgba(251,191,36,0.4)',borderRadius:4}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:15,font:{size:10}}}},scales:{y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+const projects=[{n:'New City Hall (40K sq ft)',i:'$31.6M',c:'Late 2026',pct:40},{n:'The Bluffs — 400-Unit Tower',i:'$85M+',c:'April 2028',pct:10},{n:'10-Story Hotel + Rooftop Bar',i:'$28M',c:'2027',pct:25},{n:'Osceola Parking Garage',i:'$12M',c:'Late 2026',pct:35},{n:'Streetscape Improvements',i:'$8M',c:'Late 2026',pct:20},{n:'Coachman Park & BayCare Sound',i:'$15M',c:'Completed',pct:100}];
+const t=document.getElementById('projectTable');projects.forEach(p=>{const c=p.pct===100?'rgba(74,222,128,0.7)':p.pct>30?'rgba(96,165,250,0.7)':'rgba(251,191,36,0.7)';t.innerHTML+=`<tr class="dept-row border-b border-white/[0.03]"><td class="px-5 py-3 text-white/60 font-medium">${p.n}</td><td class="text-right px-4 py-3 text-white/50">${p.i}</td><td class="text-right px-4 py-3 text-white/40">${p.c}</td><td class="px-5 py-3"><div class="progress-bar"><div class="progress-fill" style="width:${p.pct}%;background:${c}"></div></div><p class="text-[0.5rem] text-white/25 mt-1 text-right">${p.pct}%</p></td></tr>`;});
+</script>
+</body>
+</html>

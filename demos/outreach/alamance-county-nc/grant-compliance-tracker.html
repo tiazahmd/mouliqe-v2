@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alamance County — Grant Compliance & Expenditure Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: #060a14; }
+    .card { background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 0.75rem; }
+    .card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+    .stat-value { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+    .stat-label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); }
+    .stat-sub { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
+    .section-label { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.25); }
+    .pill { font-size: 0.55rem; padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 600; }
+    .pill-green { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+    .pill-yellow { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+    .pill-red { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+    .pill-blue { background: rgba(96,165,250,0.1); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+    .progress-bg { background: rgba(255,255,255,0.05); border-radius: 9999px; height: 8px; overflow: hidden; }
+    .progress-fill { border-radius: 9999px; height: 8px; transition: width 1s ease; }
+    .filter-btn { font-size: 0.6rem; padding: 0.3rem 0.7rem; border-radius: 9999px; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: rgba(255,255,255,0.35); }
+    .filter-btn.active { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.3); color: #4ade80; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    .anim { animation: fadeUp 0.5s ease both; }
+    .anim-d1 { animation-delay: 0.1s; } .anim-d2 { animation-delay: 0.2s; }
+    .anim-d3 { animation-delay: 0.3s; } .anim-d4 { animation-delay: 0.4s; }
+    .grant-row { transition: all 0.2s; cursor: pointer; }
+    .grant-row:hover { background: rgba(255,255,255,0.02); }
+    .grant-detail { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .grant-detail.open { max-height: 400px; }
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for Alamance County, NC</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-white">Grant Compliance & Expenditure Tracker</h1>
+        <p class="text-[0.75rem] text-white/35 mt-1">Unified view across ARPA, CDBG, opioid settlement, BJA, and COPS grants</p>
+      </div>
+      <div class="text-right hidden md:block">
+        <p class="text-[0.6rem] text-white/25">ARPA expenditure deadline</p>
+        <p class="text-[0.75rem] font-semibold" style="color:#f87171" id="countdown"></p>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-4">
+      <button class="filter-btn active" onclick="filterGrants('all', this)">All Grants</button>
+      <button class="filter-btn" onclick="filterGrants('arpa', this)">ARPA ($32.9M)</button>
+      <button class="filter-btn" onclick="filterGrants('opioid', this)">Opioid Settlement</button>
+      <button class="filter-btn" onclick="filterGrants('bja', this)">BJA / COPS</button>
+      <button class="filter-btn" onclick="filterGrants('cdbg', this)">CDBG</button>
+      <button class="filter-btn" onclick="filterGrants('other', this)">Other Federal</button>
+    </div>
+  </header>
+
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+
+    <!-- Portfolio Summary -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">Total Grant Portfolio</p>
+        <p class="stat-value mt-1">$38.8M</p>
+        <p class="stat-sub mt-1">21 active grants across 8 departments</p>
+      </div>
+      <div class="card p-5 anim anim-d1">
+        <p class="stat-label">ARPA Remaining</p>
+        <p class="stat-value mt-1" style="color:#fbbf24">$4.1M</p>
+        <div class="progress-bg mt-2">
+          <div class="progress-fill" style="width:87.5%;background:linear-gradient(90deg,#4ade80,#fbbf24)"></div>
+        </div>
+        <p class="stat-sub mt-2">87.5% obligated — deadline Dec 31, 2026</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Compliance Alerts</p>
+        <p class="stat-value mt-1" style="color:#f87171">3</p>
+        <p class="stat-sub mt-1">2 reporting overdue, 1 at risk</p>
+      </div>
+      <div class="card p-5 anim anim-d2">
+        <p class="stat-label">Next Reporting Due</p>
+        <p class="stat-value mt-1" style="font-size:1.4rem">Apr 30</p>
+        <p class="stat-sub mt-1">ARPA Q1 2026 performance report</p>
+      </div>
+    </section>
+
+    <!-- ARPA Burn-Down Chart -->
+    <section class="mt-8 anim anim-d3">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="section-label">ARPA Fund Burn-Down — $32.9M Allocation</p>
+          <p class="text-[0.65rem] text-white/25 mt-1">Tranche 1: $16.46M (May 2021) | Tranche 2: $16.46M (Jun 2022) | Expenditure deadline: Dec 31, 2026</p>
+        </div>
+      </div>
+      <div class="card p-6" style="height: 300px;">
+        <canvas id="burndownChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Grant-by-Grant Breakdown -->
+    <section class="mt-8 anim anim-d3">
+      <p class="section-label mb-4">Active Grant Portfolio — Click to expand details</p>
+      <div class="card overflow-hidden" id="grantTable">
+        <table class="w-full text-[0.65rem]">
+          <thead>
+            <tr class="text-white/25 text-left border-b border-white/5">
+              <th class="p-4 font-semibold">Grant Program</th>
+              <th class="p-4 font-semibold">Source</th>
+              <th class="p-4 font-semibold">Award</th>
+              <th class="p-4 font-semibold">Spent</th>
+              <th class="p-4 font-semibold">Utilization</th>
+              <th class="p-4 font-semibold">Deadline</th>
+              <th class="p-4 font-semibold">Status</th>
+              <th class="p-4 font-semibold">Department</th>
+            </tr>
+          </thead>
+          <tbody id="grantBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- Compliance Calendar & Department Allocation -->
+    <section class="mt-8 grid md:grid-cols-2 gap-4 anim anim-d4">
+      <!-- Compliance Calendar -->
+      <div class="card p-6">
+        <p class="section-label mb-4">Upcoming Compliance Deadlines</p>
+        <div class="space-y-3" id="deadlines">
+          <div class="flex items-center gap-3 p-3 rounded-lg" style="background:rgba(248,113,113,0.04);border:1px solid rgba(248,113,113,0.08)">
+            <div class="text-center" style="min-width:48px"><p class="text-[0.55rem] text-white/25">APR</p><p class="text-[1rem] font-bold" style="color:#f87171">30</p></div>
+            <div class="flex-1"><p class="text-[0.65rem] text-white/50 font-semibold">ARPA Q1 2026 Performance Report</p><p class="text-[0.55rem] text-white/25">Treasury SLFRF portal — 14 days remaining</p></div>
+            <span class="pill pill-red">Urgent</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg" style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.08)">
+            <div class="text-center" style="min-width:48px"><p class="text-[0.55rem] text-white/25">MAY</p><p class="text-[1rem] font-bold" style="color:#fbbf24">15</p></div>
+            <div class="flex-1"><p class="text-[0.65rem] text-white/50 font-semibold">BJA Drug Court Semi-Annual Report</p><p class="text-[0.55rem] text-white/25">PMT system — Stepping Up metrics required</p></div>
+            <span class="pill pill-yellow">Upcoming</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg" style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.08)">
+            <div class="text-center" style="min-width:48px"><p class="text-[0.55rem] text-white/25">JUN</p><p class="text-[1rem] font-bold" style="color:#fbbf24">30</p></div>
+            <div class="flex-1"><p class="text-[0.65rem] text-white/50 font-semibold">CDBG Annual Performance Report (CAPER)</p><p class="text-[0.55rem] text-white/25">HUD IDIS system — housing & community dev metrics</p></div>
+            <span class="pill pill-yellow">Upcoming</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg" style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.08)">
+            <div class="text-center" style="min-width:48px"><p class="text-[0.55rem] text-white/25">JUL</p><p class="text-[1rem] font-bold" style="color:#4ade80">31</p></div>
+            <div class="flex-1"><p class="text-[0.65rem] text-white/50 font-semibold">ARPA Q2 2026 Performance Report</p><p class="text-[0.55rem] text-white/25">Treasury SLFRF portal</p></div>
+            <span class="pill pill-green">On Track</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg" style="background:rgba(248,113,113,0.04);border:1px solid rgba(248,113,113,0.08)">
+            <div class="text-center" style="min-width:48px"><p class="text-[0.55rem] text-white/25">SEP</p><p class="text-[1rem] font-bold" style="color:#f87171">30</p></div>
+            <div class="flex-1"><p class="text-[0.65rem] text-white/50 font-semibold">NC Opioid Settlement Annual Spending Report</p><p class="text-[0.55rem] text-white/25">NC DOJ portal — must document approved-use compliance</p></div>
+            <span class="pill pill-blue">Scheduled</span>
+          </div>
+        </div>
+      </div>
+      <!-- Department Allocation -->
+      <div class="card p-6">
+        <p class="section-label mb-4">Grant Funding by Department</p>
+        <div style="height: 260px; position: relative;">
+          <canvas id="deptChart"></canvas>
+        </div>
+        <div class="grid grid-cols-2 gap-2 mt-4" id="deptLegend"></div>
+      </div>
+    </section>
+
+    <!-- Mouliqe CTA -->
+    <section class="mt-12 mb-8 anim anim-d4">
+      <div class="card p-8 text-center" style="border-color:rgba(74,222,128,0.1)">
+        <p class="text-[0.55rem] font-semibold tracking-[0.2em] uppercase text-forest-400 mb-3">What This Dashboard Demonstrates</p>
+        <p class="text-[0.8rem] text-white/50 max-w-2xl mx-auto leading-relaxed">Alamance County manages $38.8M+ in active federal and state grants across 8 departments — each with different reporting portals, compliance requirements, and deadlines. Today, this data lives in spreadsheets, email threads, and individual department files. This concept dashboard shows how a unified grant management layer can provide real-time visibility into fund utilization, flag compliance risks before they become audit findings, and generate the cross-program analytics needed for 2 CFR Part 200 reporting.</p>
+        <div class="flex justify-center gap-6 mt-6">
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Service Area</p>
+            <p class="text-[0.7rem] text-forest-400 font-semibold mt-1">Analytics & Business Intelligence</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Timeline</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">6–10 weeks to MVP</p>
+          </div>
+          <div class="text-center">
+            <p class="text-[0.55rem] text-white/25 uppercase tracking-wider">Prepared by</p>
+            <p class="text-[0.7rem] text-white/50 font-semibold mt-1">mouliqe.com</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <script>
+    // ARPA countdown
+    const deadline = new Date('2026-12-31T23:59:59');
+    function updateCountdown() {
+      const now = new Date();
+      const diff = deadline - now;
+      const days = Math.floor(diff / (1000*60*60*24));
+      const months = Math.floor(days / 30);
+      document.getElementById('countdown').textContent = `${days} days (${months} months) remaining`;
+    }
+    updateCountdown();
+
+    // ARPA Burn-Down Chart
+    const burnCtx = document.getElementById('burndownChart').getContext('2d');
+    new Chart(burnCtx, {
+      type: 'line',
+      data: {
+        labels: ['May 21','Dec 21','Jun 22','Dec 22','Jun 23','Dec 23','Jun 24','Dec 24','Jun 25','Dec 25','Apr 26','Dec 26'],
+        datasets: [
+          {
+            label: 'Planned Spend',
+            data: [32.9, 30.5, 27.0, 23.5, 20.0, 16.5, 13.0, 9.5, 6.5, 4.0, 2.0, 0],
+            borderColor: 'rgba(255,255,255,0.15)',
+            borderDash: [5, 5],
+            pointRadius: 0,
+            fill: false,
+            tension: 0.2
+          },
+          {
+            label: 'Actual Remaining',
+            data: [32.9, 31.2, 28.8, 25.1, 21.3, 17.6, 13.8, 9.2, 6.8, 5.1, 4.1, null],
+            borderColor: 'rgba(251,191,36,0.7)',
+            backgroundColor: 'rgba(251,191,36,0.05)',
+            fill: true,
+            pointRadius: 4,
+            pointHoverRadius: 7,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'top', labels: { color: 'rgba(255,255,255,0.3)', font: { family: 'Oxanium', size: 10 }, boxWidth: 12 } },
+          tooltip: {
+            backgroundColor: 'rgba(6,10,20,0.95)', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1,
+            callbacks: { label: ctx => `${ctx.dataset.label}: $${ctx.parsed.y}M` }
+          }
+        },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 9 } } },
+          y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: 'rgba(255,255,255,0.25)', font: { family: 'Oxanium', size: 10 }, callback: v => '$' + v + 'M' }, min: 0, max: 35 }
+        }
+      }
+    });
+
+    // Grant data
+    const grants = [
+      { name: 'ARPA — SLFRF', source: 'arpa', award: 32925136, spent: 28825136, deadline: '2026-12-31', status: 'on-track', dept: 'Multiple', detail: 'Water/sewer infrastructure ($14.2M), broadband ($5.8M), public health ($4.1M), premium pay ($2.9M), revenue replacement ($1.8M)' },
+      { name: 'CDBG Entitlement', source: 'cdbg', award: 481204, spent: 362000, deadline: '2026-09-30', status: 'on-track', dept: 'Planning', detail: 'Community development, housing rehabilitation, public facilities improvements in low-income areas' },
+      { name: 'Opioid Settlement (Wave 1)', source: 'opioid', award: 1850000, spent: 620000, deadline: '2038-12-31', status: 'on-track', dept: 'Health/DSS', detail: 'NC MOA — 85% to local govts. Approved uses: treatment, recovery, prevention, harm reduction. Annual reporting to NC DOJ.' },
+      { name: 'BJA Adult Drug Treatment Court', source: 'bja', award: 900000, spent: 310000, deadline: '2027-09-30', status: 'at-risk', dept: 'Courts/Sheriff', detail: 'New program — Stepping Up Initiative. Requires PMT reporting on participants, completions, recidivism. Data collection infrastructure needed.' },
+      { name: 'COPS TEP (Technology)', source: 'bja', award: 963000, spent: 485000, deadline: '2027-03-31', status: 'on-track', dept: 'Sheriff', detail: 'Technology and equipment for law enforcement. Body cameras, records management, data sharing platforms.' },
+      { name: 'IIJA Infrastructure', source: 'other', award: 1000000, spent: 150000, deadline: '2028-09-30', status: 'on-track', dept: 'Public Works', detail: 'Infrastructure Investment and Jobs Act funding for water system improvements.' },
+      { name: 'SAFER (Fire/EMS)', source: 'other', award: 496000, spent: 248000, deadline: '2027-06-30', status: 'on-track', dept: 'EMS/Fire', detail: 'Staffing for Adequate Fire and Emergency Response. Personnel costs for additional firefighter positions.' },
+      { name: 'CDBG-DR (Helene)', source: 'cdbg', award: 0, spent: 0, deadline: 'TBD', status: 'pending', dept: 'Emergency Mgmt', detail: 'Potential CDBG-DR allocation for Hurricane Helene damage. NC received $1.4B statewide. Alamance allocation TBD.' },
+    ];
+
+    // Render grant table
+    const tbody = document.getElementById('grantBody');
+    let activeFilter = 'all';
+
+    function renderGrants(filter) {
+      tbody.innerHTML = '';
+      const filtered = filter === 'all' ? grants : grants.filter(g => g.source === filter);
+      filtered.forEach((g, i) => {
+        const pct = g.award > 0 ? Math.round((g.spent / g.award) * 100) : 0;
+        const statusPill = g.status === 'on-track' ? 'pill-green' : g.status === 'at-risk' ? 'pill-yellow' : g.status === 'overdue' ? 'pill-red' : 'pill-blue';
+        const statusLabel = g.status === 'on-track' ? 'On Track' : g.status === 'at-risk' ? 'At Risk' : g.status === 'overdue' ? 'Overdue' : 'Pending';
+        const row = document.createElement('tr');
+        row.className = 'grant-row border-b border-white/3';
+        row.setAttribute('data-source', g.source);
+        row.innerHTML = `
+          <td class="p-4 text-white/60 font-semibold">${g.name}</td>
+          <td class="p-4"><span class="pill pill-blue">${g.source.toUpperCase()}</span></td>
+          <td class="p-4 text-white/50">$${(g.award/1000000).toFixed(2)}M</td>
+          <td class="p-4 text-white/50">$${(g.spent/1000000).toFixed(2)}M</td>
+          <td class="p-4" style="min-width:120px">
+            <div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${pct > 75 ? '#4ade80' : pct > 40 ? '#fbbf24' : '#60a5fa'}"></div></div>
+            <p class="text-[0.55rem] text-white/25 mt-1">${pct}%</p>
+          </td>
+          <td class="p-4 text-white/40">${g.deadline}</td>
+          <td class="p-4"><span class="pill ${statusPill}">${statusLabel}</span></td>
+          <td class="p-4 text-white/40">${g.dept}</td>
+        `;
+        row.addEventListener('click', () => {
+          const detail = row.nextElementSibling;
+          if (detail && detail.classList.contains('grant-detail')) {
+            detail.classList.toggle('open');
+          }
+        });
+        tbody.appendChild(row);
+
+        // Detail row
+        const detailRow = document.createElement('tr');
+        detailRow.innerHTML = `<td colspan="8" class="px-4"><div class="grant-detail"><div class="p-4 text-[0.6rem] text-white/30 leading-relaxed" style="background:rgba(255,255,255,0.01)">${g.detail}</div></div></td>`;
+        tbody.appendChild(detailRow);
+      });
+    }
+    renderGrants('all');
+
+    function filterGrants(source, btn) {
+      activeFilter = source;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGrants(source);
+    }
+
+    // Department Donut Chart
+    const deptData = [
+      { dept: 'Water/Sewer', amount: 14.2, color: 'rgba(96,165,250,0.7)' },
+      { dept: 'Broadband', amount: 5.8, color: 'rgba(192,132,252,0.7)' },
+      { dept: 'Public Health', amount: 4.1, color: 'rgba(74,222,128,0.7)' },
+      { dept: 'Premium Pay', amount: 2.9, color: 'rgba(251,191,36,0.7)' },
+      { dept: 'Sheriff/Courts', amount: 2.2, color: 'rgba(248,113,113,0.7)' },
+      { dept: 'Health/DSS (Opioid)', amount: 1.85, color: 'rgba(244,114,182,0.7)' },
+      { dept: 'Revenue Replacement', amount: 1.8, color: 'rgba(255,255,255,0.2)' },
+      { dept: 'Other Federal', amount: 1.5, color: 'rgba(45,212,191,0.7)' },
+    ];
+
+    const deptCtx = document.getElementById('deptChart').getContext('2d');
+    new Chart(deptCtx, {
+      type: 'doughnut',
+      data: {
+        labels: deptData.map(d => d.dept),
+        datasets: [{
+          data: deptData.map(d => d.amount),
+          backgroundColor: deptData.map(d => d.color),
+          borderWidth: 0,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(6,10,20,0.95)',
+            callbacks: { label: ctx => `${ctx.label}: $${ctx.parsed}M` }
+          }
+        }
+      }
+    });
+
+    // Custom legend
+    const legend = document.getElementById('deptLegend');
+    deptData.forEach(d => {
+      legend.innerHTML += `<div class="flex items-center gap-2"><div class="w-2 h-2 rounded" style="background:${d.color}"></div><span class="text-[0.55rem] text-white/30">${d.dept} — $${d.amount}M</span></div>`;
+    });
+  </script>
+</body>
+</html>

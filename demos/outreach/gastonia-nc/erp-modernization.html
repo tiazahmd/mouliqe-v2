@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Gastonia — ERP Modernization Analytics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>body{background:#060a14}.card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}.card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}.stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}.stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}.stat-delta{font-size:0.65rem;font-weight:600}.delta-up{color:#4ade80}.section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}.alert-card{border-left:3px solid rgba(251,191,36,0.7);background:rgba(251,191,36,0.04);padding:1rem;border-radius:0 0.5rem 0.5rem 0}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}</style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the City of Gastonia</p>
+    <h1 class="text-2xl md:text-3xl font-bold text-white">ERP Modernization & Data Architecture</h1>
+    <p class="text-[0.75rem] text-white/35 mt-1">Active ERP consultant RFP. CTO position vacant. This is what the analytics layer looks like alongside your new ERP.</p>
+  </header>
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+    <div class="alert-card anim anim-d1 mt-6">
+      <p class="text-[0.7rem] font-bold text-white/70">You're selecting an ERP consultant right now. The analytics layer should be designed alongside it — not after.</p>
+      <p class="text-[0.6rem] text-white/40 mt-1">Most cities implement ERP first, then realize they can't get cross-department analytics out of it. Mouliqe designs the data architecture in parallel so your ERP investment delivers insights from day one.</p>
+    </div>
+    <section class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+      <div class="card p-5 anim anim-d1"><p class="stat-label">ERP Status</p><p class="stat-value mt-1">RFP Active</p><p class="stat-delta" style="color:rgba(251,191,36,0.7)">Consultant selection</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">CTO Position</p><p class="stat-value mt-1">Vacant</p><p class="stat-delta" style="color:rgba(248,113,113,0.7)">Capacity gap</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Current Systems</p><p class="stat-value mt-1">6+</p><p class="stat-delta" style="color:rgba(96,165,250,0.7)">Disconnected platforms</p></div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Current Platform Landscape</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Systems That Need to Connect to Your New ERP</p>
+        <canvas id="platformChart" height="220"></canvas>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">ERP + Analytics Architecture</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-3">What Most Cities Miss</p>
+        <div class="space-y-3">
+          <div class="p-3 rounded-lg" style="background:rgba(248,113,113,0.04);border:1px solid rgba(248,113,113,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Common Mistake: ERP First, Analytics Later</p><p class="text-[0.58rem] text-white/35">Cities spend 18-24 months implementing ERP, then discover they can't get cross-department reports. The analytics layer should be designed in parallel.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Better: Parallel Design</p><p class="text-[0.58rem] text-white/35">Define your reporting requirements before ERP selection. Ensure the chosen ERP has APIs that feed your analytics layer. Build dashboards as ERP modules go live.</p></div>
+          <div class="p-3 rounded-lg" style="background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.1)"><p class="text-[0.65rem] font-bold text-white/60">Mouliqe's Role</p><p class="text-[0.58rem] text-white/35">We don't sell ERP. We design the data architecture that makes your ERP investment deliver cross-department intelligence from day one.</p></div>
+        </div>
+      </div>
+    </section>
+    <section class="card mt-4 p-5 anim anim-d4">
+      <p class="section-label">Proposed Architecture</p>
+      <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-4">ERP + Analytics — Designed Together</p>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-[0.6rem] font-semibold">
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:rgba(251,191,36,0.7)">New ERP System</span><span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15);color:rgba(192,132,252,0.7)">RTCC / Flock</span><span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);color:rgba(96,165,250,0.7)">Esri GIS</span><span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15);color:rgba(74,222,128,0.7)">NEOGOV HR</span>
+        <span class="text-white/20 mx-2">&#8594;</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)">Analytics Layer</span>
+        <span class="text-white/20 mx-2">&#8594;</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.25);color:rgba(74,222,128,0.9)">City Intelligence Platform</span>
+      </div>
+      <p class="text-[0.6rem] text-white/25 text-center mt-4">Designed alongside your ERP selection — not bolted on after</p>
+    </section>
+    <footer class="mt-8 text-center"><p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the City of Gastonia, North Carolina</p><p class="text-[0.5rem] text-white/12 mt-1">ERP RFP data from city bid solicitations. Platform data from city website analysis.</p></footer>
+  </main>
+<script>
+Chart.defaults.color='rgba(255,255,255,0.35)';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family='Oxanium';Chart.defaults.font.size=11;
+new Chart(document.getElementById('platformChart'),{type:'doughnut',data:{labels:['Legacy Financial/ERP','Flock Safety (RTCC)','Esri GIS','NEOGOV (HR)','SeamlessDocs (Forms)','Paymentus (Payments)','Joomla (Website)'],datasets:[{data:[25,20,15,12,10,10,8],backgroundColor:['rgba(248,113,113,0.5)','rgba(192,132,252,0.5)','rgba(96,165,250,0.5)','rgba(74,222,128,0.5)','rgba(251,191,36,0.5)','rgba(255,255,255,0.2)','rgba(255,255,255,0.1)'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'right',labels:{boxWidth:8,padding:8,font:{size:9}}}}}});
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+/* ==========================================================================
+   Theme toggle button — sits in sidebar
+   ========================================================================== */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-fg-subtle);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.theme-toggle:hover {
+  background: var(--color-accent-ghost);
+  border-color: var(--color-accent-border);
+  color: var(--color-accent);
+}
+
+.theme-toggle__icon { width: 14px; height: 14px; }
+
+/* Show sun in dark mode (to indicate "switch to light"), moon in light mode */
+.theme-toggle__icon--sun  { display: none; }
+.theme-toggle__icon--moon { display: block; }
+
+:root[data-theme="light"] .theme-toggle__icon--sun  { display: block; }
+:root[data-theme="light"] .theme-toggle__icon--moon { display: none; }
+
+/* ---- Sidebar footer with toggle ---- */
+.sidebar-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-8);
+}

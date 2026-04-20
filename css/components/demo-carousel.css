@@ -1,0 +1,182 @@
+/* ==========================================================================
+   Demo carousel — homepage interactive component
+   ========================================================================== */
+
+.demo-carousel { position: relative; }
+
+.demo-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.demo-tab {
+  font-family: inherit;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  color: var(--color-fg-subtle);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  letter-spacing: var(--tracking-wide);
+}
+.demo-tab:hover {
+  border-color: var(--color-border-strong);
+  color: var(--color-fg);
+}
+.demo-tab.active {
+  border-color: var(--color-accent-border);
+  background: var(--color-accent-ghost);
+  color: var(--color-accent);
+}
+
+.demo-card-wrap {
+  position: relative;
+  min-height: 14rem;
+}
+
+.demo-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  padding: var(--space-6) var(--space-8);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+}
+
+.demo-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.demo-card__badge {
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  display: inline-block;
+}
+.demo-card__badge--ai {
+  color: var(--color-purple);
+  background: color-mix(in srgb, var(--color-purple) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-purple) 20%, transparent);
+}
+.demo-card__badge--local {
+  color: var(--color-blue);
+  background: var(--color-blue-dim);
+  border: 1px solid var(--color-blue-border);
+}
+
+.demo-card__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--color-fg-strong);
+  margin-top: var(--space-2);
+}
+
+.demo-stage-pills {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  padding-top: 0.15rem;
+}
+.demo-stage-pill {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  font-size: var(--fs-xxs);
+  font-weight: var(--fw-semibold);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  letter-spacing: var(--tracking-wide);
+  border: 1px solid var(--color-accent-border);
+  background: var(--color-accent-ghost);
+  color: var(--color-accent);
+}
+.demo-stage-pill--ai {
+  color: var(--color-purple);
+  background: color-mix(in srgb, var(--color-purple) 7%, transparent);
+  border-color: color-mix(in srgb, var(--color-purple) 15%, transparent);
+}
+.demo-stage-sep {
+  color: var(--color-fg-faint);
+  font-size: var(--fs-xs);
+  margin: 0 2px;
+}
+
+.demo-card__desc {
+  font-size: var(--fs-sm);
+  color: var(--color-fg-muted);
+  line-height: var(--lh-loose);
+  margin-top: var(--space-4);
+}
+
+.demo-card__features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-1) var(--space-6);
+  margin-top: var(--space-4);
+}
+.demo-card__features p {
+  font-size: var(--fs-xs);
+  color: var(--color-fg-subtle);
+  line-height: var(--lh-base);
+}
+.demo-card__features p::before {
+  content: '\203A ';
+  color: var(--color-accent);
+  margin-right: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .demo-card__features { grid-template-columns: 1fr; }
+}
+
+/* ---- Progress row ---- */
+.demo-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.demo-dots {
+  display: flex;
+  gap: var(--space-2);
+}
+.demo-dot {
+  height: 0.4rem;
+  width: 0.4rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-border-strong);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.demo-dot.active {
+  width: 1.5rem;
+  background: var(--color-accent);
+}
+
+.demo-bar {
+  flex: 1;
+  height: 2px;
+  background: var(--color-border);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.demo-bar__fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-hover));
+  transition: width 0.1s linear;
+}

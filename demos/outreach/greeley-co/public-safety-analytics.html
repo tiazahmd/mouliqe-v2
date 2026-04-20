@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greeley RTIC — Public Safety Analytics Concept</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    .run-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--color-amber-dim);
+      border: 1px solid color-mix(in srgb, var(--color-amber) 30%, transparent);
+      color: var(--color-amber);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .run-btn:hover:not(:disabled) { background: color-mix(in srgb, var(--color-amber) 16%, transparent); }
+    .run-btn.done { background: var(--color-accent-dim); border-color: color-mix(in srgb, var(--color-accent) 30%, transparent); color: var(--color-accent); }
+    #results { display: none; }
+    #results.show { display: block; animation: demoFadeUp 0.5s ease both; }
+    .demo-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .demo-list li { font-size: 0.7rem; color: var(--color-fg-subtle); line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">☀</span><span class="demo-theme-moon">☾</span>
+  </button>
+
+  <header class="demo-container demo-container--md demo-anim">
+    <p class="demo-eyebrow">Prepared by Mouliqe for Greeley Police Department</p>
+    <h1 class="demo-title">RTIC Analytics Layer</h1>
+    <p class="demo-subtitle">Turning real-time data into predictive intelligence — built on top of your existing RTIC infrastructure</p>
+  </header>
+
+  <main class="demo-container demo-container--md" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-mt-6 demo-anim">
+      <p class="demo-section-label" style="margin-bottom:0.75rem">Analysis Pipeline</p>
+      <div class="demo-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))" id="pipeline">
+        <div class="demo-pipeline-step" id="step-ingest">
+          <p class="demo-section-label">01</p>
+          <p class="demo-fg-muted" style="font-size:0.7rem;font-weight:600;margin-top:0.25rem">Data Ingestion</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">RTIC feeds, CAD, RMS</p>
+        </div>
+        <div class="demo-pipeline-step" id="step-enrich">
+          <p class="demo-section-label">02</p>
+          <p class="demo-fg-muted" style="font-size:0.7rem;font-weight:600;margin-top:0.25rem">Enrichment</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">Geocode, classify, link</p>
+        </div>
+        <div class="demo-pipeline-step" id="step-pattern">
+          <p class="demo-section-label">03</p>
+          <p class="demo-fg-muted" style="font-size:0.7rem;font-weight:600;margin-top:0.25rem">Pattern Analysis</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">Hotspots, trends, anomalies</p>
+        </div>
+        <div class="demo-pipeline-step" id="step-predict">
+          <p class="demo-section-label">04</p>
+          <p class="demo-fg-muted" style="font-size:0.7rem;font-weight:600;margin-top:0.25rem">Predictive Model</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">Forecast, risk scoring</p>
+        </div>
+        <div class="demo-pipeline-step" id="step-recommend">
+          <p class="demo-section-label">05</p>
+          <p class="demo-fg-muted" style="font-size:0.7rem;font-weight:600;margin-top:0.25rem">Recommendations</p>
+          <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.25rem">Deploy, allocate, alert</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="demo-mt-6 demo-text-center demo-anim">
+      <button class="run-btn" id="runBtn" onclick="runAnalysis()">Run Analysis on Greeley 2025 Crime Data</button>
+      <p class="demo-fg-dim" style="font-size:0.55rem;margin-top:0.5rem">Simulated analysis using real Greeley PD statistics</p>
+    </div>
+
+    <div id="results">
+      <section class="demo-grid demo-grid--4 demo-mt-8">
+        <div class="demo-card"><p class="demo-stat-label">Violent Crime</p><p class="demo-stat-value">626</p><p class="demo-stat-delta demo-stat-delta--up">-27% YoY</p></div>
+        <div class="demo-card"><p class="demo-stat-label">Property Crime</p><p class="demo-stat-value">3,254</p><p class="demo-stat-delta demo-stat-delta--up">-18% YoY</p></div>
+        <div class="demo-card"><p class="demo-stat-label">Clearance Rate</p><p class="demo-stat-value">7/8</p><p class="demo-stat-delta demo-stat-delta--up">Categories improved</p></div>
+        <div class="demo-card"><p class="demo-stat-label">Calls for Service</p><p class="demo-stat-value">~52K</p><p class="demo-stat-delta" style="color:var(--color-amber)">+5% annual growth</p></div>
+      </section>
+
+      <section class="demo-grid demo-grid--2 demo-mt-4">
+        <div class="demo-card">
+          <p class="demo-section-label">Trend Analysis</p>
+          <p class="demo-section-title" style="margin-bottom:1rem">Monthly Incident Volume (2025)</p>
+          <canvas id="monthlyChart" height="200"></canvas>
+        </div>
+        <div class="demo-card">
+          <p class="demo-section-label">Category Breakdown</p>
+          <p class="demo-section-title" style="margin-bottom:1rem">Crime by Type — Clearance Rates</p>
+          <canvas id="clearanceChart" height="200"></canvas>
+        </div>
+      </section>
+
+      <section class="demo-mt-4">
+        <p class="demo-section-label" style="margin-bottom:0.75rem">AI-Generated Insights</p>
+        <div class="demo-grid demo-grid--2">
+          <div class="demo-insight">
+            <p class="demo-text-amber" style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Pattern Detected</p>
+            <p class="demo-fg-subtle" style="font-size:0.75rem;margin-top:0.5rem">Property crime clusters in <strong class="demo-fg">southeast corridor</strong> and <strong class="demo-fg">downtown Greeley</strong> during evening hours (6-11 PM). Motor vehicle theft shows strongest geographic concentration — 68% within 3 zones.</p>
+          </div>
+          <div class="demo-insight">
+            <p class="demo-text-amber" style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Forecast</p>
+            <p class="demo-fg-subtle" style="font-size:0.75rem;margin-top:0.5rem">With population growing at <strong class="demo-fg">2.1% annually</strong> and calls for service rising <strong class="demo-fg">5% per year</strong>, current staffing levels will reach capacity by <strong class="demo-fg">Q3 2027</strong> without predictive deployment optimization.</p>
+          </div>
+          <div class="demo-insight">
+            <p class="demo-text-amber" style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Anomaly</p>
+            <p class="demo-fg-subtle" style="font-size:0.75rem;margin-top:0.5rem">Arson clearance rate improved <strong class="demo-fg">135%</strong> — significantly outpacing other categories. Suggests investigative process change or resource reallocation that could be replicated for burglary (lowest clearance improvement).</p>
+          </div>
+          <div class="demo-rec">
+            <p class="demo-text-accent" style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Recommendation</p>
+            <p class="demo-fg-subtle" style="font-size:0.75rem;margin-top:0.5rem">Deploy <strong class="demo-fg">predictive patrol routing</strong> using RTIC camera feeds + historical incident data. Model estimates <strong class="demo-fg">12-18% additional reduction</strong> in property crime through optimized officer placement during peak hours.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-card demo-mt-4">
+        <p class="demo-section-label">Resource Optimization</p>
+        <p class="demo-section-title" style="margin-bottom:1rem">Predicted Demand vs. Current Deployment — Next 12 Months</p>
+        <canvas id="demandChart" height="160"></canvas>
+      </section>
+
+      <section class="demo-card demo-mt-4">
+        <p class="demo-section-label" style="margin-bottom:0.75rem">Value Add</p>
+        <p class="demo-section-title" style="margin-bottom:1rem">What RTIC Does Today vs. What Analytics Adds</p>
+        <div class="demo-grid demo-grid--2" style="gap:1.5rem">
+          <div>
+            <p class="demo-fg-faint" style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem">RTIC Today</p>
+            <ul class="demo-list">
+              <li>• Real-time camera feeds to responders</li>
+              <li>• Live incident monitoring</li>
+              <li>• Suspect identification (current events)</li>
+              <li>• Drone deployment coordination</li>
+              <li>• Emergency resource dispatch</li>
+            </ul>
+          </div>
+          <div>
+            <p class="demo-text-accent" style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem">With Analytics Layer</p>
+            <ul class="demo-list">
+              <li><span class="demo-text-accent">+</span> Historical trend analysis across years</li>
+              <li><span class="demo-text-accent">+</span> Predictive hotspot mapping</li>
+              <li><span class="demo-text-accent">+</span> Resource deployment optimization</li>
+              <li><span class="demo-text-accent">+</span> Clearance rate pattern analysis</li>
+              <li><span class="demo-text-accent">+</span> Staffing capacity forecasting</li>
+              <li><span class="demo-text-accent">+</span> Automated reporting for BJA grant compliance</li>
+              <li><span class="demo-text-accent">+</span> Community transparency dashboards</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="demo-footer">
+      <p class="demo-footer-main">Concept prepared by <span class="demo-brand">Mouliqe</span> for the Greeley Police Department</p>
+      <p class="demo-footer-sub">Crime statistics from Greeley PD 2025 year-end report. Predictive insights are illustrative.</p>
+    </footer>
+  </main>
+
+  <script src="/demos/_demo.js?v=8"></script>
+  <script>
+    var chartsBuilt = false, charts = [];
+    function gc(){ return demoCssVar('--color-border-soft') || 'rgba(127,127,127,0.06)'; }
+    function ac(){ return demoCssVar('--color-fg-faint') || 'rgba(127,127,127,0.4)'; }
+
+    async function runAnalysis() {
+      var btn = document.getElementById('runBtn');
+      btn.disabled = true;
+      btn.textContent = 'Analyzing…';
+      btn.style.opacity = '0.6';
+      var steps = ['step-ingest','step-enrich','step-pattern','step-predict','step-recommend'];
+      for (var i=0; i<steps.length; i++) {
+        var el = document.getElementById(steps[i]);
+        el.classList.add('active');
+        await new Promise(function(r){ setTimeout(r, 600); });
+        el.classList.remove('active');
+        el.classList.add('done');
+      }
+      btn.textContent = 'Analysis Complete';
+      btn.classList.add('done');
+      btn.style.opacity = '1';
+      document.getElementById('results').classList.add('show');
+      if (!chartsBuilt) { buildCharts(); chartsBuilt = true; }
+    }
+    window.runAnalysis = runAnalysis;
+
+    function buildCharts(){
+      charts.forEach(function(c){ c.destroy(); });
+      charts = [];
+      var g = gc(), a = ac();
+      charts.push(new Chart(document.getElementById('monthlyChart'), {
+        type: 'line',
+        data: { labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+          datasets: [
+            { label: 'Violent',  data: [62,48,55,50,58,65,72,68,52,45,38,33], borderColor:'rgba(248,113,113,0.7)', backgroundColor:'rgba(248,113,113,0.08)', fill:true, tension:0.3 },
+            { label: 'Property', data: [310,280,295,270,285,300,320,305,260,245,210,174], borderColor:'rgba(251,191,36,0.7)', backgroundColor:'rgba(251,191,36,0.08)', fill:true, tension:0.3 }
+          ] },
+        options: { responsive:true, plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, font:{size:10}, color: a } } }, scales:{ y:{ grid:{ color: g }, ticks:{ color: a } }, x:{ grid:{ display:false }, ticks:{ color: a } } } }
+      }));
+      charts.push(new Chart(document.getElementById('clearanceChart'), {
+        type: 'bar',
+        data: { labels: ['Murder','Rape','Agg. Assault','Robbery','Arson','Burglary','Theft','MV Theft'],
+          datasets: [
+            { label: '2024 Clearance %', data: [65,32,48,28,15,12,18,10], backgroundColor: g, borderRadius:4 },
+            { label: '2025 Clearance %', data: [72,38,55,35,35,14,22,15], backgroundColor: 'rgba(74,222,128,0.6)', borderRadius:4 }
+          ] },
+        options: { responsive:true, plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, font:{size:10}, color: a } } }, scales:{ y:{ grid:{ color: g }, ticks:{ color: a, callback: function(v){ return v+'%'; } } }, x:{ grid:{ display:false }, ticks:{ color: a } } } }
+      }));
+      charts.push(new Chart(document.getElementById('demandChart'), {
+        type: 'line',
+        data: { labels: ['Apr 26','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 27','Feb','Mar'],
+          datasets: [
+            { label: 'Predicted Calls',    data: [4400,4550,4800,5100,5000,4700,4500,4200,4300,4100,4000,4200], borderColor:'rgba(251,191,36,0.7)', borderDash:[5,3], tension:0.3 },
+            { label: 'Current Capacity',   data: [4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600], borderColor:'rgba(248,113,113,0.5)', borderDash:[2,2] },
+            { label: 'Optimized Capacity', data: [4600,4700,4900,5200,5100,4800,4600,4400,4500,4300,4200,4400], borderColor:'rgba(74,222,128,0.6)', tension:0.3 }
+          ] },
+        options: { responsive:true, plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, font:{size:10}, color: a } } }, scales:{ y:{ grid:{ color: g }, ticks:{ color: a } }, x:{ grid:{ display:false }, ticks:{ color: a } } } }
+      }));
+    }
+    window.demoRerenderCharts = function(){ if (chartsBuilt) buildCharts(); };
+  </script>
+</body>
+</html>
