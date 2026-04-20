@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>Interactive Demos — AI, Data & Analytics Tools | Mouliqe</title>
+  <meta name="description" content="Try interactive demos of AI-powered and local data tools — data quality scanning, RAG pipelines, agent workflows, KPI dashboards, ETL simulators, and AI cost optimization.">
+  <link rel="canonical" href="https://mouliqe.com/demo">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="Interactive Demos — AI, Data & Analytics Tools | Mouliqe">
+  <meta property="og:description" content="Try interactive demos of AI-powered and local data tools.">
+  <meta property="og:url" content="https://mouliqe.com/demo">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Interactive Demos — AI, Data & Analytics Tools | Mouliqe">
+  <meta name="twitter:description" content="Try interactive demos of AI-powered and local data tools.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <section class="section section--hero" style="padding-bottom: var(--space-10)">
+      <div class="container">
+        <span class="eyebrow anim-fade">Interactive Demos</span>
+        <h1 class="hero-title anim-up" style="margin-bottom: var(--space-3)">See the work in action.</h1>
+        <p class="lead anim-up anim-delay-1">Each tool runs entirely in your browser — no data leaves your machine. Pick one and watch the pipeline execute step by step.</p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0; padding-bottom: var(--space-20)">
+      <div class="container">
+
+        <div style="margin-bottom: var(--space-12)">
+          <div class="demo-section-head reveal">
+            <p class="demo-section-head__label demo-section-head__label--ai">AI-Powered</p>
+            <div class="demo-section-head__rule"></div>
+          </div>
+          <div class="grid grid--3" id="ai-demos"></div>
+        </div>
+
+        <div>
+          <div class="demo-section-head reveal">
+            <p class="demo-section-head__label demo-section-head__label--local">Runs Locally</p>
+            <div class="demo-section-head__rule"></div>
+          </div>
+          <div class="grid grid--3" id="local-demos"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Hidden for SEO: full list of tool URLs -->
+    <div aria-hidden="true" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap">
+      <h2>All Interactive Demos</h2>
+      <ul>
+        <li><a href="/tools/data-quality">Data Quality Scanner</a></li>
+        <li><a href="/tools/rag-pipeline">RAG Pipeline Simulator</a></li>
+        <li><a href="/tools/agent-workflow">Multi-Agent Workflow</a></li>
+        <li><a href="/tools/cost-simulator">AI Cost Simulator</a></li>
+        <li><a href="/tools/supply-chain">Supply Chain Optimizer</a></li>
+        <li><a href="/tools/kpi-dashboard">KPI Dashboard Builder</a></li>
+        <li><a href="/tools/etl-pipeline">ETL Pipeline Simulator</a></li>
+        <li><a href="/tools/document-intelligence">Document Intelligence</a></li>
+        <li><a href="/tools/prompt-security">Prompt Security Scanner</a></li>
+        <li><a href="/tools/data-migration">Data Migration Planner</a></li>
+        <li><a href="/tools/anomaly-detection">Anomaly Detection Dashboard</a></li>
+      </ul>
+    </div>
+
+  </main>
+
+  <script type="module">
+    import { mountNav } from '/js/nav.js?v=2';
+    import { mountReveal } from '/js/reveal.js?v=2';
+    import { injectSchema } from '/js/seo.js?v=2';
+    import { mountDemoGallery } from '/js/demo-gallery.js?v=2';
+
+    mountNav();
+    mountReveal();
+    injectSchema();
+    mountDemoGallery();
+  </script>
+</body>
+</html>

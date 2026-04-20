@@ -1,0 +1,332 @@
+// tools/agent-workflow-data.js — preset definitions for the 5 agentic patterns
+export const STAGES = ['analyze', 'plan', 'execute', 'synthesize', 'deliver'];
+
+export const STAGE_CONTEXT = {
+  analyze:    { title: 'Analyzing Task',       text: 'Evaluating task complexity, identifying required capabilities, and selecting the optimal agent architecture pattern.' },
+  plan:       { title: 'Planning Execution',   text: 'Decomposing the task into sub-operations and assigning agent roles based on the selected pattern.' },
+  execute:    { title: 'Executing Agents',     text: 'Agents are running their assigned operations, making tool calls, and producing intermediate results.' },
+  synthesize: { title: 'Synthesizing Results', text: 'Collecting outputs from all agents and merging them into a unified, coherent result.' },
+  deliver:    { title: 'Delivering Output',    text: 'Formatting the final deliverable and completing the workflow.' },
+};
+
+export const PRESETS = {
+  invoices: {
+    label: 'Process Invoices',
+    sub: 'Fan-Out / Fan-In',
+    pattern: { name: 'Fan-Out / Fan-In', badge: 'fan-out', desc: 'A planner decomposes the task into parallel subtasks. Independent workers execute simultaneously, then a synthesizer merges all results.' },
+    analysis: {
+      complexity: 'Medium',
+      capabilities: 'OCR / document parsing, data validation, database queries, workflow routing',
+      agentCount: '3 workers + planner + synthesizer',
+      reasoning: 'This task involves three distinct skill domains: document extraction, data validation against existing records, and approval workflow routing. Each can run independently once the document is parsed.',
+    },
+    planner: 'Decomposes invoice processing into three parallel tracks: extract structured data from the document, validate extracted fields against vendor and accounting databases, and determine the correct approval routing based on amount thresholds and department rules.',
+    workers: [
+      {
+        role: 'Data Extractor',
+        desc: 'Parses the invoice document to extract structured fields — vendor name, invoice number, line items, amounts, tax, and payment terms.',
+        tools: ['OCR', 'PDF Parser', 'NLP'],
+        logs: [
+          { dir: 'out', text: 'Calling OCR tool on invoice_042.pdf' },
+          { dir: 'in',  text: 'Extracted raw text (2,847 chars, confidence: 96.2%)' },
+          { dir: 'out', text: 'Running NLP entity extraction on raw text' },
+          { dir: 'in',  text: 'Extracted: vendor="Acme Corp", amount=$4,250.00, date=2025-06-15' },
+          { dir: 'out', text: 'Parsing line items from table structure' },
+          { dir: 'in',  text: 'Found 3 line items: consulting ($2,500), licenses ($1,500), expenses ($250)' },
+        ],
+        result: 'Structured invoice object with 12 fields, 3 line items, confidence score 96.2%',
+      },
+      {
+        role: 'Validator',
+        desc: 'Cross-references extracted data against the vendor database and accounting system to verify accuracy and flag discrepancies.',
+        tools: ['Database Query', 'API Call', 'Rules Engine'],
+        logs: [
+          { dir: 'out', text: 'Querying vendor database for "Acme Corp"' },
+          { dir: 'in',  text: 'Match found: vendor_id=V-1042, payment_terms=Net30, status=Active' },
+          { dir: 'out', text: 'Validating invoice amount against PO #PO-2025-089' },
+          { dir: 'in',  text: 'PO amount: $4,500.00 — invoice $4,250.00 is within tolerance (5.6%)' },
+          { dir: 'out', text: 'Checking for duplicate invoice numbers' },
+          { dir: 'in',  text: 'No duplicates found. Invoice INV-2025-042 is unique.' },
+        ],
+        result: 'Validation passed: vendor verified, PO matched, no duplicates, amount within tolerance',
+      },
+      {
+        role: 'Routing Agent',
+        desc: 'Determines the approval workflow based on invoice amount, department, vendor tier, and company policies.',
+        tools: ['Rules Engine', 'Org Chart API', 'Notification'],
+        logs: [
+          { dir: 'out', text: 'Loading approval rules for department: Engineering' },
+          { dir: 'in',  text: 'Rule matched: amounts $1K-$5K require manager approval only' },
+          { dir: 'out', text: 'Looking up department manager for Engineering' },
+          { dir: 'in',  text: 'Approver: Sarah Chen (sarah@company.com), auto-approve threshold: $2K' },
+          { dir: 'out', text: 'Generating approval request with invoice summary' },
+          { dir: 'in',  text: 'Approval request queued. ETA: 24hr SLA for this tier.' },
+        ],
+        result: 'Routed to Sarah Chen for approval. Priority: Normal. SLA: 24 hours.',
+      },
+    ],
+    synthesis: 'Combined extraction, validation, and routing into a complete invoice processing record. Vendor Acme Corp (V-1042) invoice for $4,250.00 has been validated against PO-2025-089 and routed to Sarah Chen for manager-level approval.',
+    deliverable: {
+      title: 'Invoice Processing Complete',
+      items: [
+        { label: 'Invoice',    value: 'INV-2025-042 from Acme Corp' },
+        { label: 'Amount',     value: '$4,250.00 (3 line items)' },
+        { label: 'Validation', value: 'Passed — PO matched, no duplicates' },
+        { label: 'Routing',    value: 'Sent to Sarah Chen for approval' },
+        { label: 'Status',     value: 'Awaiting approval (24hr SLA)' },
+        { label: 'Accounting', value: 'GL code 6100 — Professional Services' },
+      ],
+    },
+  },
+
+  tickets: {
+    label: 'Triage Support Tickets',
+    sub: 'Router → Specialist',
+    pattern: { name: 'Router → Specialist', badge: 'router', desc: 'A router agent classifies the input and dispatches it to the most appropriate specialist agent. Only the relevant specialist executes — others are bypassed.' },
+    analysis: {
+      complexity: 'Medium-High',
+      capabilities: 'NLP classification, sentiment analysis, knowledge base search, template generation, escalation logic',
+      agentCount: '1 router + 3 specialists (1 activated)',
+      reasoning: 'Support tickets vary widely in type. Rather than running all capabilities in parallel, a router first classifies the ticket, then dispatches to a single specialized handler — more efficient and avoids conflicting actions.',
+    },
+    routerAgent: {
+      role: 'Ticket Router',
+      desc: 'Classifies the incoming ticket by analyzing content, sentiment, customer tier, and urgency to select the right specialist.',
+      tools: ['NLP', 'Sentiment Analysis', 'Customer Lookup'],
+      logs: [
+        { dir: 'out', text: 'Running NLP classification on ticket #TK-8841' },
+        { dir: 'in',  text: 'Category: "Billing / Payment Failed", confidence: 0.94' },
+        { dir: 'out', text: 'Analyzing customer sentiment and history' },
+        { dir: 'in',  text: 'Sentiment: Frustrated (-0.72). Enterprise plan, 2yr tenure, 3 tickets this month.' },
+        { dir: 'out', text: 'Evaluating routing rules for billing + enterprise + frustrated' },
+        { dir: 'in',  text: 'Decision: Route to Billing Specialist (high priority, proactive credit eligible)' },
+      ],
+      decision: 'Billing Specialist selected — payment issue from frustrated enterprise customer requires proactive handling.',
+    },
+    specialists: [
+      {
+        role: 'Billing Specialist',
+        desc: 'Handles payment issues, subscription changes, refunds, and billing disputes with access to financial systems.',
+        tools: ['Payment Gateway', 'Knowledge Base', 'Template Engine', 'Credit System'],
+        logs: [
+          { dir: 'out', text: 'Checking payment provider status for recent failures' },
+          { dir: 'in',  text: 'Active incident: payment provider intermittent timeouts since 14:30 UTC' },
+          { dir: 'out', text: 'Searching resolved tickets for similar billing issues' },
+          { dir: 'in',  text: 'Found 8 similar tickets this week. Common fix: retry after incident resolves (62%)' },
+          { dir: 'out', text: 'Generating response with incident acknowledgment and proactive credit' },
+          { dir: 'in',  text: 'Response drafted: incident status, ETA, 1-day service credit auto-applied per enterprise SLA' },
+        ],
+        result: 'Response drafted with incident acknowledgment, ETA, and proactive 1-day service credit. Marked for priority follow-up.',
+      },
+      { role: 'Technical Specialist', desc: 'Diagnoses technical issues, API errors, integration failures, and product bugs with access to logs and monitoring.', tools: ['Log Search', 'Stack Trace Analyzer', 'Monitoring API', 'Jira'], logs: [], result: '' },
+      { role: 'Account Specialist',   desc: 'Manages account-level concerns — access issues, plan changes, feature requests, and relationship management.',      tools: ['CRM', 'Feature Flags', 'Account API', 'Calendar'],           logs: [], result: '' },
+    ],
+    activeSpecialist: 0,
+    synthesis: 'Router classified ticket #TK-8841 as a billing issue from a frustrated enterprise customer. Dispatched to Billing Specialist who identified an active payment provider incident, drafted a proactive response with service credit, and flagged for priority follow-up.',
+    deliverable: {
+      title: 'Ticket Triage Complete',
+      items: [
+        { label: 'Ticket',     value: '#TK-8841 — Payment Failed' },
+        { label: 'Pattern',    value: 'Router → Billing Specialist (2 others bypassed)' },
+        { label: 'Urgency',    value: 'High (Enterprise customer, frustrated sentiment)' },
+        { label: 'Root Cause', value: 'Active payment provider incident (since 14:30 UTC)' },
+        { label: 'Response',   value: 'Draft ready for review (includes credit offer)' },
+        { label: 'Follow-up',  value: 'Auto-check incident status in 2 hours' },
+      ],
+    },
+  },
+
+  reports: {
+    label: 'Generate Weekly Reports',
+    sub: 'Map-Reduce',
+    pattern: { name: 'Map-Reduce', badge: 'map-reduce', desc: 'Multiple mapper agents gather data from different sources in parallel. A reducer agent then aggregates and analyzes the combined dataset.' },
+    analysis: {
+      complexity: 'Medium',
+      capabilities: 'Data aggregation, statistical analysis, natural language generation, distribution',
+      agentCount: '3 mappers + 1 reducer',
+      reasoning: 'Report generation needs data from multiple independent sources. Map-Reduce lets us collect from all sources simultaneously (map phase), then aggregate and write the narrative (reduce phase). Much faster than sequential collection.',
+    },
+    mappers: [
+      {
+        role: 'CRM Mapper', desc: 'Pulls pipeline updates, opportunity data, and sales metrics from the CRM system.',
+        tools: ['Salesforce API', 'Data Transform'],
+        logs: [
+          { dir: 'out', text: 'Querying Salesforce API for pipeline updates (Mar 17-23)' },
+          { dir: 'in',  text: 'Retrieved: 42 new opportunities, $1.2M added to pipeline' },
+          { dir: 'out', text: 'Pulling win/loss data and stage transitions' },
+          { dir: 'in',  text: '8 deals closed ($340K), 3 lost, average cycle: 28 days' },
+        ],
+        result: '{ pipeline: $1.2M, deals_closed: 8, revenue: $340K, avg_cycle: 28d }',
+      },
+      {
+        role: 'Analytics Mapper', desc: 'Collects website traffic, conversion rates, and engagement metrics from the analytics platform.',
+        tools: ['SQL Query', 'Analytics API'],
+        logs: [
+          { dir: 'out', text: 'Running SQL query on analytics warehouse for traffic metrics' },
+          { dir: 'in',  text: 'Website: 48,200 sessions (+12% WoW), 3.2% conversion rate' },
+          { dir: 'out', text: 'Pulling engagement metrics by channel' },
+          { dir: 'in',  text: 'Organic: 52%, Paid: 28%, Direct: 12%, Referral: 8%' },
+        ],
+        result: '{ sessions: 48200, conversion: 3.2%, top_channel: "organic" }',
+      },
+      {
+        role: 'Finance Mapper', desc: 'Extracts billing data, subscription changes, and churn metrics from the payment system.',
+        tools: ['Stripe API', 'Billing Query'],
+        logs: [
+          { dir: 'out', text: 'Pulling billing data from Stripe API' },
+          { dir: 'in',  text: 'Revenue: $89,400 this week. 14 new subscriptions, 3 churned.' },
+          { dir: 'out', text: 'Computing MRR and churn rate' },
+          { dir: 'in',  text: 'MRR: $372K. Churn rate: 2.1% (above 4-week average of 1.0%)' },
+        ],
+        result: '{ revenue: $89.4K, mrr: $372K, new_subs: 14, churn: 3, churn_rate: 2.1% }',
+      },
+    ],
+    reducer: {
+      role: 'Report Reducer',
+      desc: 'Aggregates all mapper outputs, detects trends and anomalies, generates the narrative report, and distributes it.',
+      tools: ['Statistics', 'Anomaly Detection', 'NLG', 'Slack API', 'Email'],
+      logs: [
+        { dir: 'out', text: 'Merging 3 mapper outputs into unified dataset (24 metrics)' },
+        { dir: 'in',  text: 'Dataset merged. Computing week-over-week deltas.' },
+        { dir: 'out', text: 'Running anomaly detection across all metrics' },
+        { dir: 'in',  text: 'Anomaly: churn rate 2.1x above 4-week moving average. Flagging.' },
+        { dir: 'out', text: 'Generating executive summary with charts and action items' },
+        { dir: 'in',  text: 'Report finalized: 3 highlights, 1 alert, 4 charts, 3 action items' },
+        { dir: 'out', text: 'Distributing via Slack #leadership and email' },
+        { dir: 'in',  text: 'Sent to 8 stakeholders. Slack digest posted.' },
+      ],
+      result: 'Weekly report generated and distributed. 1 anomaly flagged (churn spike). 3 action items recommended.',
+    },
+    synthesis: 'Map phase collected data from CRM, analytics, and finance in parallel. Reduce phase merged all metrics, detected a churn anomaly (2.1x above baseline), and generated a narrative report with 4 charts and 3 action items. Distributed to 8 stakeholders via Slack and email.',
+    deliverable: {
+      title: 'Weekly Report Ready',
+      items: [
+        { label: 'Period',   value: 'Mar 17 — Mar 23, 2026' },
+        { label: 'Pattern',  value: '3 mappers (parallel) → 1 reducer' },
+        { label: 'Revenue',  value: '$89,400 (+6% WoW)' },
+        { label: 'Pipeline', value: '$1.2M added, 42 new opportunities' },
+        { label: 'Alert',    value: 'Churn spike detected (2.1x above average)' },
+        { label: 'Actions',  value: '3 recommended: investigate churn, scale ad spend, review pricing' },
+      ],
+    },
+  },
+
+  onboard: {
+    label: 'Onboard New Customer',
+    sub: 'Sequential Chain',
+    pattern: { name: 'Sequential Chain', badge: 'chain', desc: 'Agents execute in strict order — each step must complete and pass a validation gate before the next can begin. Ensures dependencies are met.' },
+    analysis: {
+      complexity: 'High',
+      capabilities: 'Account provisioning, data migration, API configuration, email sequencing, validation gates',
+      agentCount: '3 chained agents + 2 validation gates',
+      reasoning: 'Customer onboarding has hard dependencies — you cannot import data before the account exists, and you cannot send the welcome email before integrations are verified. A sequential chain with validation gates enforces these constraints.',
+    },
+    chainAgents: [
+      {
+        role: 'Account Provisioner',
+        desc: 'Creates the customer account, sets up user credentials, configures permissions, and establishes the billing subscription.',
+        tools: ['CRM API', 'Auth Provider', 'Billing API'],
+        logs: [
+          { dir: 'out', text: 'Creating organization in CRM: "TechFlow Inc"' },
+          { dir: 'in',  text: 'Organization created: org_id=ORG-2841, tier=Professional' },
+          { dir: 'out', text: 'Provisioning 5 user accounts via Auth0' },
+          { dir: 'in',  text: '5 users created. Admin: alex@techflow.io, 4 team members invited' },
+          { dir: 'out', text: 'Setting up Stripe subscription (Professional plan, annual)' },
+          { dir: 'in',  text: 'Subscription active: sub_1NqR8x, $299/mo billed annually, next: Apr 15' },
+        ],
+        result: 'Account provisioned: 5 users, Professional tier, annual billing active.',
+        gate: { label: 'Gate 1: Account Verified', check: 'org_id exists, auth tokens valid, billing active' },
+      },
+      {
+        role: 'Integration Specialist',
+        desc: 'Imports customer data, configures third-party integrations, and sets up webhooks and API keys. Requires account to exist first.',
+        tools: ['Data Import', 'API Config', 'Webhook Manager'],
+        logs: [
+          { dir: 'out', text: 'Importing customer data from CSV (2,340 contact records)' },
+          { dir: 'in',  text: 'Import complete: 2,340 contacts, 12 custom fields mapped, 3 validation warnings' },
+          { dir: 'out', text: 'Configuring Salesforce integration via OAuth' },
+          { dir: 'in',  text: 'Salesforce connected. Bi-directional sync enabled for contacts and deals.' },
+          { dir: 'out', text: 'Setting up webhook endpoints for real-time events' },
+          { dir: 'in',  text: '4 webhooks configured: new_deal, contact_updated, task_complete, alert' },
+        ],
+        result: 'Data imported (2,340 records), Salesforce integrated, 4 webhooks active.',
+        gate: { label: 'Gate 2: Integrations Verified', check: 'data import clean, API connections healthy, webhooks responding' },
+      },
+      {
+        role: 'Communications Agent',
+        desc: 'Sends the welcome email sequence, shares training resources, and schedules onboarding calls. Requires integrations to be live first.',
+        tools: ['Email API', 'Calendar API', 'Resource Hub'],
+        logs: [
+          { dir: 'out', text: 'Sending welcome email to alex@techflow.io' },
+          { dir: 'in',  text: 'Welcome email sent. Includes: login link, quick-start guide, support contacts.' },
+          { dir: 'out', text: 'Scheduling onboarding check-in calls (Week 1 + Week 4)' },
+          { dir: 'in',  text: 'Calls scheduled: Mar 31 (kickoff, 30min), Apr 21 (review, 45min)' },
+          { dir: 'out', text: 'Enrolling team in automated training sequence (5 emails over 14 days)' },
+          { dir: 'in',  text: 'Training sequence activated. First lesson sends in 24 hours.' },
+        ],
+        result: 'Welcome email sent, 2 check-in calls scheduled, 5-part training sequence activated.',
+      },
+    ],
+    synthesis: 'All three chain agents completed in sequence with passing validation gates. TechFlow Inc is fully configured with 5 user accounts (Gate 1 ✓), Salesforce integration and imported data (Gate 2 ✓), and an automated welcome sequence in progress.',
+    deliverable: {
+      title: 'Customer Onboarding Complete',
+      items: [
+        { label: 'Customer',   value: 'TechFlow Inc (ORG-2841)' },
+        { label: 'Pattern',    value: '3-step chain with 2 validation gates' },
+        { label: 'Plan',       value: 'Professional, Annual ($299/mo)' },
+        { label: 'Users',      value: '5 accounts provisioned (1 admin + 4 team)' },
+        { label: 'Data',       value: '2,340 contacts imported, Salesforce synced' },
+        { label: 'Next Steps', value: 'Kickoff call Mar 31, training sequence in progress' },
+      ],
+    },
+  },
+
+  monitor: {
+    label: 'Monitor System Health',
+    sub: 'ReAct Loop',
+    pattern: { name: 'ReAct Loop', badge: 'react', desc: 'A single agent iterates through Observe→Think→Act cycles. Each observation informs the next action, building understanding incrementally until the issue is diagnosed.' },
+    analysis: {
+      complexity: 'Medium-High',
+      capabilities: 'Infrastructure monitoring, log analysis, anomaly detection, root cause analysis, alerting',
+      agentCount: '1 agent, 3 reasoning cycles',
+      reasoning: 'System health diagnosis requires iterative investigation — each observation changes what to look at next. A ReAct loop lets the agent reason about what it sees, decide the next action, observe the result, and repeat until it converges on a diagnosis.',
+    },
+    agent: {
+      role: 'SRE Agent',
+      desc: 'Investigates system health using an iterative observe-think-act loop, narrowing down from broad metrics to specific root causes.',
+      tools: ['Prometheus', 'CloudWatch', 'Log Query', 'Status Page API', 'PagerDuty'],
+    },
+    iterations: [
+      { label: 'Cycle 1 — Broad Scan', phases: [
+        { type: 'observe', text: 'Polling Prometheus for service metrics across 12 services.' },
+        { type: 'result',  text: '11/12 services healthy. API Gateway: p99 latency 2.8s (threshold: 2s). Error rate: 0.42%.' },
+        { type: 'think',   text: 'Latency spike + elevated errors in API Gateway. Need to determine if this is internal or caused by a downstream dependency.' },
+        { type: 'act',     text: 'Querying error logs for API Gateway and checking downstream dependency health checks.' },
+      ] },
+      { label: 'Cycle 2 — Narrow Down', phases: [
+        { type: 'observe', text: 'Analyzing API Gateway error logs from last 30 minutes.' },
+        { type: 'result',  text: '28 "ConnectionTimeout" errors from payment-service. Error timestamps correlate with latency spikes.' },
+        { type: 'think',   text: 'Payment-service connection timeouts are the likely cause. Need to check if this is our service or the external payment provider.' },
+        { type: 'act',     text: 'Running health check on payment provider API and checking their status page.' },
+      ] },
+      { label: 'Cycle 3 — Confirm & Respond', phases: [
+        { type: 'observe', text: 'Payment provider API response time: 4.2s (normal: 0.3s). Checking status page.' },
+        { type: 'result',  text: 'Status page confirms: "Degraded performance — investigating." Posted 18 minutes ago.' },
+        { type: 'think',   text: 'Root cause confirmed: external payment provider degradation is causing cascading latency in our API Gateway. Need to mitigate and alert.' },
+        { type: 'act',     text: 'Enabling circuit breaker for payment calls, activating fallback queue, and sending PagerDuty alert (P3).' },
+      ] },
+    ],
+    synthesis: 'After 3 ReAct cycles, the agent narrowed from broad metrics (12 services) → correlated symptoms (API Gateway + payment-service) → confirmed root cause (external payment provider degradation). Mitigated with circuit breaker and alerted the team via PagerDuty.',
+    deliverable: {
+      title: 'Health Check Report',
+      items: [
+        { label: 'Overall Status', value: 'Degraded — 1 issue detected' },
+        { label: 'Pattern',        value: '3 ReAct cycles (broad → narrow → confirm)' },
+        { label: 'Root Cause',     value: 'Payment provider degraded (4.2s response, normal 0.3s)' },
+        { label: 'Impact',         value: 'API Gateway p99 at 2.8s, error rate 0.42%' },
+        { label: 'Action Taken',   value: 'Circuit breaker enabled, fallback queue active' },
+        { label: 'Alert',          value: 'PagerDuty P3 + #ops-alerts Slack notification' },
+      ],
+    },
+  },
+};

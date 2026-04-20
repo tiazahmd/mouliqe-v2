@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>Blog — AI Architecture &amp; Data Engineering Insights | Mouliqe</title>
+  <meta name="description" content="Insights on AI architecture, data engineering, and building reliable AI systems — from real-world experience.">
+  <link rel="canonical" href="https://mouliqe.com/blog">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="Blog — AI Architecture &amp; Data Engineering Insights | Mouliqe">
+  <meta property="og:description" content="Insights on AI architecture, data engineering, and building reliable AI systems — from real-world experience.">
+  <meta property="og:url" content="https://mouliqe.com/blog">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blog — AI Architecture &amp; Data Engineering Insights | Mouliqe">
+  <meta name="twitter:description" content="Insights on AI architecture, data engineering, and building reliable AI systems.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <section class="section section--hero" style="padding-bottom: var(--space-10)">
+      <div class="container">
+        <span class="eyebrow anim-fade">Blog</span>
+        <h1 class="hero-title anim-up">Thinking out loud.</h1>
+        <p class="lead anim-up anim-delay-1" style="margin-top: var(--space-6)">
+          Notes on AI architecture, data engineering, and the lessons learned from building systems that actually work.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0; padding-bottom: var(--space-20)">
+      <div class="container">
+        <div class="blog-layout">
+          <div class="blog-main">
+            <div id="posts-grid" class="posts-grid"></div>
+          </div>
+
+          <aside class="blog-side">
+            <div class="blog-side__sticky">
+              <div class="sidebar-cta">
+                <p style="font-size: var(--fs-xxs); font-weight: var(--fw-bold); color: var(--color-accent); text-transform: uppercase; letter-spacing: var(--tracking-widest); margin-bottom: var(--space-3)">Have a challenge?</p>
+                <p style="font-size: var(--fs-sm); color: var(--color-fg-subtle); line-height: var(--lh-base); margin-bottom: var(--space-5)">Let's talk about your AI architecture.</p>
+                <a href="/contact" class="btn btn--primary">Book a Discovery Call</a>
+                <a href="mailto:imtiaz@mouliqe.com" class="email-link" style="justify-content: center; margin-top: var(--space-3); display: flex">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  <span>prefer email instead?</span>
+                </a>
+                <div class="divider" style="margin-block: var(--space-5)"></div>
+                <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" class="social-link" style="justify-content: center; display: flex">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  <span>Follow on LinkedIn</span>
+                </a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { mountNav } from '/js/nav.js';
+    import { mountReveal } from '/js/reveal.js';
+    import { injectSchema } from '/js/seo.js';
+    import { mountBlogIndex } from '/js/blog-index.js';
+
+    mountNav();
+    mountReveal();
+    injectSchema();
+    mountBlogIndex();
+  </script>
+</body>
+</html>

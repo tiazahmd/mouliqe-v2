@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>LLM Context Window Limits Explained: Why Bigger Isn't Better — Mouliqe</title>
+  <meta name="description" content="A 200K token context window doesn't mean your AI can use 200K tokens effectively. Learn why context window size is misleading and how to architect around the real limits.">
+  <meta name="keywords" content="LLM context window limits, context window size explained, AI context management, token limits AI, large language model architecture, RAG vs context window">
+  <link rel="canonical" href="https://mouliqe.com/blog/context-windows-are-a-lie">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="LLM Context Window Limits Explained: Why Bigger Isn&#39;t Better — Mouliqe">
+  <meta property="og:description" content="A 200K token context window doesn&#39;t mean your AI can use 200K tokens effectively. Here&#39;s why — and how to architect around the real limits.">
+  <meta property="og:url" content="https://mouliqe.com/blog/context-windows-are-a-lie">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LLM Context Window Limits Explained: Why Bigger Isn&#39;t Better — Mouliqe">
+  <meta name="twitter:description" content="A 200K token context window doesn&#39;t mean your AI can use 200K tokens effectively. Here&#39;s why — and how to architect around the real limits.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <section class="section section--hero" style="padding-bottom: var(--space-8)">
+      <div class="container">
+        <a href="/blog" class="post-back anim-fade">&larr; Back to Blog</a>
+        <h1 class="post__title anim-up">Context Windows Are a Lie (Sort Of)</h1>
+        <div class="row anim-up anim-delay-1" style="gap: var(--space-4); margin-top: var(--space-4)">
+          <time datetime="" class="post__date"></time>
+          <span class="post-tag">AI Architecture</span><span class="post-tag">Context Management</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0; padding-bottom: var(--space-20)">
+      <div class="container">
+        <div class="blog-layout">
+          <article class="blog-main">
+            <div class="post post__body">
+<p>Every new model announcement leads with the same headline: bigger context window. 100K tokens. 200K tokens. A million tokens. The implication is clear — more context means better performance. Just throw everything in and let the model figure it out.</p>
+
+              <p>I bought into this for a while. Then I actually tried it.</p>
+
+              <h2>The Needle in a Haystack Problem</h2>
+
+              <p>There's a well-known benchmark called "needle in a haystack" that tests whether a model can find a specific piece of information buried in a large context. Most modern models pass this test with flying colors. Great. But here's what the benchmark doesn't test: can the model use that information correctly in combination with everything else in the context?</p>
+
+              <p>Finding a needle is easy. Threading it while juggling is hard.</p>
+
+              <p>When I was building Mimir with a single-agent architecture, I had everything in one context: system prompt, tool definitions, conversation history, memory retrievals, session state. The model could technically "see" all of it. But its ability to act on any specific piece of information degraded as the total context grew. Not because the information wasn't there — because the signal-to-noise ratio collapsed.</p>
+
+              <blockquote><p>A 200K context window doesn't mean the model can effectively use 200K tokens. It means it can hold 200K tokens while effectively using maybe 20% of them.</p></blockquote>
+
+              <h2>What I Actually Observed</h2>
+
+              <p>Three specific failure patterns showed up as context grew:</p>
+
+              <ol>
+                <li><strong>Instruction amnesia.</strong> Instructions at the top of the system prompt got ignored when the context was long enough. The model would follow instructions from the last few thousand tokens and forget rules defined 50,000 tokens earlier. This is well-documented in research — attention degrades with distance.</li>
+                <li><strong>Tool confusion.</strong> With 80+ tool definitions in context, the model would occasionally call the wrong tool or pass parameters meant for one tool to another. Not because it couldn't read the definitions — because it was processing too many similar-looking definitions simultaneously.</li>
+                <li><strong>Context bleed.</strong> Information from one part of the context would leak into responses about something else. I'd ask about a calendar event and get details mixed in from an email that happened to be in the conversation history. The model wasn't hallucinating — it was cross-referencing things it shouldn't have been.</li>
+              </ol>
+
+              <h2>The Architecture Fix</h2>
+
+              <p>The solution wasn't to use less context. It was to use the right context at the right time. This is the principle behind the three-agent pipeline I described in an earlier article, but it applies more broadly.</p>
+
+              <p>Every stage of processing should receive only the context it needs:</p>
+
+              <ul>
+                <li>The Planner gets full context because it needs to understand the big picture</li>
+                <li>The Worker gets minimal context because it needs to execute precisely</li>
+                <li>The Synthesizer gets results plus conversation tone, not the full history</li>
+              </ul>
+
+              <p>But beyond the pipeline, I also implemented aggressive context management at every level:</p>
+
+              <p><strong>Conversation history pruning.</strong> Not every message in the conversation is equally important. System messages, tool call details, and routine confirmations get summarized or dropped. The actual user messages and key assistant responses are preserved verbatim.</p>
+
+              <p><strong>Dynamic tool loading.</strong> Instead of sending all 80+ tool definitions in every request, the Planner identifies which tools are likely needed and only those definitions get sent to the Worker. A calendar request doesn't need to see the code execution tool definitions.</p>
+
+              <p><strong>Memory injection budgets.</strong> Each request gets a maximum number of memory tokens. If semantic search returns 15 relevant memories, they get ranked and only the top N that fit within the budget are injected. The rest are available if the Planner explicitly asks for more.</p>
+
+              <blockquote><p>The goal isn't to maximize context. It's to maximize the ratio of useful context to total context.</p></blockquote>
+
+              <h2>Practical Takeaways</h2>
+
+              <p>If you're building AI applications and relying on large context windows to solve your problems, here's what I'd suggest:</p>
+
+              <ol>
+                <li><strong>Measure effective context, not total context.</strong> How much of what you're sending is actually being used in the response? If you're sending 50K tokens and the model is only meaningfully engaging with 5K, you have a 90% waste problem.</li>
+                <li><strong>Put critical instructions at the end.</strong> Due to recency bias in attention, instructions closer to the actual query get more weight. If you have non-negotiable rules, repeat them near the end of the context.</li>
+                <li><strong>Separate concerns into separate calls.</strong> If a task requires both understanding context and executing precisely, those should be different LLM calls with different context.</li>
+                <li><strong>Budget your context like you budget compute.</strong> Every token has a cost — not just in dollars, but in attention. Treat context as a scarce resource, not an infinite buffer.</li>
+              </ol>
+
+              <p>The models will keep getting bigger context windows. That's great. But architecture will always matter more than capacity. A well-structured 10K context will outperform a poorly structured 200K context every single time.</p>
+
+              <blockquote><p>Part of a series on building reliable AI applications. Previous: <a href="/blog/ai-memory-systems">AI Memory Systems</a>.</p>
+                <p>Also worth reading: <a href="/blog/planner-worker-synthesizer">Planner, Worker, Synthesizer</a> — the architecture that solves the context noise problem described here.</p></blockquote>
+
+            </div>
+          </article>
+
+          <aside class="blog-side">
+            <div class="blog-side__sticky">
+              <div class="sidebar-cta">
+                <p style="font-size: var(--fs-xxs); font-weight: var(--fw-bold); color: var(--color-accent); text-transform: uppercase; letter-spacing: var(--tracking-widest); margin-bottom: var(--space-3)">Have a challenge?</p>
+                <p style="font-size: var(--fs-sm); color: var(--color-fg-subtle); line-height: var(--lh-base); margin-bottom: var(--space-5)">Let's talk about your AI architecture.</p>
+                <a href="/contact" class="btn btn--primary">Book a Discovery Call</a>
+                <div class="divider" style="margin-block: var(--space-5)"></div>
+                <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" class="social-link" style="justify-content: center; display: flex">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  <span>Follow on LinkedIn</span>
+                </a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="/js/boot.js"></script>
+</body>
+</html>

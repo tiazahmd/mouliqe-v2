@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>AI Cost Simulator — Mouliqe Demo</title>
+  <meta name="description" content="See how much you're overpaying for AI. Pick a scenario, set your query volume, and watch the cost collapse as proper architecture is applied — step by step.">
+  <link rel="canonical" href="https://mouliqe.com/tools/cost-simulator">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="AI Cost Simulator — Mouliqe Demo">
+  <meta property="og:description" content="See how much you're overpaying for AI. Pick a scenario, set your query volume, and watch the cost collapse as proper architecture is applied.">
+  <meta property="og:url" content="https://mouliqe.com/tools/cost-simulator">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Cost Simulator — Mouliqe Demo">
+  <meta name="twitter:description" content="Watch your AI monthly cost collapse as RAG, caching, and routing are applied.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <section class="container tool-hero">
+      <span class="eyebrow anim-fade">Demo</span>
+      <div class="tool-hero__row anim-up">
+        <h1 class="tool-hero__title">AI Cost Simulator</h1>
+        <span class="tool-hero__badge tool-hero__badge--local">Runs Locally</span>
+      </div>
+      <p class="tool-hero__lead anim-up anim-delay-1">Most teams are overpaying for AI by 80–97%. Pick a scenario, set your query volume, and watch the monthly cost collapse as proper architecture is applied — one decision at a time.</p>
+    </section>
+
+    <section class="container" style="padding-bottom: var(--space-20)">
+      <div class="tool-layout">
+
+        <div class="tool-main">
+
+          <div class="card">
+            <p class="tool-section-label">Choose a Scenario</p>
+            <div class="tool-sample-row" id="sample-btns"></div>
+
+            <div id="slider-section" style="display: none; margin-top: var(--space-5)">
+              <div class="divider" style="margin-bottom: var(--space-5)"></div>
+
+              <div class="vol-row">
+                <p class="vol-row__label">Query volume</p>
+                <span class="vol-row__value">
+                  <span id="vol-display">500</span>
+                  <span class="vol-row__unit" id="vol-unit">queries/day</span>
+                </span>
+              </div>
+              <input type="range" class="vol-slider" id="vol-slider" min="50" max="10000" step="50" value="500">
+              <div class="vol-bounds">
+                <span>50/day</span>
+                <span>10,000/day</span>
+              </div>
+
+              <div class="phase-run-row">
+                <button class="phase-btn phase-btn--baseline" id="run-baseline-btn">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Run Current Architecture
+                </button>
+                <span class="phase-meta">Phase 1 of 2</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tool-pipeline" id="pipeline" style="display: none">
+            <div class="tool-stage pending" data-stage="profile" data-ai><div class="tool-stage__dot"></div><span class="tool-stage__label">Profile</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="baseline"><div class="tool-stage__dot"></div><span class="tool-stage__label">Baseline</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="optimize" data-ai><div class="tool-stage__dot"></div><span class="tool-stage__label">Optimise</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="compare"><div class="tool-stage__dot"></div><span class="tool-stage__label">Compare</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="recommend" data-ai><div class="tool-stage__dot"></div><span class="tool-stage__label">Recommend</span></div>
+          </div>
+
+          <div class="tool-context" id="context-panel" style="display: none">
+            <div id="context-log"></div>
+          </div>
+
+          <div id="sim-output" style="display: none; margin-top: var(--space-5)">
+
+            <div class="cost-meter" id="cost-meter" style="display: none">
+              <div class="cost-meter__head">
+                <div>
+                  <p class="cost-meter__label" id="cost-meter-label">Monthly Cost</p>
+                  <div>
+                    <span class="cost-number cost-number--high" id="cost-number">$0</span>
+                    <span class="cost-meter__suffix">/month</span>
+                  </div>
+                </div>
+                <div class="cost-meter__meta" id="cost-meter-meta"></div>
+              </div>
+              <div class="arch-pipeline" id="arch-pipeline"></div>
+              <p class="pricing-note">Pricing based on published Anthropic rates as of March 2026: Claude Sonnet 4.6 $3.00/1M input · $15.00/1M output &nbsp;·&nbsp; Claude Haiku 4.5 $0.80/1M input · $4.00/1M output.</p>
+            </div>
+
+            <div id="phase2-cta" style="display: none; margin-bottom: var(--space-5)">
+              <div class="phase2-cta">
+                <p class="phase2-cta__title">That's what a typical, unoptimised setup costs.</p>
+                <p class="phase2-cta__text">Now watch what happens when proper architecture is applied — one decision at a time.</p>
+                <button class="phase-btn phase-btn--opt" id="run-opt-btn">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                  Optimise This Architecture
+                </button>
+              </div>
+            </div>
+
+            <div id="opt-steps" style="display: none">
+              <p class="tool-section-label">Optimisations Applied</p>
+              <div id="opt-steps-list"></div>
+            </div>
+
+            <div id="comparison" style="display: none; margin-top: var(--space-5)"></div>
+            <div id="savings-card" style="display: none; margin-top: var(--space-5)"></div>
+
+          </div>
+        </div>
+
+        <aside class="tool-side" id="tool-sidebar">
+          <div class="tool-side__sticky">
+            <div class="tool-sidebar-card">
+              <p class="tool-sidebar-card__label">What This Demonstrates</p>
+              <p class="tool-sidebar-card__body">The same AI output quality can be achieved at 80–97% lower cost with the right architecture. This simulator shows exactly which decisions drive those savings.</p>
+              <p class="tool-sidebar-card__body">The three biggest levers:</p>
+              <div class="tool-sidebar-bullets">
+                <p><strong>RAG</strong> — retrieve only what's needed</p>
+                <p><strong>Model routing</strong> — right model for each task</p>
+                <p><strong>Caching</strong> — never pay for the same answer twice</p>
+                <p>Context window management</p>
+                <p>Prompt compression &amp; structured outputs</p>
+              </div>
+            </div>
+
+            <div class="sidebar-cta">
+              <p class="tool-sidebar-card__label">Overpaying for AI?</p>
+              <p class="tool-sidebar-card__body">An architecture review identifies exactly where your costs are inflated and what to do about it — before you scale.</p>
+              <a href="/contact" class="btn btn--primary">Book a Discovery Call</a>
+              <div class="divider" style="margin-block: var(--space-4)"></div>
+              <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" class="social-link" style="justify-content: center; display: flex">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <span>Follow on LinkedIn</span>
+              </a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { mountNav } from '/js/nav.js';
+    import { mountReveal } from '/js/reveal.js';
+    import { injectSchema } from '/js/seo.js';
+    import { mountCostSim } from '/js/tools/cost-simulator.js';
+
+    mountNav();
+    mountReveal();
+    injectSchema();
+    mountCostSim();
+  </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>ETL Pipeline Simulator — Mouliqe Demo</title>
+  <meta name="description" content="Watch messy data get extracted, validated, cleaned, transformed, and loaded — step by step. See every transformation as it happens.">
+  <link rel="canonical" href="https://mouliqe.com/tools/etl-pipeline">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="ETL Pipeline Simulator — Mouliqe Demo">
+  <meta property="og:description" content="Watch messy data get extracted, validated, cleaned, transformed, and loaded — step by step.">
+  <meta property="og:url" content="https://mouliqe.com/tools/etl-pipeline">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ETL Pipeline Simulator — Mouliqe Demo">
+  <meta name="twitter:description" content="Watch messy data get extracted, validated, cleaned, transformed, and loaded.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <section class="container tool-hero">
+      <span class="eyebrow anim-fade">Demo</span>
+      <div class="tool-hero__row anim-up">
+        <h1 class="tool-hero__title">ETL Pipeline Simulator</h1>
+        <span class="tool-hero__badge tool-hero__badge--local">Runs Locally</span>
+      </div>
+      <p class="tool-hero__lead anim-up anim-delay-1">Watch messy data get extracted, validated, cleaned, transformed, and loaded — step by step. See every transformation as it happens.</p>
+    </section>
+
+    <section class="container" style="padding-bottom: var(--space-20)">
+      <div class="tool-layout">
+
+        <div class="tool-main">
+
+          <div class="card">
+            <p class="tool-section-label">Choose a Scenario</p>
+            <div class="tool-sample-row" id="sample-btns"></div>
+          </div>
+
+          <div class="tool-pipeline" id="pipeline" style="display: none">
+            <div class="tool-stage pending" data-stage="extract"><div class="tool-stage__dot"></div><span class="tool-stage__label">Extract</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="validate"><div class="tool-stage__dot"></div><span class="tool-stage__label">Validate</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="clean"><div class="tool-stage__dot"></div><span class="tool-stage__label">Clean</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="transform"><div class="tool-stage__dot"></div><span class="tool-stage__label">Transform</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="load"><div class="tool-stage__dot"></div><span class="tool-stage__label">Load</span></div>
+          </div>
+
+          <div class="tool-context" id="context-panel" style="display: none">
+            <div id="context-log"></div>
+          </div>
+
+          <div id="data-preview" style="display: none; margin-top: var(--space-5)">
+            <div class="tool-result-card">
+              <div class="tool-result-header">
+                <span class="tool-result-label" id="preview-title">Data</span>
+                <span class="tool-result-meta" id="preview-stats"></span>
+              </div>
+              <div class="etl-scroll" id="table-wrap"></div>
+              <div class="etl-stats" id="etl-stats"></div>
+            </div>
+          </div>
+
+          <div id="quality-card" style="display: none; margin-top: var(--space-4)">
+            <div class="tool-result-card tool-result-card--success" style="text-align: center; padding: var(--space-6)">
+              <p class="tool-section-label" style="margin-bottom: var(--space-2)">Pipeline Complete</p>
+              <div class="quality-summary">
+                <div class="quality-summary__item">
+                  <p class="quality-summary__value" id="final-score"></p>
+                  <p class="quality-summary__label">Quality Score</p>
+                </div>
+                <div class="quality-summary__item">
+                  <p class="quality-summary__value" id="final-rows"></p>
+                  <p class="quality-summary__label">Clean Rows</p>
+                </div>
+                <div class="quality-summary__item">
+                  <p class="quality-summary__value" id="final-issues"></p>
+                  <p class="quality-summary__label">Issues Fixed</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="tool-side" id="tool-sidebar">
+          <div class="tool-side__sticky">
+            <div class="tool-sidebar-card">
+              <p class="tool-sidebar-card__label">What This Demonstrates</p>
+              <p class="tool-sidebar-card__body">This simulator runs pre-built transformations on sample data so you can see each ETL stage in action. In production, these pipelines run continuously on live data.</p>
+              <p class="tool-sidebar-card__body">A production data pipeline adds:</p>
+              <div class="tool-sidebar-bullets">
+                <p>Orchestration (Airflow, Dagster, Prefect)</p>
+                <p>Incremental loads and CDC</p>
+                <p>Schema evolution and versioning</p>
+                <p>Data quality monitoring and alerts</p>
+                <p>Lineage tracking and audit logs</p>
+                <p>Retry logic and dead-letter queues</p>
+              </div>
+            </div>
+
+            <div class="sidebar-cta">
+              <p class="tool-sidebar-card__label">Messy data slowing you down?</p>
+              <p class="tool-sidebar-card__body">Let's talk about building pipelines that clean, transform, and deliver your data reliably.</p>
+              <a href="/contact" class="btn btn--primary">Book a Discovery Call</a>
+              <div class="divider" style="margin-block: var(--space-4)"></div>
+              <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" class="social-link" style="justify-content: center; display: flex">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <span>Follow on LinkedIn</span>
+              </a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { mountNav } from '/js/nav.js';
+    import { mountReveal } from '/js/reveal.js';
+    import { injectSchema } from '/js/seo.js';
+    import { mountEtl } from '/js/tools/etl-pipeline.js';
+
+    mountNav();
+    mountReveal();
+    injectSchema();
+    mountEtl();
+  </script>
+</body>
+</html>

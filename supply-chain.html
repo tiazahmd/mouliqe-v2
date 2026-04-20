@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>Supply Chain Intelligence Engine — Mouliqe Demo</title>
+  <meta name="description" content="Watch 12 market, company, and geopolitical signals get processed by a hybrid AI + statistical engine to produce actionable supply chain recommendations.">
+  <link rel="canonical" href="https://mouliqe.com/tools/supply-chain">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="Supply Chain Intelligence Engine — Mouliqe Demo">
+  <meta property="og:description" content="Watch 12 signals get processed by a hybrid AI + statistical engine to produce actionable supply chain recommendations.">
+  <meta property="og:url" content="https://mouliqe.com/tools/supply-chain">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Supply Chain Intelligence Engine — Mouliqe Demo">
+  <meta name="twitter:description" content="Watch 12 signals get processed by a hybrid AI + statistical engine to produce actionable supply chain recommendations.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <section class="container tool-hero">
+      <span class="eyebrow anim-fade">Demo</span>
+      <div class="tool-hero__row anim-up">
+        <h1 class="tool-hero__title">Supply Chain Intelligence Engine</h1>
+        <span class="tool-hero__badge tool-hero__badge--ai">AI + Statistical</span>
+      </div>
+      <p class="tool-hero__lead anim-up anim-delay-1">A hybrid intelligence engine that ingests commodity prices, shipping indices, currency rates, inflation indicators, internal inventory and procurement data, and global news — then uses statistical models for the math and AI agents for the reasoning to produce actionable recommendations.</p>
+    </section>
+
+    <section class="container" style="padding-bottom: var(--space-20)">
+      <div class="tool-layout">
+
+        <div class="tool-main">
+
+          <div class="card">
+            <p class="tool-section-label">How It Works</p>
+            <p class="tool-sidebar-card__body">This engine processes 12 live signals across three domains simultaneously:</p>
+            <div class="tool-sidebar-bullets" style="margin-bottom: var(--space-5)">
+              <p><strong>Market data</strong> — commodity prices, shipping indices, currency rates, inflation indicators (CPI, PPI)</p>
+              <p><strong>Company data</strong> — inventory levels, procurement costs, supplier contracts, sales velocity</p>
+              <p><strong>News &amp; policy</strong> — tariffs, geopolitical events, disruptions, regulatory changes</p>
+            </div>
+            <p class="tool-sidebar-card__body">Statistical models detect trends, correlations, and anomalies. AI agents classify news, reason about causality, and synthesize recommendations. An optimization model calculates the numbers. The result: specific, actionable decisions across procurement, pricing, inventory, and risk.</p>
+            <button id="run-btn" class="btn btn--primary" style="margin-top: var(--space-4)">
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Run Intelligence Engine
+            </button>
+          </div>
+
+          <div class="tool-pipeline" id="pipeline" style="display: none">
+            <div class="tool-stage pending" data-stage="ingest"><div class="tool-stage__dot"></div><span class="tool-stage__label">Ingest</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="process"><div class="tool-stage__dot"></div><span class="tool-stage__label">Process</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="correlate"><div class="tool-stage__dot"></div><span class="tool-stage__label">Correlate</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="reason" data-ai><div class="tool-stage__dot"></div><span class="tool-stage__label">Reason</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="optimize"><div class="tool-stage__dot"></div><span class="tool-stage__label">Optimize</span></div>
+            <div class="tool-stage__connector"></div>
+            <div class="tool-stage pending" data-stage="recommend" data-ai><div class="tool-stage__dot"></div><span class="tool-stage__label">Recommend</span></div>
+          </div>
+
+          <div class="tool-context" id="context-panel" style="display: none">
+            <div id="context-log"></div>
+          </div>
+
+          <div id="sim-output" style="display: none"></div>
+        </div>
+
+        <aside class="tool-side" id="tool-sidebar">
+          <div class="tool-side__sticky">
+            <div class="tool-sidebar-card">
+              <p class="tool-sidebar-card__label">Hybrid Architecture</p>
+              <p class="tool-sidebar-card__body">AI and deterministic models working together — each doing what they're best at:</p>
+              <div class="tool-sidebar-bullets">
+                <p><strong>Statistical</strong> — trends, correlations, anomalies</p>
+                <p><strong>AI Agent</strong> — news classification, causal reasoning</p>
+                <p><strong>Optimization</strong> — constrained cost minimization</p>
+                <p><strong>AI Synthesis</strong> — narrative recommendations</p>
+              </div>
+              <div class="divider" style="margin-block: var(--space-4)"></div>
+              <p class="tool-sidebar-card__body">AI handles reasoning. Math handles math. That's how you get recommendations you can actually trust.</p>
+            </div>
+
+            <div class="sidebar-cta">
+              <p class="tool-sidebar-card__label">Complex supply chain?</p>
+              <p class="tool-sidebar-card__body">Let's talk about building intelligence layers that turn market signals into actionable decisions.</p>
+              <a href="/contact" class="btn btn--primary">Book a Discovery Call</a>
+              <div class="divider" style="margin-block: var(--space-4)"></div>
+              <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" class="social-link" style="justify-content: center; display: flex">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <span>Follow on LinkedIn</span>
+              </a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { mountNav } from '/js/nav.js';
+    import { mountReveal } from '/js/reveal.js';
+    import { injectSchema } from '/js/seo.js';
+    import { mountSupplyChain } from '/js/tools/supply-chain.js';
+
+    mountNav();
+    mountReveal();
+    injectSchema();
+    mountSupplyChain();
+  </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>Explore AI & Data Architectures — See What Mouliqe Would Build</title>
+  <meta name="description" content="Answer three questions about your situation and see a real AI and data architecture mapped to your challenge. Includes timeline estimates, cost tiers, and what happens when you cut corners.">
+  <meta name="keywords" content="AI architecture configurator, AI solution design, data architecture planning, interactive AI roadmap">
+  <link rel="canonical" href="https://mouliqe.com/explore">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="Explore AI & Data Architectures — See What Mouliqe Would Build">
+  <meta property="og:description" content="Answer three questions. Get a real architecture mapped to your situation.">
+  <meta property="og:url" content="https://mouliqe.com/explore">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Explore AI & Data Architectures — See What Mouliqe Would Build">
+  <meta name="twitter:description" content="Answer three questions. Get a real architecture mapped to your situation.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <!-- ═══ HERO ═══ -->
+    <section class="section section--hero" style="padding-bottom: var(--space-10)">
+      <div class="container">
+        <span class="eyebrow anim-fade">Explore</span>
+        <h1 class="hero-title anim-up" style="margin-bottom: var(--space-3)">What would Mouliqe build for you?</h1>
+        <p class="lead anim-up anim-delay-1">Answer three questions. Get a real architecture mapped to your situation — then explore what happens when you cut corners.</p>
+      </div>
+    </section>
+
+    <!-- ═══ CONFIGURATOR ═══ -->
+    <section class="section" style="padding-top: 0; padding-bottom: var(--space-24)">
+      <div class="container">
+
+        <!-- Presets -->
+        <div>
+          <p class="eyebrow--small">Quick start</p>
+          <div id="preset-row" class="preset-row"></div>
+        </div>
+
+        <!-- Questions -->
+        <div id="questions-section" style="margin-bottom: var(--space-12)">
+
+          <!-- Q1 -->
+          <div class="q-block">
+            <div class="q-label">
+              <span class="q-num">01</span>
+              <span class="q-text">What's your main challenge?</span>
+            </div>
+            <div class="q-tiles">
+              <button class="q-tile" data-q="challenge" data-v="automation"><strong>Automate manual work</strong><span>Repetitive processes eating time and headcount</span></button>
+              <button class="q-tile" data-q="challenge" data-v="reliability"><strong>Fix unreliable AI</strong><span>AI that works in demos but breaks in production</span></button>
+              <button class="q-tile" data-q="challenge" data-v="data"><strong>Fix messy data</strong><span>Multiple systems, no single source of truth</span></button>
+              <button class="q-tile" data-q="challenge" data-v="ai-product"><strong>Build an AI product</strong><span>AI-powered feature or application for users</span></button>
+              <button class="q-tile" data-q="challenge" data-v="cost"><strong>Reduce AI costs</strong><span>Spending too much on models, tokens, or infrastructure</span></button>
+              <button class="q-tile" data-q="challenge" data-v="migrate"><strong>Migrate systems</strong><span>Moving off legacy platforms to modern infrastructure</span></button>
+              <button class="q-tile" data-q="challenge" data-v="reporting"><strong>Build reporting</strong><span>Leadership needs better visibility into what's happening</span></button>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div id="q2-reveal" class="q-reveal">
+            <div class="q-block">
+              <div class="q-label">
+                <span class="q-num">02</span>
+                <span class="q-text">How organized is your data right now?</span>
+              </div>
+              <div class="q-tiles--3">
+                <button class="q-tile" data-q="maturity" data-v="scattered"><strong>Scattered</strong><span>Spreadsheets, siloed systems, no clear structure</span></button>
+                <button class="q-tile" data-q="maturity" data-v="siloed"><strong>Structured but siloed</strong><span>Clean data, fragmented across systems</span></button>
+                <button class="q-tile" data-q="maturity" data-v="clean"><strong>Pretty organized</strong><span>Solid structure, just needs smarter use</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div id="q3-reveal" class="q-reveal">
+            <div class="q-block">
+              <div class="q-label">
+                <span class="q-num">03</span>
+                <span class="q-text">What does success look like?</span>
+              </div>
+              <div class="q-tiles--3">
+                <button class="q-tile" data-q="success" data-v="save-time"><strong>Save time</strong><span>Automate processes, reduce manual work</span></button>
+                <button class="q-tile" data-q="success" data-v="reliable-production"><strong>Production reliability</strong><span>AI that works consistently at scale</span></button>
+                <button class="q-tile" data-q="success" data-v="insights"><strong>Better decisions</strong><span>Visibility and insights I can act on</span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Architecture -->
+        <div id="architecture" style="display: none">
+
+          <div id="arch-summary" class="arch-summary"></div>
+          <div id="timeline-block" class="timeline-block"></div>
+          <p id="estimate-disclaimer" class="estimate-disclaimer">These are high-level estimates based on typical engagements. Actual cost and timeline depend heavily on your existing infrastructure, team size, data quality, and scope. That's exactly what the discovery call is for.</p>
+
+          <div id="pipeline" class="pipeline"></div>
+          <div id="node-drilldown" class="node-drilldown"></div>
+
+          <!-- Actions -->
+          <div id="explore-actions" class="explore-actions" style="margin-top: var(--space-8)">
+            <div class="explore-actions__rule"></div>
+            <div class="explore-actions__row">
+              <button id="copy-link-btn" class="btn-inline btn-inline--accent" aria-label="Copy shareable link">Copy link</button>
+              <button id="reset-btn" class="btn-inline btn-inline--muted">Start over</button>
+            </div>
+            <div class="explore-actions__rule"></div>
+          </div>
+
+          <!-- Toggles -->
+          <div style="margin-top: var(--space-10)">
+            <p class="eyebrow--small" style="margin-bottom: var(--space-4)">What happens if you cut corners?</p>
+            <div class="grid grid--2">
+
+              <div>
+                <p class="toggle-group__label toggle-group__label--arch">Architecture</p>
+                <div class="toggle-group">
+                  <label class="toggle-row" for="t-skipData">
+                    <div style="flex-shrink: 0; margin-top: 0.1rem">
+                      <input type="checkbox" id="t-skipData" class="toggle-input" data-toggle="skipData">
+                      <label for="t-skipData" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Skip the data foundation</p>
+                      <p class="toggle-desc">Run AI directly on raw, unvalidated inputs</p>
+                    </div>
+                  </label>
+                  <label class="toggle-row" for="t-noGuardrails" id="tr-noGuardrails">
+                    <div style="flex-shrink: 0; margin-top: 0.1rem">
+                      <input type="checkbox" id="t-noGuardrails" class="toggle-input" data-toggle="noGuardrails">
+                      <label for="t-noGuardrails" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Remove AI guardrails</p>
+                      <p class="toggle-desc">No output validation, no permission classification</p>
+                    </div>
+                  </label>
+                  <label class="toggle-row" for="t-singleAgent" id="tr-singleAgent">
+                    <div style="flex-shrink: 0; margin-top: 0.1rem">
+                      <input type="checkbox" id="t-singleAgent" class="toggle-input" data-toggle="singleAgent">
+                      <label for="t-singleAgent" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Use a single agent</p>
+                      <p class="toggle-desc">One model handles planning, execution, and synthesis</p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <p class="toggle-group__label toggle-group__label--ops">Operations</p>
+                <div class="toggle-group">
+                  <label class="toggle-row" for="t-noMonitoring" id="tr-noMonitoring">
+                    <div style="flex-shrink: 0; margin-top: 0.1rem">
+                      <input type="checkbox" id="t-noMonitoring" class="toggle-input" data-toggle="noMonitoring">
+                      <label for="t-noMonitoring" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Skip monitoring &amp; alerting</p>
+                      <p class="toggle-desc">No pipeline health checks, no anomaly detection</p>
+                    </div>
+                  </label>
+                  <label class="toggle-row" for="t-noCaching" id="tr-noCaching">
+                    <div style="flex-shrink: 0; margin-top: 0.1rem">
+                      <input type="checkbox" id="t-noCaching" class="toggle-input" data-toggle="noCaching">
+                      <label for="t-noCaching" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">No caching layer</p>
+                      <p class="toggle-desc">Every request hits the AI model directly</p>
+                    </div>
+                  </label>
+                  <label class="toggle-row" for="t-skipTesting" id="tr-skipTesting">
+                    <div style="flex-shrink: 0; margin-top: 0.1rem">
+                      <input type="checkbox" id="t-skipTesting" class="toggle-input" data-toggle="skipTesting">
+                      <label for="t-skipTesting" class="toggle-label" onclick="event.stopPropagation()"></label>
+                    </div>
+                    <div>
+                      <p class="toggle-title">Skip testing &amp; validation</p>
+                      <p class="toggle-desc">No parallel runs, no data reconciliation, no evals</p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div id="toggle-warning" class="toggle-warning"></div>
+
+          <!-- Inline booking -->
+          <div class="booking-inline-head">
+            <p class="booking-inline-head__label">Book a Discovery Call</p>
+            <p class="booking-inline-head__copy">This is a starting point. A 30-minute call maps this to your actual systems, team, and timeline — at no cost.</p>
+
+            <div class="card booking-card" id="eb-booking-card" data-booking-root="eb-">
+
+              <div class="step-indicator">
+                <div class="step-item active" data-step="1"><span class="step-dot active">1</span><span class="step-label">Date</span></div>
+                <div class="step-connector" id="eb-conn-1-2"><div class="step-connector__fill"></div></div>
+                <div class="step-item" data-step="2"><span class="step-dot">2</span><span class="step-label">Time</span></div>
+                <div class="step-connector" id="eb-conn-2-3"><div class="step-connector__fill"></div></div>
+                <div class="step-item" data-step="3"><span class="step-dot">3</span><span class="step-label">Details</span></div>
+              </div>
+
+              <div id="eb-step-1" class="booking-step">
+                <div class="form-label" style="margin-bottom: var(--space-4)">Select a date</div>
+                <div id="eb-date-grid" class="date-grid">
+                  <div class="skeleton-slot"></div><div class="skeleton-slot"></div><div class="skeleton-slot"></div><div class="skeleton-slot"></div><div class="skeleton-slot"></div>
+                  <div style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); padding: var(--space-3) 0">
+                    <div class="spinner"></div>
+                    <span class="text-fg-faint text-xs">Loading availability...</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="eb-step-2" class="booking-step" style="display: none">
+                <div class="row" style="margin-bottom: var(--space-4); gap: var(--space-3)">
+                  <button id="eb-back-to-dates" class="step-back">&larr; Back</button>
+                  <div class="form-label" style="margin: 0">Pick a time on <span id="eb-selected-date-label" class="text-fg"></span></div>
+                </div>
+                <div id="eb-time-grid" class="time-grid"></div>
+              </div>
+
+              <div id="eb-step-3" class="booking-step" style="display: none">
+                <div class="row" style="margin-bottom: var(--space-4); gap: var(--space-3)">
+                  <button id="eb-back-to-times" class="step-back">&larr; Back</button>
+                  <div class="form-label" style="margin: 0">Your details</div>
+                </div>
+
+                <div class="slot-summary">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  <span id="eb-slot-summary-text"></span>
+                </div>
+
+                <form id="eb-booking-form">
+                  <div class="form-group"><label for="eb-name" class="form-label">Name</label><input type="text" id="eb-name" class="form-input" placeholder="Your name" required></div>
+                  <div class="form-group"><label for="eb-email" class="form-label">Email</label><input type="email" id="eb-email" class="form-input" placeholder="you@company.com" required></div>
+                  <div class="form-group"><label for="eb-company" class="form-label">Company <span class="text-fg-faint">(optional)</span></label><input type="text" id="eb-company" class="form-input" placeholder="Your company"></div>
+                  <div class="form-group">
+                    <label class="form-label">Interested in</label>
+                    <div class="custom-select" id="eb-interest-select">
+                      <button type="button" class="custom-select__trigger" id="eb-interest-trigger">Select an option</button>
+                      <div class="custom-select__options">
+                        <div class="custom-select__option" data-value="AI Solutions & Architecture">AI Solutions &amp; Architecture</div>
+                        <div class="custom-select__option" data-value="Data Engineering & Infrastructure">Data Engineering &amp; Infrastructure</div>
+                        <div class="custom-select__option" data-value="Analytics & Business Intelligence">Analytics &amp; Business Intelligence</div>
+                        <div class="custom-select__option" data-value="Not sure yet">Not sure yet — let's talk</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group"><label for="eb-message" class="form-label">Tell me about your situation <span class="text-fg-faint">(optional)</span></label><textarea id="eb-message" rows="2" class="form-input" placeholder="What challenges are you facing?"></textarea></div>
+                  <div style="padding-top: var(--space-2)"><button type="submit" id="eb-submit-btn" class="btn btn--primary">Confirm Booking</button></div>
+                </form>
+              </div>
+
+              <div id="eb-step-success" class="booking-step booking-success" style="display: none">
+                <svg class="booking-success__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <p class="booking-success__title">You're booked.</p>
+                <p id="eb-success-detail" class="booking-success__detail"></p>
+                <p class="booking-success__note">A calendar invite has been sent to your email.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { mountNav } from '/js/nav.js';
+    import { mountReveal } from '/js/reveal.js';
+    import { injectSchema } from '/js/seo.js';
+    import { mountBooking } from '/js/booking.js';
+    import { mountExplore } from '/js/explore.js';
+
+    mountNav();
+    mountReveal();
+    injectSchema();
+    const booking = mountBooking('eb-');
+    mountExplore(booking);
+  </script>
+</body>
+</html>

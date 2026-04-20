@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imtiaz Ahmed — Resume</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: letter; margin: 0.35in 0.45in 0.3in 0.45in; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Montserrat', sans-serif; color: #1a1a1a; background: #fff; font-size: 7.5pt; line-height: 1.4; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  a { color: #15803d; text-decoration: none; }
+  h1 { font-size: 18pt; font-weight: 700; color: #0a0a0a; letter-spacing: -0.02em; }
+  h2 { font-size: 8pt; font-weight: 700; color: #15803d; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 4pt; padding-bottom: 2pt; border-bottom: 1px solid #e5e7eb; }
+  h3 { font-size: 7.8pt; font-weight: 700; color: #1a1a1a; }
+  h4 { font-size: 7pt; font-weight: 600; color: #15803d; }
+  .subtitle { font-size: 9.5pt; font-weight: 600; color: #15803d; letter-spacing: 0.08em; }
+  .contact { display: flex; gap: 10pt; flex-wrap: wrap; margin-top: 3pt; }
+  .contact span { font-size: 7pt; color: #6b7280; }
+  .contact a { font-size: 7pt; color: #6b7280; }
+  .summary { font-size: 7.5pt; color: #374151; line-height: 1.45; margin-top: 5pt; }
+  .divider { height: 1px; background: linear-gradient(90deg, #15803d, #e5e7eb 40%); margin: 6pt 0; }
+  .cols { display: flex; gap: 16pt; }
+  .col-main { flex: 1; min-width: 0; }
+  .col-side { width: 160pt; flex-shrink: 0; }
+  .project { margin-bottom: 5pt; }
+  .project-title { font-size: 7.5pt; font-weight: 700; color: #1a1a1a; }
+  .project-tech { font-size: 6pt; color: #9ca3af; margin-bottom: 1.5pt; }
+  .tag { font-size: 5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 1.2pt 3.5pt; border-radius: 2pt; display: inline-block; margin-right: 2pt; }
+  .tag-green { color: #15803d; background: #f0fdf4; }
+  .tag-blue { color: #2563eb; background: #eff6ff; }
+  .tag-purple { color: #7c3aed; background: #f5f3ff; }
+  .tag-amber { color: #b45309; background: #fffbeb; }
+  ul { padding-left: 10pt; }
+  li { font-size: 7.2pt; color: #374151; line-height: 1.4; margin-bottom: 0.5pt; }
+  li::marker { color: #15803d; font-size: 5.5pt; }
+  .role { margin-bottom: 5pt; }
+  .role-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .role-company { font-size: 7.8pt; font-weight: 700; color: #1a1a1a; }
+  .role-date { font-size: 6.2pt; color: #9ca3af; font-weight: 500; }
+  .role-title { font-size: 7pt; font-weight: 600; color: #4b5563; margin-bottom: 2pt; }
+  .subrole { margin-bottom: 3pt; padding-left: 7pt; border-left: 1.5px solid #d1fae5; }
+  .subrole-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .subrole-title { font-size: 6.8pt; font-weight: 600; color: #15803d; }
+  .subrole-date { font-size: 5.8pt; color: #9ca3af; }
+  .skill-cat { font-size: 6pt; font-weight: 700; color: #15803d; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5pt; }
+  .skill-list { font-size: 7pt; color: #374151; line-height: 1.45; margin-bottom: 5pt; }
+  .edu-item { margin-bottom: 4pt; }
+  .edu-degree { font-size: 7.5pt; font-weight: 700; color: #1a1a1a; }
+  .edu-school { font-size: 6.5pt; color: #6b7280; }
+  .award { font-size: 6.8pt; color: #6b7280; line-height: 1.55; }
+  .earlier { font-size: 6.8pt; color: #6b7280; line-height: 1.55; margin-top: 3pt; }
+  @media screen {
+    body { max-width: 8.5in; margin: 0.5in auto; padding: 0.4in 0.45in; box-shadow: 0 0 30px rgba(0,0,0,0.08); }
+    .no-print { position: fixed; top: 12px; right: 12px; z-index: 10; }
+    .no-print button { font-family: 'Montserrat', sans-serif; font-size: 9pt; font-weight: 600; padding: 8px 18px; background: #15803d; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+    .no-print button:hover { background: #16a34a; }
+  }
+  @media print { .no-print { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="no-print"><button onclick="window.print()">Save as PDF</button></div>
+
+<!-- HEADER -->
+<h1>Imtiaz Ahmed</h1>
+<p class="subtitle">AI & Data Engineering Leader</p>
+<div class="contact">
+  <a href="https://www.linkedin.com/in/tiazahmed/">linkedin.com/in/tiazahmed</a>
+  <span>&middot;</span>
+  <a href="https://mouliqe.com">mouliqe.com</a>
+  <span>&middot;</span>
+  <span>imtiaz@mouliqe.com</span>
+  <span>&middot;</span>
+  <span>347-429-2441</span>
+</div>
+<p class="summary">Engineer and technical leader building production AI systems, full-stack applications, and data platforms at AWS scale. Shipped a React/TypeScript/Lambda analytics platform serving 250+ users, automated executive reporting with Amazon Q, and architected a $90B+ pipeline goal-setting tool. Self-taught builder with an MBA bridging business strategy and hands-on engineering.</p>
+
+<div class="divider"></div>
+
+<!-- TWO COLUMN LAYOUT -->
+<div class="cols">
+<div class="col-main">
+
+<!-- TECHNICAL PROJECTS -->
+<h2>Technical Projects</h2>
+
+<div class="project">
+  <div style="display:flex;align-items:baseline;gap:4pt;margin-bottom:1pt">
+    <span class="project-title">AWS Marketing Analytics Platform</span>
+    <span class="tag tag-green">Full-Stack</span><span class="tag tag-blue">AWS</span>
+  </div>
+  <div class="project-tech">React &middot; TypeScript &middot; Lambda &middot; S3 &middot; CloudFront &middot; CDK</div>
+  <ul>
+    <li>Built standalone web application from scratch with serverless architecture serving 250+ users</li>
+    <li>Modules: forecasting engine, goaling tool, automated commentary, GenAI capabilities</li>
+    <li>Reduced manual processing time by 80-95%, saving 250+ employee hours annually</li>
+    <li>Full CI/CD lifecycle: Git version control, CDK infrastructure-as-code, automated CloudFront deployments</li>
+  </ul>
+</div>
+
+<div class="project">
+  <div style="display:flex;align-items:baseline;gap:4pt;margin-bottom:1pt">
+    <span class="project-title">FY26 Goaling & Target-Setting Tool</span>
+    <span class="tag tag-purple">Data Eng</span><span class="tag tag-green">React</span>
+  </div>
+  <div class="project-tech">Python &middot; React &middot; S3 &middot; Parquet &middot; CDK</div>
+  <ul>
+    <li>Interactive platform for $90B+ pipeline goal allocation used by VP-level leadership</li>
+    <li>Python backend generating view-layer JSONs from 50K+ row datasets; 97-check contract validation suite</li>
+    <li>Multi-tab architecture with dynamic filtering, pivot tables, and real-time S3-backed data pipeline</li>
+  </ul>
+</div>
+
+<div class="project">
+  <div style="display:flex;align-items:baseline;gap:4pt;margin-bottom:1pt">
+    <span class="project-title">GenAI WBR Automation Engine</span>
+    <span class="tag tag-amber">AI/ML</span><span class="tag tag-purple">GenAI</span>
+  </div>
+  <div class="project-tech">Amazon Q &middot; Python &middot; QuickSight &middot; Bedrock</div>
+  <ul>
+    <li>Amazon Q-powered system automating executive insights; reduced WBR generation from 4-7 hrs to 15 min</li>
+    <li>Leading GenAI Tiger Team scaling automated commentary across demand driver teams</li>
+    <li>Authored the team's 5-phase Generative AI Roadmap adopted as the strategic AI framework</li>
+  </ul>
+</div>
+
+<div class="project">
+  <div style="display:flex;align-items:baseline;gap:4pt;margin-bottom:1pt">
+    <span class="project-title">Mouliqe AI Consulting Platform</span>
+    <span class="tag tag-green">Consulting</span><span class="tag tag-blue">Platform</span>
+  </div>
+  <div class="project-tech">HTML5 &middot; Tailwind &middot; JS &middot; Cloudflare Pages &middot; GitHub CI/CD</div>
+  <ul>
+    <li>Custom-built site with interactive AI Architecture Configurator (63 pathways), 11 demo tools</li>
+    <li>Data architecture consulting: MicroStrategy &rarr; Airbyte &rarr; Snowflake &rarr; Power BI</li>
+    <li>SEO optimization with JSON-LD schema markup, automated booking system via Google Apps Script</li>
+  </ul>
+</div>
+
+<!-- EXPERIENCE -->
+<h2>Experience</h2>
+
+<div class="role">
+  <div class="role-header">
+    <span class="role-company" style="color:#15803d">Mouliqe</span>
+    <span class="role-date">2025 &mdash; Present</span>
+  </div>
+  <div class="role-title">Founder & AI Solutions Architect</div>
+  <ul>
+    <li>Independent consultancy designing data architecture and AI solutions for SMBs</li>
+    <li>6-stage delivery methodology: Discovery &rarr; Diagnosis &rarr; Blueprint &rarr; Build &rarr; Refine &rarr; Support</li>
+    <li>End-to-end data pipelines: source extraction, cloud warehousing, BI dashboards, client portals</li>
+  </ul>
+</div>
+
+<div class="role">
+  <div class="role-header">
+    <span class="role-company">Amazon Web Services</span>
+    <span class="role-date">Apr 2022 &mdash; Present</span>
+  </div>
+  <div class="role-title">Senior Business Analyst (L6) &mdash; Engineering-scoped role</div>
+
+  <div class="subrole">
+    <div class="subrole-header">
+      <span class="subrole-title">AI & Automation Lead</span>
+      <span class="subrole-date">Jan 2026 &mdash; Present</span>
+    </div>
+    <ul>
+      <li>Spearheading AI Rotation Program &mdash; MCP integrations for Kingpin, Slack, Asana, SharePoint</li>
+      <li>RAG-based chatbot architecture (Bedrock, vector search) for CMO-level data access</li>
+      <li>Managing full CI/CD lifecycle: Git, CDK, Lambda deployments, S3 pipelines, CloudFront distributions</li>
+    </ul>
+  </div>
+
+  <div class="subrole">
+    <div class="subrole-header">
+      <span class="subrole-title">Full-Stack Developer & Analytics Engineer</span>
+      <span class="subrole-date">Aug 2024 &mdash; Dec 2025</span>
+    </div>
+    <ul>
+      <li>Built AWS Marketing Analytics Toolbox &mdash; production React/TypeScript/Lambda application</li>
+      <li>Automated commentary dashboards in QuickSight; designed ETL pipelines across business units</li>
+      <li>Created automated lead staggering system improving email performance by 35%</li>
+    </ul>
+  </div>
+
+  <div class="subrole">
+    <div class="subrole-header">
+      <span class="subrole-title" style="color:#6b7280">Digital Marketing Analyst</span>
+      <span class="subrole-date">Apr 2022 &mdash; Aug 2024</span>
+    </div>
+    <ul>
+      <li>Tableau/Marketo reporting infrastructure; data pipeline design and campaign analytics automation</li>
+    </ul>
+  </div>
+</div>
+
+<div class="role">
+  <div class="role-header">
+    <span class="role-company">Ruffalo Noel Levitz</span>
+    <span class="role-date">Feb 2018 &mdash; Apr 2022</span>
+  </div>
+  <div class="role-title">Director of Digital Strategy</div>
+  <ul>
+    <li>Led 15-person team managing $350K/month paid media; built analytics frameworks for ROI optimization</li>
+    <li>Reduced campaign targeting timelines by 70% through data-driven automation and process redesign</li>
+  </ul>
+</div>
+
+<p class="earlier"><strong>Earlier:</strong> Digital Marketing Manager at Affectiva Inc (AI startup) &middot; Marketing Manager at KSmit Products</p>
+
+</div><!-- end col-main -->
+
+<!-- SIDEBAR -->
+<div class="col-side">
+
+<h2>Key Metrics</h2>
+<div class="skill-list" style="margin-bottom:2pt">
+  <strong style="color:#15803d">80-95%</strong> reduction in processing time<br>
+  <strong style="color:#15803d">250+</strong> employee hours saved annually<br>
+  <strong style="color:#15803d">95%</strong> faster report generation (4-7 hrs &rarr; 15 min)<br>
+  <strong style="color:#15803d">35%</strong> improvement in email marketing performance<br>
+  <strong style="color:#15803d">70%</strong> reduction in campaign targeting timelines<br>
+  <strong style="color:#15803d">$90B+</strong> pipeline goals managed through custom tooling
+</div>
+
+<div style="margin-top:4pt"></div>
+<h2>Skills</h2>
+
+<div class="skill-cat">Languages</div>
+<div class="skill-list">Python &middot; TypeScript &middot; JavaScript &middot; SQL &middot; HTML/CSS</div>
+
+<div class="skill-cat">Frontend</div>
+<div class="skill-list">React &middot; Tailwind CSS &middot; Webpack &middot; Responsive Design</div>
+
+<div class="skill-cat">AWS Services</div>
+<div class="skill-list">Lambda &middot; S3 &middot; CloudFront &middot; CDK &middot; QuickSight &middot; Amazon Q &middot; Bedrock</div>
+
+<div class="skill-cat">Data Engineering</div>
+<div class="skill-list">ETL Pipelines &middot; Snowflake &middot; Airbyte &middot; Power BI &middot; Tableau &middot; Parquet</div>
+
+<div class="skill-cat">AI / ML</div>
+<div class="skill-list">GenAI Applications &middot; RAG &middot; Prompt Engineering &middot; Agentic Workflows &middot; MCP</div>
+
+<div class="skill-cat">DevOps</div>
+<div class="skill-list">Git &middot; CI/CD &middot; Serverless &middot; Cloudflare Pages &middot; GitHub Actions</div>
+
+<div style="margin-top:4pt"></div>
+<h2>Education</h2>
+
+<div class="edu-item">
+  <div class="edu-degree">MBA</div>
+  <div class="edu-school">University of Connecticut &mdash; 2016</div>
+</div>
+<div class="edu-item">
+  <div class="edu-degree">BBA</div>
+  <div class="edu-school">Khulna University &mdash; 2012</div>
+</div>
+
+<div style="margin-top:4pt"></div>
+<h2>Recognition</h2>
+<div class="award">
+  GE Fellowship Award (2016)<br>
+  Lincoln MBA Challenge &mdash; Runner-up<br>
+  Full Scholarship, UConn
+</div>
+
+<div style="margin-top:4pt"></div>
+<h2>Languages</h2>
+<div class="skill-list">English (Fluent) &middot; Bangla (Fluent) &middot; Hindi (Spoken) &middot; Urdu (Spoken)</div>
+
+<div style="margin-top:4pt"></div>
+<h2>Certifications</h2>
+<div class="skill-list">
+  AWS AI Practitioner (In Progress)<br>
+  AWS Cloud Practitioner (In Progress)
+</div>
+
+<div style="margin-top:4pt"></div>
+<h2>What I Build</h2>
+<div class="skill-list" style="margin-bottom:0">
+  Production web apps, data pipelines that replace spreadsheets, and AI systems with guardrails that leadership trusts. Business problem first, technology second.
+</div>
+
+</div><!-- end col-side -->
+</div><!-- end cols -->
+
+</body>
+</html>

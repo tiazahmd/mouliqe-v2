@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>Free AI Consulting Discovery Call — Book 30 Minutes</title>
+  <meta name="description" content="Book a free 30-minute discovery call to discuss your AI and data engineering challenges. No prep needed, no pitch — just an honest conversation about what you need.">
+  <meta name="keywords" content="free AI consultation, book AI consultant, AI consulting discovery call, data engineering consultation, hire AI architect">
+  <link rel="canonical" href="https://mouliqe.com/contact">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="Free AI Consulting Discovery Call — Book 30 Minutes">
+  <meta property="og:description" content="Book a free 30-minute discovery call. No prep needed, no pitch — just an honest conversation about your AI and data challenges.">
+  <meta property="og:url" content="https://mouliqe.com/contact">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free AI Consulting Discovery Call — Book 30 Minutes">
+  <meta name="twitter:description" content="Book a free 30-minute discovery call. No prep needed, no pitch — just an honest conversation about your AI and data challenges.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <!-- ═══ HERO ═══ -->
+    <section class="section section--hero" style="padding-bottom: var(--space-10)">
+      <div class="container">
+        <span class="eyebrow anim-fade">Contact</span>
+        <h1 class="hero-title anim-up">Start with a question.</h1>
+        <p class="lead anim-up anim-delay-1" style="margin-top: var(--space-6)">
+          Pick a time, tell me what you're dealing with, and we'll figure it out together. Free, no commitment, no pitch.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══ BOOKING ═══ -->
+    <section class="section" style="padding-top: 0">
+      <div class="container">
+        <div class="booking-layout">
+
+          <!-- Booking flow -->
+          <div class="booking-main reveal">
+            <div class="card booking-card">
+
+              <!-- Step indicator -->
+              <div class="step-indicator">
+                <div class="step-item active" data-step="1">
+                  <span class="step-dot active">1</span>
+                  <span class="step-label">Date</span>
+                </div>
+                <div class="step-connector" id="conn-1-2"><div class="step-connector__fill"></div></div>
+                <div class="step-item" data-step="2">
+                  <span class="step-dot">2</span>
+                  <span class="step-label">Time</span>
+                </div>
+                <div class="step-connector" id="conn-2-3"><div class="step-connector__fill"></div></div>
+                <div class="step-item" data-step="3">
+                  <span class="step-dot">3</span>
+                  <span class="step-label">Details</span>
+                </div>
+              </div>
+
+              <!-- Step 1: Date -->
+              <div id="step-1" class="booking-step">
+                <div class="form-label" style="margin-bottom: var(--space-4)">Select a date</div>
+                <div id="date-grid" class="date-grid">
+                  <div class="skeleton-slot"></div>
+                  <div class="skeleton-slot"></div>
+                  <div class="skeleton-slot"></div>
+                  <div class="skeleton-slot"></div>
+                  <div class="skeleton-slot"></div>
+                  <div style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); padding: var(--space-3) 0">
+                    <div class="spinner"></div>
+                    <span class="text-fg-faint text-xs">Loading availability...</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 2: Time -->
+              <div id="step-2" class="booking-step" style="display: none">
+                <div class="row" style="margin-bottom: var(--space-4); gap: var(--space-3)">
+                  <button id="back-to-dates" class="step-back">&larr; Back</button>
+                  <div class="form-label" style="margin: 0">Pick a time on <span id="selected-date-label" class="text-fg"></span></div>
+                </div>
+                <div id="time-grid" class="time-grid"></div>
+              </div>
+
+              <!-- Step 3: Details -->
+              <div id="step-3" class="booking-step" style="display: none">
+                <div class="row" style="margin-bottom: var(--space-4); gap: var(--space-3)">
+                  <button id="back-to-times" class="step-back">&larr; Back</button>
+                  <div class="form-label" style="margin: 0">Your details</div>
+                </div>
+
+                <div class="slot-summary">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  <span id="slot-summary-text"></span>
+                </div>
+
+                <form id="booking-form">
+                  <div class="form-group">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" id="name" class="form-input" placeholder="Your name" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="you@company.com" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="company" class="form-label">Company <span class="text-fg-faint">(optional)</span></label>
+                    <input type="text" id="company" class="form-input" placeholder="Your company">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Interested in</label>
+                    <div class="custom-select" id="interest-select">
+                      <button type="button" class="custom-select__trigger" id="interest-trigger">Select an option</button>
+                      <div class="custom-select__options">
+                        <div class="custom-select__option" data-value="AI Solutions & Architecture">AI Solutions &amp; Architecture</div>
+                        <div class="custom-select__option" data-value="Data Engineering & Infrastructure">Data Engineering &amp; Infrastructure</div>
+                        <div class="custom-select__option" data-value="Analytics & Business Intelligence">Analytics &amp; Business Intelligence</div>
+                        <div class="custom-select__option" data-value="Not sure yet">Not sure yet — let's talk</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="message" class="form-label">Tell me about your situation <span class="text-fg-faint">(optional)</span></label>
+                    <textarea id="message" rows="2" class="form-input" placeholder="What challenges are you facing?"></textarea>
+                  </div>
+                  <div style="padding-top: var(--space-2)">
+                    <button type="submit" id="submit-btn" class="btn btn--primary">Confirm Booking</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Success -->
+              <div id="step-success" class="booking-step booking-success" style="display: none">
+                <svg class="booking-success__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <p class="booking-success__title">You're booked.</p>
+                <p id="success-detail" class="booking-success__detail"></p>
+                <p class="booking-success__note">A calendar invite has been sent to your email.</p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <aside class="booking-side reveal reveal--stagger-1">
+            <div class="booking-side__sticky">
+              <div class="sidebar-card">
+                <div class="sidebar-card__title">What to Expect</div>
+                <p class="sidebar-card__body">This is a conversation, not a sales pitch. I'll ask about your situation, share what I think the right approach is, and if it makes sense to work together, we'll talk next steps. If it doesn't, you'll still walk away with a clearer picture.</p>
+                <div class="info-list">
+                  <div class="info-list__item">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>30 minutes on Google Meet</span>
+                  </div>
+                  <div class="info-list__item">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>Free, no commitment</span>
+                  </div>
+                  <div class="info-list__item">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>No prep needed, no follow-up spam</span>
+                  </div>
+                </div>
+              </div>
+              <div class="sidebar-card">
+                <div class="sidebar-card__title" style="color: var(--color-fg-faint)">Prefer email?</div>
+                <a href="mailto:imtiaz@mouliqe.com" class="email-link">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  <span>Send us an email instead</span>
+                </a>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ WHAT TO EXPECT ═══ -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="grid grid--3 reveal">
+          <div class="expect-card">
+            <p class="expect-card__title">We talk about your situation</p>
+            <p class="expect-card__text">No prep needed. Just tell me what you're dealing with and what you're trying to achieve.</p>
+          </div>
+          <div class="expect-card">
+            <p class="expect-card__title">I tell you what I think</p>
+            <p class="expect-card__text">Honest assessment — even if the answer is "you don't need me" or "AI isn't the right approach here."</p>
+          </div>
+          <div class="expect-card">
+            <p class="expect-card__title">You decide what's next</p>
+            <p class="expect-card__text">No pressure, no follow-up emails. If it makes sense to work together, we'll talk about it. If not, no hard feelings.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { mountNav } from '/js/nav.js';
+    import { mountReveal } from '/js/reveal.js';
+    import { injectSchema } from '/js/seo.js';
+    import { mountBooking } from '/js/booking.js';
+
+    mountNav();
+    mountReveal();
+    injectSchema();
+    mountBooking();
+  </script>
+</body>
+</html>

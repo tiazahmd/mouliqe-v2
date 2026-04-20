@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>AI Consulting FAQ — Common Questions About AI, Data & Working With Mouliqe</title>
+  <meta name="description" content="Answers to the most common questions about AI consulting, data engineering, project timelines, costs, and what it's like to work with Mouliqe.">
+  <meta name="keywords" content="AI consulting FAQ, do I need AI, how much does AI consulting cost, AI project timeline, data engineering questions, hire AI consultant">
+  <link rel="canonical" href="https://mouliqe.com/faq">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="AI Consulting FAQ — Common Questions About AI, Data & Working With Mouliqe">
+  <meta property="og:description" content="Answers to the most common questions about AI consulting, data engineering, project timelines, costs, and what it's like to work with Mouliqe.">
+  <meta property="og:url" content="https://mouliqe.com/faq">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Consulting FAQ — Common Questions About AI, Data & Working With Mouliqe">
+  <meta name="twitter:description" content="Answers to the most common questions about AI consulting, data engineering, project timelines, costs, and what it's like to work with Mouliqe.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <section class="section section--hero" style="padding-bottom: var(--space-10)">
+      <div class="container">
+        <span class="eyebrow anim-fade">FAQ</span>
+        <h1 class="hero-title anim-up">Questions I hear<br>before we even <span class="text-accent">start.</span></h1>
+        <p class="lead anim-up anim-delay-1" style="margin-top: var(--space-6)">
+          Honest answers about AI consulting, data engineering, timelines, costs, and how I work. If your question isn't here, that's what the discovery call is for.
+        </p>
+      </div>
+    </section>
+
+    <section class="section section--tight section--divided">
+      <div class="container container--narrow" style="max-width: 48rem">
+
+        <div class="faq-search-wrap reveal">
+          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="text" class="faq-search" id="faq-search" placeholder="Search questions...">
+        </div>
+
+        <div class="faq-tabs reveal" id="faq-tabs"></div>
+
+        <div class="faq-list reveal" id="faq-list"></div>
+
+        <div id="faq-empty" class="faq-empty faq-hidden">No questions match your search.</div>
+
+      </div>
+    </section>
+
+    <section class="section section--divided" style="text-align: center">
+      <div class="container">
+        <div class="reveal" style="max-width: 36rem; margin: 0 auto">
+          <h2 class="section-heading__title">Still have questions?</h2>
+          <p class="text-fg-subtle" style="margin-bottom: var(--space-10); line-height: var(--lh-loose); font-size: var(--fs-sm)">Every engagement starts with a free discovery call. No pitch, no pressure — just an honest conversation about what you need.</p>
+          <a href="/contact" class="btn btn--primary">Book a Discovery Call</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { mountNav } from '/js/nav.js';
+    import { mountReveal } from '/js/reveal.js';
+    import { injectSchema } from '/js/seo.js';
+    import { mountFAQ, getFAQSchema } from '/js/faq.js';
+
+    mountNav();
+    mountReveal();
+    injectSchema();
+    mountFAQ();
+
+    // Inject FAQPage schema for SEO
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify(getFAQSchema());
+    document.head.appendChild(s);
+  </script>
+</body>
+</html>

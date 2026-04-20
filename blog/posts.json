@@ -1,0 +1,98 @@
+[
+  {
+    "slug": "ai-cant-read-your-mind",
+    "title": "Your AI Can Read Your Data. It Can't Read Your Mind.",
+    "date": "2026-04-11",
+    "excerpt": "AI can summarize your data all day long. But it can't tell you why something happened or what to do about it without business context. Here's how to close that gap.",
+    "tags": ["AI Architecture", "Business"],
+    "linkedin": ""
+  },
+  {
+    "slug": "choose-ai-consultant",
+    "title": "How to Choose an AI Consultant: 7 Questions to Ask Before You Hire",
+    "date": "2026-03-31",
+    "excerpt": "Not all AI consultants are created equal. Here are the questions that separate the ones who solve problems from the ones who sell technology.",
+    "tags": ["AI Strategy", "Business"],
+    "linkedin": ""
+  },
+  {
+    "slug": "first-ai-project",
+    "title": "What to Expect From Your First AI Project: A Realistic Timeline and Guide",
+    "date": "2026-03-31",
+    "excerpt": "Your first AI project does not have to be a disaster. Here is what actually happens, step by step, when you build an AI solution for the first time.",
+    "tags": ["AI Strategy", "Business"],
+    "linkedin": ""
+  },
+  {
+    "slug": "fix-your-data",
+    "title": "How to Fix Your Business Data Without a 6-Month Project",
+    "date": "2026-03-31",
+    "excerpt": "Your data is a mess and you know it. Here is how to fix it in weeks, not months, without hiring a data team or buying an expensive platform.",
+    "tags": ["Data Engineering", "Business"],
+    "linkedin": ""
+  },
+  {
+    "slug": "stop-building-ai-features",
+    "title": "Does Your Business Actually Need AI? How to Tell",
+    "date": "2026-03-26",
+    "excerpt": "70-85% of AI projects fail because they solve the wrong problem. Learn how to evaluate whether AI is the right solution — or if something simpler will work better.",
+    "tags": ["AI Strategy", "Business"],
+    "linkedin": ""
+  },
+  {
+    "slug": "poc-to-production",
+    "title": "Why AI Proof of Concepts Fail in Production (And How to Fix It)",
+    "date": "2026-03-19",
+    "excerpt": "Your AI demo worked perfectly. Production is a disaster. Here's why the gap between POC and production AI is so wide — and the architecture decisions that close it.",
+    "tags": ["AI Strategy", "Production Systems"],
+    "linkedin": ""
+  },
+  {
+    "slug": "data-problem-not-ai-problem",
+    "title": "Why Most AI Projects Fail: It's a Data Problem, Not an AI Problem",
+    "date": "2026-03-16",
+    "excerpt": "Most AI initiatives fail not because of the model — but because the data underneath is a mess. Fix the foundation first.",
+    "tags": ["Data Engineering", "AI Strategy"],
+    "linkedin": ""
+  },
+  {
+    "slug": "context-windows-are-a-lie",
+    "title": "LLM Context Window Limits Explained: Why Bigger Isn't Better",
+    "date": "2026-03-12",
+    "excerpt": "A 200K token context window doesn't mean your AI can use 200K tokens effectively. Here's why — and how to architect around the real limits.",
+    "tags": ["AI Architecture", "Context Management"],
+    "linkedin": ""
+  },
+  {
+    "slug": "guardrails-problem",
+    "title": "How to Implement AI Guardrails Without Breaking Your System",
+    "date": "2026-03-09",
+    "excerpt": "AI without guardrails is a liability. But most implementations are too loose or too restrictive. Here's how to design AI safety guardrails that actually work.",
+    "tags": ["AI Architecture", "Reliability"],
+    "linkedin": ""
+  },
+  {
+    "slug": "ai-memory-systems",
+    "title": "How to Build AI Memory Systems That Persist Across Sessions",
+    "date": "2026-03-05",
+    "excerpt": "Most AI assistants forget everything between sessions. Learn how a six-layer memory architecture gives AI persistent context — and why it matters for production systems.",
+    "tags": ["AI Architecture", "Memory Systems"],
+    "linkedin": ""
+  },
+  {
+    "slug": "planner-worker-synthesizer",
+    "title": "Multi-Agent AI Architecture: The Planner-Worker-Synthesizer Pattern",
+    "date": "2026-02-26",
+    "excerpt": "How splitting one AI agent into three — planner, worker, and synthesizer — eliminated tool call hallucinations and made the system dramatically more reliable.",
+    "tags": ["AI Architecture", "Multi-Agent Systems"],
+    "linkedin": "https://www.linkedin.com/pulse/planner-worker-synthesizer-3-agent-pattern-actually-works-ahmed-69ake/"
+  },
+  {
+    "slug": "costume-change-vs-new-actor",
+    "title": "Single AI Agent vs. Multiple Specialized Agents: When to Split",
+    "date": "2026-02-19",
+    "excerpt": "Should you tune one AI agent or build multiple specialized ones? A practical framework for the architectural decision most builders get wrong.",
+    "tags": ["AI Architecture", "Multi-Agent Systems"],
+    "linkedin": "https://www.linkedin.com/pulse/when-your-ai-agent-needs-costume-change-vs-whole-new-actor-ahmed-nd2pe/"
+  }
+]

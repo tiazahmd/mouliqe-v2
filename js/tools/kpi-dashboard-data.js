@@ -1,0 +1,65 @@
+// tools/kpi-dashboard-data.js — sample datasets + stage context
+export const SAMPLES = {
+  saas: {
+    label: 'SaaS Metrics', sub: 'MRR, Churn, LTV',
+    headers: ['Month','MRR','New MRR','Churned MRR','Customers','New Customers','Churned Customers','ARPU','Churn Rate','LTV','NPS'],
+    rows: [
+      ['2025-01','42000','8500','2100','310','45','12','135.48','3.87','3501','42'],
+      ['2025-02','48400','9200','2800','343','52','19','141.11','5.54','2548','45'],
+      ['2025-03','54800','10100','3700','376','58','25','145.74','6.65','2191','38'],
+      ['2025-04','61200','11400','5000','409','62','29','149.63','7.09','2111','41'],
+      ['2025-05','67600','12200','5800','442','67','34','152.94','7.69','1989','44'],
+      ['2025-06','74000','13500','7100','475','71','38','155.79','8.00','1947','47'],
+      ['2025-07','79200','12800','7600','502','68','41','157.77','8.17','1932','43'],
+      ['2025-08','85600','14200','7800','535','76','43','160.00','8.04','1990','48'],
+      ['2025-09','91400','13900','8100','564','72','43','162.06','7.62','2127','51'],
+      ['2025-10','98200','15600','8800','601','82','45','163.39','7.49','2182','49'],
+      ['2025-11','104800','16200','9600','638','87','50','164.26','7.84','2095','52'],
+      ['2025-12','112400','18100','10500','682','98','54','164.81','7.92','2081','55'],
+    ],
+  },
+  ecommerce: {
+    label: 'E-commerce', sub: 'Revenue, Orders, AOV',
+    headers: ['Month','Revenue','Orders','AOV','Visitors','Conversion Rate','Return Rate','Cart Abandonment','Repeat Customers','Avg Shipping Days','CSAT'],
+    rows: [
+      ['2025-01','285000','3420','83.33','142000','2.41','8.2','71.3','28.4','3.2','4.1'],
+      ['2025-02','312000','3650','85.48','155000','2.35','7.8','69.8','29.1','3.1','4.2'],
+      ['2025-03','298000','3480','85.63','148000','2.35','9.1','72.1','27.6','3.4','3.9'],
+      ['2025-04','345000','3920','88.01','168000','2.33','7.5','68.4','30.2','2.9','4.3'],
+      ['2025-05','378000','4180','90.43','182000','2.30','6.9','67.2','31.8','2.8','4.4'],
+      ['2025-06','402000','4350','92.41','195000','2.23','7.2','66.8','32.5','2.7','4.5'],
+      ['2025-07','389000','4210','92.40','188000','2.24','8.0','68.5','31.2','3.0','4.3'],
+      ['2025-08','425000','4520','94.03','201000','2.25','6.5','65.4','33.8','2.6','4.6'],
+      ['2025-09','398000','4180','95.22','192000','2.18','7.8','67.9','32.1','2.9','4.4'],
+      ['2025-10','456000','4780','95.40','215000','2.22','6.2','64.8','34.5','2.5','4.7'],
+      ['2025-11','520000','5340','97.38','248000','2.15','5.8','63.1','36.2','2.8','4.5'],
+      ['2025-12','612000','6120','100.00','295000','2.07','9.5','61.2','38.4','3.5','4.2'],
+    ],
+  },
+  marketing: {
+    label: 'Marketing', sub: 'CAC, ROAS, Conversion',
+    headers: ['Month','Ad Spend','Leads','MQLs','SQLs','Conversions','CAC','ROAS','CTR','CPC','Conversion Rate','Email Open Rate','Email CTR'],
+    rows: [
+      ['2025-01','18500','1240','385','142','48','385.42','2.85','2.1','1.45','3.87','22.4','3.2'],
+      ['2025-02','21200','1480','412','168','56','378.57','2.92','2.3','1.52','3.78','23.1','3.5'],
+      ['2025-03','24800','1650','498','195','62','400.00','2.68','2.0','1.61','3.76','21.8','3.1'],
+      ['2025-04','22400','1520','445','178','58','386.21','2.95','2.4','1.48','3.82','24.2','3.8'],
+      ['2025-05','26500','1780','534','212','72','368.06','3.12','2.6','1.55','3.96','25.1','4.0'],
+      ['2025-06','28200','1890','562','228','78','361.54','3.18','2.5','1.58','4.13','24.8','3.9'],
+      ['2025-07','25800','1720','498','198','65','396.92','2.88','2.2','1.62','3.78','23.5','3.4'],
+      ['2025-08','30100','2050','615','248','85','354.12','3.28','2.7','1.51','4.15','26.2','4.2'],
+      ['2025-09','28400','1920','576','232','79','359.49','3.22','2.5','1.54','4.11','25.8','4.1'],
+      ['2025-10','32500','2180','654','268','92','353.26','3.35','2.8','1.49','4.22','27.1','4.4'],
+      ['2025-11','35200','2380','714','292','102','345.10','3.42','2.9','1.46','4.29','28.4','4.6'],
+      ['2025-12','31800','2120','636','258','88','361.36','3.28','2.6','1.52','4.15','26.8','4.3'],
+    ],
+  },
+};
+
+export const STAGE_CTX = {
+  parse:     { title: 'Parsing CSV',               text: 'Reading your data row by row, detecting delimiters, handling quoted fields, and building a structured table. This is the foundation — if parsing is wrong, everything downstream breaks.' },
+  profile:   { title: 'Profiling Columns',         text: 'Analyzing each column: counting nulls, detecting data types (numeric, date, categorical, percentage), computing min/max/mean, and measuring cardinality. This tells us what kind of data we\'re working with.' },
+  classify:  { title: 'Classifying Metrics',       text: 'Identifying which columns are KPIs (key performance indicators) vs. dimensions. Looking for revenue metrics, rates, counts, and time-series patterns. This determines what to highlight vs. what to group by.' },
+  visualize: { title: 'Selecting Visualizations',  text: 'Matching each metric type to the right chart: line charts for trends over time, bar charts for comparisons, gauges for rates and percentages. The wrong chart type hides insights; the right one reveals them.' },
+  render:    { title: 'Building Dashboard',        text: 'Rendering KPI summary cards with trend indicators, drawing charts with proper scales and labels, and laying out the dashboard grid. The goal: a scannable view that answers "how are we doing?" in under 5 seconds.' },
+};

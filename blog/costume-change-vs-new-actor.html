@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>Single AI Agent vs. Multiple Specialized Agents: When to Split — Mouliqe</title>
+  <meta name="description" content="Should you tune one AI agent or build multiple specialized ones? The architectural decision most AI builders get wrong — and a practical framework for deciding.">
+  <meta name="keywords" content="single vs multiple AI agents, AI agent specialization, when to split AI agents, AI agent architecture decisions, specialized AI agents, multi-agent vs single agent">
+  <link rel="canonical" href="https://mouliqe.com/blog/costume-change-vs-new-actor">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="Single AI Agent vs. Multiple Specialized Agents: When to Split — Mouliqe">
+  <meta property="og:description" content="Should you tune one AI agent or build multiple specialized ones? A practical framework for the architectural decision most builders get wrong.">
+  <meta property="og:url" content="https://mouliqe.com/blog/costume-change-vs-new-actor">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Single AI Agent vs. Multiple Specialized Agents: When to Split — Mouliqe">
+  <meta name="twitter:description" content="Should you tune one AI agent or build multiple specialized ones? A practical framework for the architectural decision most builders get wrong.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <section class="section section--hero" style="padding-bottom: var(--space-8)">
+      <div class="container">
+        <a href="/blog" class="post-back anim-fade">&larr; Back to Blog</a>
+        <h1 class="post__title anim-up">When Your AI Agent Needs a Costume Change vs. a Whole New Actor</h1>
+        <div class="row anim-up anim-delay-1" style="gap: var(--space-4); margin-top: var(--space-4)">
+          <time datetime="" class="post__date"></time>
+          <span class="post-tag">AI Architecture</span><span class="post-tag">Multi-Agent Systems</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0; padding-bottom: var(--space-20)">
+      <div class="container">
+        <div class="blog-layout">
+          <article class="blog-main">
+            <div class="post post__body">
+<p>The architectural decision a lot of AI builders get wrong and how to think about it.</p>
+
+              <p>I've been building a multi-agent AI assistant for a while now. Recently, I hit a problem that I think a lot of people building AI products will eventually face — and the solution turned out to be one of the more interesting architectural decisions I've made. Let me walk you through it.</p>
+
+              <h2>The Situation</h2>
+
+              <p>My assistant has a pipeline: a Planner figures out what to do, an Executor (Worker) does the work using tools, and a Synthesizer crafts the final response. One Worker agent handles 80+ tools — calendar, email, file operations, web search, code execution, you name it.</p>
+
+              <blockquote><p>Note: The reason why I implemented this planner -> worker -> synthesizer system is to keep the worker's context clean from unnecessary noise. Bloating an LLM's context with things that it doesn't need created massive hallucination problems, specifically around tool calls. This architecture keeps the worker context clean and has successfully been able to remove tool call hallucinations. This topic requires a whole different article, which I will publish soon, so stay tuned!</p></blockquote>
+
+              <p>It works. For most things, it works really well. But "most things" isn't good enough when you're trying to build something reliable.</p>
+
+              <h2>The Problem</h2>
+
+              <p>I asked my assistant to review my resume. It read the file, analyzed it, and told me to change "Jan 2026 to Present" because it was inaccurate. Its suggestion? Change it to "Jan 2026 to Present." The exact same text. The model misread the content, hallucinated an issue, and confidently recommended changing something to what it already was. This wasn't a one-off. Every time I asked it to do something that required precision - reviewing a document, comparing two files, analyzing data - the same class of errors showed up. The agent was treating "review my resume" with the same configuration as "what's the weather." Same model, same temperature, same level of attention to detail.</p>
+
+              <p>Think about that for a second. In what world would you assign the same person, with the same instructions, to both check the weather and audit a legal document?</p>
+
+              <h2>The Insight</h2>
+
+              <p>When I dug into why this was happening, I found three root causes:</p>
+
+              <ol>
+                <li><strong>Wrong model for the job:</strong> The Worker used a fast, cheap model (Haiku) for everything. Great for "create a todo," terrible for "find inconsistencies in this 3-page document."</li>
+                <li><strong>Context degradation:</strong> My pipeline has three stages. By the time the Synthesizer - the agent that actually writes the response - gets the document content, it's been summarized and truncated. The agent writing the feedback has never seen the exact text it's commenting on.</li>
+                <li><strong>No task-appropriate behavior:</strong> There was no mechanism to say "for this specific task, be more careful, quote the source text before commenting, and use a smarter model."</li>
+              </ol>
+
+              <p>The fix seemed obvious: specialize. But how you specialize matters enormously.</p>
+
+              <h2>Two Approaches to Specialization</h2>
+
+              <p>I landed on a two-tier system, and I think this framework applies to almost any AI product that uses agents.</p>
+
+              <h3>Tier 1 — Specialized Profiles (Configuration-driven)</h3>
+
+              <p>Same agent, different settings. Think of it like giving the same employee different checklists for different tasks. The Worker agent's execution loop - call tools, evaluate results, decide next step - works fine for most tasks. What needed to change was the configuration: which model to use, how creative to be, how much context to preserve, and what domain-specific instructions to follow.</p>
+
+              <p>So I created profiles. A "document review" profile uses a smarter model at low temperature with instructions to quote text before critiquing it. An "email" profile uses a fast model with instructions about threading and batch operations. A "data ops" profile uses minimal context — when you create a todo, the Synthesizer doesn't need the full tool response, just a confirmation.</p>
+
+              <p>Ten profiles. Same Worker code. Each one tuned for its task category. This covers roughly 80% of requests. The execution pattern is identical — the agent calls tools in a loop. Only the configuration changes.</p>
+
+              <h3>Tier 2 — Specialized Agents (Code-driven)</h3>
+
+              <p>Different agent, different execution loop entirely. This is when the task fundamentally cannot be handled by the generic "call tools and evaluate" pattern.</p>
+
+              <p>Take data analysis. The generic Worker would read a CSV file and try to analyze it in one shot — sending raw data to the LLM and hoping for insights. That's not how data analysis works. You need to load the data into pandas, explore the structure, run computations, notice something interesting, drill deeper, maybe create a visualization, iterate. That's a fundamentally different execution pattern — not just different settings.</p>
+
+              <p>So I built a DataAnalysisAgent with its own tool-call loop. It starts a Python REPL session, executes code iteratively, reads outputs, decides what to investigate next, and can run up to 30 iterations of exploration before producing its final report.</p>
+
+              <p>Same for document review. The generic Worker reads a file and analyzes everything at once. A dedicated DocumentReviewAgent reads the file, enforces a quote-first protocol (you must quote the exact text before commenting on it), and structures feedback by category. The execution pattern is different — not just the configuration.</p>
+
+              <h2>The Decision Framework</h2>
+
+              <p>Here's how I decide which tier a task belongs to:</p>
+
+              <p><strong>Can the generic tool-call loop handle this if I just change the settings?</strong> → Profile.</p>
+
+              <ul>
+                <li>Checking the weather with a fast model → Profile</li>
+                <li>Drafting an email with a creative temperature → Profile</li>
+                <li>Creating a todo with minimal confirmation context → Profile</li>
+              </ul>
+
+              <p><strong>Does this task need a fundamentally different execution pattern?</strong> → Specialized Agent.</p>
+
+              <ul>
+                <li>Iterative data analysis with REPL computation → Agent</li>
+                <li>Section-by-section document review with structured output → Agent</li>
+                <li>Side-by-side comparison requiring both texts in context simultaneously → Agent</li>
+                <li>Multi-source research with parallel sub-agents and verification → Agent</li>
+              </ul>
+
+              <p>The key question is about the loop, not the content. If the task fits "call tool → evaluate → repeat," it's a profile. If the task needs its own choreography, it's an agent.</p>
+
+              <h2>The Glue: Context Fidelity</h2>
+
+              <p>One thing I haven't seen discussed much in the AI architecture space is what I call context fidelity — how much of the raw tool output should reach the final response generator.</p>
+
+              <p>When you review a document, the Synthesizer needs the full verbatim text to generate accurate feedback. When you create a todo, the Synthesizer just needs "todo created: Buy groceries." Sending the full tool response for a todo creation is wasteful. Sending a truncated document for a review is destructive.</p>
+
+              <p>So each profile and agent declares its fidelity level:</p>
+
+              <ul>
+                <li><strong>Verbatim:</strong> No truncation. The Synthesizer sees exactly what the executor saw. Used for document review, code review, comparisons.</li>
+                <li><strong>Standard:</strong> Reasonable truncation. Current behavior. Used for most tasks.</li>
+                <li><strong>Compact:</strong> Aggressive summarization. Just confirmations. Used for CRUD operations.</li>
+              </ul>
+
+              <p>This single setting fixed the "telephone game" problem. The resume review now works because the Synthesizer actually sees the resume text, not a summary of it.</p>
+
+              <h2>How This May Apply to Your AI Product</h2>
+
+              <p>If you're building anything with AI agents — whether it's a customer service bot, an internal tool, or a product feature — you'll eventually hit this same wall. Your one-size-fits-all agent will fail on tasks that need precision, or it'll be overkill for tasks that need speed.</p>
+
+              <p>Here's what I'd suggest:</p>
+
+              <ol>
+                <li><strong>Start with one agent.</strong> Don't over-engineer. Get the generic loop working well.</li>
+                <li><strong>When failures cluster around a task type, create a profile first.</strong> Nine times out of ten, the execution pattern is fine — you just need different settings. This is cheap and fast to implement.</li>
+                <li><strong>When a profile isn't enough</strong> — when the task needs a different choreography — build a specialized agent. But make it extend a common base class so your orchestrator doesn't need to know the difference.</li>
+                <li><strong>Control context fidelity.</strong> This is the one most people miss. Your response generator's quality is bounded by the quality of what it receives. If you're truncating everything uniformly, you're silently degrading your precision tasks.</li>
+                <li><strong>Keep your executor blind.</strong> The Worker should only see its instructions and approved tools. Session state, conversation history, user preferences — that stays at the orchestrator level. The moment your executor starts seeing everything, it starts hallucinating based on context that has nothing to do with the current task.</li>
+              </ol>
+
+              <p>The resume review works now. The model quotes the exact text, verifies its suggestion is actually different from the original, and organizes feedback by category. Not because I switched to a better model — but because the architecture now gives the right configuration to the right task.</p>
+
+              <blockquote><p>That's the thing about AI products. The model is rarely the bottleneck. The architecture is.</p></blockquote>
+
+              <blockquote><p>This is the first article in a series about the architectural decisions behind building reliable AI applications. Originally published on <a href="https://www.linkedin.com/pulse/when-your-ai-agent-needs-costume-change-vs-whole-new-actor-ahmed-nd2pe/" target="_blank" rel="noopener">LinkedIn</a>.</p>
+                <p>Next in the series: <a href="/blog/planner-worker-synthesizer">Planner, Worker, Synthesizer: The 3-Agent Pattern That Actually Works</a>. Also worth reading: <a href="/blog/guardrails-problem">The Guardrails Problem</a>.</p></blockquote>
+
+            </div>
+          </article>
+
+          <aside class="blog-side">
+            <div class="blog-side__sticky">
+              <div class="sidebar-cta">
+                <p style="font-size: var(--fs-xxs); font-weight: var(--fw-bold); color: var(--color-accent); text-transform: uppercase; letter-spacing: var(--tracking-widest); margin-bottom: var(--space-3)">Have a challenge?</p>
+                <p style="font-size: var(--fs-sm); color: var(--color-fg-subtle); line-height: var(--lh-base); margin-bottom: var(--space-5)">Let's talk about your AI architecture.</p>
+                <a href="/contact" class="btn btn--primary">Book a Discovery Call</a>
+                <div class="divider" style="margin-block: var(--space-5)"></div>
+                <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" class="social-link" style="justify-content: center; display: flex">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  <span>Follow on LinkedIn</span>
+                </a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="/js/boot.js"></script>
+</body>
+</html>
