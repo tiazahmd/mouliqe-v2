@@ -1,74 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>City of Bellingham — Capital Projects Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-  <style>body{background:#060a14}.card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}.card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}.stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}.stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}.stat-delta{font-size:0.65rem;font-weight:600}.delta-up{color:#4ade80}.delta-down{color:#f87171}.section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}.dept-row{transition:all 0.2s}.dept-row:hover{background:rgba(255,255,255,0.02)}.progress-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden}.progress-fill{height:100%;border-radius:3px}.alert-card{border-left:3px solid rgba(251,191,36,0.7);background:rgba(251,191,36,0.04);padding:1rem;border-radius:0 0.5rem 0.5rem 0}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}</style>
+  <style>
+    .alert-amber { border-left: 3px solid var(--color-amber); background: var(--color-amber-dim); padding: 1rem; border-radius: 0 0.5rem 0.5rem 0; }
+    .progress-bar { height: 6px; border-radius: 3px; background: var(--color-bg-raised); overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; }
+  </style>
 </head>
-<body class="text-white/80 font-sans antialiased min-h-screen">
-  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
-    <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the City of Bellingham</p>
-    <h1 class="text-2xl md:text-3xl font-bold text-white">Capital Projects Dashboard</h1>
-    <p class="text-[0.75rem] text-white/35 mt-1">50+ active projects tracked as blog posts. This is what structured project data looks like.</p>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">☀</span><span class="demo-theme-moon">☾</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <p class="demo-eyebrow">Prepared by Mouliqe for the City of Bellingham</p>
+    <h1 class="demo-title">Capital Projects Dashboard</h1>
+    <p class="demo-subtitle">50+ active projects tracked as blog posts. This is what structured project data looks like.</p>
   </header>
-  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
-    <div class="alert-card anim anim-d1 mt-6">
-      <p class="text-[0.7rem] font-bold text-white/70">Your project page shows you care about visibility. This dashboard gives you the tools to match.</p>
-      <p class="text-[0.6rem] text-white/40 mt-1">cob.org/gov/projects lists 50+ projects as individual blog posts with no status indicators, budget tracking, or completion percentages. This dashboard connects project data to your Questica budget and ArcGIS mapping.</p>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+    <div class="alert-amber demo-anim demo-anim-d1 demo-mt-6">
+      <p class="demo-fg-muted" style="font-size:0.7rem;font-weight:700">Your project page shows you care about visibility. This dashboard gives you the tools to match.</p>
+      <p class="demo-fg-faint" style="font-size:0.6rem;margin-top:0.25rem">cob.org/gov/projects lists 50+ projects as individual blog posts with no status indicators, budget tracking, or completion percentages. This dashboard connects project data to your Questica budget and ArcGIS mapping.</p>
     </div>
-    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-      <div class="card p-5 anim anim-d1"><p class="stat-label">Active Projects</p><p class="stat-value mt-1">50+</p><p class="stat-delta" style="color:rgba(96,165,250,0.7)">Across all departments</p></div>
-      <div class="card p-5 anim anim-d1"><p class="stat-label">2026 Budget</p><p class="stat-value mt-1">$543M</p><p class="stat-delta delta-down mt-1">50+ funds, strict rules</p></div>
-      <div class="card p-5 anim anim-d2"><p class="stat-label">Budget Shortfall</p><p class="stat-value mt-1">$10M</p><p class="stat-delta delta-down mt-1">40+ positions cut</p></div>
-      <div class="card p-5 anim anim-d2"><p class="stat-label">Utility Rate Increase</p><p class="stat-value mt-1">13.5%</p><p class="stat-delta" style="color:rgba(251,191,36,0.7)">2026 (11% in 2027, 2028)</p></div>
+
+    <section class="demo-grid demo-grid--4 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d1"><p class="demo-stat-label">Active Projects</p><p class="demo-stat-value">50+</p><p class="demo-stat-delta demo-stat-delta--info">Across all departments</p></div>
+      <div class="demo-card demo-anim demo-anim-d1"><p class="demo-stat-label">2026 Budget</p><p class="demo-stat-value">$543M</p><p class="demo-stat-delta demo-stat-delta--down">50+ funds, strict rules</p></div>
+      <div class="demo-card demo-anim demo-anim-d2"><p class="demo-stat-label">Budget Shortfall</p><p class="demo-stat-value">$10M</p><p class="demo-stat-delta demo-stat-delta--down">40+ positions cut</p></div>
+      <div class="demo-card demo-anim demo-anim-d2"><p class="demo-stat-label">Utility Rate Increase</p><p class="demo-stat-value">13.5%</p><p class="demo-stat-delta" style="color:var(--color-amber)">2026 (11% in 2027, 2028)</p></div>
     </section>
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-      <div class="card p-5 anim anim-d3">
-        <p class="section-label">Project Portfolio</p>
-        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Active Projects by Category</p>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <p class="demo-section-label">Project Portfolio</p>
+        <p class="demo-section-title" style="margin-bottom:1rem">Active Projects by Category</p>
         <canvas id="categoryChart" height="200"></canvas>
       </div>
-      <div class="card p-5 anim anim-d3">
-        <p class="section-label">Budget Impact</p>
-        <p class="text-[0.8rem] font-bold text-white/70 mt-1">CIP Spending by Fund Source</p>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <p class="demo-section-label">Budget Impact</p>
+        <p class="demo-section-title" style="margin-bottom:1rem">CIP Spending by Fund Source</p>
         <canvas id="fundChart" height="200"></canvas>
       </div>
     </section>
-    <section class="card mt-4 anim anim-d4 overflow-hidden">
-      <div class="p-5 pb-3">
-        <p class="section-label">Project Tracker</p>
-        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Major Active Projects — 2026</p>
-        <p class="text-[0.6rem] text-white/25 mt-1">Currently tracked as individual blog posts on cob.org/gov/projects — this is the structured alternative</p>
+
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Project Tracker</p>
+        <p class="demo-section-title">Major Active Projects — 2026</p>
+        <p class="demo-section-sub">Currently tracked as individual blog posts on cob.org/gov/projects — this is the structured alternative</p>
       </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-[0.68rem]"><thead><tr class="border-b border-white/5"><th class="text-left px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Project</th><th class="text-left px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Department</th><th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Budget</th><th class="px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]" style="width:100px">Progress</th></tr></thead><tbody id="projectTable"></tbody></table>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>Project</th><th>Department</th><th class="demo-right">Budget</th><th style="width:120px">Progress</th></tr></thead>
+          <tbody id="projectTable"></tbody>
+        </table>
       </div>
     </section>
-    <section class="card mt-4 p-5 anim anim-d4">
-      <p class="section-label">Architecture</p>
-      <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-4">Connecting Existing Investments</p>
-      <div class="flex flex-wrap items-center justify-center gap-3 text-[0.6rem] font-semibold">
-        <span class="px-3 py-2 rounded-lg" style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);color:rgba(96,165,250,0.7)">Questica Budget</span><span class="text-white/15">+</span>
-        <span class="px-3 py-2 rounded-lg" style="background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15);color:rgba(192,132,252,0.7)">Esri ArcGIS</span><span class="text-white/15">+</span>
-        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15);color:rgba(74,222,128,0.7)">eTRAKiT Permits</span><span class="text-white/15">+</span>
-        <span class="px-3 py-2 rounded-lg" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:rgba(251,191,36,0.7)">SeeClickFix</span>
-        <span class="text-white/20 mx-2">&#8594;</span>
-        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.25);color:rgba(74,222,128,0.9)">Project Intelligence</span>
+
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <p class="demo-section-label">Architecture</p>
+      <p class="demo-section-title" style="margin-bottom:1rem">Connecting Existing Investments</p>
+      <div class="demo-flex-wrap demo-items-center demo-text-center demo-gap-3" style="justify-content:center">
+        <span class="demo-node demo-node--blue">Questica Budget</span>
+        <span class="demo-node-plus">+</span>
+        <span class="demo-node demo-node--purple">Esri ArcGIS</span>
+        <span class="demo-node-plus">+</span>
+        <span class="demo-node demo-node--green">eTRAKiT Permits</span>
+        <span class="demo-node-plus">+</span>
+        <span class="demo-node demo-node--amber">SeeClickFix</span>
+        <span class="demo-node-arrow">&#8594;</span>
+        <span class="demo-node demo-node--final">Project Intelligence</span>
       </div>
-      <p class="text-[0.6rem] text-white/25 text-center mt-4">Leverages your existing Questica and ArcGIS investments — adds the project tracking layer</p>
+      <p class="demo-section-sub demo-text-center" style="margin-top:1rem">Leverages your existing Questica and ArcGIS investments — adds the project tracking layer</p>
     </section>
-    <footer class="mt-8 text-center"><p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the City of Bellingham, Washington</p><p class="text-[0.5rem] text-white/12 mt-1">Budget data from 2026 proposed budget (Cascadia Daily). Project data from cob.org/gov/projects.</p></footer>
+
+    <footer class="demo-footer">
+      <p class="demo-footer-main">Concept prepared by <span class="demo-brand">Mouliqe</span> for the City of Bellingham, Washington</p>
+      <p class="demo-footer-sub">Budget data from 2026 proposed budget (Cascadia Daily). Project data from cob.org/gov/projects.</p>
+    </footer>
   </main>
-<script>
-Chart.defaults.color='rgba(255,255,255,0.35)';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family='Oxanium';Chart.defaults.font.size=11;
-new Chart(document.getElementById('categoryChart'),{type:'doughnut',data:{labels:['Water/Sewer','Transportation','Stormwater','Parks & Facilities','Public Safety','Communications','Environmental','Other'],datasets:[{data:[18,12,8,6,3,2,2,4],backgroundColor:['rgba(96,165,250,0.6)','rgba(74,222,128,0.5)','rgba(192,132,252,0.5)','rgba(251,191,36,0.5)','rgba(248,113,113,0.4)','rgba(255,255,255,0.2)','rgba(74,222,128,0.3)','rgba(255,255,255,0.1)'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'right',labels:{boxWidth:8,padding:8,font:{size:9}}}}}});
-new Chart(document.getElementById('fundChart'),{type:'bar',data:{labels:['Water Utility','Sewer Utility','Stormwater','Transportation','General Fund','Grants/Federal','Other'],datasets:[{data:[42,38,18,15,12,8,6],backgroundColor:'rgba(96,165,250,0.5)',borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{callback:v=>'$'+v+'M'}},x:{grid:{display:false}}}}});
-const projects=[{n:'Post Point Wastewater Treatment Upgrade',d:'Public Works',b:'$28M',pct:65},{n:'What-Comm Dispatch Facility',d:'Public Safety',b:'$18M',pct:40},{n:'Sehome Hill Communications Tower',d:'IT',b:'$4.2M',pct:55},{n:'Watermain Replacements (multiple)',d:'Public Works',b:'$8.5M',pct:45},{n:'Sewer System Improvements',d:'Public Works',b:'$6.2M',pct:30},{n:'Bridge Reconstructions',d:'Public Works',b:'$5.8M',pct:25},{n:'Multimodal Transportation Improvements',d:'Public Works',b:'$3.4M',pct:35},{n:'Central Library Renovation',d:'Library',b:'$2.8M',pct:10},{n:'Indoor Recreation Center (planning)',d:'Parks & Rec',b:'TBD',pct:5}];
-const t=document.getElementById('projectTable');projects.forEach(p=>{const c=p.pct>50?'rgba(74,222,128,0.7)':p.pct>20?'rgba(96,165,250,0.7)':'rgba(251,191,36,0.7)';t.innerHTML+=`<tr class="dept-row border-b border-white/[0.03]"><td class="px-5 py-3 text-white/60 font-medium">${p.n}</td><td class="px-4 py-3 text-white/40">${p.d}</td><td class="text-right px-4 py-3 text-white/50">${p.b}</td><td class="px-5 py-3"><div class="progress-bar"><div class="progress-fill" style="width:${p.pct}%;background:${c}"></div></div></td></tr>`;});
-</script>
+
+  <script src="/demos/_demo.js?v=8"></script>
+  <script>
+    var charts = [];
+    function gc(){ return demoCssVar('--color-border-soft') || 'rgba(127,127,127,0.06)'; }
+    function ac(){ return demoCssVar('--color-fg-faint') || 'rgba(127,127,127,0.4)'; }
+
+    function buildCharts(){
+      charts.forEach(function(c){ c.destroy(); });
+      charts = [];
+      var g = gc(), a = ac();
+
+      charts.push(new Chart(document.getElementById('categoryChart'), {
+        type:'doughnut',
+        data:{ labels:['Water/Sewer','Transportation','Stormwater','Parks & Facilities','Public Safety','Communications','Environmental','Other'],
+          datasets:[{ data:[18,12,8,6,3,2,2,4], backgroundColor:['rgba(96,165,250,0.65)','rgba(74,222,128,0.55)','rgba(192,132,252,0.55)','rgba(251,191,36,0.55)','rgba(248,113,113,0.5)','rgba(127,127,127,0.35)','rgba(74,222,128,0.35)','rgba(127,127,127,0.2)'], borderWidth:0 }] },
+        options:{ responsive:true, cutout:'60%', plugins:{ legend:{ position:'right', labels:{ boxWidth:8, padding:8, font:{size:9}, color:a } } } }
+      }));
+
+      charts.push(new Chart(document.getElementById('fundChart'), {
+        type:'bar',
+        data:{ labels:['Water Utility','Sewer Utility','Stormwater','Transportation','General Fund','Grants/Federal','Other'],
+          datasets:[{ data:[42,38,18,15,12,8,6], backgroundColor:'rgba(96,165,250,0.55)', borderRadius:4 }] },
+        options:{ responsive:true, plugins:{ legend:{ display:false } }, scales:{ y:{ grid:{ color:g }, ticks:{ color:a, callback: function(v){ return '$'+v+'M'; } } }, x:{ grid:{ display:false }, ticks:{ color:a } } } }
+      }));
+    }
+
+    window.demoRerenderCharts = buildCharts;
+    document.addEventListener('DOMContentLoaded', buildCharts);
+
+    var projects = [
+      { n:'Post Point Wastewater Treatment Upgrade', d:'Public Works', b:'$28M',  pct:65 },
+      { n:'What-Comm Dispatch Facility',             d:'Public Safety', b:'$18M',  pct:40 },
+      { n:'Sehome Hill Communications Tower',        d:'IT',           b:'$4.2M', pct:55 },
+      { n:'Watermain Replacements (multiple)',       d:'Public Works', b:'$8.5M', pct:45 },
+      { n:'Sewer System Improvements',               d:'Public Works', b:'$6.2M', pct:30 },
+      { n:'Bridge Reconstructions',                  d:'Public Works', b:'$5.8M', pct:25 },
+      { n:'Multimodal Transportation Improvements',  d:'Public Works', b:'$3.4M', pct:35 },
+      { n:'Central Library Renovation',              d:'Library',      b:'$2.8M', pct:10 },
+      { n:'Indoor Recreation Center (planning)',     d:'Parks & Rec',  b:'TBD',   pct:5  }
+    ];
+    var tbody = document.getElementById('projectTable');
+    projects.forEach(function(p){
+      var color = p.pct > 50 ? 'var(--color-accent)' : p.pct > 20 ? 'var(--color-blue)' : 'var(--color-amber)';
+      tbody.insertAdjacentHTML('beforeend',
+        '<tr><td>'+p.n+'</td><td class="demo-fg-faint">'+p.d+'</td><td class="demo-right">'+p.b+'</td>'
+        +'<td><div class="progress-bar"><div class="progress-fill" style="width:'+p.pct+'%;background:'+color+'"></div></div></td></tr>');
+    });
+  </script>
 </body>
 </html>
