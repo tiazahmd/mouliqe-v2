@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Government of WyCo/KCK — UG STAT Performance Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{forest:{400:'#4ade80',500:'#22c55e'}},fontFamily:{sans:['Oxanium','sans-serif']}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    body{background:#060a14}
+    .card{background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:0.75rem}.card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08)}
+    .stat-value{font-size:1.8rem;font-weight:700;color:rgba(255,255,255,0.85)}.stat-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.35)}.stat-delta{font-size:0.65rem;font-weight:600}.delta-up{color:#4ade80}
+    .source-tag{font-size:0.5rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.2rem 0.4rem;border-radius:0.25rem}
+    .section-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.25)}
+    .dept-row{transition:all 0.2s}.dept-row:hover{background:rgba(255,255,255,0.02)}
+    .progress-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden}.progress-fill{height:100%;border-radius:3px;transition:width 0.8s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.anim{animation:fadeUp 0.5s ease both}.anim-d1{animation-delay:0.1s}.anim-d2{animation-delay:0.2s}.anim-d3{animation-delay:0.3s}.anim-d4{animation-delay:0.4s}
+  </style>
+</head>
+<body class="text-white/80 font-sans antialiased min-h-screen">
+  <header class="pt-8 pb-4 px-6 md:px-10 max-w-7xl mx-auto anim">
+    <div>
+      <p class="text-forest-400 text-[0.55rem] font-semibold tracking-[0.2em] uppercase mb-2">Prepared by Mouliqe for the Unified Government of WyCo/KCK</p>
+      <h1 class="text-2xl md:text-3xl font-bold text-white">UG STAT Performance Dashboard</h1>
+      <p class="text-[0.75rem] text-white/35 mt-1">What monthly reporting looks like when it's automated — not compiled from spreadsheets</p>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-4">
+      <span class="source-tag" style="color:rgba(96,165,250,0.7);background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15)">Workday</span>
+      <span class="source-tag" style="color:rgba(192,132,252,0.7);background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15)">GXA / 311</span>
+      <span class="source-tag" style="color:rgba(74,222,128,0.7);background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15)">OpenBook Finance</span>
+      <span class="source-tag" style="color:rgba(251,191,36,0.7);background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15)">GIS / AEGIS</span>
+      <span class="source-tag" style="color:rgba(248,113,113,0.7);background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15)">Public Safety</span>
+    </div>
+  </header>
+  <main class="px-6 md:px-10 max-w-7xl mx-auto pb-16">
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+      <div class="card p-5 anim anim-d1"><p class="stat-label">Total Budget</p><p class="stat-value mt-1">$472M</p><p class="stat-delta delta-up mt-1">City + County</p></div>
+      <div class="card p-5 anim anim-d1"><p class="stat-label">Departments</p><p class="stat-value mt-1">30+</p><p class="stat-delta" style="color:rgba(96,165,250,0.7)">Consolidated govt</p></div>
+      <div class="card p-5 anim anim-d1"><p class="stat-label">311 Calls (Annual)</p><p class="stat-value mt-1">310K</p><p class="stat-delta" style="color:rgba(192,132,252,0.7)">5 staff</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Crime Index</p><p class="stat-value mt-1">23.3</p><p class="stat-delta delta-up mt-1">per 1K — 20yr low</p></div>
+      <div class="card p-5 anim anim-d2"><p class="stat-label">Languages Spoken</p><p class="stat-value mt-1">31+</p><p class="stat-delta" style="color:rgba(251,191,36,0.7)">Most diverse in KS</p></div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Budget Execution</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Spending by Division — Q3 FY2025</p>
+        <canvas id="budgetChart" height="220"></canvas>
+      </div>
+      <div class="card p-5 anim anim-d3">
+        <p class="section-label">Service Delivery</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">311 Resolution Time by Category (Days)</p>
+        <canvas id="resolutionChart" height="220"></canvas>
+      </div>
+    </section>
+    <!-- UG Forward KPI Table -->
+    <section class="card mt-4 anim anim-d4 overflow-hidden">
+      <div class="p-5 pb-3">
+        <p class="section-label">UG Forward Initiative</p>
+        <p class="text-[0.8rem] font-bold text-white/70 mt-1">Cross-Department Performance KPIs</p>
+        <p class="text-[0.6rem] text-white/25 mt-1">Automated from Workday, 311, OpenBook, and GIS — replaces manual UG STAT compilation</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-[0.68rem]">
+          <thead><tr class="border-b border-white/5">
+            <th class="text-left px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">KPI</th>
+            <th class="text-left px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Department</th>
+            <th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Target</th>
+            <th class="text-right px-4 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]">Actual</th>
+            <th class="px-5 py-3 text-white/30 font-semibold uppercase tracking-wider text-[0.5rem]" style="width:120px">Progress</th>
+          </tr></thead>
+          <tbody id="kpiTable"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="card mt-4 p-5 anim anim-d4">
+      <p class="section-label">Data Architecture</p>
+      <p class="text-[0.8rem] font-bold text-white/70 mt-1 mb-4">From 5 Silos to 1 Dashboard</p>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-[0.6rem] font-semibold">
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);color:rgba(96,165,250,0.7)">Workday</span>
+        <span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.15);color:rgba(192,132,252,0.7)">GXA / 311</span>
+        <span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.15);color:rgba(74,222,128,0.7)">OpenBook</span>
+        <span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.15);color:rgba(251,191,36,0.7)">GIS</span>
+        <span class="text-white/15">+</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15);color:rgba(248,113,113,0.7)">Public Safety</span>
+        <span class="text-white/20 mx-2">&#8594;</span>
+        <span class="px-3 py-2 rounded-lg" style="background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.25);color:rgba(74,222,128,0.9)">UG STAT Live</span>
+      </div>
+      <p class="text-[0.6rem] text-white/25 text-center mt-4">No rip-and-replace. Connects your existing Workday, Granicus, and OpenBook investments.</p>
+    </section>
+    <footer class="mt-8 text-center">
+      <p class="text-[0.6rem] text-white/20">Concept prepared by <span class="text-forest-400/50">Mouliqe</span> for the Unified Government of Wyandotte County / Kansas City, KS</p>
+      <p class="text-[0.5rem] text-white/12 mt-1">Data shown is illustrative, based on publicly available UG budget documents, KBI crime reports, and Granicus case study data.</p>
+    </footer>
+  </main>
+<script>
+Chart.defaults.color='rgba(255,255,255,0.35)';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family='Oxanium';Chart.defaults.font.size=11;
+new Chart(document.getElementById('budgetChart'),{type:'bar',data:{labels:['Public Safety','Public Works','Health & Human Svcs','Community Dev','Finance & Admin','Parks & Rec','Courts','Knowledge/IT','Other'],datasets:[{label:'Spent',data:[82,48,35,28,22,18,14,12,41],backgroundColor:'rgba(74,222,128,0.5)',borderRadius:4},{label:'Remaining',data:[28,16,12,9,8,6,5,4,14],backgroundColor:'rgba(255,255,255,0.06)',borderRadius:4}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:15,font:{size:10}}}},scales:{x:{stacked:true,grid:{color:'rgba(255,255,255,0.03)'},ticks:{callback:v=>'$'+v+'M'}},y:{stacked:true,grid:{display:false}}}}});
+new Chart(document.getElementById('resolutionChart'),{type:'bar',data:{labels:['Solid Waste','Street Repair','Code Enforce','Water/Sewer','Permits','Animal Control','Graffiti','Noise'],datasets:[{data:[1.2,4.8,7.3,2.1,12.5,3.4,2.8,1.5],backgroundColor:['rgba(74,222,128,0.5)','rgba(251,191,36,0.5)','rgba(248,113,113,0.5)','rgba(96,165,250,0.5)','rgba(248,113,113,0.6)','rgba(192,132,252,0.5)','rgba(74,222,128,0.4)','rgba(96,165,250,0.4)'],borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{callback:v=>v+'d'}},x:{grid:{display:false}}}}});
+const kpis=[
+  {kpi:'311 First-Call Resolution',dept:'Knowledge/311',target:'60%',actual:'42%',pct:70,color:'rgba(248,113,113,0.7)'},
+  {kpi:'GXA Deflection Rate',dept:'Knowledge/GXA',target:'50%',actual:'38%',pct:76,color:'rgba(192,132,252,0.7)'},
+  {kpi:'Budget Execution (Q3)',dept:'Finance',target:'75%',actual:'72%',pct:96,color:'rgba(74,222,128,0.7)'},
+  {kpi:'Violent Crime Rate',dept:'Police',target:'< 25/1K',actual:'23.3/1K',pct:100,color:'rgba(74,222,128,0.7)'},
+  {kpi:'Code Enforcement Response',dept:'Community Dev',target:'< 5 days',actual:'7.3 days',pct:68,color:'rgba(248,113,113,0.7)'},
+  {kpi:'Permit Processing Time',dept:'Planning',target:'< 10 days',actual:'12.5 days',pct:80,color:'rgba(251,191,36,0.7)'},
+  {kpi:'Employee Retention',dept:'HR / Workday',target:'85%',actual:'81%',pct:95,color:'rgba(96,165,250,0.7)'},
+  {kpi:'Solid Waste Collection',dept:'Public Works',target:'99%',actual:'97.2%',pct:98,color:'rgba(74,222,128,0.7)'},
+];
+const t=document.getElementById('kpiTable');
+kpis.forEach(k=>{t.innerHTML+=`<tr class="dept-row border-b border-white/[0.03]"><td class="px-5 py-3 text-white/60 font-medium">${k.kpi}</td><td class="px-4 py-3 text-white/40">${k.dept}</td><td class="text-right px-4 py-3 text-white/50">${k.target}</td><td class="text-right px-4 py-3 text-white/70 font-semibold">${k.actual}</td><td class="px-5 py-3"><div class="progress-bar"><div class="progress-fill" style="width:${k.pct}%;background:${k.color}"></div></div></td></tr>`;});
+</script>
+</body>
+</html>
