@@ -1,5 +1,6 @@
 // nav.js — sidebar navigation injector + active state + mobile toggle
 import { mountThemeToggle } from './theme.js';
+console.log('[NAV] module loaded, mountThemeToggle:', typeof mountThemeToggle);
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
@@ -168,6 +169,7 @@ function wireInteractions() {
 }
 
 export function mountNav(targetId = 'site-nav') {
+  console.log('[NAV] mountNav called, target:', targetId, 'el:', document.getElementById(targetId));
   renderSidebar(targetId);
   wireInteractions();
 }
