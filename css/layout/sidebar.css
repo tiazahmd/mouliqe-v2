@@ -156,9 +156,9 @@
   pointer-events: none;
 }
 .mobile-menu.open {
-  transform: translateX(0);
-  visibility: visible;
-  pointer-events: auto;
+  transform: translateX(0) !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 @media (max-width: 768px) {
