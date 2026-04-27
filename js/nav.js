@@ -133,6 +133,11 @@ function wireInteractions() {
   const mToggle  = document.getElementById('mobile-toggle');
   const mMenu    = document.getElementById('mobile-menu');
   const mOverlay = document.getElementById('mobile-overlay');
+  console.log('[NAV DEBUG] mToggle:', mToggle);
+  console.log('[NAV DEBUG] mMenu:', mMenu);
+  console.log('[NAV DEBUG] mOverlay:', mOverlay);
+  console.log('[NAV DEBUG] mToggle display:', mToggle && getComputedStyle(mToggle).display);
+  console.log('[NAV DEBUG] mMenu display:', mMenu && getComputedStyle(mMenu).display);
   const closeMobile = () => {
     mToggle?.classList.remove('active');
     mMenu?.classList.remove('open');
@@ -140,11 +145,15 @@ function wireInteractions() {
     mToggle?.setAttribute('aria-expanded', 'false');
   };
   mToggle?.addEventListener('click', () => {
+    console.log('[NAV DEBUG] toggle clicked');
     const open = !mMenu?.classList.contains('open');
+    console.log('[NAV DEBUG] setting open:', open);
     mToggle.classList.toggle('active', open);
     mMenu?.classList.toggle('open', open);
     mOverlay?.classList.toggle('open', open);
     mToggle.setAttribute('aria-expanded', String(open));
+    console.log('[NAV DEBUG] mMenu classes after:', mMenu?.className);
+    console.log('[NAV DEBUG] mMenu transform:', mMenu && getComputedStyle(mMenu).transform);
   });
   mOverlay?.addEventListener('click', closeMobile);
 
