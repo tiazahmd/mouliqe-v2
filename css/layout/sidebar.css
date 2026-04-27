@@ -199,25 +199,15 @@
 
   .mobile-menu {
     display: block;
-    visibility: hidden;
-    pointer-events: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 240px;
-    height: 100vh;
     background: color-mix(in srgb, var(--color-bg) 98%, transparent);
     backdrop-filter: blur(20px);
     border-right: 1px solid var(--color-border);
     z-index: var(--z-modal);
     padding: var(--space-8) var(--space-5);
-    transform: translateX(-100%);
     transition: transform var(--dur) var(--ease), visibility 0s var(--dur);
     overflow-y: auto;
   }
   .mobile-menu.open {
-    transform: translateX(0);
-    visibility: visible;
-    pointer-events: auto;
     transition: transform var(--dur) var(--ease), visibility 0s 0s;
   }
 
