@@ -1,47 +1,88 @@
 /* ==========================================================================
-   Mouliqe v2 — main CSS entry point
-   Architecture: tokens → base → layout → components
+   Main content area — container, sections, dividers
    ========================================================================== */
 
-/* Tokens — design primitives */
-@import url('./tokens/spacing.css?v=8');
-@import url('./tokens/typography.css?v=8');
-@import url('./tokens/colors.css?v=8');
+.main-content {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+}
 
-/* Base — reset, global, element defaults */
-@import url('./base/reset.css?v=8');
-@import url('./base/typography.css?v=8');
-@import url('./base/global.css?v=8');
+.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+@media (min-width: 768px) {
+  .container { padding-inline: var(--space-10); }
+}
 
-/* Layout — structural chrome */
-@import url('./layout/sidebar.css?v=10');
-@import url('./layout/main.css?v=8');
+.container--narrow { max-width: var(--content-narrow); }
 
-/* Components */
-@import url('./components/buttons.css?v=8');
-@import url('./components/cards.css?v=8');
-@import url('./components/forms.css?v=8');
-@import url('./components/pills.css?v=8');
-@import url('./components/prose.css?v=8');
-@import url('./components/animations.css?v=8');
-@import url('./components/process-flow.css?v=8');
-@import url('./components/theme-toggle.css?v=8');
-@import url('./components/demo-carousel.css?v=8');
-@import url('./components/services.css?v=8');
-@import url('./components/about.css?v=8');
-@import url('./components/booking.css?v=8');
-@import url('./components/explore.css?v=8');
-@import url('./components/timeline.css?v=8');
-@import url('./components/faq.css?v=8');
-@import url('./components/demo-gallery.css?v=8');
-@import url('./components/resume.css?v=8');
-@import url('./components/blog.css?v=8');
-@import url('./components/tool-page.css?v=8');
-@import url('./components/tool-prompt-security.css?v=8');
-@import url('./components/tool-extras.css?v=8');
-@import url('./components/tool-etl.css?v=8');
-@import url('./components/tool-data-quality.css?v=8');
-@import url('./components/tool-rag.css?v=8');
-@import url('./components/tool-cost-sim.css?v=8');
-@import url('./components/tool-kpi.css?v=8');
-@import url('./components/tool-agent-workflow.css?v=8');
+/* ---- Section spacing ---- */
+.section {
+  padding-block: var(--space-20);
+  position: relative;
+}
+.section--tight { padding-block: var(--space-16); }
+.section--hero  { padding-top: var(--space-24); padding-bottom: var(--space-24); }
+
+/* Section top divider — used between stacked sections */
+.section--divided::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--space-8);
+  right: var(--space-8);
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, var(--color-border) 30%, var(--color-border) 70%, transparent 95%);
+}
+
+/* ---- Section heading block ---- */
+.section-heading {
+  margin-bottom: var(--space-10);
+  max-width: 38rem;
+}
+.section-heading__title {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--space-4);
+  color: var(--color-fg-strong);
+}
+@media (min-width: 768px) {
+  .section-heading__title { font-size: var(--fs-2xl); }
+}
+.section-heading__lead {
+  color: var(--color-fg-subtle);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-loose);
+}
+
+/* ---- Grid helpers ---- */
+.grid { display: grid; gap: var(--space-5); }
+.grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+@media (max-width: 768px) {
+  .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+}
+
+/* ---- Flex helpers ---- */
+.stack { display: flex; flex-direction: column; gap: var(--space-4); }
+.row   { display: flex; align-items: center; gap: var(--space-4); }
+.row--wrap { flex-wrap: wrap; }
+
+/* ---- Responsive: collapse sidebar ---- */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding-top: 56px;
+  }
+}
+
+/* ---- Divider ---- */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+  margin-block: var(--space-8);
+}
