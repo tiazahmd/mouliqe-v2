@@ -1,6 +1,5 @@
 // nav.js — sidebar navigation injector + active state + mobile toggle
 import { mountThemeToggle } from './theme.js';
-console.log('[NAV] module loaded, mountThemeToggle:', typeof mountThemeToggle);
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
@@ -134,11 +133,6 @@ function wireInteractions() {
   const mToggle  = document.getElementById('mobile-toggle');
   const mMenu    = document.getElementById('mobile-menu');
   const mOverlay = document.getElementById('mobile-overlay');
-  console.log('[NAV DEBUG] mToggle:', mToggle);
-  console.log('[NAV DEBUG] mMenu:', mMenu);
-  console.log('[NAV DEBUG] mOverlay:', mOverlay);
-  console.log('[NAV DEBUG] mToggle display:', mToggle && getComputedStyle(mToggle).display);
-  console.log('[NAV DEBUG] mMenu display:', mMenu && getComputedStyle(mMenu).display);
   const closeMobile = () => {
     mToggle?.classList.remove('active');
     mMenu?.classList.remove('open');
@@ -151,28 +145,6 @@ function wireInteractions() {
     mMenu?.classList.toggle('open', open);
     mOverlay?.classList.toggle('open', open);
     mToggle.setAttribute('aria-expanded', String(open));
-    // Debug: inspect which CSS rules are actually loaded
-    if (mMenu) {
-      const sheets = [...document.styleSheets];
-      sheets.forEach((sheet, i) => {
-        try {
-          const rules = [...sheet.cssRules];
-          rules.forEach(r => {
-            if (r.selectorText && r.selectorText.includes('mobile-menu') && r.style?.transform) {
-              console.log(`[CSS DEBUG] Sheet ${i} (${sheet.href || 'inline'}): ${r.selectorText} { transform: ${r.style.transform} }`);
-            }
-            // Check inside media queries
-            if (r.cssRules) {
-              [...r.cssRules].forEach(mr => {
-                if (mr.selectorText && mr.selectorText.includes('mobile-menu') && mr.style?.transform) {
-                  console.log(`[CSS DEBUG] Sheet ${i} @media: ${mr.selectorText} { transform: ${mr.style.transform} }`);
-                }
-              });
-            }
-          });
-        } catch(e) {}
-      });
-    }
   });
   mOverlay?.addEventListener('click', closeMobile);
 
@@ -187,7 +159,6 @@ function wireInteractions() {
 }
 
 export function mountNav(targetId = 'site-nav') {
-  console.log('[NAV] mountNav called, target:', targetId, 'el:', document.getElementById(targetId));
   renderSidebar(targetId);
   wireInteractions();
 }
