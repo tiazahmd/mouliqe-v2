@@ -146,15 +146,33 @@ function wireInteractions() {
     mToggle?.setAttribute('aria-expanded', 'false');
   };
   mToggle?.addEventListener('click', () => {
-    console.log('[NAV DEBUG] toggle clicked');
     const open = !mMenu?.classList.contains('open');
-    console.log('[NAV DEBUG] setting open:', open);
     mToggle.classList.toggle('active', open);
     mMenu?.classList.toggle('open', open);
     mOverlay?.classList.toggle('open', open);
     mToggle.setAttribute('aria-expanded', String(open));
-    console.log('[NAV DEBUG] mMenu classes after:', mMenu?.className);
-    console.log('[NAV DEBUG] mMenu transform:', mMenu && getComputedStyle(mMenu).transform);
+    // Debug: inspect which CSS rules are actually loaded
+    if (mMenu) {
+      const sheets = [...document.styleSheets];
+      sheets.forEach((sheet, i) => {
+        try {
+          const rules = [...sheet.cssRules];
+          rules.forEach(r => {
+            if (r.selectorText && r.selectorText.includes('mobile-menu') && r.style?.transform) {
+              console.log(`[CSS DEBUG] Sheet ${i} (${sheet.href || 'inline'}): ${r.selectorText} { transform: ${r.style.transform} }`);
+            }
+            // Check inside media queries
+            if (r.cssRules) {
+              [...r.cssRules].forEach(mr => {
+                if (mr.selectorText && mr.selectorText.includes('mobile-menu') && mr.style?.transform) {
+                  console.log(`[CSS DEBUG] Sheet ${i} @media: ${mr.selectorText} { transform: ${mr.style.transform} }`);
+                }
+              });
+            }
+          });
+        } catch(e) {}
+      });
+    }
   });
   mOverlay?.addEventListener('click', closeMobile);
 
