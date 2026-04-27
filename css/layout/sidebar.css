@@ -144,7 +144,22 @@
 }
 
 /* ---- Mobile ---- */
-.mobile-toggle, .mobile-overlay, .mobile-menu { display: none; }
+.mobile-toggle { display: none; }
+.mobile-overlay { display: none; }
+.mobile-menu {
+  position: fixed;
+  top: 0; left: 0;
+  width: 240px;
+  height: 100vh;
+  transform: translateX(-100%);
+  visibility: hidden;
+  pointer-events: none;
+}
+.mobile-menu.open {
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
+}
 
 @media (max-width: 768px) {
   .sidebar {
@@ -184,6 +199,8 @@
 
   .mobile-menu {
     display: block;
+    visibility: hidden;
+    pointer-events: none;
     position: fixed;
     top: 0; left: 0;
     width: 240px;
@@ -194,10 +211,15 @@
     z-index: var(--z-modal);
     padding: var(--space-8) var(--space-5);
     transform: translateX(-100%);
-    transition: transform var(--dur) var(--ease);
+    transition: transform var(--dur) var(--ease), visibility 0s var(--dur);
     overflow-y: auto;
   }
-  .mobile-menu.open { transform: translateX(0); }
+  .mobile-menu.open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform var(--dur) var(--ease), visibility 0s 0s;
+  }
 
   .mobile-overlay {
     display: block;
