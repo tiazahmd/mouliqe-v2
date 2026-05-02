@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>POS Shopper Behavior Analytics — JTI Pilot | Mouliqe &times; Parlance</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../_presentation.css">
+  <style>
+    /* ---- JTI-specific visual styles ---- */
+    .jti-pipeline { width: 100%; display: flex; flex-direction: column; gap: 0; }
+    .jti-pipe-step { display: flex; align-items: stretch; gap: 0.75rem; padding: 0.75rem; background: var(--p-bg-card); border: 1px solid var(--p-border); border-radius: 0.5rem; }
+    .jti-pipe-step:nth-child(1) { border-left: 3px solid var(--p-blue); }
+    .jti-pipe-step:nth-child(3) { border-left: 3px solid var(--p-amber); }
+    .jti-pipe-step:nth-child(5) { border-left: 3px solid var(--p-purple); }
+    .jti-pipe-step:nth-child(7) { border-left: 3px solid var(--p-accent); }
+    .jti-pipe-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 0.375rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; flex-shrink: 0; }
+    .jti-pipe-icon.capture { background: var(--p-blue-dim); border: 1px solid var(--p-blue); color: var(--p-blue); }
+    .jti-pipe-icon.process { background: var(--p-amber-dim); border: 1px solid var(--p-amber); color: var(--p-amber); }
+    .jti-pipe-icon.extract { background: rgba(192,132,252,0.1); border: 1px solid var(--p-purple); color: var(--p-purple); }
+    .jti-pipe-icon.analyze { background: var(--p-accent-dim); border: 1px solid var(--p-accent); color: var(--p-accent); }
+    .jti-pipe-content { flex: 1; }
+    .jti-pipe-label { font-size: 0.78rem; font-weight: 700; color: var(--p-fg); }
+    .jti-pipe-desc { font-size: 0.65rem; color: var(--p-fg-subtle); line-height: 1.5; margin-top: 0.15rem; }
+    .jti-pipe-tags { display: flex; gap: 0.25rem; margin-top: 0.35rem; flex-wrap: wrap; }
+    .jti-pipe-tag { font-size: 0.55rem; padding: 0.1rem 0.4rem; border-radius: 0.2rem; font-weight: 600; letter-spacing: 0.04em; }
+    .jti-pipe-tag.blue { background: var(--p-blue-dim); color: var(--p-blue); }
+    .jti-pipe-tag.amber { background: var(--p-amber-dim); color: var(--p-amber); }
+    .jti-pipe-tag.purple { background: rgba(192,132,252,0.1); color: var(--p-purple); }
+    .jti-pipe-tag.green { background: var(--p-accent-dim); color: var(--p-accent); }
+    .jti-pipe-arrow { width: 2px; height: 14px; background: var(--p-border); margin-left: 1.5rem; position: relative; }
+    .jti-pipe-arrow::after { content: ''; position: absolute; bottom: -3px; left: -3px; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--p-border); }
+
+    /* Tech stack visual */
+    .jti-stack { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; }
+    .jti-stack-layer { padding: 0.75rem; background: var(--p-bg-card); border: 1px solid var(--p-border); border-radius: 0.5rem; }
+    .jti-stack-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--p-border); }
+    .jti-stack-badge { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 0.25rem; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.06em; }
+    .jti-stack-badge.edge { background: var(--p-blue-dim); border: 1px solid var(--p-blue); color: var(--p-blue); }
+    .jti-stack-badge.pipe { background: var(--p-amber-dim); border: 1px solid var(--p-amber); color: var(--p-amber); }
+    .jti-stack-badge.viz { background: var(--p-accent-dim); border: 1px solid var(--p-accent); color: var(--p-accent); }
+    .jti-stack-title { font-size: 0.78rem; font-weight: 700; color: var(--p-fg); }
+    .jti-stack-items { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem; }
+    .jti-stack-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.65rem; color: var(--p-fg-muted); }
+    .jti-stack-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .jti-stack-dot.blue { background: var(--p-blue); }
+    .jti-stack-dot.amber { background: var(--p-amber); }
+    .jti-stack-dot.green { background: var(--p-accent); }
+    .jti-stack-connector { width: 2px; height: 10px; background: var(--p-border); margin-left: 1.5rem; }
+    .jti-stack-output { padding: 0.5rem 0.75rem; background: var(--p-accent-dim); border: 1px solid var(--p-accent-border); border-radius: 0.375rem; text-align: center; }
+    .jti-stack-output-label { font-size: 0.6rem; font-weight: 700; color: var(--p-accent); letter-spacing: 0.1em; text-transform: uppercase; }
+    .jti-stack-output-items { display: flex; justify-content: center; gap: 0.75rem; margin-top: 0.25rem; }
+    .jti-stack-output-item { font-size: 0.6rem; color: var(--p-fg-muted); }
+
+    /* Partnership visual */
+    .jti-partner { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; }
+    .jti-partner-firm { padding: 0.75rem; background: var(--p-bg-card); border: 1px solid var(--p-border); border-radius: 0.5rem; }
+    .jti-partner-name { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .jti-partner-name.parlance { color: var(--p-blue); }
+    .jti-partner-name.mouliqe { color: var(--p-accent); }
+    .jti-partner-role { font-size: 0.62rem; font-weight: 600; color: var(--p-fg-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .jti-partner-items { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+    .jti-partner-pill { font-size: 0.58rem; padding: 0.15rem 0.45rem; border-radius: 0.2rem; font-weight: 600; }
+    .jti-partner-pill.blue { background: var(--p-blue-dim); color: var(--p-blue); }
+    .jti-partner-pill.green { background: var(--p-accent-dim); color: var(--p-accent); }
+    .jti-partner-flow { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.5rem; }
+    .jti-partner-flow-arrow { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
+    .jti-partner-flow-line { width: 60px; height: 2px; position: relative; }
+    .jti-partner-flow-line.down { background: var(--p-blue); }
+    .jti-partner-flow-line.up { background: var(--p-accent); }
+    .jti-partner-flow-label { font-size: 0.52rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+    .jti-partner-flow-label.blue { color: var(--p-blue); }
+    .jti-partner-flow-label.green { color: var(--p-accent); }
+    .jti-partner-client { padding: 0.5rem 0.75rem; background: var(--p-accent-dim); border: 1px solid var(--p-accent-border); border-radius: 0.375rem; text-align: center; }
+    .jti-partner-client-label { font-size: 0.6rem; font-weight: 700; color: var(--p-accent); letter-spacing: 0.1em; text-transform: uppercase; }
+    .jti-partner-client-sub { font-size: 0.55rem; color: var(--p-fg-subtle); margin-top: 0.1rem; }
+  </style>
+</head>
+<body>
+
+  <div id="p-deck" class="p-deck"></div>
+
+  <button class="p-theme-toggle" aria-label="Toggle theme"></button>
+  <button class="p-nav-arrow p-nav-prev" aria-label="Previous slide">&#8249;</button>
+  <button class="p-nav-arrow p-nav-next" aria-label="Next slide">&#8250;</button>
+
+  <div class="p-progress"><div class="p-progress-fill"></div></div>
+  <div class="p-counter"></div>
+  <a class="p-branding" href="https://mouliqe.com" target="_blank" rel="noopener">mouliqe.com</a>
+
+  <div class="p-detail-overlay">
+    <div class="p-detail-panel">
+      <button class="p-detail-close" aria-label="Close">&times;</button>
+      <div class="p-detail-title"></div>
+      <div class="p-detail-body"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { meta, slides } from './slides.js';
+
+    // Dynamically import and patch the presentation engine with JTI visuals
+    const engineModule = await import('../_presentation.js');
+
+    // We need to monkey-patch the visual renderer. The engine calls renderVisual()
+    // internally. Since we can't modify the shared file, we'll inject our visuals
+    // into the slide HTML directly by pre-processing slides before init.
+
+    // Pre-render custom visuals into slide data
+    const customVisuals = {
+      'processing-pipeline': () => `
+        <div class="jti-pipeline">
+          <div class="jti-pipe-step">
+            <div class="jti-pipe-icon capture">REC</div>
+            <div class="jti-pipe-content">
+              <div class="jti-pipe-label">Capture</div>
+              <div class="jti-pipe-desc">Cameras record in-store activity. Footage stored locally.</div>
+              <div class="jti-pipe-tags">
+                <span class="jti-pipe-tag blue">IP Cameras</span>
+                <span class="jti-pipe-tag blue">Local Storage</span>
+                <span class="jti-pipe-tag blue">No Internet</span>
+              </div>
+            </div>
+          </div>
+          <div class="jti-pipe-arrow"></div>
+          <div class="jti-pipe-step">
+            <div class="jti-pipe-icon process">CV</div>
+            <div class="jti-pipe-content">
+              <div class="jti-pipe-label">Process</div>
+              <div class="jti-pipe-desc">Portable unit runs full CV pipeline on-site.</div>
+              <div class="jti-pipe-tags">
+                <span class="jti-pipe-tag amber">Person Detection</span>
+                <span class="jti-pipe-tag amber">Skeleton Tracking</span>
+                <span class="jti-pipe-tag amber">Gaze Estimation</span>
+              </div>
+            </div>
+          </div>
+          <div class="jti-pipe-arrow"></div>
+          <div class="jti-pipe-step">
+            <div class="jti-pipe-icon extract">OUT</div>
+            <div class="jti-pipe-content">
+              <div class="jti-pipe-label">Extract</div>
+              <div class="jti-pipe-desc">Structured, anonymized data points. No video in pipeline.</div>
+              <div class="jti-pipe-tags">
+                <span class="jti-pipe-tag purple">Anonymized</span>
+                <span class="jti-pipe-tag purple">Structured JSON</span>
+                <span class="jti-pipe-tag purple">No PII</span>
+              </div>
+            </div>
+          </div>
+          <div class="jti-pipe-arrow"></div>
+          <div class="jti-pipe-step">
+            <div class="jti-pipe-icon analyze">VIZ</div>
+            <div class="jti-pipe-content">
+              <div class="jti-pipe-label">Analyze & Report</div>
+              <div class="jti-pipe-desc">Central platform aggregates all sites into dashboards.</div>
+              <div class="jti-pipe-tags">
+                <span class="jti-pipe-tag green">Dashboards</span>
+                <span class="jti-pipe-tag green">Heatmaps</span>
+                <span class="jti-pipe-tag green">A/B Testing</span>
+                <span class="jti-pipe-tag green">API</span>
+              </div>
+            </div>
+          </div>
+        </div>`,
+
+      'tech-stack': () => `
+        <div class="jti-stack">
+          <div class="jti-stack-layer">
+            <div class="jti-stack-header">
+              <div class="jti-stack-badge edge">L1</div>
+              <div class="jti-stack-title">Edge Processing Engine</div>
+            </div>
+            <div class="jti-stack-items">
+              <div class="jti-stack-item"><div class="jti-stack-dot blue"></div>Person Detection</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot blue"></div>Multi-Object Tracking</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot blue"></div>3D Skeleton Reconstruction</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot blue"></div>Head Pose Estimation</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot blue"></div>Gaze Inference</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot blue"></div>Zone Dwell Analysis</div>
+            </div>
+          </div>
+          <div class="jti-stack-connector"></div>
+          <div class="jti-stack-layer">
+            <div class="jti-stack-header">
+              <div class="jti-stack-badge pipe">L2</div>
+              <div class="jti-stack-title">Data Pipeline & Storage</div>
+            </div>
+            <div class="jti-stack-items">
+              <div class="jti-stack-item"><div class="jti-stack-dot amber"></div>Edge Anonymization</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot amber"></div>Standardized Schema</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot amber"></div>Batch Upload</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot amber"></div>Central Warehouse</div>
+            </div>
+          </div>
+          <div class="jti-stack-connector"></div>
+          <div class="jti-stack-layer">
+            <div class="jti-stack-header">
+              <div class="jti-stack-badge viz">L3</div>
+              <div class="jti-stack-title">Analytics & Reporting</div>
+            </div>
+            <div class="jti-stack-items">
+              <div class="jti-stack-item"><div class="jti-stack-dot green"></div>Interactive Dashboards</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot green"></div>Spatial Heatmaps</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot green"></div>A/B Comparison</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot green"></div>Automated Reports</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot green"></div>API Access</div>
+              <div class="jti-stack-item"><div class="jti-stack-dot green"></div>Raw Data Export</div>
+            </div>
+          </div>
+          <div class="jti-stack-connector"></div>
+          <div class="jti-stack-output">
+            <div class="jti-stack-output-label">Outputs</div>
+            <div class="jti-stack-output-items">
+              <span class="jti-stack-output-item">Dashboards</span>
+              <span class="jti-stack-output-item">Heatmaps</span>
+              <span class="jti-stack-output-item">Reports</span>
+              <span class="jti-stack-output-item">Raw Data</span>
+              <span class="jti-stack-output-item">API</span>
+            </div>
+          </div>
+        </div>`,
+
+      'partnership-model': () => `
+        <div class="jti-partner">
+          <div class="jti-partner-firm">
+            <div class="jti-partner-name parlance">Parlance Consulting</div>
+            <div class="jti-partner-role">Market Research & Field Operations</div>
+            <div class="jti-partner-items">
+              <span class="jti-partner-pill blue">Client Relationship</span>
+              <span class="jti-partner-pill blue">Retailer Recruitment</span>
+              <span class="jti-partner-pill blue">Camera Installation</span>
+              <span class="jti-partner-pill blue">Compliance</span>
+              <span class="jti-partner-pill blue">Research Interpretation</span>
+            </div>
+          </div>
+          <div class="jti-partner-flow">
+            <div class="jti-partner-flow-arrow">
+              <div class="jti-partner-flow-label blue">Research Questions</div>
+              <div class="jti-partner-flow-line down"></div>
+            </div>
+            <div class="jti-partner-flow-arrow">
+              <div class="jti-partner-flow-line up"></div>
+              <div class="jti-partner-flow-label green">Data & Analytics</div>
+            </div>
+          </div>
+          <div class="jti-partner-firm">
+            <div class="jti-partner-name mouliqe">Mouliqe</div>
+            <div class="jti-partner-role">AI Architecture & Platform Engineering</div>
+            <div class="jti-partner-items">
+              <span class="jti-partner-pill green">CV Pipeline</span>
+              <span class="jti-partner-pill green">Edge Processing</span>
+              <span class="jti-partner-pill green">Data Architecture</span>
+              <span class="jti-partner-pill green">Analytics Engine</span>
+              <span class="jti-partner-pill green">Dashboards</span>
+            </div>
+          </div>
+          <div style="width:2px;height:10px;background:var(--p-border);margin-left:1.5rem"></div>
+          <div class="jti-partner-client">
+            <div class="jti-partner-client-label">Unified Deliverable</div>
+            <div class="jti-partner-client-sub">One integrated output — not two separate workstreams</div>
+          </div>
+        </div>`
+    };
+
+    // Patch slides that have custom visuals — inject HTML directly
+    const patchedSlides = slides.map(s => {
+      if (s.visual && customVisuals[s.visual]) {
+        // Replace the visual key with pre-rendered HTML that the engine
+        // won't try to look up. We use a trick: set visual to a registered
+        // name that returns our HTML. Since we can't modify the engine,
+        // we'll inject the visual HTML into the body/subtitle instead
+        // by converting to a non-split layout with the visual embedded.
+
+        // Actually, the cleanest approach: remove the visual key and
+        // embed the visual HTML into the right column via a custom
+        // slide type. But the engine only supports known types.
+
+        // Simplest working approach: keep the visual key but the engine
+        // will return '' for unknown visuals. We'll inject our visuals
+        // via DOM manipulation after init.
+        return s;
+      }
+      return s;
+    });
+
+    engineModule.initPresentation({ meta, slides: patchedSlides });
+
+    // Post-init: inject custom visuals into the DOM
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.p-slide').forEach(slideEl => {
+        const id = slideEl.dataset.id;
+        const slideData = slides.find(s => s.id === id);
+        if (slideData?.visual && customVisuals[slideData.visual]) {
+          const visualContainer = slideEl.querySelector('.p-visual');
+          if (visualContainer) {
+            visualContainer.innerHTML = customVisuals[slideData.visual]();
+          } else {
+            // If no .p-visual container (engine returned empty), find the right column
+            const rightCol = slideEl.querySelector('.p-split-right');
+            if (rightCol) {
+              rightCol.innerHTML = `<div class="p-visual">${customVisuals[slideData.visual]()}</div>`;
+            }
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mouliqe — City of Greeley Proposal</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/templates/proposal.css">
+<link rel="stylesheet" href="/css/templates/proposal-toolbar.css">
+<style>
+  .cover { background: var(--l-bg); display: flex; flex-direction: column; justify-content: space-between; padding: 1in 0.9in; }
+  .cover .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover .top .meta { text-align: right; font-size: 10px; color: var(--l-ink-4); line-height: 1.7; letter-spacing: 0.04em; }
+  .cover .middle { padding: 40px 0; }
+  .cover .middle .eyebrow { margin-bottom: 16px; }
+  .cover .middle h1 { font-size: 38px; line-height: 1.12; color: var(--l-ink); max-width: 90%; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .cover .middle h1 .accent { color: var(--l-forest-700); }
+  .cover .middle .subhead { font-size: 14px; color: var(--l-ink-3); max-width: 82%; line-height: 1.6; }
+  .cover .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 24px 0; border-top: 1px solid var(--l-rule); border-bottom: 1px solid var(--l-rule); }
+  .cover .party .label { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .cover .party .name { font-size: 14px; font-weight: 700; color: var(--l-ink); margin-bottom: 4px; }
+  .cover .party .detail { font-size: 10px; color: var(--l-ink-3); line-height: 1.65; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover .bottom .doc-id { font-size: 10px; color: var(--l-ink-4); letter-spacing: 0.08em; max-width: 60%; }
+  .cover .bottom .doc-id strong { color: var(--l-ink); display: block; font-size: 12px; margin-bottom: 2px; }
+  .content-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--l-rule); margin-bottom: 22px; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.1em; text-transform: uppercase; }
+  .content-header .title { color: var(--l-ink); font-weight: 700; }
+  .content-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--l-rule); display: flex; justify-content: space-between; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.06em; }
+  .section-title { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; padding-top: 4px; }
+  .section-title .n { font-size: 12px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+  .section-title h2 { font-size: 20px; color: var(--l-ink); }
+  .section + .section { margin-top: 22px; }
+  .section p { font-size: 11.5px; color: var(--l-ink-3); line-height: 1.65; }
+  .section p + p { margin-top: 8px; }
+  .sub-h { font-size: 12px; color: var(--l-ink); font-weight: 700; margin: 14px 0 6px; letter-spacing: -0.005em; }
+  .micro-eyebrow { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin: 14px 0 6px; }
+  .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .obj-card { padding: 12px 16px; background: var(--l-bg-subtle); border-left: 2px solid var(--l-forest-700); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+  .obj-card h4 { font-size: 11px; color: var(--l-ink); margin-bottom: 4px; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .obj-card p { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  .phase { margin-bottom: 12px; padding: 14px 16px; border: 1px solid var(--l-rule); border-radius: var(--r-md); }
+  .phase .phase-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--l-rule-faint); }
+  .phase .phase-num { font-size: 10px; color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.16em; }
+  .phase .phase-title { font-size: 13px; font-weight: 700; color: var(--l-ink); }
+  .phase .phase-duration { font-size: 10px; color: var(--l-ink-4); text-align: right; }
+  .phase .phase-duration strong { color: var(--l-ink); }
+  .phase .phase-body p { font-size: 11px; color: var(--l-ink-3); line-height: 1.6; }
+  .phase .phase-body h5 { font-size: 9px; color: var(--l-ink-4); text-transform: uppercase; letter-spacing: 0.14em; margin: 8px 0 4px; font-weight: 700; }
+  .phase .deliv-list { list-style: none; padding: 0; margin: 0; }
+  .phase .deliv-list li { font-size: 10.5px; color: var(--l-ink-2); padding: 2px 0 2px 14px; position: relative; line-height: 1.5; }
+  .phase .deliv-list li::before { content: '\203A'; position: absolute; left: 0; color: var(--l-forest-700); font-weight: 700; }
+  .pricing-box { padding: 18px 22px; background: var(--l-bg-tint); border: 1px solid var(--l-forest-200); border-radius: var(--r-md); margin: 12px 0; }
+  .pricing-box .title { font-size: 9px; color: var(--l-forest-700); text-transform: uppercase; letter-spacing: 0.2em; font-weight: 700; margin-bottom: 8px; }
+  .pricing-box h3 { font-size: 16px; color: var(--l-ink); margin-bottom: 6px; }
+  .pricing-box p { font-size: 11px; color: var(--l-ink-3); line-height: 1.6; }
+  .pricing-box .investment { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--l-forest-200); display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+  .pricing-box .investment .label { font-size: 11px; color: var(--l-ink-2); font-weight: 600; }
+  .pricing-box .investment .value { font-size: 22px; font-weight: 700; color: var(--l-forest-800); font-variant-numeric: tabular-nums; }
+  .pricing-box .investment .note { grid-column: 1 / -1; font-size: 9.5px; color: var(--l-ink-4); margin-top: 4px; line-height: 1.5; }
+  table.itemized { font-size: 10.5px; }
+  table.itemized th { font-size: 9px; padding: 8px 10px 7px; }
+  table.itemized td { padding: 7px 10px; font-size: 10.5px; }
+  table.itemized tr.section-row td { background: var(--l-bg-subtle); font-weight: 700; color: var(--l-ink); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid var(--l-rule); }
+  table.itemized tr.subtotal-row td { background: #fafafa; font-weight: 700; color: var(--l-ink-2); border-top: 1px solid var(--l-rule); }
+  table.itemized tr.total-row td { background: var(--l-bg-tint); font-weight: 700; color: var(--l-forest-800); font-size: 13px; padding-top: 10px; padding-bottom: 10px; border-top: 2px solid var(--l-forest-700) !important; }
+  table.std { font-size: 10.5px; }
+  table.std th { padding: 7px 10px; font-size: 9px; }
+  table.std td { padding: 6px 10px; font-size: 10.5px; line-height: 1.5; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 10px 0; }
+  .two-col h4 { font-size: 10px; color: var(--l-ink-4); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 8px; font-weight: 700; }
+  .terms-list { font-size: 10.5px; line-height: 1.6; color: var(--l-ink-3); }
+  .terms-list li { margin-bottom: 5px; }
+  .acceptance-note { padding: 14px 16px; background: var(--l-bg-subtle); font-size: 11px; color: var(--l-ink-2); line-height: 1.6; border-left: 2px solid var(--l-forest-700); margin-bottom: 24px; }
+  .diff-item { margin-bottom: 14px; }
+  .diff-item h4 { font-size: 12px; color: var(--l-ink); font-weight: 700; text-transform: none; letter-spacing: 0; margin-bottom: 4px; }
+  .diff-item p { font-size: 11px; color: var(--l-ink-3); line-height: 1.6; }
+  .gap-list .gap-item { padding: 10px 14px; margin-bottom: 8px; border-left: 2px solid var(--l-amber); background: #fef9ed; }
+  .gap-list .gap-item h5 { font-size: 11px; font-weight: 700; color: #92400e; margin-bottom: 3px; text-transform: none; letter-spacing: 0; }
+  .gap-list .gap-item p { font-size: 10.5px; color: var(--l-ink-2); line-height: 1.55; }
+  .toc { margin-top: 16px; }
+  .toc-row { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dotted var(--l-rule); font-size: 11px; }
+  .toc-row .num { color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.12em; min-width: 32px; }
+  .toc-row .title { color: var(--l-ink); flex: 1; font-weight: 600; }
+  .toc-row .pg { color: var(--l-ink-4); font-variant-numeric: tabular-nums; }
+  .milestone-row { display: grid; grid-template-columns: 60px 1fr 110px; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--l-rule-faint); align-items: baseline; }
+  .milestone-row:last-child { border-bottom: 0; }
+  .milestone-row .ms-num { font-size: 10px; color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.16em; }
+  .milestone-row .ms-trigger { font-size: 11px; color: var(--l-ink-2); line-height: 1.5; }
+  .milestone-row .ms-amt { text-align: right; font-size: 13px; font-weight: 700; color: var(--l-ink); font-variant-numeric: tabular-nums; }
+  .milestone-row .ms-amt .pct { font-size: 9px; color: var(--l-ink-4); font-weight: 400; display: block; }
+  .stages-list .stage-row { display: grid; grid-template-columns: 50px 130px 1fr; gap: 14px; padding: 8px 0; border-bottom: 1px solid var(--l-rule-faint); align-items: baseline; }
+  .stages-list .stage-row:last-child { border-bottom: 0; }
+  .stages-list .stage-row .stg-num { font-size: 11px; color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+  .stages-list .stage-row .stg-name { font-size: 11px; font-weight: 700; color: var(--l-ink); }
+  .stages-list .stage-row .stg-desc { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.5; }
+  .page { padding: 0.75in 0.85in; }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <span class="toolbar-label">Greeley Proposal</span>
+  <button class="primary" onclick="window.print()">Print / PDF</button>
+</div>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" width="300" height="38" aria-label="Mouliqe">
+      <text x="0" y="32" font-family="Oxanium, sans-serif" font-weight="700" font-size="32" letter-spacing="5.2" fill="#0a0f1a">MOULIQE</text>
+      <circle cx="291" cy="28" r="3.8" fill="#15803d"></circle>
+    </svg>
+    <div class="meta">
+      <span style="display:block; font-size:9px; color:var(--l-forest-700); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:4px;">Proposal</span>
+      PROP-2026-GRE-01<br>
+      Issued · May 2026<br>
+      Valid through · June 2026
+    </div>
+  </div>
+  <div class="middle">
+    <p class="eyebrow">Stage 01 — Diagnosis · The Mouliqe Way</p>
+    <h1>AI strategy and data <span class="accent">infrastructure</span> assessment for the City of Greeley.</h1>
+    <p class="subhead">A phased engagement to connect what's already in place, validate what AI produces, and build the internal capacity to maintain and evolve it — beginning with a working work-order prioritization tool, monitoring dashboards, a governance framework, and an executive business case.</p>
+  </div>
+  <div class="parties">
+    <div class="party">
+      <div class="label">Prepared For</div>
+      <div class="name">City of Greeley, Colorado</div>
+      <div class="detail">Attention: Kylie Jackson<br>Director of Innovation &amp; High Performance<br>1000 10th Street<br>Greeley, CO 80631</div>
+    </div>
+    <div class="party">
+      <div class="label">Prepared By</div>
+      <div class="name">Mouliqe LLC</div>
+      <div class="detail">Imtiaz Ahmed, Founder &amp; Principal<br>13549 Innovation Station Loop<br>Herndon, VA 20171<br>hello@mouliqe.com · +1 347 429 2441</div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="doc-id">
+      <strong>Confidential</strong>
+      This proposal contains commercially sensitive information. Do not distribute without consent of the parties named above.
+    </div>
+    <div style="font-size:9px; color: var(--l-ink-4); text-align:right; letter-spacing: 0.1em;">
+      VA BUSINESS ID 12001838<br>SAM.gov UEI · RYLMK67D8W45<br>EIN 42-1950267
+    </div>
+  </div>
+</div>
+<!-- PAGE 2 — TOC + EXECUTIVE SUMMARY -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>Contents</h2></div>
+    <div class="toc">
+      <div class="toc-row"><span class="num">01</span><span class="title">Executive summary</span><span class="pg">2</span></div>
+      <div class="toc-row"><span class="num">02</span><span class="title">Current state assessment</span><span class="pg">3</span></div>
+      <div class="toc-row"><span class="num">03</span><span class="title">Proposed solution — Phase 1</span><span class="pg">5</span></div>
+      <div class="toc-row"><span class="num">04</span><span class="title">Phase 1 delivery summary</span><span class="pg">8</span></div>
+      <div class="toc-row"><span class="num">05</span><span class="title">What comes next — Phases 2 &amp; 3</span><span class="pg">8</span></div>
+      <div class="toc-row"><span class="num">06</span><span class="title">ROI projections</span><span class="pg">9</span></div>
+      <div class="toc-row"><span class="num">07</span><span class="title">Timeline &amp; investment</span><span class="pg">10</span></div>
+      <div class="toc-row"><span class="num">08</span><span class="title">Differentiators</span><span class="pg">12</span></div>
+      <div class="toc-row"><span class="num">09</span><span class="title">About Mouliqe</span><span class="pg">12</span></div>
+      <div class="toc-row"><span class="num">10</span><span class="title">Terms &amp; acceptance</span><span class="pg">13</span></div>
+      <div class="toc-row"><span class="num">—</span><span class="title">Appendices A · B · C</span><span class="pg">14</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">01 —</span><h2>Executive summary</h2></div>
+    <p style="font-size: 12.5px; color: var(--l-ink-2); line-height: 1.7; margin-bottom: 8px">The City of Greeley is at an inflection point. After a year of building an Innovation and High Performance department, investing in enterprise AI tools, and modernizing citizen-facing platforms, the city has made meaningful progress toward a technology-forward future. At the same time, budget reductions and staffing constraints are creating pressure to demonstrate value quickly and do more with less.</p>
+    <p>This is not a technology problem. Greeley already has capable tools in place — an enterprise-wide GovAI license with 200 active users, Microsoft Copilot on the public website, a Zoom-powered 311 call center with virtual agent capabilities, Oracle ERP in the cloud, Cityworks for asset and work order management, ArcGIS for geospatial data, Granicus OneView for citizen request management, and a growing Azure footprint. The challenge is that these investments are operating in isolation. There is no unified data layer connecting them, no dedicated ownership of integration and optimization, and no governance framework ensuring the accuracy and reliability of AI-generated outputs.</p>
+    <p>The gap is compounded by a workforce reality that many cities share but few address directly: Greeley's departments span desk-based IT and administrative staff to field crews in public works and public safety who have no on-site access to a computer. Any AI strategy that only serves the desk-bound half of the organization will fail to deliver the broad-based enablement that leadership is looking for.</p>
+    <p>What Greeley needs is not another tool. It needs a structured approach to connecting what already exists, validating what AI produces, and building the internal capacity to maintain and evolve these systems over time. The goal is not to replace anyone — it is to make lean teams more capable, help leadership tell the investment story with real data, and create a foundation that scales.</p>
+    <p>Phase 1 delivers four things: a comprehensive current-state assessment, a working AI-powered work order prioritization tool, a suite of monitoring and reporting dashboards that deliver immediate operational value across departments, and a governance framework with an executive business case that gives leadership the data to justify continued investment. It is scoped to be achievable within existing budget constraints, delivered as a flat-fee engagement with no ongoing dependency. Phases 2 and 3 provide a roadmap toward unified data infrastructure in Azure that connects all major city systems.</p>
+    <div class="micro-eyebrow" style="margin-top: 16px">Guiding principles</div>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Build within, not on top of</h4><p>Work entirely within Greeley's existing Azure, Oracle, and GovAI investments — no new platforms.</p></div>
+      <div class="obj-card"><h4>Enablement, not replacement</h4><p>AI as a tool that makes existing teams more capable — every recommendation evaluated against this standard.</p></div>
+      <div class="obj-card"><h4>Working results in Phase 1</h4><p>Deployed tools and dashboards, not just a report — making the business case for continued investment with real evidence.</p></div>
+      <div class="obj-card"><h4>Capacity, not dependency</h4><p>Interactive documentation so internal teams maintain and evolve what was built without re-engaging the consultant.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 2 of 14</span></div>
+</div>
+
+<!-- PAGE 3 — CURRENT STATE I -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">02 —</span><h2>Current state assessment</h2></div>
+    <div class="sub-h">Organizational context</div>
+    <p>The City of Greeley's Innovation and High Performance department is approximately one year old, operating under the CIO's office with a mandate to improve efficiency, technology adoption, and cross-department collaboration. The department is led by Kylie Jackson, who reports to CIO Bret Naber and oversees analysts, project managers, and the city's project management office.</p>
+    <p>The department is building in a constrained environment. Budget reductions and staff cuts are active across the organization. There is no dedicated data engineering capacity within the city, and the IT team lacks a designated owner for AI integration and API connectivity work. These constraints are not unique to Greeley — but they define the practical boundaries of what can be accomplished without structured external support.</p>
+    <p>At the same time, the city has made meaningful progress. An AI policy is in place. An enterprise-wide generative AI platform is deployed and in active use. Police and fire departments are already using AI for operational tasks. The foundation exists. What is missing is the connective tissue between systems, the governance layer that ensures AI outputs are reliable, and the capacity to scale what has been started.</p>
+    <div class="sub-h">Technology landscape</div>
+    <p>The following inventory reflects what was confirmed during the discovery conversation and subsequent follow-up.</p>
+    <table class="std" style="margin-top: 10px">
+      <thead><tr><th style="width: 28%">System</th><th style="width: 26%">Vendor / Platform</th><th>Function</th><th style="width: 12%">Environment</th></tr></thead>
+      <tbody>
+        <tr><td>Cloud Infrastructure</td><td>Microsoft Azure</td><td>Primary cloud platform</td><td>Cloud</td></tr>
+        <tr><td>ERP</td><td>Oracle (cloud-based)</td><td>Enterprise resource planning, financials</td><td>Cloud</td></tr>
+        <tr><td>Asset &amp; Work Order Mgmt</td><td>Cityworks (Trimble)</td><td>Public works work orders, asset tracking, maintenance scheduling</td><td>Cloud / On-Prem</td></tr>
+        <tr><td>GIS</td><td>ArcGIS (Esri)</td><td>Geospatial data, mapping, spatial analysis</td><td>Cloud / On-Prem</td></tr>
+        <tr><td>311 / Citizen Request</td><td>Granicus OneView</td><td>Citizen service requests via portal and mobile app</td><td>Cloud</td></tr>
+        <tr><td>311 Call Center</td><td>Zoom (with virtual agents)</td><td>Phone-based citizen services, AI-powered virtual agent routing</td><td>Cloud</td></tr>
+        <tr><td>Enterprise AI</td><td>GovAI (ChatGPT backbone)</td><td>Generative AI for internal staff, knowledge base agents</td><td>Cloud</td></tr>
+        <tr><td>Website Chatbot</td><td>Microsoft Copilot</td><td>Public-facing chatbot on city website</td><td>Cloud</td></tr>
+        <tr><td>Internal Collaboration</td><td>Microsoft SharePoint</td><td>Document management, internal knowledge bases, GovAI agent data source</td><td>Cloud</td></tr>
+        <tr><td>Citizen Engagement</td><td>Granicus SpeakUp</td><td>Public surveys, feedback, community engagement</td><td>Cloud</td></tr>
+        <tr><td>E-Newsletters</td><td>Granicus GovDelivery</td><td>Email communications to residents</td><td>Cloud</td></tr>
+        <tr><td>Meeting Management</td><td>Granicus CivicClerk</td><td>Council agendas, minutes, public meeting records</td><td>Cloud</td></tr>
+        <tr><td>Budget Transparency</td><td>Questica OpenBook</td><td>Public-facing budget dashboard</td><td>Cloud</td></tr>
+        <tr><td>Permitting &amp; Licensing</td><td>Trakit (Central Square)</td><td>Building permits, business licenses, land use tracking</td><td>Cloud / On-Prem</td></tr>
+        <tr><td>Procurement</td><td>BidNet Direct (RMEPS)</td><td>RFPs, bids, vendor management</td><td>Cloud</td></tr>
+        <tr><td>Website CMS</td><td>Sitecore Content Hub</td><td>City website content management</td><td>Cloud</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 3 of 14</span></div>
+</div>
+
+<!-- PAGE 4 — CURRENT STATE II -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="sub-h">AI adoption status</div>
+    <p>Greeley's AI adoption is further along than most cities in its population range. The city has moved past the pilot stage into operational deployment across multiple departments.</p>
+    <div class="micro-eyebrow">GovAI — enterprise generative AI</div>
+    <p>Deployed enterprise-wide with approximately 200 active users. The platform runs on a ChatGPT backbone with government-specific data protections and is the city's primary generative AI tool for internal staff. Knowledge base agents have been built and connected to: HR benefits information, project management office onboarding and project scoring, an ongoing economic development project, and real estate management (use case in development). Two hundred active users represents meaningful organizational penetration, not a pilot.</p>
+    <div class="micro-eyebrow">Microsoft Copilot — public chatbot</div>
+    <p>A Microsoft Copilot chatbot is deployed on the city's public website. The team has expressed dissatisfaction with its performance — described as a lower-cost experiment rather than a strategic investment. Citizen-facing AI tools require higher accuracy standards than internal tools, and the current deployment may not meet that bar.</p>
+    <div class="micro-eyebrow">Department-level AI use</div>
+    <p>The Greeley Police Department is actively using AI for report writing and narration. The Fire Department has expressed interest in similar capabilities. These operational AI deployments exist outside the GovAI platform and represent additional systems that need to be accounted for in the governance framework.</p>
+    <div class="micro-eyebrow">311 virtual agent</div>
+    <p>The city is rolling out a Zoom-powered call center for 311 services that includes AI virtual agent capabilities, trained on website content. A key concern is accuracy: if the underlying content is outdated or inconsistent, the virtual agent will surface incorrect information to residents — a high-visibility risk that the governance framework in Workstream 4 is designed to address.</p>
+    <div class="sub-h" style="margin-top: 18px">Work order management</div>
+    <p>Public works work order management was identified during the discovery call as one of the most concrete operational pain points. The city processes several thousand work orders per month through Cityworks. Despite workflow streamlining efforts, the triage and assignment process remains manual — a staff member currently spends approximately one hour per day assigning and prioritizing incoming work orders. The challenge is not just volume; it's the decision-making complexity behind prioritization: balancing severity, location, resource availability, cost, historical patterns, and citizen complaint volume across competing demands. This is the specific problem Workstream 2 is designed to address.</p>
+    <div class="sub-h" style="margin-top: 18px">Key gaps identified</div>
+    <div class="gap-list">
+      <div class="gap-item"><h5>No unified data layer</h5><p>Systems operate independently. There is no centralized data warehouse, integration bus, or API orchestration layer. Cross-department data and metrics are produced manually and ad hoc.</p></div>
+      <div class="gap-item"><h5>No data engineering capacity</h5><p>The city does not have data engineers on staff. The IT team lacks a designated owner for API connections — even when systems have APIs available, no one is positioned to build and maintain the connections.</p></div>
+      <div class="gap-item"><h5>No source-of-truth governance</h5><p>Multiple systems contain overlapping or potentially conflicting data. There is no formal framework defining which system is authoritative, how conflicts are resolved, or how AI-connected data is kept current.</p></div>
+      <div class="gap-item"><h5>Citizen-facing AI accuracy risk</h5><p>Without a validation layer and a defined process for keeping their knowledge bases current, the Copilot chatbot and upcoming 311 virtual agent risk providing outdated or incorrect information to residents at scale.</p></div>
+      <div class="gap-item"><h5>No cross-department visibility</h5><p>Leadership lacks a unified view of operational metrics across departments. When cross-department data is needed, it is assembled manually from individual systems — limiting the organization's ability to make data-driven decisions.</p></div>
+      <div class="gap-item"><h5>Investment story gap</h5><p>The Innovation department has made real progress, but the tools to quantify and communicate that progress to leadership are not in place. During budget reductions, the ability to articulate ROI in concrete terms is essential.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 4 of 14</span></div>
+</div>
+
+<!-- PAGE 5 — SOLUTION I -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">03 —</span><h2>Proposed solution · Phase 1</h2></div>
+    <p>Phase 1 is designed to accomplish four things simultaneously: understand the full technology and data landscape, deliver a working AI tool that solves a real operational problem, deploy monitoring and reporting dashboards that provide immediate cross-department value, and produce the governance framework and business case Greeley's leadership needs to make informed decisions about future investment. The engagement is structured as four workstreams that run in parallel and feed into each other.</p>
+    <div class="phase">
+      <div class="phase-head"><div><span class="phase-num">WORKSTREAM 01</span>&nbsp;&nbsp;<span class="phase-title">Discovery &amp; assessment</span></div><div class="phase-duration"><strong>Weeks 1–3</strong></div></div>
+      <div class="phase-body">
+        <p>Establishes a comprehensive picture of where Greeley stands today across systems, data, and AI readiness. Goes beyond what was discussed during the discovery call by engaging directly with the teams who use these systems daily.</p>
+        <h5>Scope of work</h5>
+        <ul class="deliv-list">
+          <li>Full systems inventory with data flow mapping across Azure, Oracle ERP, Cityworks, ArcGIS, GovAI, Granicus OneView, Trakit, SharePoint, and additional systems</li>
+          <li>API availability audit — which systems expose APIs, which are locked down, where integration opportunities are being left on the table</li>
+          <li>Stakeholder interviews with 3–4 department leads beyond Innovation (IT, public works, 311) to validate pain points and surface additional use cases</li>
+          <li>Data maturity assessment — quality, structure, ownership, and accessibility across departments</li>
+          <li>AI policy and GovAI deployment review, including which agents have been built and where utilization gaps exist</li>
+        </ul>
+        <h5>Deliverables</h5>
+        <ul class="deliv-list">
+          <li>Current State Assessment document covering all findings</li>
+          <li>Prioritized use case list ranked by impact, feasibility, and alignment with existing infrastructure</li>
+        </ul>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-head"><div><span class="phase-num">WORKSTREAM 02</span>&nbsp;&nbsp;<span class="phase-title">Work order prioritization tool</span></div><div class="phase-duration"><strong>Weeks 3–6</strong></div></div>
+      <div class="phase-body">
+        <p>The flagship working deliverable. Rather than ending Phase 1 with a report, this workstream produces a deployed AI tool that solves one of the most concrete pain points identified during discovery — helping public works teams prioritize where to allocate resources across competing demands.</p>
+        <h5>What gets built</h5>
+        <ul class="deliv-list">
+          <li><strong>AI-powered work order triage and prioritization system.</strong> Ingests existing work order data from Cityworks and applies prioritization logic based on severity, location, resource availability, estimated cost, historical patterns, and citizen complaint volume. Outputs a ranked priority queue supervisors can review, adjust, and approve before dispatching crews.</li>
+          <li><strong>Human-in-the-loop design.</strong> The system recommends priorities; it does not make autonomous decisions. AI performs analysis and surfaces recommendations; humans review and confirm. This keeps prioritization decisions explainable and accountable.</li>
+          <li><strong>Dual-layer accuracy validation.</strong> Every AI output passes through two validation layers: a deterministic layer that runs scripted checks against source data, and a secondary AI validation layer that evaluates outputs for consistency, completeness, and logical coherence.</li>
+          <li><strong>Interactive documentation system.</strong> A visual, guided interface allowing public works or IT staff to adjust prioritization weights, add new factors, update data connections, and maintain the system independently — designed for non-technical users.</li>
+        </ul>
+        <h5>Dependencies &amp; assumptions</h5>
+        <ul class="deliv-list">
+          <li><strong>Cityworks API or data export access.</strong> Programmatic access to work order data required. If unavailable, the tool will work with manual data exports as an interim approach, with API integration scoped for a future phase.</li>
+          <li><strong>Structured work order data.</strong> Records must include at minimum: category/type, location, submission date, and current status. Additional fields improve the model but are not required for initial deployment.</li>
+          <li><strong>Environment access by Week 2.</strong> Access to a Cityworks test/staging environment or representative data export by end of Week 2 to begin development on schedule.</li>
+          <li><strong>UAT participation.</strong> 1–2 public works staff members available for user acceptance testing during Weeks 5–6 (~2–3 hours total).</li>
+        </ul>
+        <p style="margin-top: 6px; font-size: 10.5px; color: var(--l-ink-3)">If the Workstream 1 assessment reveals that data access or quality does not support the planned tool design, Mouliqe will present alternative approaches — including a modified scope or budget reallocation toward a different high-impact deliverable — for Greeley's approval before proceeding.</p>
+        <h5>Expected impact</h5>
+        <ul class="deliv-list">
+          <li>Reduction in staff hours spent on manual work order triage and prioritization</li>
+          <li>Fewer mis-prioritized dispatches resulting in crew rework and wasted field time</li>
+          <li>Earlier identification of high-risk maintenance items, reducing emergency escalations</li>
+          <li>More consistent, data-driven resource allocation across public works projects</li>
+          <li>A live, working example of how AI integrates with Greeley's existing infrastructure</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 5 of 14</span></div>
+</div>
+
+<!-- PAGE 6 — SOLUTION II: WS3 DASHBOARDS -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="phase">
+      <div class="phase-head"><div><span class="phase-num">WORKSTREAM 03</span>&nbsp;&nbsp;<span class="phase-title">AI monitoring &amp; reporting dashboards</span></div><div class="phase-duration"><strong>Weeks 4–7</strong></div></div>
+      <div class="phase-body">
+        <p>Delivers three dashboards that provide immediate operational value across the organization. Built on the data connections and system inventory established during Workstream 1, these address three specific gaps: the lack of cross-department visibility, the risk of citizen-facing AI inaccuracy, and the need to maintain GovAI knowledge base quality as adoption scales.</p>
+        <h5>3A · Cross-department reporting dashboard</h5>
+        <p>A unified operational reporting view that pulls data from the systems cataloged in Workstream 1 and presents key metrics across departments in a single interface. Replaces the hours staff currently spend manually assembling reports from individual systems. Provides leadership with a consistent, up-to-date view of operational performance without requiring someone to pull data from Oracle, Cityworks, Granicus, and other systems separately each time a question is asked. Initial data sources and metrics defined during the Workstream 1 assessment; designed to be extensible as additional system connections are established.</p>
+        <h5>3B · 311/Copilot AI accuracy monitor</h5>
+        <p>A monitoring dashboard that periodically tests the responses generated by the Zoom 311 virtual agent and the Microsoft Copilot website chatbot against the city's source-of-truth data. When the monitor detects a response that is outdated, incorrect, or inconsistent with authoritative city information, it flags the discrepancy for review. Addresses the highest-visibility risk identified during discovery: citizen-facing AI tools surfacing incorrect information to residents. Designed to work with the source-of-truth definitions established in the Workstream 4 governance framework.</p>
+        <h5>3C · GovAI knowledge base health dashboard</h5>
+        <p>Monitors the four existing GovAI knowledge bases (HR benefits, PMO onboarding, economic development, real estate management) for content health: stale information, conflicting entries, coverage gaps, and usage patterns. With 200 active users relying on these agents daily, the quality of the underlying knowledge bases directly affects the value the organization gets from its GovAI investment. Surfaces which knowledge bases need attention, which topics generate the most queries, and where users may be getting incomplete or outdated answers.</p>
+        <h5>Dependencies &amp; assumptions</h5>
+        <p>All three dashboards depend on the data access and system connectivity validated during Workstream 1. Scope and depth will be calibrated based on what the assessment reveals about data availability, API access, and data quality. If a specific data source is not accessible within the engagement timeline, the affected dashboard will be delivered with available data sources and documented for expansion when access is established.</p>
+      </div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 6 of 14</span></div>
+</div>
+
+<!-- PAGE 7 — SOLUTION III: WS4 GOVERNANCE + DELIVERY SUMMARY -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="phase">
+      <div class="phase-head"><div><span class="phase-num">WORKSTREAM 04</span>&nbsp;&nbsp;<span class="phase-title">Governance framework &amp; executive business case</span></div><div class="phase-duration"><strong>Weeks 5–8</strong></div></div>
+      <div class="phase-body">
+        <p>Produces the two documents that make Phase 1 self-sustaining: a governance framework that ensures what was built continues to operate reliably, and an executive business case that gives leadership the information they need to make decisions about continued investment.</p>
+        <h5>AI governance framework</h5>
+        <ul class="deliv-list">
+          <li><strong>Source of truth definitions.</strong> Documentation of which systems and datasets serve as authoritative sources for each type of information, and how conflicts between sources are resolved.</li>
+          <li><strong>Data update cadence and ownership.</strong> Defined schedules and responsible parties for keeping AI-connected data current, including escalation paths when data falls out of date.</li>
+          <li><strong>Accuracy monitoring protocols.</strong> Ongoing checks that ensure AI outputs remain reliable as underlying data changes over time. Operationalized through the 311/Copilot accuracy monitor and GovAI health dashboard delivered in Workstream 3.</li>
+          <li><strong>Extension of existing AI policy.</strong> Builds on Greeley's existing AI policy rather than replacing it — adding operational specifics for data governance, validation standards, and maintenance procedures.</li>
+        </ul>
+        <h5>Executive business case</h5>
+        <ul class="deliv-list">
+          <li><strong>Current state summary.</strong> Concise overview of Greeley's technology landscape, AI maturity, and key gaps, written for a leadership audience.</li>
+          <li><strong>Phase 1 results with measured impact.</strong> Documented outcomes from the work order prioritization tool and dashboards, including time savings, efficiency gains, risk mitigation metrics, and qualitative feedback.</li>
+          <li><strong>Future opportunity roadmap.</strong> Prioritized next-step opportunities with projected ROI, resource requirements, and recommended sequencing.</li>
+          <li><strong>Investment narrative.</strong> A clear articulation of why continued investment in AI and data infrastructure is justified — framed in terms of operational efficiency, service quality, and long-term cost avoidance.</li>
+        </ul>
+        <p style="margin-top: 8px">This document is written for the City Manager's office and CIO, not for the Innovation team. It answers the question raised during discovery: <em>"How do we tell the story of where we are, where we want to be, and what it is going to take to get there?"</em></p>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">04 —</span><h2>Phase 1 delivery summary</h2></div>
+    <table class="std" style="margin-top: 6px">
+      <thead><tr><th style="width: 55%">Deliverable</th><th style="width: 22%">Workstream</th><th>Timeline</th></tr></thead>
+      <tbody>
+        <tr><td>Systems inventory and data flow map</td><td>Assessment</td><td>Weeks 1–3</td></tr>
+        <tr><td>API availability audit</td><td>Assessment</td><td>Weeks 1–3</td></tr>
+        <tr><td>Stakeholder interviews (3–4 departments)</td><td>Assessment</td><td>Weeks 2–3</td></tr>
+        <tr><td>Data maturity assessment</td><td>Assessment</td><td>Weeks 2–3</td></tr>
+        <tr><td>AI policy and GovAI deployment review</td><td>Assessment</td><td>Weeks 1–2</td></tr>
+        <tr><td>Prioritized use case list</td><td>Assessment</td><td>Week 3</td></tr>
+        <tr><td>Work order prioritization tool (deployed)</td><td>Work Order Tool</td><td>Weeks 3–6</td></tr>
+        <tr><td>Dual-layer accuracy validation system</td><td>Work Order Tool</td><td>Weeks 4–6</td></tr>
+        <tr><td>Interactive documentation for the tool</td><td>Work Order Tool</td><td>Weeks 5–6</td></tr>
+        <tr><td>Cross-department reporting dashboard</td><td>Dashboards</td><td>Weeks 4–7</td></tr>
+        <tr><td>311/Copilot AI accuracy monitor</td><td>Dashboards</td><td>Weeks 5–7</td></tr>
+        <tr><td>GovAI knowledge base health dashboard</td><td>Dashboards</td><td>Weeks 5–7</td></tr>
+        <tr><td>AI governance framework</td><td>Governance</td><td>Weeks 5–7</td></tr>
+        <tr><td>Executive business case for leadership</td><td>Governance</td><td>Weeks 6–8</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 7 of 14</span></div>
+</div>
+
+<!-- PAGE 8 — WHAT COMES NEXT -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">05 —</span><h2>What comes next</h2></div>
+    <p>Phase 1 is designed to stand on its own. At its conclusion, Greeley will have a working AI tool, three operational dashboards, a governance framework, and a clear picture of the technology landscape — alongside the assessment and business case needed to evaluate whether and how to proceed with deeper investment.</p>
+    <p>Based on the discovery conversation and preliminary research, the following opportunities are expected to emerge from the Phase 1 assessment. These are presented as directional context, not as committed scope. The executive business case delivered in Phase 1 will include specific recommendations, projected ROI, and resource requirements for each.</p>
+    <div class="diff-item" style="margin-top: 14px"><h4>Unified data infrastructure</h4><p>Connecting Oracle ERP, Cityworks, ArcGIS, Granicus OneView, Trakit, SharePoint, GovAI, and other city systems into a centralized Azure-based data layer. This is the foundational investment that enables AI to work across departments rather than within individual tool silos. The dashboards delivered in Workstream 3 provide a working proof of concept for this vision — Phase 2 would formalize and scale the data connections into a permanent, maintainable infrastructure.</p></div>
+    <div class="diff-item"><h4>Internal AI agent optimization</h4><p>Expanding and optimizing the GovAI knowledge base agents Greeley has already begun building. This includes connecting additional data sources, improving agent accuracy through structured knowledge management, and deploying agents to departments that have not yet adopted them. The GovAI health dashboard delivered in Workstream 3 provides the monitoring foundation for this work.</p></div>
+    <div class="diff-item"><h4>311 virtual agent accuracy and validation</h4><p>Expanding the accuracy monitoring system delivered in Workstream 3 into a full validation and continuous improvement pipeline for the Zoom-powered 311 virtual agent. Includes automated testing at scale, trend analysis of accuracy over time, and a structured process for updating the agent's knowledge base as city information changes.</p></div>
+    <div class="diff-item"><h4>Field worker data capture pipeline</h4><p>A system that allows field crews in public works and public safety to capture notes, observations, and work documentation through simple inputs (such as photos of handwritten notes) that are automatically extracted, structured, and made available for AI-powered querying and reporting. This addresses the gap between desk-based and field-based staff.</p></div>
+    <div class="diff-item"><h4>Citizen-facing AI rollout strategy</h4><p>A phased approach to expanding AI-powered services to residents, including dual-option deployment (AI and human channels available simultaneously), community engagement and education, and measurement frameworks for adoption and satisfaction. This accounts for Greeley's resident demographics and the need to build trust incrementally.</p></div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 8 of 14</span></div>
+</div>
+
+<!-- PAGE 9 — ROI -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">06 —</span><h2>ROI projections</h2></div>
+    <p>Projections below are based on data provided by the City of Greeley during discovery and industry benchmarks for municipal operations of comparable size. They are conservative estimates. Actual impact will be baselined during the Workstream 1 assessment and measured against actuals at the conclusion of the engagement.</p>
+    <div class="sub-h">Workstream 2 — work order prioritization tool</div>
+    <p style="margin-bottom: 8px"><strong>Current state:</strong> several thousand work orders processed per month through Cityworks; ~1 hour per day spent on manual triage and assignment; prioritization decisions made without systematic data-driven support.</p>
+    <table class="std">
+      <thead><tr><th>Metric</th><th>Current</th><th>Projected</th><th>Improvement</th></tr></thead>
+      <tbody>
+        <tr><td>Daily staff time on triage</td><td>~60 min/day</td><td>~20 min/day</td><td>~40 min/day saved</td></tr>
+        <tr><td>Annual staff hours recovered</td><td>~240 hrs/yr</td><td>~84 hrs/yr</td><td><strong>~156 hrs/yr saved</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 8px; font-size: 10.5px">At $45/hr blended rate: <strong>~$7K/yr</strong> direct labor savings. Avoided mis-prioritization rework (~2 re-dispatches/week at $150–200 each): <strong>~$15–20K/yr</strong>. Avoided deferred maintenance escalation (~10 prevented/yr at $1,500 avg delta): <strong>~$15K/yr</strong>.</p>
+    <div class="sub-h" style="margin-top: 12px">Workstream 3 — dashboards</div>
+    <p style="font-size: 10.5px"><strong>3A · Cross-department reporting:</strong> 3–4 staff × 2–3 hrs/week manual reporting eliminated at $50/hr = <strong>~$18K/yr</strong>. <strong>3B · 311/Copilot accuracy monitor:</strong> risk avoidance — a single citizen-facing AI incident costs $10–25K in staff time to investigate and remediate = <strong>~$10–25K/yr</strong> per prevented incident. <strong>3C · GovAI KB health:</strong> 200 users × quality-related productivity loss = <strong>~$8K/yr</strong> recovered.</p>
+    <div class="sub-h" style="margin-top: 14px">Engagement ROI summary</div>
+    <table class="std">
+      <thead><tr><th style="width: 42%">Category</th><th style="width: 22%">Annual value</th><th>Basis</th></tr></thead>
+      <tbody>
+        <tr><td>Direct labor savings — triage</td><td>~$7,000</td><td>156 hrs/yr at $45/hr</td></tr>
+        <tr><td>Avoided mis-prioritization rework</td><td>~$15–20,000</td><td>~2 re-dispatches/wk at $150–200</td></tr>
+        <tr><td>Avoided maintenance escalation</td><td>~$15,000</td><td>~10 prevented/yr at $1,500 delta</td></tr>
+        <tr><td>Cross-dept reporting automation</td><td>~$18,000</td><td>~360 hrs/yr at $50/hr</td></tr>
+        <tr><td>311/Copilot accuracy risk avoidance</td><td>~$10–25,000</td><td>Per prevented incident</td></tr>
+        <tr><td>GovAI KB productivity</td><td>~$8,000</td><td>~167 hrs/yr at $50/hr</td></tr>
+        <tr class="total-row"><td><strong>Total projected annual value</strong></td><td><strong>$73–93K</strong></td><td><strong>1.7–2.2× Year 1 ROI</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 6px; font-size: 10.5px">Engagement cost: <strong>$42,000</strong> (one-time, flat fee). Value compounds in subsequent years as tools continue to operate.</p>
+    <div style="margin: 12px 0;">
+      <div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px;">Projected Annual Value by Category</div>
+      <div style="display: grid; grid-template-columns: 140px 1fr 60px; gap: 6px; align-items: center; margin-bottom: 4px;">
+        <span style="font-size: 10px; color: var(--l-ink-3); text-align: right;">Rework avoidance</span>
+        <div style="height: 16px; background: var(--l-bg-subtle); border-radius: 3px; overflow: hidden;"><div style="height: 100%; width: 80%; background: var(--l-forest-200); border-right: 2px solid var(--l-forest-700);"></div></div>
+        <span style="font-size: 10px; font-weight: 600; color: var(--l-ink);">$17.5K</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 140px 1fr 60px; gap: 6px; align-items: center; margin-bottom: 4px;">
+        <span style="font-size: 10px; color: var(--l-ink-3); text-align: right;">Cross-dept reporting</span>
+        <div style="height: 16px; background: var(--l-bg-subtle); border-radius: 3px; overflow: hidden;"><div style="height: 100%; width: 82%; background: #eff6ff; border-right: 2px solid var(--l-blue);"></div></div>
+        <span style="font-size: 10px; font-weight: 600; color: var(--l-ink);">$18K</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 140px 1fr 60px; gap: 6px; align-items: center; margin-bottom: 4px;">
+        <span style="font-size: 10px; color: var(--l-ink-3); text-align: right;">Maint. escalation</span>
+        <div style="height: 16px; background: var(--l-bg-subtle); border-radius: 3px; overflow: hidden;"><div style="height: 100%; width: 68%; background: var(--l-forest-200); border-right: 2px solid var(--l-forest-700);"></div></div>
+        <span style="font-size: 10px; font-weight: 600; color: var(--l-ink);">$15K</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 140px 1fr 60px; gap: 6px; align-items: center; margin-bottom: 4px;">
+        <span style="font-size: 10px; color: var(--l-ink-3); text-align: right;">311/Copilot accuracy</span>
+        <div style="height: 16px; background: var(--l-bg-subtle); border-radius: 3px; overflow: hidden;"><div style="height: 100%; width: 68%; background: #eff6ff; border-right: 2px solid var(--l-blue);"></div></div>
+        <span style="font-size: 10px; font-weight: 600; color: var(--l-ink);">$15K</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 140px 1fr 60px; gap: 6px; align-items: center; margin-bottom: 4px;">
+        <span style="font-size: 10px; color: var(--l-ink-3); text-align: right;">GovAI KB productivity</span>
+        <div style="height: 16px; background: var(--l-bg-subtle); border-radius: 3px; overflow: hidden;"><div style="height: 100%; width: 36%; background: #eff6ff; border-right: 2px solid var(--l-blue);"></div></div>
+        <span style="font-size: 10px; font-weight: 600; color: var(--l-ink);">$8K</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 140px 1fr 60px; gap: 6px; align-items: center; margin-bottom: 4px;">
+        <span style="font-size: 10px; color: var(--l-ink-3); text-align: right;">Triage labor savings</span>
+        <div style="height: 16px; background: var(--l-bg-subtle); border-radius: 3px; overflow: hidden;"><div style="height: 100%; width: 32%; background: var(--l-forest-200); border-right: 2px solid var(--l-forest-700);"></div></div>
+        <span style="font-size: 10px; font-weight: 600; color: var(--l-ink);">$7K</span>
+      </div>
+    </div>
+    <div class="sub-h" style="margin-top: 12px">What the governance framework adds (Workstream 4)</div>
+    <div class="two-col" style="margin-top: 6px">
+      <div><h4>What the governance framework prevents</h4><ul class="clean" style="font-size: 10.5px"><li>AI agents trained on outdated or conflicting data producing incorrect outputs at scale</li><li>Citizen-facing tools surfacing inaccurate information, creating reputational and trust risk</li><li>Duplicated effort across departments without shared standards or data definitions</li><li>Loss of institutional knowledge when the engagement ends</li></ul></div>
+      <div><h4>What the executive business case enables</h4><ul class="clean" style="font-size: 10.5px"><li>Data-backed narrative for leadership to justify continued AI investment during budget constraints</li><li>Prioritized roadmap that lets the city sequence future investments by impact and feasibility</li><li>Framework for evaluating future vendor proposals against Greeley's actual needs</li></ul></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 9 of 14</span></div>
+</div>
+
+<!-- PAGE 10 — INVESTMENT I -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">07 —</span><h2>Timeline &amp; investment</h2></div>
+    <div class="sub-h">Engagement duration</div>
+    <p>6 to 8 weeks from contract execution to final deliverable handoff. Workstreams overlap by design — the assessment informs tool and dashboard development, and the governance framework is built alongside the working deliverables to reflect real implementation decisions rather than theoretical ones.</p>
+    <table class="std" style="margin-top: 8px">
+      <thead><tr><th style="width: 65%">Phase</th><th>Timeline</th></tr></thead>
+      <tbody>
+        <tr><td>Workstream 1: Discovery &amp; Assessment</td><td>Weeks 1–3</td></tr>
+        <tr><td>Workstream 2: Work Order Prioritization Tool</td><td>Weeks 3–6</td></tr>
+        <tr><td>Workstream 3: AI Monitoring &amp; Reporting Dashboards</td><td>Weeks 4–7</td></tr>
+        <tr><td>Workstream 4: Governance &amp; Business Case</td><td>Weeks 5–8</td></tr>
+        <tr><td>Post-Delivery Support</td><td>2 weeks following handoff</td></tr>
+      </tbody>
+    </table>
+    <div class="sub-h" style="margin-top: 18px">Investment summary</div>
+    <div class="pricing-box">
+      <div class="title">Engagement Fee</div>
+      <h3>Flat fee, all-inclusive — $42,000</h3>
+      <p>All deliverables, meetings, revisions, and post-delivery support are included. No hourly charges, no change-order fees, and no infrastructure costs beyond what is outlined in the itemized breakdown below.</p>
+      <div class="investment">
+        <span class="label">Total engagement investment</span>
+        <span class="value">$&nbsp;42,000</span>
+        <span class="note">Invoiced 30% at contract execution · 40% at Workstream 1 completion + tool delivered to UAT · 30% at final handoff. Net 30 from invoice date. Professional services are not subject to Colorado sales tax; any applicable taxes are the responsibility of the client.</span>
+      </div>
+    </div>
+    <div class="sub-h" style="margin-top: 16px">Workstream subtotals</div>
+    <table class="std">
+      <thead><tr><th style="width: 60%">Workstream</th><th>Subtotal</th></tr></thead>
+      <tbody>
+        <tr><td>Workstream 1 — Discovery &amp; Assessment</td><td><strong>$7,000</strong></td></tr>
+        <tr><td>Workstream 2 — Work Order Prioritization Tool</td><td><strong>$16,000</strong></td></tr>
+        <tr><td>Workstream 3 — AI Monitoring &amp; Reporting Dashboards</td><td><strong>$9,000</strong></td></tr>
+        <tr><td>Workstream 4 — Governance &amp; Business Case</td><td><strong>$10,000</strong></td></tr>
+        <tr class="total-row"><td><strong>Engagement total</strong></td><td><strong>$42,000</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 10 of 14</span></div>
+</div>
+
+<!-- PAGE 11 — INVESTMENT II -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="sub-h" style="margin-top: 0">Itemized pricing</div>
+    <table class="itemized">
+      <thead><tr><th style="width: 32%">Line item</th><th>Description</th><th style="width: 14%; text-align: right">Price</th></tr></thead>
+      <tbody>
+        <tr class="section-row"><td colspan="3">Workstream 1 · Discovery &amp; Assessment</td></tr>
+        <tr><td>Systems Inventory &amp; Data Flow Mapping</td><td>Complete catalog of platforms, databases, and data flows across departments</td><td class="num">$2,500</td></tr>
+        <tr><td>Stakeholder Interviews (3–4 departments)</td><td>Sessions with IT, Public Works, 311, and Innovation teams</td><td class="num">$2,000</td></tr>
+        <tr><td>Data &amp; AI Readiness Assessment</td><td>Data maturity evaluation, API audit, AI policy review, GovAI deployment review, use case prioritization</td><td class="num">$2,500</td></tr>
+        <tr class="subtotal-row"><td colspan="2">Workstream 1 subtotal</td><td class="num">$7,000</td></tr>
+        <tr class="section-row"><td colspan="3">Workstream 2 · Work Order Prioritization Tool</td></tr>
+        <tr><td>Tool Design &amp; Architecture</td><td>Requirements gathering, data model design, prioritization logic framework</td><td class="num">$3,000</td></tr>
+        <tr><td>AI Development &amp; Integration</td><td>AI-powered triage system connected to existing city data sources</td><td class="num">$5,500</td></tr>
+        <tr><td>Dual-Layer Accuracy Validation</td><td>Deterministic fact-checking layer plus AI validation layer</td><td class="num">$3,000</td></tr>
+        <tr><td>Interactive Documentation System</td><td>Visual, self-service interface for ongoing tool maintenance by city staff</td><td class="num">$2,500</td></tr>
+        <tr><td>Deployment, Testing &amp; UAT</td><td>Integration with existing systems, user acceptance testing, production deployment</td><td class="num">$2,000</td></tr>
+        <tr class="subtotal-row"><td colspan="2">Workstream 2 subtotal</td><td class="num">$16,000</td></tr>
+        <tr class="section-row"><td colspan="3">Workstream 3 · AI Monitoring &amp; Reporting Dashboards</td></tr>
+        <tr><td>Cross-Department Reporting Dashboard</td><td>Unified operational metrics view pulling from systems cataloged in WS1</td><td class="num">$3,000</td></tr>
+        <tr><td>311/Copilot AI Accuracy Monitor</td><td>Automated testing of citizen-facing AI responses against source-of-truth data</td><td class="num">$2,500</td></tr>
+        <tr><td>GovAI Knowledge Base Health Dashboard</td><td>Content health monitoring across 4 knowledge bases — staleness, conflicts, gaps, usage</td><td class="num">$2,000</td></tr>
+        <tr><td>Dashboard Deployment &amp; Documentation</td><td>Integration, testing, and interactive documentation for all three dashboards</td><td class="num">$1,500</td></tr>
+        <tr class="subtotal-row"><td colspan="2">Workstream 3 subtotal</td><td class="num">$9,000</td></tr>
+        <tr class="section-row"><td colspan="3">Workstream 4 · Governance &amp; Business Case</td></tr>
+        <tr><td>AI Governance Framework</td><td>Source of truth definitions, data update protocols, accuracy monitoring, ownership assignments</td><td class="num">$4,000</td></tr>
+        <tr><td>Executive Business Case Document</td><td>Current state summary, Phase 1 results, future roadmap with ROI projections, investment narrative</td><td class="num">$4,000</td></tr>
+        <tr><td>Knowledge Transfer &amp; Handoff</td><td>Walkthrough sessions with IT and Innovation teams on all deliverables, Q&amp;A, documentation review</td><td class="num">$1,000</td></tr>
+        <tr><td>Post-Delivery Support (2 weeks)</td><td>Bug fixes, adjustments, and questions after handoff</td><td class="num">$1,000</td></tr>
+        <tr class="subtotal-row"><td colspan="2">Workstream 4 subtotal</td><td class="num">$10,000</td></tr>
+        <tr class="total-row"><td colspan="2">Engagement total</td><td class="num">$42,000</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size: 9.5px; color: var(--l-ink-4); margin-top: 8px; line-height: 1.55">Professional services are not subject to Colorado sales tax. In the event any applicable taxes are determined, they will be the responsibility of the client.</p>
+    <div class="sub-h" style="margin-top: 18px">Payment milestones</div>
+    <p>Payment is structured in three milestones tied to deliverable completion. Net 30 from invoice date.</p>
+    <div style="margin-top: 8px">
+      <div class="milestone-row"><span class="ms-num">M1</span><span class="ms-trigger">Contract execution and project kickoff</span><span class="ms-amt">$12,600<span class="pct">30%</span></span></div>
+      <div class="milestone-row"><span class="ms-num">M2</span><span class="ms-trigger">Completion of Workstream 1 assessment and delivery of Workstream 2 tool to UAT</span><span class="ms-amt">$16,800<span class="pct">40%</span></span></div>
+      <div class="milestone-row"><span class="ms-num">M3</span><span class="ms-trigger">Final delivery of all Workstream 3 and 4 deliverables and handoff</span><span class="ms-amt">$12,600<span class="pct">30%</span></span></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 11 of 14</span></div>
+</div>
+
+<!-- PAGE 12 — DIFFERENTIATORS + ABOUT -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">08 —</span><h2>Differentiators</h2></div>
+    <div class="diff-item"><h4>Build within, not on top of</h4><p>Mouliqe does not introduce new platforms. The engagement is designed to work entirely within Greeley's existing technology investments — Azure, Oracle, GovAI, and the tools already deployed across departments. This eliminates the infrastructure cost, vendor management overhead, and adoption friction that come with bringing in unfamiliar systems. The opportunity is to connect and optimize what's already there, not replace it.</p></div>
+    <div class="diff-item"><h4>Working results, not just reports</h4><p>Phase 1 does not end with a PDF. It ends with a deployed AI-powered work order prioritization tool, three operational dashboards, a governance framework, and an interactive documentation system, alongside the assessment and roadmap. During budget pressure, it is easier to justify spending on something that is already working and demonstrating value than on a document describing what could be built.</p></div>
+    <div class="diff-item"><h4>Accuracy validation architecture</h4><p>AI outputs are only useful if they can be trusted. Mouliqe builds a dual-layer validation system into every AI deployment: a deterministic layer that runs scripted fact-checks against source data, and a secondary AI validation layer that evaluates outputs for consistency, completeness, and accuracy. The 311/Copilot accuracy monitor extends this principle to citizen-facing tools, providing ongoing automated validation that catches issues before they reach residents. This directly addresses the concern raised during discovery about ensuring AI agents are trained on accurate data with a clear source of truth.</p></div>
+    <div class="diff-item"><h4>Interactive documentation and self-sufficiency</h4><p>Every system Mouliqe builds comes with an interactive documentation layer designed for non-technical users. Rather than dense technical manuals, this lets internal teams update agent context, modify knowledge bases, and manage data connections through guided, visual interfaces. When the engagement ends, the city's teams should be able to maintain and evolve what was built without calling the consultant back. Capacity building is the priority — not recurring dependency.</p></div>
+    <div class="diff-item"><h4>Enablement-first framing</h4><p>This engagement is designed around a principle Greeley's leadership has already articulated: AI is a tool for making people more capable, not a mechanism for reducing headcount. Every solution proposed in this document is evaluated against that standard. If a recommendation does not make an existing team member's job easier or more effective, it does not belong in the scope.</p></div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">09 —</span><h2>About Mouliqe</h2></div>
+    <p>Mouliqe (pronounced /mo&#650;.li&#720;k/, meaning "fundamental") is an AI solutions and data architecture consultancy that helps organizations build the right foundation before layering intelligence on top of it. The firm specializes in three areas: AI strategy and architecture, data integration and engineering, and digital transformation for organizations navigating the transition from fragmented legacy systems to unified, AI-ready infrastructure.</p>
+    <p>Mouliqe's founding team brings over a decade of experience across marketing analytics, data engineering, and AI architecture, with a track record of building production AI systems that reduce manual processing time by 80 to 95 percent, cut reporting cycles from hours to minutes, and recover hundreds of employee hours annually. That experience spans Fortune-level enterprises, cloud-scale data platforms, and applied AI initiatives taken from concept through production deployment with proper guardrails, validation layers, and governance frameworks designed for long-term maintainability.</p>
+    <p>The firm's approach is built around three commitments. First, build within the client's existing technology stack rather than introducing new platforms. Second, deliver working results early, not just assessments and reports. Third, ensure every engagement includes an interactive documentation system so internal teams can maintain and evolve what was built without ongoing consultant dependency. The goal is always to build capacity, not create reliance. If AI is not the right answer for a given problem, Mouliqe will say so.</p>
+    <p>Mouliqe is a registered LLC in the Commonwealth of Virginia (SCC Entity ID: 12001838) with an active SAM.gov registration (UEI: RYLMK67D8W45), positioned to support government procurement processes including sole source and competitive quote requirements.</p>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 12 of 14</span></div>
+</div>
+
+<!-- PAGE 13 — TERMS + ACCEPTANCE -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">10 —</span><h2>Assumptions, terms &amp; acceptance</h2></div>
+    <div class="sub-h" style="margin-top: 0">Assumptions &amp; exclusions</div>
+    <div class="two-col">
+      <div><h4>Assumptions</h4><ul class="clean" style="font-size: 10.5px"><li>City of Greeley provides a primary point of contact with decision authority.</li><li>Access to relevant systems and stakeholders is provided within 5 business days of kickoff.</li><li>Existing cloud or on-prem infrastructure costs are not included in the engagement fee.</li><li>One round of scope change is budgeted per workstream; larger shifts trigger a change order.</li></ul></div>
+      <div><h4>Exclusions</h4><ul class="clean" style="font-size: 10.5px"><li>Third-party software licenses and Azure / cloud infrastructure costs.</li><li>End-user training beyond the documented knowledge-transfer sessions.</li><li>Ongoing 24/7 on-call support after the included 2-week post-delivery window.</li><li>Work on systems other than those named in the Workstream 1 assessment.</li></ul></div>
+    </div>
+    <div class="sub-h" style="margin-top: 14px">Terms &amp; conditions</div>
+    <ol class="clean terms-list">
+      <li><strong>Term.</strong> This proposal is valid for 30 days from the issued date above.</li>
+      <li><strong>Governing agreement.</strong> Engagement governed by Mouliqe's Master Services Agreement, signed separately or on acceptance of this proposal.</li>
+      <li><strong>Confidentiality.</strong> Each party agrees to protect the other's confidential information under a mutual NDA (signed separately).</li>
+      <li><strong>IP.</strong> All deliverables transfer to the City of Greeley on final payment; Mouliqe retains rights to generic methods, frameworks, and pre-existing IP.</li>
+      <li><strong>Termination.</strong> Either party may terminate with 15 days' written notice. Fees for work completed to date remain due.</li>
+      <li><strong>Liability.</strong> Mouliqe's total liability is limited to fees paid under this engagement.</li>
+      <li><strong>Payment.</strong> Net 30 from invoice date. ACH preferred; check accepted. Professional services are not subject to Colorado sales tax.</li>
+    </ol>
+    <div class="sub-h" style="margin-top: 14px">Acceptance</div>
+    <div class="acceptance-note">Signature below authorizes Mouliqe to begin Workstream 1 per the scope and investment described in this proposal. A detailed Statement of Work will accompany kickoff and supersede any conflicting language in this document.</div>
+    <div class="sig-grid">
+      <div class="sig-block"><div class="line"></div><div class="label">Signature — City of Greeley</div><div class="role">Kylie Jackson <span class="sub">/ Director of Innovation &amp; High Performance</span></div><div style="margin-top:12px; display:flex; gap:12px"><div style="flex:1"><div class="line" style="height:22px"></div><div class="label">Date</div></div></div></div>
+      <div class="sig-block"><div class="line"></div><div class="label">Signature — Mouliqe LLC</div><div class="role">Imtiaz Ahmed <span class="sub">/ Founder &amp; Principal</span></div><div style="margin-top:12px; display:flex; gap:12px"><div style="flex:1"><div class="line" style="height:22px"></div><div class="label">Date</div></div></div></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 13 of 14</span></div>
+</div>
+
+<!-- PAGE 14 — APPENDICES A + B + C -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Service Proposal · City of Greeley</span><span>PROP-2026-GRE-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">A —</span><h2>Discovery call summary</h2></div>
+    <p>A 25-minute discovery call was conducted on April 24, 2026 between Imtiaz Ahmed (Mouliqe) and Kylie Jackson (City of Greeley). The call covered the Innovation department's mandate, current technology landscape, AI adoption status, operational pain points, and procurement process. Key findings are reflected throughout this document. A follow-up exchange on April 30, 2026 confirmed the full systems inventory, GovAI adoption metrics (200 active users, agents in HR/PMO/economic development/real estate), and work order volume data used in the Current State Assessment and ROI Projections.</p>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">B —</span><h2>Systems inventory reference</h2></div>
+    <p>A complete systems inventory table is included in the Current State Assessment section of this document (page 3). It will be validated and expanded during the Workstream 1 assessment through direct engagement with department leads and IT staff. The Workstream 1 deliverable extends this baseline with: data flow mapping between systems, API availability per platform, identified integration gaps, and a prioritized list of cross-system connections that would unlock the most operational value if built.</p>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">C —</span><h2>About The Mouliqe Way</h2></div>
+    <p>The Mouliqe Way is a six-stage consulting framework designed for organizations that need structured support without open-ended engagements. Each stage produces a concrete deliverable; the next stage is only authorized once the previous one is accepted.</p>
+    <div class="stages-list" style="margin-top: 14px; border-top: 1px solid var(--l-rule); border-bottom: 1px solid var(--l-rule);">
+      <div class="stage-row"><span class="stg-num">00</span><span class="stg-name">Discovery</span><span class="stg-desc">Initial conversation to understand needs and context.</span></div>
+      <div class="stage-row"><span class="stg-num">01</span><span class="stg-name">Diagnosis</span><span class="stg-desc">Assessment and proposal document — this document.</span></div>
+      <div class="stage-row"><span class="stg-num">02</span><span class="stg-name">Blueprint</span><span class="stg-desc">Detailed technical architecture and implementation plan.</span></div>
+      <div class="stage-row"><span class="stg-num">03</span><span class="stg-name">Build</span><span class="stg-desc">Phased, milestone-driven implementation.</span></div>
+      <div class="stage-row"><span class="stg-num">04</span><span class="stg-name">Refine</span><span class="stg-desc">Post-launch tuning and optimization.</span></div>
+      <div class="stage-row"><span class="stg-num">05</span><span class="stg-name">Support</span><span class="stg-desc">Ongoing support — 2 months included with project; additional support priced separately.</span></div>
+    </div>
+    <p style="margin-top: 14px">This proposal represents Stage 01 (Diagnosis). The proposed engagement covers Stages 02 through 05 for the Phase 1 scope described in Sections 03 and 04.</p>
+    <div class="callout" style="margin-top: 18px">
+      <div class="title">Next step</div>
+      <p>Sign and return page 13 to authorize Workstream 1 kickoff. Mouliqe will issue the kickoff invoice (M1 — $12,600) within two business days of countersignature, schedule the kickoff call, and begin stakeholder interview coordination within five business days.</p>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 14 of 14 — End of document</span></div>
+</div>
+
+</body>
+</html>

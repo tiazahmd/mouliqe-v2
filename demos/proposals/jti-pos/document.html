@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mouliqe × Parlance — POS Shopper Behavior Analytics Platform</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/templates/proposal.css">
+<link rel="stylesheet" href="/css/templates/proposal-toolbar.css">
+<style>
+  .cover { background: var(--l-bg); display: flex; flex-direction: column; justify-content: space-between; padding: 1in 0.9in; }
+  .cover .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover .top .meta { text-align: right; font-size: 10px; color: var(--l-ink-4); line-height: 1.7; letter-spacing: 0.04em; }
+  .cover .middle { padding: 40px 0; }
+  .cover .middle .eyebrow { margin-bottom: 16px; }
+  .cover .middle h1 { font-size: 36px; line-height: 1.12; color: var(--l-ink); max-width: 90%; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .cover .middle h1 .accent { color: var(--l-forest-700); }
+  .cover .middle .subhead { font-size: 14px; color: var(--l-ink-3); max-width: 82%; line-height: 1.6; }
+  .cover .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 24px 0; border-top: 1px solid var(--l-rule); border-bottom: 1px solid var(--l-rule); }
+  .cover .party .label { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .cover .party .name { font-size: 14px; font-weight: 700; color: var(--l-ink); margin-bottom: 4px; }
+  .cover .party .detail { font-size: 10px; color: var(--l-ink-3); line-height: 1.65; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover .bottom .doc-id { font-size: 10px; color: var(--l-ink-4); letter-spacing: 0.08em; max-width: 60%; }
+  .cover .bottom .doc-id strong { color: var(--l-ink); display: block; font-size: 12px; margin-bottom: 2px; }
+  .content-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--l-rule); margin-bottom: 22px; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.1em; text-transform: uppercase; }
+  .content-header .title { color: var(--l-ink); font-weight: 700; }
+  .content-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--l-rule); display: flex; justify-content: space-between; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.06em; }
+  .section-title { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; padding-top: 4px; }
+  .section-title .n { font-size: 12px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+  .section-title h2 { font-size: 20px; color: var(--l-ink); }
+  .section + .section { margin-top: 22px; }
+  .section p { font-size: 11.5px; color: var(--l-ink-3); line-height: 1.65; }
+  .section p + p { margin-top: 8px; }
+  .sub-h { font-size: 12px; color: var(--l-ink); font-weight: 700; margin: 14px 0 6px; letter-spacing: -0.005em; }
+  .micro-eyebrow { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin: 14px 0 6px; }
+  .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .obj-card { padding: 12px 16px; background: var(--l-bg-subtle); border-left: 2px solid var(--l-forest-700); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+  .obj-card h4 { font-size: 11px; color: var(--l-ink); margin-bottom: 4px; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .obj-card p { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  .toc { margin-top: 16px; }
+  .toc-row { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dotted var(--l-rule); font-size: 11px; }
+  .toc-row .num { color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.12em; min-width: 32px; }
+  .toc-row .title { color: var(--l-ink); flex: 1; font-weight: 600; }
+  .toc-row .pg { color: var(--l-ink-4); font-variant-numeric: tabular-nums; }
+  .diff-item { margin-bottom: 14px; }
+  .diff-item h4 { font-size: 12px; color: var(--l-ink); font-weight: 700; text-transform: none; letter-spacing: 0; margin-bottom: 4px; }
+  .diff-item p { font-size: 11px; color: var(--l-ink-3); line-height: 1.6; }
+  .cap-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .cap-card { padding: 10px 14px; background: var(--l-bg-subtle); border-left: 2px solid var(--l-forest-700); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+  .cap-card.blue { border-left-color: var(--l-blue); }
+  .cap-card.amber { border-left-color: var(--l-amber); }
+  .cap-card.purple { border-left-color: var(--l-purple); }
+  .cap-card h4 { font-size: 10px; color: var(--l-ink); margin-bottom: 3px; font-weight: 700; text-transform: none; letter-spacing: 0; }
+  .cap-card p { font-size: 9.5px; color: var(--l-ink-3); line-height: 1.5; }
+  .pipe-step { display: grid; grid-template-columns: 48px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--l-rule-faint); align-items: start; }
+  .pipe-step:last-child { border-bottom: none; }
+  .pipe-num { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; }
+  .pipe-num.blue { background: #eff6ff; border: 1px solid var(--l-blue); color: var(--l-blue); }
+  .pipe-num.amber { background: #fef9ed; border: 1px solid var(--l-amber); color: var(--l-amber); }
+  .pipe-num.purple { background: #f5f3ff; border: 1px solid var(--l-purple); color: var(--l-purple); }
+  .pipe-num.green { background: var(--l-bg-tint); border: 1px solid var(--l-forest-700); color: var(--l-forest-700); }
+  .pipe-label { font-size: 12px; font-weight: 700; color: var(--l-ink); margin-bottom: 3px; }
+  .pipe-desc { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  .layer-box { padding: 14px 16px; border: 1px solid var(--l-rule); border-radius: var(--r-md); margin-bottom: 10px; }
+  .layer-box .layer-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--l-rule-faint); }
+  .layer-badge { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; }
+  .layer-badge.l1 { background: #eff6ff; border: 1px solid var(--l-blue); color: var(--l-blue); }
+  .layer-badge.l2 { background: #fef9ed; border: 1px solid var(--l-amber); color: var(--l-amber); }
+  .layer-badge.l3 { background: var(--l-bg-tint); border: 1px solid var(--l-forest-700); color: var(--l-forest-700); }
+  .layer-title { font-size: 12px; font-weight: 700; color: var(--l-ink); }
+  .layer-items { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+  .layer-item { font-size: 10px; color: var(--l-ink-3); padding-left: 12px; position: relative; line-height: 1.5; }
+  .layer-item::before { content: '\203A'; position: absolute; left: 0; color: var(--l-forest-700); font-weight: 700; }
+  .partner-block { padding: 14px 16px; border: 1px solid var(--l-rule); border-radius: var(--r-md); margin-bottom: 10px; }
+  .partner-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .partner-name.parlance { color: var(--l-blue); }
+  .partner-name.mouliqe { color: var(--l-forest-700); }
+  .partner-role { font-size: 9px; font-weight: 700; color: var(--l-ink-4); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+  .partner-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+  .partner-pill { font-size: 9px; padding: 2px 8px; border-radius: 3px; font-weight: 600; }
+  .partner-pill.blue { background: #eff6ff; color: var(--l-blue); }
+  .partner-pill.green { background: var(--l-bg-tint); color: var(--l-forest-700); }
+  .flow-arrow { text-align: center; padding: 6px 0; font-size: 9px; font-weight: 700; color: var(--l-ink-4); letter-spacing: 0.1em; }
+  .stages-list .stage-row { display: grid; grid-template-columns: 50px 130px 1fr; gap: 14px; padding: 8px 0; border-bottom: 1px solid var(--l-rule-faint); align-items: baseline; }
+  .stages-list .stage-row:last-child { border-bottom: 0; }
+  .stages-list .stage-row .stg-num { font-size: 11px; color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+  .stages-list .stage-row .stg-name { font-size: 11px; font-weight: 700; color: var(--l-ink); }
+  .stages-list .stage-row .stg-desc { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.5; }
+  .page { padding: 0.75in 0.85in; }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <span class="toolbar-label">JTI POS Proposal</span>
+  <button class="primary" onclick="window.print()">Print / PDF</button>
+</div>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" width="300" height="38" aria-label="Mouliqe">
+      <text x="0" y="32" font-family="Oxanium, sans-serif" font-weight="700" font-size="32" letter-spacing="5.2" fill="#0a0f1a">MOULIQE</text>
+      <circle cx="291" cy="28" r="3.8" fill="#15803d"></circle>
+    </svg>
+    <div class="meta">
+      <span style="display:block; font-size:9px; color:var(--l-forest-700); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:4px;">Technical Proposal</span>
+      PROP-2026-JTI-01<br>
+      Issued · May 2026
+    </div>
+  </div>
+  <div class="middle">
+    <p class="eyebrow">Mouliqe × Parlance Consulting Services Ltd.</p>
+    <h1>POS shopper behavior <span class="accent">analytics platform.</span></h1>
+    <p class="subhead">An AI-powered computer vision system for capturing, analyzing, and reporting in-store shopper behavior at the point of sale. Designed for batch processing, on-site privacy, and scale from pilot to nationwide deployment.</p>
+  </div>
+  <div class="parties">
+    <div class="party">
+      <div class="label">Technology Partner</div>
+      <div class="name">Mouliqe LLC</div>
+      <div class="detail">Imtiaz Ahmed, Founder &amp; Principal<br>AI Solutions &amp; Data Architecture<br>hello@mouliqe.com · mouliqe.com</div>
+    </div>
+    <div class="party">
+      <div class="label">Research &amp; Field Operations Partner</div>
+      <div class="name">Parlance Consulting Services Ltd.</div>
+      <div class="detail">Market Research &amp; Consumer Insights<br>Dhaka, Bangladesh</div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="doc-id">
+      <strong>Confidential</strong>
+      This document contains commercially sensitive technical architecture and partnership details. Do not distribute without consent of the parties named above.
+    </div>
+    <div style="font-size:9px; color: var(--l-ink-4); text-align:right; letter-spacing: 0.1em;">
+      VA BUSINESS ID 12001838<br>SAM.gov UEI · RYLMK67D8W45
+    </div>
+  </div>
+</div>
