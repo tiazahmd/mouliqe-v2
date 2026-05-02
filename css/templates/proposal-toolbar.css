@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Screen-only toolbar for printable business templates.
+   Hidden in print. Include AFTER proposal.css.
+   ========================================================================== */
+
+.toolbar {
+  position: fixed; top: 16px; right: 16px; z-index: 10;
+  display: inline-flex; gap: 8px; padding: 8px;
+  background: #ffffff; border: 1px solid var(--l-rule);
+  border-radius: var(--r-lg); box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-size: 11px; color: var(--l-ink-3);
+}
+.toolbar button, .toolbar a {
+  font-family: inherit; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  padding: 8px 12px; border-radius: var(--r-md);
+  border: 1px solid var(--l-rule); background: var(--l-bg);
+  color: var(--l-ink); cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px; line-height: 1;
+  transition: all 0.15s;
+}
+.toolbar button:hover, .toolbar a:hover {
+  background: var(--l-bg-tint); border-color: var(--l-forest-700);
+  color: var(--l-forest-800);
+}
+.toolbar button.primary, .toolbar a.primary {
+  background: var(--l-forest-700); color: #fff; border-color: var(--l-forest-700);
+}
+.toolbar button.primary:hover, .toolbar a.primary:hover {
+  background: var(--l-forest-800); color: #fff;
+}
+.toolbar-label {
+  padding: 8px 6px 8px 10px; color: var(--l-ink-4);
+  font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em;
+  border-right: 1px solid var(--l-rule); margin-right: 4px;
+}
+
+@media print {
+  .toolbar { display: none !important; }
+}
