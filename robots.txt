@@ -1,5 +1,28 @@
 User-agent: *
 Allow: /
 Disallow: /demos/outreach/
+Disallow: /demos/proposals/
+
+# Block AI crawlers from proposals
+User-agent: GPTBot
+Disallow: /demos/proposals/
+
+User-agent: ChatGPT-User
+Disallow: /demos/proposals/
+
+User-agent: anthropic-ai
+Disallow: /demos/proposals/
+
+User-agent: ClaudeBot
+Disallow: /demos/proposals/
+
+User-agent: CCBot
+Disallow: /demos/proposals/
+
+User-agent: Google-Extended
+Disallow: /demos/proposals/
+
+User-agent: Bytespider
+Disallow: /demos/proposals/
 
 Sitemap: https://mouliqe.com/sitemap.xml
