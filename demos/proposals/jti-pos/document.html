@@ -138,3 +138,248 @@
     </div>
   </div>
 </div>
+
+<!-- PAGE 2 — TOC + EXECUTIVE SUMMARY -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Shopper Behavior Analytics</span><span>PROP-2026-JTI-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>Contents</h2></div>
+    <div class="toc">
+      <div class="toc-row"><span class="num">01</span><span class="title">Executive summary</span><span class="pg">2</span></div>
+      <div class="toc-row"><span class="num">02</span><span class="title">The opportunity</span><span class="pg">3</span></div>
+      <div class="toc-row"><span class="num">03</span><span class="title">What we capture</span><span class="pg">3</span></div>
+      <div class="toc-row"><span class="num">04</span><span class="title">How it works</span><span class="pg">4</span></div>
+      <div class="toc-row"><span class="num">05</span><span class="title">The platform</span><span class="pg">5</span></div>
+      <div class="toc-row"><span class="num">06</span><span class="title">The Mouliqe–Parlance partnership</span><span class="pg">6</span></div>
+      <div class="toc-row"><span class="num">07</span><span class="title">About Mouliqe</span><span class="pg">7</span></div>
+      <div class="toc-row"><span class="num">08</span><span class="title">Next steps</span><span class="pg">7</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">01 —</span><h2>Executive summary</h2></div>
+    <p style="font-size: 12.5px; color: var(--l-ink-2); line-height: 1.7; margin-bottom: 8px">In physical retail, the point of sale is the most valuable real estate in the store. It is where purchase decisions are made, where brand visibility converts to revenue, and where placement strategy either works or fails. Yet in most emerging markets, there is no systematic data on what actually happens there.</p>
+    <p>E-commerce platforms track every click, scroll, and hover. They generate heatmaps, session recordings, and conversion funnels that tell brands exactly where attention goes and where it doesn't. Physical retail has no equivalent. Placement decisions — where to position products, signage, and displays — are made on intuition, historical convention, and anecdotal feedback. The cost of this blind spot is unmeasured but significant: brands invest heavily in point-of-sale materials with no way to validate whether shoppers actually see them, engage with them, or ignore them entirely.</p>
+    <p>Modern computer vision and AI make it possible to close this gap. Using strategically placed cameras and advanced behavioral analytics, it is now feasible to capture the same depth of shopper behavior data in a physical retail environment that digital platforms have had for decades — without requiring shoppers to wear devices, answer surveys, or change their behavior in any way.</p>
+    <p>This document proposes a POS Shopper Behavior Analytics Platform: an AI-powered computer vision system designed to capture, analyze, and report in-store shopper behavior across a pilot network of retail locations. The platform is designed for batch processing (no live streaming or cloud dependency), on-site privacy (raw footage never leaves the store), and scalability (from a 50-store pilot to nationwide deployment).</p>
+    <p>The platform is delivered through a strategic partnership between <strong>Mouliqe</strong> (AI architecture, computer vision platform, and analytics engine) and <strong>Parlance Consulting Services Ltd.</strong> (market research methodology, field operations, retailer relationships, and regulatory compliance). The client receives a unified deliverable — not two separate workstreams.</p>
+    <div class="micro-eyebrow" style="margin-top: 16px">Guiding principles</div>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Privacy by architecture</h4><p>Raw video never enters the data pipeline. Anonymization happens at the edge, during processing. The central platform only receives structured, non-identifiable data points.</p></div>
+      <div class="obj-card"><h4>Batch, not live</h4><p>No internet required at retail sites. Footage is recorded locally and processed on a scheduled basis using portable hardware. Designed for infrastructure-constrained environments.</p></div>
+      <div class="obj-card"><h4>Research-grade, honestly framed</h4><p>Camera-based gaze estimation is directional intelligence, not laboratory precision. Outputs are framed as behavioral signals, calibrated against ground-truth, with accuracy reported transparently.</p></div>
+      <div class="obj-card"><h4>Built to scale</h4><p>Per-store configuration without code changes. A small kiosk and a large retail outlet use the same platform with different spatial parameters. Designed for 50 stores, architected for thousands.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 2 of 7</span></div>
+</div>
+
+<!-- PAGE 3 — THE OPPORTUNITY + WHAT WE CAPTURE -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Shopper Behavior Analytics</span><span>PROP-2026-JTI-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">02 —</span><h2>The opportunity</h2></div>
+    <p>The global in-store analytics market was valued at $5.3 billion in 2023 and is projected to reach $16.5 billion by 2030, growing at a compound annual rate of 21.8%. This growth is driven by a simple reality: physical retail has operated without the behavioral intelligence that digital commerce has had for over a decade.</p>
+    <p>In digital retail, every interaction is instrumented. Click-through rates, scroll depth, hover duration, session recordings, and conversion funnels provide a complete picture of how shoppers engage with products and content. In physical retail — particularly in emerging markets — the equivalent data does not exist. There are no heatmaps showing where shoppers look. No dwell-time analysis showing which displays hold attention. No A/B testing framework for comparing product placement strategies.</p>
+    <p>The consequence is that every decision about product placement, signage positioning, and display design at the point of sale is a hypothesis that cannot be validated. Brands invest in POS materials based on convention, intuition, and periodic manual audits. The gap between what is spent on POS strategy and what is known about its effectiveness is significant — and until recently, it was technically impractical to close.</p>
+    <p>Advances in computer vision, pose estimation, and gaze inference have changed this. It is now possible to extract rich behavioral data from standard camera footage without requiring shoppers to wear devices, participate in studies, or alter their natural behavior. The technology exists. What has been missing is a platform designed specifically for the constraints of emerging-market retail: variable infrastructure, batch processing requirements, strict privacy needs, and the ability to scale across hundreds of diverse store formats.</p>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">03 —</span><h2>What we capture</h2></div>
+    <p>The platform extracts a full spectrum of shopper behavior metrics from standard camera footage. Each metric is produced through the computer vision pipeline described in Section 04, with no wearable devices or shopper participation required.</p>
+    <div class="cap-grid">
+      <div class="cap-card"><h4>Foot Traffic &amp; Flow</h4><p>Visitor count, entry/exit patterns, peak hours, movement paths through the retail space.</p></div>
+      <div class="cap-card"><h4>Dwell Time Analysis</h4><p>Time spent in specific zones — counter, product displays, signage areas. Strong predictor of purchase intent.</p></div>
+      <div class="cap-card blue"><h4>Gaze Direction</h4><p>Head pose and gaze estimation — which shelf sections, product tiers, and signage capture visual attention.</p></div>
+      <div class="cap-card blue"><h4>Attention Heatmaps</h4><p>Aggregated visual attention rendered as spatial heatmaps. Identifies hot zones and dead zones across the store.</p></div>
+      <div class="cap-card amber"><h4>Product Interaction</h4><p>Pick-up, examination, and put-back detection. Measures the gap between visual attention and physical engagement.</p></div>
+      <div class="cap-card amber"><h4>Demographic Segments</h4><p>Anonymous age-range and gender estimation for behavioral segmentation. No facial recognition or PII.</p></div>
+      <div class="cap-card purple"><h4>Queue &amp; Purchase</h4><p>Queue time, purchase completion patterns, POS interaction duration. Correlates wait time with browsing behavior.</p></div>
+      <div class="cap-card purple"><h4>Temporal Patterns</h4><p>Behavioral variation by time of day, day of week, and season. Identifies peak attention windows.</p></div>
+      <div class="cap-card"><h4>A/B Placement Testing</h4><p>Compare metrics across store groups with different configurations. Statistically validate which arrangements work.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 3 of 7</span></div>
+</div>
+
+<!-- PAGE 4 — HOW IT WORKS -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Shopper Behavior Analytics</span><span>PROP-2026-JTI-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">04 —</span><h2>How it works</h2></div>
+    <p>The platform uses a batch processing model designed for reliability, privacy, and infrastructure constraints. There is no live streaming, no cloud dependency, and no internet required at the retail site. Raw footage never leaves the store.</p>
+    <div style="margin-top: 14px">
+      <div class="pipe-step">
+        <div class="pipe-num blue">01</div>
+        <div>
+          <div class="pipe-label">Capture</div>
+          <div class="pipe-desc">Strategically positioned cameras record shopper activity during operating hours. Footage is stored locally on-site using standard storage devices. Camera placement is optimized per store layout to maximize coverage of POS zones, product displays, and high-traffic areas. No internet connectivity is required at the retail site.</div>
+        </div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num amber">02</div>
+        <div>
+          <div class="pipe-label">Process</div>
+          <div class="pipe-desc">A portable processing unit is brought to the retail site on a scheduled basis. The unit runs the full computer vision pipeline locally: person detection and multi-object tracking, 3D skeleton reconstruction for body pose and head orientation, gaze inference from head pose estimation, zone-based dwell analysis with configurable regions of interest, and product interaction detection. All processing happens on-site. Raw footage is never transferred, uploaded, or transmitted.</div>
+        </div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num purple">03</div>
+        <div>
+          <div class="pipe-label">Extract</div>
+          <div class="pipe-desc">The processing pipeline outputs structured, anonymized data points — not video. Timestamps, zone attention scores, dwell durations, gaze heatmap coordinates, interaction events, and demographic segment estimates are extracted into a standardized schema. All personally identifiable information is discarded during processing. The output is a structured dataset that contains no images, no video frames, and no biometric data.</div>
+        </div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num green">04</div>
+        <div>
+          <div class="pipe-label">Analyze &amp; Report</div>
+          <div class="pipe-desc">Extracted data from all retail sites is aggregated into the central analytics platform. Interactive dashboards provide filtering by store, zone, time period, and demographic segment. Spatial attention heatmaps are overlaid on store layout diagrams. A/B comparison tools enable testing placement changes across store groups. Automated report generation produces periodic research deliverables. Raw data exports and API access are available for integration with existing business intelligence platforms.</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 16px; padding: 12px 16px; background: var(--l-bg-tint); border: 1px solid var(--l-forest-200); border-radius: var(--r-md);">
+      <div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px;">Privacy architecture</div>
+      <p style="font-size: 10.5px; margin: 0">Privacy is not a policy layer added after the system is built — it is an architectural decision. The data pipeline is designed so that raw video never enters it. Anonymization happens at the edge, during processing. The central analytics platform only receives structured, non-identifiable data points. This is not a feature of the system. It is how the system is designed.</p>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 4 of 7</span></div>
+</div>
+
+<!-- PAGE 5 — THE PLATFORM -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Shopper Behavior Analytics</span><span>PROP-2026-JTI-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">05 —</span><h2>The platform</h2></div>
+    <p>Three layers — edge processing, data pipeline, and analytics — designed to scale from a 50-store pilot to nationwide deployment. Each layer is independently configurable per store without code changes.</p>
+    <div style="margin-top: 14px">
+      <div class="layer-box">
+        <div class="layer-head">
+          <div class="layer-badge l1">L1</div>
+          <div class="layer-title">Edge Processing Engine</div>
+        </div>
+        <p style="font-size: 10.5px; margin-bottom: 8px">The core computer vision pipeline running on portable hardware. Processes recorded footage on-site and outputs structured behavioral data.</p>
+        <div class="layer-items">
+          <div class="layer-item">Person detection (state-of-the-art real-time models)</div>
+          <div class="layer-item">Multi-object tracking across frames</div>
+          <div class="layer-item">3D skeleton reconstruction</div>
+          <div class="layer-item">Head pose estimation</div>
+          <div class="layer-item">Gaze inference from head orientation</div>
+          <div class="layer-item">Zone-based spatial analysis</div>
+          <div class="layer-item">Product interaction detection</div>
+          <div class="layer-item">Demographic classification (anonymous)</div>
+        </div>
+      </div>
+      <div class="layer-box">
+        <div class="layer-head">
+          <div class="layer-badge l2">L2</div>
+          <div class="layer-title">Data Pipeline &amp; Storage</div>
+        </div>
+        <p style="font-size: 10.5px; margin-bottom: 8px">Structured data extraction with full anonymization at the edge. Standardized schema across all retail sites for consistent aggregation and historical analysis.</p>
+        <div class="layer-items">
+          <div class="layer-item">Edge anonymization — no raw video in pipeline</div>
+          <div class="layer-item">Standardized output schema across all sites</div>
+          <div class="layer-item">Batch upload from portable units</div>
+          <div class="layer-item">Central data warehouse</div>
+          <div class="layer-item">Historical trend storage</div>
+          <div class="layer-item">Data validation and quality checks</div>
+        </div>
+      </div>
+      <div class="layer-box">
+        <div class="layer-head">
+          <div class="layer-badge l3">L3</div>
+          <div class="layer-title">Analytics &amp; Reporting</div>
+        </div>
+        <p style="font-size: 10.5px; margin-bottom: 8px">Interactive dashboards, spatial heatmaps, and automated reporting. Designed for both research analysts and business stakeholders.</p>
+        <div class="layer-items">
+          <div class="layer-item">Interactive dashboards with multi-dimensional filtering</div>
+          <div class="layer-item">Spatial attention heatmaps on store layouts</div>
+          <div class="layer-item">A/B comparison tools for placement testing</div>
+          <div class="layer-item">Automated periodic report generation</div>
+          <div class="layer-item">Raw data export (CSV, JSON)</div>
+          <div class="layer-item">API access for BI platform integration</div>
+        </div>
+      </div>
+    </div>
+    <div class="sub-h" style="margin-top: 12px">Per-store configuration</div>
+    <p>Every retail environment is different. The platform supports per-store configuration: camera positions, zone definitions, region-of-interest boundaries, and analysis parameters are all adjustable without code changes. A small roadside kiosk and a large retail outlet use the same platform with different spatial configurations. New stores are onboarded by defining their layout and zone map — not by writing custom code.</p>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 5 of 7</span></div>
+</div>
+
+<!-- PAGE 6 — THE PARTNERSHIP -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Shopper Behavior Analytics</span><span>PROP-2026-JTI-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">06 —</span><h2>The Mouliqe–Parlance partnership</h2></div>
+    <p>This platform is delivered through a strategic partnership that combines deep market research expertise with advanced AI and data architecture capability. Each firm brings a distinct and complementary set of capabilities. The client receives a single, integrated deliverable — not two separate workstreams.</p>
+    <div style="margin-top: 14px">
+      <div class="partner-block">
+        <div class="partner-name parlance">Parlance Consulting Services Ltd.</div>
+        <div class="partner-role">Market Research &amp; Field Operations</div>
+        <p style="font-size: 10.5px; margin-bottom: 8px">Parlance owns the client relationship, research methodology, and physical deployment. With decades of experience in consumer research and direct relationships with retailers across Bangladesh, Parlance provides the domain expertise and field infrastructure that makes the technology meaningful.</p>
+        <div class="partner-pills">
+          <span class="partner-pill blue">Client relationship</span>
+          <span class="partner-pill blue">Retailer recruitment</span>
+          <span class="partner-pill blue">Camera installation &amp; maintenance</span>
+          <span class="partner-pill blue">Regulatory compliance</span>
+          <span class="partner-pill blue">Research methodology</span>
+          <span class="partner-pill blue">Research interpretation &amp; reporting</span>
+        </div>
+      </div>
+      <div class="flow-arrow">RESEARCH QUESTIONS ↓ &nbsp;&nbsp;&nbsp; ↑ DATA &amp; ANALYTICS</div>
+      <div class="partner-block">
+        <div class="partner-name mouliqe">Mouliqe LLC</div>
+        <div class="partner-role">AI Architecture &amp; Platform Engineering</div>
+        <p style="font-size: 10.5px; margin-bottom: 8px">Mouliqe designs and builds the technology stack — from the edge computer vision pipeline to the central analytics dashboards. With production AI systems experience, data engineering infrastructure expertise, and a track record of building systems that reduce manual processing by 80–95%, Mouliqe provides the technical architecture that turns raw camera footage into structured behavioral intelligence.</p>
+        <div class="partner-pills">
+          <span class="partner-pill green">Computer vision pipeline</span>
+          <span class="partner-pill green">Edge processing engine</span>
+          <span class="partner-pill green">Data architecture &amp; pipeline</span>
+          <span class="partner-pill green">Analytics engine</span>
+          <span class="partner-pill green">Dashboard &amp; reporting platform</span>
+          <span class="partner-pill green">API &amp; data export</span>
+        </div>
+      </div>
+    </div>
+    <div class="sub-h" style="margin-top: 16px">How it works together</div>
+    <p>Parlance defines what needs to be measured and manages the physical deployment across retail sites. Mouliqe builds the tools that do the measuring and produces the data. Research questions flow from Parlance to Mouliqe as platform requirements — what zones to track, what behaviors to prioritize, what comparisons to enable. Structured data and analytics flow from Mouliqe back to Parlance as research outputs — dashboards, heatmaps, trend reports, and raw data for custom analysis.</p>
+    <p>This model ensures that every technical capability is grounded in research methodology, and every research question is backed by a platform that can answer it at scale. Market research without technology is limited to surveys and manual observation. Technology without market research expertise produces data without context. The partnership eliminates both failure modes.</p>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 6 of 7</span></div>
+</div>
+
+<!-- PAGE 7 — ABOUT MOULIQE + NEXT STEPS -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Shopper Behavior Analytics</span><span>PROP-2026-JTI-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">07 —</span><h2>About Mouliqe</h2></div>
+    <p>Mouliqe (pronounced /moʊ.liːk/, Bangla for "fundamental") is an AI solutions and data architecture consultancy built on a simple principle: AI is only as good as the architecture underneath it. The firm specializes in three areas: AI solutions and architecture, data engineering and infrastructure, and analytics and business intelligence.</p>
+    <p>Mouliqe's founding team brings over a decade of experience across marketing analytics, data engineering, and AI architecture, with a track record of building production AI systems that reduce manual processing time by 80 to 95 percent, cut reporting cycles from hours to minutes, and recover hundreds of employee hours annually. That experience spans Fortune-level enterprises, cloud-scale data platforms, and applied AI initiatives taken from concept through production deployment with proper guardrails, validation layers, and governance frameworks.</p>
+    <p>The firm's approach is built around three commitments. First, build within the client's existing constraints rather than introducing unnecessary complexity. Second, deliver working systems, not prototypes that break under real-world conditions. Third, ensure every engagement includes documentation designed for non-technical users so internal teams can maintain and evolve what was built without ongoing consultant dependency. The goal is always to build capacity, not create reliance.</p>
+    <div class="sub-h" style="margin-top: 12px">Why Mouliqe for this project</div>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Intersection of all three pillars</h4><p>This project requires computer vision AI, edge-to-cloud data pipelines, and analytical dashboards. It is not adjacent to what Mouliqe does — it is exactly what Mouliqe does.</p></div>
+      <div class="obj-card"><h4>Production-grade engineering</h4><p>Systems designed for variable lighting, camera angles, and store layouts without manual tuning per site. Built for the real world, not the demo room.</p></div>
+      <div class="obj-card"><h4>Foundation-first architecture</h4><p>Data schema before dashboards. Anonymization before pipelines. The platform is built to evolve and scale, not to be rebuilt when requirements change.</p></div>
+      <div class="obj-card"><h4>Honest about AI limitations</h4><p>Camera-based gaze estimation is directional intelligence, not lab-grade precision. Accuracy is reported transparently and calibrated against ground-truth observations.</p></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">08 —</span><h2>Next steps</h2></div>
+    <p>This document outlines the platform architecture and partnership model at a conceptual level. The following steps move the engagement from concept to execution.</p>
+    <div style="margin-top: 10px">
+      <div class="diff-item"><h4>1. Define pilot parameters</h4><p>Number of retail sites, store types, geographic distribution, pilot duration, and specific research questions to be answered. These parameters drive hardware specifications, processing schedules, and analytics configuration.</p></div>
+      <div class="diff-item"><h4>2. Technical blueprint</h4><p>A detailed technical architecture document covering hardware specifications, software stack, data schema, processing pipeline design, dashboard wireframes, and deployment plan. This is the engineering specification that turns the conceptual platform into a buildable system.</p></div>
+      <div class="diff-item"><h4>3. Pilot site assessment</h4><p>On-site evaluation of representative retail locations to determine camera placement, power and storage requirements, physical constraints, and site-specific configuration needs. Conducted jointly by Parlance (field logistics) and Mouliqe (technical requirements).</p></div>
+      <div class="diff-item"><h4>4. Scope, timeline, and investment</h4><p>With pilot parameters and site assessment complete, Mouliqe and Parlance will deliver a detailed scope of work with timeline, milestones, and investment breakdown. No estimates without evidence — the numbers will be grounded in the actual requirements discovered during the previous steps.</p></div>
+    </div>
+    <div style="margin-top: 14px; padding: 14px 16px; background: var(--l-bg-tint); border: 1px solid var(--l-forest-200); border-radius: var(--r-md);">
+      <div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px;">The Mouliqe Way</div>
+      <p style="font-size: 10.5px; margin: 0">Mouliqe follows a structured six-stage consulting process: Discovery, Diagnosis, Blueprint, Build, Refine, and Support. This document represents the Diagnosis stage — an assessment of the opportunity and a recommendation for how to proceed. The next stage (Blueprint) produces the detailed technical architecture. No stage begins until the previous one is accepted.</p>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 7 of 7 — End of document</span></div>
+</div>
+
+</body>
+</html>
