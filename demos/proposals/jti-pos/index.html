@@ -75,6 +75,64 @@
     .jti-partner-client { padding: 0.5rem 0.75rem; background: var(--p-accent-dim); border: 1px solid var(--p-accent-border); border-radius: 0.375rem; text-align: center; }
     .jti-partner-client-label { font-size: 0.6rem; font-weight: 700; color: var(--p-accent); letter-spacing: 0.1em; text-transform: uppercase; }
     .jti-partner-client-sub { font-size: 0.55rem; color: var(--p-fg-subtle); margin-top: 0.1rem; }
+
+    /* Vision roadmap */
+    .jti-roadmap { width: 100%; position: relative; padding-left: 1.75rem; }
+    .jti-roadmap-line { position: absolute; left: 0.65rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--p-blue), var(--p-amber), var(--p-accent)); }
+    .jti-roadmap-phase { position: relative; padding: 0.75rem 0; }
+    .jti-roadmap-phase + .jti-roadmap-phase { margin-top: 0.25rem; }
+    .jti-roadmap-dot { position: absolute; left: -1.45rem; top: 1rem; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--p-border); background: var(--p-bg-card); }
+    .jti-roadmap-dot.p1 { background: var(--p-blue); border-color: var(--p-blue); box-shadow: 0 0 8px rgba(96,165,250,0.3); }
+    .jti-roadmap-dot.p2 { background: var(--p-amber); border-color: var(--p-amber); box-shadow: 0 0 8px rgba(251,191,36,0.3); }
+    .jti-roadmap-dot.p3 { background: var(--p-accent); border-color: var(--p-accent); box-shadow: 0 0 8px var(--p-accent-glow); }
+    .jti-roadmap-card { padding: 0.75rem; background: var(--p-bg-card); border: 1px solid var(--p-border); border-radius: 0.5rem; }
+    .jti-roadmap-card.p1 { border-left: 3px solid var(--p-blue); }
+    .jti-roadmap-card.p2 { border-left: 3px solid var(--p-amber); }
+    .jti-roadmap-card.p3 { border-left: 3px solid var(--p-accent); }
+    .jti-roadmap-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.2rem; }
+    .jti-roadmap-label.p1 { color: var(--p-blue); }
+    .jti-roadmap-label.p2 { color: var(--p-amber); }
+    .jti-roadmap-label.p3 { color: var(--p-accent); }
+    .jti-roadmap-title { font-size: 0.82rem; font-weight: 700; color: var(--p-fg); margin-bottom: 0.25rem; }
+    .jti-roadmap-desc { font-size: 0.65rem; color: var(--p-fg-subtle); line-height: 1.5; }
+    .jti-roadmap-output { font-size: 0.58rem; color: var(--p-fg-faint); margin-top: 0.3rem; font-style: italic; }
+
+    /* Model training visual */
+    .jti-model { width: 100%; display: flex; flex-direction: column; gap: 0.375rem; }
+    .jti-model-input { padding: 0.625rem 0.75rem; background: var(--p-bg-card); border: 1px solid var(--p-border); border-left: 3px solid var(--p-blue); border-radius: 0.5rem; }
+    .jti-model-core { padding: 0.75rem; background: var(--p-accent-dim); border: 1px solid var(--p-accent-border); border-radius: 0.5rem; text-align: center; }
+    .jti-model-output { padding: 0.625rem 0.75rem; background: var(--p-bg-card); border: 1px solid var(--p-border); border-left: 3px solid var(--p-accent); border-radius: 0.5rem; }
+    .jti-model-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .jti-model-label.blue { color: var(--p-blue); }
+    .jti-model-label.green { color: var(--p-accent); }
+    .jti-model-label.core { color: var(--p-accent); font-size: 0.65rem; }
+    .jti-model-title { font-size: 0.9rem; font-weight: 700; color: var(--p-accent); margin-bottom: 0.15rem; }
+    .jti-model-sub { font-size: 0.6rem; color: var(--p-fg-subtle); }
+    .jti-model-items { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+    .jti-model-tag { font-size: 0.55rem; padding: 0.1rem 0.4rem; border-radius: 0.2rem; font-weight: 600; }
+    .jti-model-tag.blue { background: var(--p-blue-dim); color: var(--p-blue); }
+    .jti-model-tag.green { background: var(--p-accent-dim); color: var(--p-accent); }
+    .jti-model-arrow { text-align: center; font-size: 0.7rem; color: var(--p-fg-faint); padding: 0.15rem 0; }
+
+    /* Product flow visual */
+    .jti-product { width: 100%; display: flex; flex-direction: column; gap: 0; }
+    .jti-product-step { display: flex; align-items: stretch; gap: 0.75rem; padding: 0.65rem 0.75rem; background: var(--p-bg-card); border: 1px solid var(--p-border); border-radius: 0.5rem; }
+    .jti-product-step:nth-child(1) { border-left: 3px solid var(--p-blue); }
+    .jti-product-step:nth-child(3) { border-left: 3px solid var(--p-amber); }
+    .jti-product-step:nth-child(5) { border-left: 3px solid var(--p-accent); }
+    .jti-product-num { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+    .jti-product-num.n1 { background: var(--p-blue-dim); color: var(--p-blue); border: 1px solid var(--p-blue); }
+    .jti-product-num.n2 { background: var(--p-amber-dim); color: var(--p-amber); border: 1px solid var(--p-amber); }
+    .jti-product-num.n3 { background: var(--p-accent-dim); color: var(--p-accent); border: 1px solid var(--p-accent); }
+    .jti-product-label { font-size: 0.78rem; font-weight: 700; color: var(--p-fg); }
+    .jti-product-desc { font-size: 0.62rem; color: var(--p-fg-subtle); line-height: 1.5; margin-top: 0.1rem; }
+    .jti-product-arrow { width: 2px; height: 12px; background: var(--p-border); margin-left: 1.5rem; position: relative; }
+    .jti-product-arrow::after { content: ''; position: absolute; bottom: -3px; left: -3px; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--p-border); }
+    .jti-product-result { padding: 0.625rem 0.75rem; background: var(--p-accent-dim); border: 1px solid var(--p-accent-border); border-radius: 0.5rem; text-align: center; }
+    .jti-product-result-label { font-size: 0.6rem; font-weight: 700; color: var(--p-accent); letter-spacing: 0.1em; text-transform: uppercase; }
+    .jti-product-result-sub { font-size: 0.55rem; color: var(--p-fg-subtle); margin-top: 0.1rem; }
+    .jti-product-industries { display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.35rem; }
+    .jti-product-ind { font-size: 0.52rem; padding: 0.1rem 0.35rem; border-radius: 0.2rem; background: var(--p-bg-card); border: 1px solid var(--p-border); color: var(--p-fg-subtle); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -252,14 +310,123 @@
               <span class="jti-partner-pill green">CV Pipeline</span>
               <span class="jti-partner-pill green">Edge Processing</span>
               <span class="jti-partner-pill green">Data Architecture</span>
-              <span class="jti-partner-pill green">Analytics Engine</span>
-              <span class="jti-partner-pill green">Dashboards</span>
+              <span class="jti-partner-pill green">Model Development</span>
+              <span class="jti-partner-pill green">Product Engineering</span>
             </div>
           </div>
           <div style="width:2px;height:10px;background:var(--p-border);margin-left:1.5rem"></div>
           <div class="jti-partner-client">
             <div class="jti-partner-client-label">Unified Deliverable</div>
-            <div class="jti-partner-client-sub">One integrated output — not two separate workstreams</div>
+            <div class="jti-partner-client-sub">One integrated output across all three phases</div>
+          </div>
+        </div>`,
+
+      'vision-roadmap': () => `
+        <div class="jti-roadmap">
+          <div class="jti-roadmap-line"></div>
+          <div class="jti-roadmap-phase">
+            <div class="jti-roadmap-dot p1"></div>
+            <div class="jti-roadmap-card p1">
+              <div class="jti-roadmap-label p1">Phase 1 — The Pilot</div>
+              <div class="jti-roadmap-title">Data Collection</div>
+              <div class="jti-roadmap-desc">50-100 stores. Cameras. CV pipeline. Rich behavioral dataset mapping store layouts to attention patterns.</div>
+              <div class="jti-roadmap-output">Output: labeled training dataset + analytics dashboards</div>
+            </div>
+          </div>
+          <div class="jti-roadmap-phase">
+            <div class="jti-roadmap-dot p2"></div>
+            <div class="jti-roadmap-card p2">
+              <div class="jti-roadmap-label p2">Phase 2 — The Model</div>
+              <div class="jti-roadmap-title">Predictive Algorithm</div>
+              <div class="jti-roadmap-desc">Train proprietary model on pilot data. Learn the relationship between store geometry and human attention.</div>
+              <div class="jti-roadmap-output">Output: placement optimization algorithm</div>
+            </div>
+          </div>
+          <div class="jti-roadmap-phase">
+            <div class="jti-roadmap-dot p3"></div>
+            <div class="jti-roadmap-card p3">
+              <div class="jti-roadmap-label p3">Phase 3 — The Product</div>
+              <div class="jti-roadmap-title">Scalable Tool</div>
+              <div class="jti-roadmap-desc">Upload a photo, answer questions, get placement recommendations. No cameras. Scales to every retail location in the network.</div>
+              <div class="jti-roadmap-output">Output: scalable placement tool for the entire retail network</div>
+            </div>
+          </div>
+        </div>`,
+
+      'model-training': () => `
+        <div class="jti-model">
+          <div class="jti-model-input">
+            <div class="jti-model-label blue">Model Inputs (from Phase 1)</div>
+            <div class="jti-model-items">
+              <span class="jti-model-tag blue">Store Geometry</span>
+              <span class="jti-model-tag blue">Layout Type</span>
+              <span class="jti-model-tag blue">Counter Position</span>
+              <span class="jti-model-tag blue">Shelf Config</span>
+              <span class="jti-model-tag blue">Product Positions</span>
+              <span class="jti-model-tag blue">Attention Heatmaps</span>
+              <span class="jti-model-tag blue">Dwell Data</span>
+              <span class="jti-model-tag blue">Gaze Vectors</span>
+            </div>
+          </div>
+          <div class="jti-model-arrow">&#9660;</div>
+          <div class="jti-model-core">
+            <div class="jti-model-label core">Proprietary Algorithm</div>
+            <div class="jti-model-title">Placement Optimization Model</div>
+            <div class="jti-model-sub">Learns: space → attention relationship</div>
+          </div>
+          <div class="jti-model-arrow">&#9660;</div>
+          <div class="jti-model-output">
+            <div class="jti-model-label green">Model Outputs</div>
+            <div class="jti-model-items">
+              <span class="jti-model-tag green">Optimal Positions</span>
+              <span class="jti-model-tag green">Attention Predictions</span>
+              <span class="jti-model-tag green">Confidence Scores</span>
+              <span class="jti-model-tag green">Layout Recommendations</span>
+            </div>
+          </div>
+          <div class="jti-model-arrow">&#9660;</div>
+          <div style="padding:0.4rem 0.6rem;background:var(--p-bg-card);border:1px solid var(--p-border);border-radius:0.375rem;text-align:center">
+            <div style="font-size:0.55rem;font-weight:700;color:var(--p-fg-faint);letter-spacing:0.08em;text-transform:uppercase">Improves With Scale</div>
+            <div style="font-size:0.6rem;color:var(--p-fg-subtle);margin-top:0.1rem">Every new store format + industry adds training data</div>
+          </div>
+        </div>`,
+
+      'product-flow': () => `
+        <div class="jti-product">
+          <div class="jti-product-step">
+            <div class="jti-product-num n1">1</div>
+            <div>
+              <div class="jti-product-label">Upload a Photo</div>
+              <div class="jti-product-desc">Take a photo of the store, counter, or POS area. CV analyzes spatial layout automatically.</div>
+            </div>
+          </div>
+          <div class="jti-product-arrow"></div>
+          <div class="jti-product-step">
+            <div class="jti-product-num n2">2</div>
+            <div>
+              <div class="jti-product-label">Answer Questions</div>
+              <div class="jti-product-desc">Square footage, layout type, product categories, traffic estimate. Simple form, no technical knowledge.</div>
+            </div>
+          </div>
+          <div class="jti-product-arrow"></div>
+          <div class="jti-product-step">
+            <div class="jti-product-num n3">3</div>
+            <div>
+              <div class="jti-product-label">Get Recommendations</div>
+              <div class="jti-product-desc">Visual placement map with ranked positions, predicted impact, and confidence scores.</div>
+            </div>
+          </div>
+          <div class="jti-product-arrow"></div>
+          <div class="jti-product-result">
+            <div class="jti-product-result-label">Scales Across the Network</div>
+            <div class="jti-product-result-sub">Pilot covers 50-100 stores with cameras. The product covers every store without them.</div>
+            <div class="jti-product-industries">
+              <span class="jti-product-ind">Kiosks</span>
+              <span class="jti-product-ind">Corner Shops</span>
+              <span class="jti-product-ind">Convenience</span>
+              <span class="jti-product-ind">Large Retail</span>
+              <span class="jti-product-ind">New Markets</span>
+            </div>
           </div>
         </div>`
     };
