@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mouliqe × Parlance — POS Customer Behavior Analytics Platform</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/templates/proposal.css">
+<link rel="stylesheet" href="/css/templates/proposal-toolbar.css">
+<style>
+  .cover { background: var(--l-bg); display: flex; flex-direction: column; justify-content: space-between; padding: 1in 0.9in; }
+  .cover .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover .top .meta { text-align: right; font-size: 10px; color: var(--l-ink-4); line-height: 1.7; letter-spacing: 0.04em; }
+  .cover .middle { padding: 40px 0; }
+  .cover .middle .eyebrow { margin-bottom: 16px; }
+  .cover .middle h1 { font-size: 36px; line-height: 1.12; color: var(--l-ink); max-width: 90%; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .cover .middle h1 .accent { color: var(--l-forest-700); }
+  .cover .middle .subhead { font-size: 14px; color: var(--l-ink-3); max-width: 82%; line-height: 1.6; }
+  .cover .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 24px 0; border-top: 1px solid var(--l-rule); border-bottom: 1px solid var(--l-rule); }
+  .cover .party .label { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .cover .party .name { font-size: 14px; font-weight: 700; color: var(--l-ink); margin-bottom: 4px; }
+  .cover .party .detail { font-size: 10px; color: var(--l-ink-3); line-height: 1.65; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover .bottom .doc-id { font-size: 10px; color: var(--l-ink-4); max-width: 60%; }
+  .cover .bottom .doc-id strong { color: var(--l-ink); display: block; font-size: 12px; margin-bottom: 2px; }
+  .content-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--l-rule); margin-bottom: 22px; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.1em; text-transform: uppercase; }
+  .content-header .title { color: var(--l-ink); font-weight: 700; }
+  .content-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--l-rule); display: flex; justify-content: space-between; font-size: 9px; color: var(--l-ink-4); }
+  .section-title { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; }
+  .section-title .n { font-size: 12px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.12em; }
+  .section-title h2 { font-size: 20px; color: var(--l-ink); }
+  .section + .section { margin-top: 22px; }
+  .section p { font-size: 11.5px; color: var(--l-ink-3); line-height: 1.65; }
+  .section p + p { margin-top: 8px; }
+  .sub-h { font-size: 12px; color: var(--l-ink); font-weight: 700; margin: 14px 0 6px; }
+  .micro-eyebrow { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin: 14px 0 6px; }
+  .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .obj-card { padding: 12px 16px; background: var(--l-bg-subtle); border-left: 2px solid var(--l-forest-700); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+  .obj-card.blue { border-left-color: var(--l-blue); }
+  .obj-card.amber { border-left-color: var(--l-amber); }
+  .obj-card h4 { font-size: 11px; color: var(--l-ink); margin-bottom: 4px; font-weight: 700; }
+  .obj-card p { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  .toc { margin-top: 16px; }
+  .toc-row { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dotted var(--l-rule); font-size: 11px; }
+  .toc-row .num { color: var(--l-forest-700); font-weight: 700; min-width: 32px; }
+  .toc-row .title { color: var(--l-ink); flex: 1; font-weight: 600; }
+  .toc-row .pg { color: var(--l-ink-4); }
+  .diff-item { margin-bottom: 14px; }
+  .diff-item h4 { font-size: 12px; color: var(--l-ink); font-weight: 700; margin-bottom: 4px; }
+  .diff-item p { font-size: 11px; color: var(--l-ink-3); line-height: 1.6; }
+  .cap-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .cap-card { padding: 10px 14px; background: var(--l-bg-subtle); border-left: 2px solid var(--l-forest-700); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+  .cap-card.blue { border-left-color: var(--l-blue); }
+  .cap-card.amber { border-left-color: var(--l-amber); }
+  .cap-card.purple { border-left-color: var(--l-purple); }
+  .cap-card h4 { font-size: 10px; color: var(--l-ink); margin-bottom: 3px; font-weight: 700; }
+  .cap-card p { font-size: 9.5px; color: var(--l-ink-3); line-height: 1.5; }
+  .pipe-step { display: grid; grid-template-columns: 48px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--l-rule-faint); align-items: start; }
+  .pipe-step:last-child { border-bottom: none; }
+  .pipe-num { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 10px; font-weight: 700; }
+  .pipe-num.blue { background: #eff6ff; border: 1px solid var(--l-blue); color: var(--l-blue); }
+  .pipe-num.amber { background: #fef9ed; border: 1px solid var(--l-amber); color: var(--l-amber); }
+  .pipe-num.purple { background: #f5f3ff; border: 1px solid var(--l-purple); color: var(--l-purple); }
+  .pipe-num.green { background: var(--l-bg-tint); border: 1px solid var(--l-forest-700); color: var(--l-forest-700); }
+  .pipe-label { font-size: 12px; font-weight: 700; color: var(--l-ink); margin-bottom: 3px; }
+  .pipe-desc { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  .layer-box { padding: 14px 16px; border: 1px solid var(--l-rule); border-radius: var(--r-md); margin-bottom: 10px; }
+  .layer-box .layer-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--l-rule-faint); }
+  .layer-badge { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 9px; font-weight: 700; }
+  .layer-badge.l1 { background: #eff6ff; border: 1px solid var(--l-blue); color: var(--l-blue); }
+  .layer-badge.l2 { background: #fef9ed; border: 1px solid var(--l-amber); color: var(--l-amber); }
+  .layer-badge.l3 { background: var(--l-bg-tint); border: 1px solid var(--l-forest-700); color: var(--l-forest-700); }
+  .layer-title { font-size: 12px; font-weight: 700; color: var(--l-ink); }
+  .layer-items { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+  .layer-item { font-size: 10px; color: var(--l-ink-3); padding-left: 12px; position: relative; line-height: 1.5; }
+  .layer-item::before { content: '\203A'; position: absolute; left: 0; color: var(--l-forest-700); font-weight: 700; }
+  .partner-block { padding: 14px 16px; border: 1px solid var(--l-rule); border-radius: var(--r-md); margin-bottom: 10px; }
+  .partner-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .partner-name.parlance { color: var(--l-blue); }
+  .partner-name.mouliqe { color: var(--l-forest-700); }
+  .partner-role { font-size: 9px; font-weight: 700; color: var(--l-ink-4); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+  .partner-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+  .partner-pill { font-size: 9px; padding: 2px 8px; border-radius: 3px; font-weight: 600; }
+  .partner-pill.blue { background: #eff6ff; color: var(--l-blue); }
+  .partner-pill.green { background: var(--l-bg-tint); color: var(--l-forest-700); }
+  .flow-arrow { text-align: center; padding: 6px 0; font-size: 9px; font-weight: 700; color: var(--l-ink-4); }
+  .phase-card { padding: 14px 16px; border: 1px solid var(--l-rule); border-radius: var(--r-md); margin-bottom: 10px; }
+  .phase-card.p1 { border-left: 3px solid var(--l-blue); }
+  .phase-card.p2 { border-left: 3px solid var(--l-amber); }
+  .phase-card.p3 { border-left: 3px solid var(--l-forest-700); }
+  .phase-tag { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+  .phase-tag.p1 { color: var(--l-blue); }
+  .phase-tag.p2 { color: var(--l-amber); }
+  .phase-tag.p3 { color: var(--l-forest-700); }
+  .page { padding: 0.75in 0.85in; }
+</style>
+</head>
+<body>
+<div class="toolbar no-print"><span class="toolbar-label">bKash POS Pre-Proposal</span><button class="primary" onclick="window.print()">Print / PDF</button></div>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" width="300" height="38" aria-label="Mouliqe"><text x="0" y="32" font-family="Oxanium, sans-serif" font-weight="700" font-size="32" letter-spacing="5.2" fill="#0a0f1a">MOULIQE</text><circle cx="291" cy="28" r="3.8" fill="#15803d"></circle></svg>
+    <div class="meta"><span style="display:block; font-size:9px; color:var(--l-forest-700); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:4px;">Pre-Proposal</span>PROP-2026-BKS-01<br>Issued · May 2026</div>
+  </div>
+  <div class="middle">
+    <p class="eyebrow">Mouliqe × Parlance Consulting Services Ltd.</p>
+    <h1>POS customer behavior <span class="accent">analytics platform.</span></h1>
+    <p class="subhead">From pilot data collection to a proprietary placement optimization model — an end-to-end vision for maximizing digital payment adoption across the entire merchant and agent network. Three phases: capture behavior, build the algorithm, scale the tool.</p>
+  </div>
+  <div class="parties">
+    <div class="party"><div class="label">Technology Partner</div><div class="name">Mouliqe LLC</div><div class="detail">Imtiaz Ahmed, Founder &amp; Principal<br>AI Solutions &amp; Data Architecture<br>hello@mouliqe.com · mouliqe.com</div></div>
+    <div class="party"><div class="label">Research &amp; Field Operations Partner</div><div class="name">Parlance Consulting Services Ltd.</div><div class="detail">Market Research &amp; Consumer Insights<br>Dhaka, Bangladesh</div></div>
+  </div>
+  <div class="bottom">
+    <div class="doc-id"><strong>Confidential</strong>This document contains commercially sensitive technical architecture and partnership details. Do not distribute without consent of the parties named above.</div>
+    <div style="font-size:9px; color: var(--l-ink-4); text-align:right; letter-spacing: 0.1em;">VA BUSINESS ID 12001838<br>SAM.gov UEI · RYLMK67D8W45</div>
+  </div>
+</div>
+
+<!-- PAGE 2 — TOC + EXECUTIVE SUMMARY -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Customer Behavior Analytics</span><span>PROP-2026-BKS-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>Contents</h2></div>
+    <div class="toc">
+      <div class="toc-row"><span class="num">01</span><span class="title">Executive summary</span><span class="pg">2</span></div>
+      <div class="toc-row"><span class="num">02</span><span class="title">The opportunity</span><span class="pg">3</span></div>
+      <div class="toc-row"><span class="num">03</span><span class="title">The vision — three phases</span><span class="pg">4</span></div>
+      <div class="toc-row"><span class="num">04</span><span class="title">Phase 1 — the pilot</span><span class="pg">5</span></div>
+      <div class="toc-row"><span class="num">05</span><span class="title">Phase 2 — the model</span><span class="pg">6</span></div>
+      <div class="toc-row"><span class="num">06</span><span class="title">Phase 3 — the tool</span><span class="pg">7</span></div>
+      <div class="toc-row"><span class="num">07</span><span class="title">The Mouliqe–Parlance partnership</span><span class="pg">8</span></div>
+      <div class="toc-row"><span class="num">08</span><span class="title">About Mouliqe &amp; next steps</span><span class="pg">9</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">01 —</span><h2>Executive summary</h2></div>
+    <p style="font-size: 12.5px; color: var(--l-ink-2); line-height: 1.7; margin-bottom: 8px">bKash has built the largest mobile financial services network in Bangladesh — 82 million verified customers, over 1 million merchants, and 360,000 agent points. The infrastructure for digital payments exists at extraordinary scale. The challenge is no longer reach. It is conversion: turning the presence of bKash at a merchant location into an active payment at the point of sale.</p>
+    <p>bKash knows transaction volumes per merchant. It does not know why some locations convert at high rates and others do not. The answer is in the physical environment — where the QR code sits, whether customers notice the signage, how the layout of the counter shapes the moment of payment decision. That behavioral data does not exist today. Placement of QR codes, signage, and promotional materials is guided by general best practices and field representative judgment, not by measured evidence of what actually captures customer attention.</p>
+    <p>This document proposes a three-phase initiative that closes this gap and transforms it into a scalable competitive advantage:</p>
+    <div style="margin: 14px 0">
+      <div class="phase-card p1"><div class="phase-tag p1">Phase 1 — The Pilot</div><p style="font-size: 11px; margin: 0">Install cameras at 50–100 merchant and agent locations across diverse formats. Capture rich customer behavior data — foot traffic, dwell time, gaze direction, QR code visibility, signage attention, queue dynamics — using an AI-powered computer vision pipeline. Build the labeled dataset that maps physical layouts to digital payment behavior. All processing happens on-site; raw footage never leaves the location.</p></div>
+      <div class="phase-card p2"><div class="phase-tag p2">Phase 2 — The Model</div><p style="font-size: 11px; margin: 0">Use the pilot data to develop a proprietary algorithm that predicts optimal QR code, signage, and branding placement based on location geometry, layout type, and customer interaction patterns. The model learns what the cameras observed — which configurations drive the highest digital payment engagement.</p></div>
+      <div class="phase-card p3"><div class="phase-tag p3">Phase 3 — The Tool</div><p style="font-size: 11px; margin: 0">A standalone tool for field teams. Upload a photo of any merchant or agent location, answer a few questions about dimensions and layout, and the system outputs ideal placement recommendations for QR codes, signage, and promotional materials. No cameras. No on-site hardware. Placement optimization scaled across the entire 1M+ merchant and 360K+ agent network.</p></div>
+    </div>
+    <p>The platform is delivered through a strategic partnership between <strong>Mouliqe</strong> (AI architecture, computer vision, model development, and product engineering) and <strong>Parlance Consulting Services Ltd.</strong> (market research methodology, field operations, location relationships, and regulatory compliance).</p>
+    <div class="micro-eyebrow" style="margin-top: 16px">Guiding principles</div>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Privacy by architecture</h4><p>Raw video never enters the data pipeline. Anonymization at the edge. The central platform only receives structured, non-identifiable data.</p></div>
+      <div class="obj-card"><h4>Pilot as investment</h4><p>Phase 1 is not just data collection — it is training data acquisition. Every design decision is made with Phase 2 model development in mind.</p></div>
+      <div class="obj-card"><h4>Research-grade, honestly framed</h4><p>Camera-based gaze estimation is directional intelligence, not lab precision. Accuracy reported transparently and calibrated against ground-truth.</p></div>
+      <div class="obj-card"><h4>Built to scale</h4><p>Phase 3 eliminates cameras entirely. The tool works from a photo and a questionnaire. Every location in the network gets data-driven placement guidance.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 2 of 9</span></div>
+</div>
+
+<!-- PAGE 3 — THE OPPORTUNITY + WHAT WE CAPTURE -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Customer Behavior Analytics</span><span>PROP-2026-BKS-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">02 —</span><h2>The opportunity</h2></div>
+    <p>Bangladesh's mobile financial services sector has grown at extraordinary pace. With over 200 million MFS accounts nationwide and bKash commanding the dominant market position, the infrastructure for digital payments is in place. The next growth frontier is not adding more merchants to the network — it is increasing the rate at which existing merchants convert cash transactions to digital payments.</p>
+    <p>The gap between merchant network size and merchant payment adoption is well documented. The majority of transactions at bKash merchant locations remain cash-based. Customers who have bKash accounts and are standing at a bKash-enabled merchant still default to cash. The question is why — and the answer is not in the app, the pricing, or the merchant's willingness. It is in the physical environment.</p>
+    <p>Does the customer see the QR code? Is the signage positioned where attention naturally falls? Does the layout of the counter create a natural moment for scanning? Is the bKash branding visible during the queue — the window when payment method decisions are actually made? These questions cannot be answered by transaction data alone. They require behavioral data from the physical point of interaction.</p>
+    <p>That data does not exist today. QR code placement, signage positioning, and branding material deployment are guided by general best practices and field representative judgment. There is no systematic measurement of what customers actually see, what they engage with, and what they ignore. The gap between what is spent on merchant-level branding and what is known about its effectiveness is the opportunity this initiative addresses.</p>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>What we capture in Phase 1</h2></div>
+    <p>The platform extracts a full spectrum of customer behavior metrics from standard camera footage at merchant and agent locations. Each metric feeds both the Phase 1 analytics dashboards and the Phase 2 model training pipeline.</p>
+    <div class="cap-grid">
+      <div class="cap-card"><h4>Foot Traffic &amp; Flow</h4><p>Customer count, entry patterns, peak hours, movement paths approaching the counter.</p></div>
+      <div class="cap-card blue"><h4>QR Code Visibility</h4><p>Whether customers visually engage with the bKash QR code. The core conversion metric.</p></div>
+      <div class="cap-card blue"><h4>Signage &amp; Branding Attention</h4><p>Gaze estimation on bKash signage and promotional materials. Which placements capture attention.</p></div>
+      <div class="cap-card"><h4>Dwell Time Analysis</h4><p>Time at counter, in queue, near displays. Longer dwell = more opportunity for signage influence.</p></div>
+      <div class="cap-card amber"><h4>Queue Behavior</h4><p>Queue patterns, wait times, what customers look at while waiting. Untapped conversion window.</p></div>
+      <div class="cap-card amber"><h4>Transaction Point Interaction</h4><p>Phone usage, cash handling vs. scanning behavior, merchant-customer exchange dynamics.</p></div>
+      <div class="cap-card purple"><h4>Demographic Segments</h4><p>Anonymous age-range and gender estimation. Which segments are most receptive to digital payment prompts.</p></div>
+      <div class="cap-card purple"><h4>Temporal Patterns</h4><p>Behavioral variation by time of day and week. Peak windows for digital payment receptivity.</p></div>
+      <div class="cap-card"><h4>Layout–Conversion Mapping</h4><p>The key Phase 2 input: correlating layout, QR placement, and signage with payment behavior.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 3 of 9</span></div>
+</div>
+
+<!-- PAGE 4 — THE VISION -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Customer Behavior Analytics</span><span>PROP-2026-BKS-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">03 —</span><h2>The vision — three phases</h2></div>
+    <p>The initiative is structured as three sequential phases, each building on the outputs of the previous one. Phase 1 produces the data. Phase 2 produces the intelligence. Phase 3 produces the tool.</p>
+    <div style="margin-top: 16px; padding: 18px 20px; background: var(--l-bg-subtle); border: 1px solid var(--l-rule); border-radius: var(--r-md);">
+      <div class="phase-card p1" style="margin-bottom: 12px"><div class="phase-tag p1">Phase 1 — The Pilot</div><div class="sub-h" style="margin: 0 0 4px">Data Collection &amp; Behavioral Analytics</div><p style="font-size: 10.5px; margin: 0">Install cameras at 50–100 merchant and agent locations across diverse formats — from small roadside agent points to larger retail merchants. Run the computer vision pipeline to capture foot traffic, dwell time, gaze direction, QR code visibility, signage attention, queue dynamics, and transaction point interaction. All processing happens on-site using portable hardware — raw footage never leaves the location. The output is twofold: (1) analytics dashboards and research reports for immediate business value, and (2) a labeled dataset mapping physical layouts to measured payment behavior — the training data for Phase 2.</p><p style="font-size: 9.5px; color: var(--l-ink-4); margin-top: 6px; font-style: italic">Output: behavioral analytics + labeled training dataset</p></div>
+      <div class="phase-card p2" style="margin-bottom: 12px"><div class="phase-tag p2">Phase 2 — The Model</div><div class="sub-h" style="margin: 0 0 4px">Proprietary Placement Optimization Algorithm</div><p style="font-size: 10.5px; margin: 0">Train a proprietary algorithm on the Phase 1 dataset. The model learns the relationship between location geometry (dimensions, layout type, counter position, queue area) and digital payment behavior (QR code attention, signage engagement, payment method choice). The output is a predictive model that takes location layout parameters as input and outputs optimal placement recommendations for QR codes, signage, and promotional materials — without needing cameras or on-site observation.</p><p style="font-size: 9.5px; color: var(--l-ink-4); margin-top: 6px; font-style: italic">Output: placement optimization algorithm (the core IP)</p></div>
+      <div class="phase-card p3"><div class="phase-tag p3">Phase 3 — The Tool</div><div class="sub-h" style="margin: 0 0 4px">Scalable Placement Optimization for the Network</div><p style="font-size: 10.5px; margin: 0">Package the model into a standalone tool for field teams. A field representative uploads a photo of any merchant or agent location, answers a few questions (square footage, layout type, daily footfall, transaction volume), and the system outputs a visual placement recommendation map for QR codes, signage, and promotional materials. No cameras. No installation. No per-location hardware. Placement optimization scaled to every location in the 1M+ merchant and 360K+ agent network.</p><p style="font-size: 9.5px; color: var(--l-ink-4); margin-top: 6px; font-style: italic">Output: scalable placement tool for the entire network</p></div>
+    </div>
+    <div style="margin-top: 14px; padding: 12px 16px; background: var(--l-bg-tint); border: 1px solid var(--l-forest-200); border-radius: var(--r-md);"><div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px;">Continuous improvement</div><p style="font-size: 10.5px; margin: 0">The model improves with scale. Every new location format and every new geographic region adds training data. As the network expands, the algorithm becomes more accurate — delivering better placement recommendations with each new merchant or agent point onboarded.</p></div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 4 of 9</span></div>
+</div>
+
+<!-- PAGE 5 — PHASE 1: THE PILOT -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Customer Behavior Analytics</span><span>PROP-2026-BKS-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">04 —</span><h2>Phase 1 — the pilot</h2></div>
+    <p>The pilot uses a batch processing model designed for reliability, privacy, and infrastructure constraints. No live streaming, no cloud dependency, no internet required at the location.</p>
+    <div style="margin-top: 14px">
+      <div class="pipe-step"><div class="pipe-num blue">01</div><div><div class="pipe-label">Capture</div><div class="pipe-desc">Strategically positioned cameras record customer activity at merchant counters and agent points. Footage stored locally on-site. Camera placement optimized per location for maximum coverage of QR display zones, signage areas, queue zones, and transaction points.</div></div></div>
+      <div class="pipe-step"><div class="pipe-num amber">02</div><div><div class="pipe-label">Process</div><div class="pipe-desc">A portable processing unit runs the full computer vision pipeline on-site: person detection, multi-object tracking, head pose estimation, gaze inference, zone-based dwell analysis, queue dynamics, and transaction point interaction detection. Raw footage never leaves the location.</div></div></div>
+      <div class="pipe-step"><div class="pipe-num purple">03</div><div><div class="pipe-label">Extract</div><div class="pipe-desc">The pipeline outputs structured, anonymized data points — not video. Timestamps, QR attention scores, signage dwell durations, gaze coordinates, queue metrics, and transaction point interaction events. All PII discarded during processing.</div></div></div>
+      <div class="pipe-step"><div class="pipe-num green">04</div><div><div class="pipe-label">Analyze &amp; Label</div><div class="pipe-desc">Data from all sites aggregated into the central analytics platform. Dashboards, attention heatmaps, conversion correlation reports for immediate business value. Simultaneously, the data is structured and labeled for Phase 2 model training — mapping location layouts to measured payment behavior patterns.</div></div></div>
+    </div>
+    <div class="sub-h" style="margin-top: 16px">Platform architecture</div>
+    <div style="margin-top: 10px">
+      <div class="layer-box"><div class="layer-head"><div class="layer-badge l1">L1</div><div class="layer-title">Edge Processing Engine</div></div><div class="layer-items"><div class="layer-item">Person detection (real-time models)</div><div class="layer-item">Multi-object tracking</div><div class="layer-item">Head pose &amp; gaze inference</div><div class="layer-item">Zone-based spatial analysis</div><div class="layer-item">Queue dynamics analysis</div><div class="layer-item">Transaction point interaction detection</div></div></div>
+      <div class="layer-box"><div class="layer-head"><div class="layer-badge l2">L2</div><div class="layer-title">Data Pipeline &amp; Storage</div></div><div class="layer-items"><div class="layer-item">Edge anonymization</div><div class="layer-item">Standardized schema</div><div class="layer-item">Batch upload from portable units</div><div class="layer-item">Central data warehouse</div></div></div>
+      <div class="layer-box"><div class="layer-head"><div class="layer-badge l3">L3</div><div class="layer-title">Analytics &amp; Reporting</div></div><div class="layer-items"><div class="layer-item">Interactive dashboards</div><div class="layer-item">QR &amp; signage attention heatmaps</div><div class="layer-item">Conversion correlation analysis</div><div class="layer-item">Automated reports &amp; API access</div></div></div>
+    </div>
+    <div style="margin-top: 10px; padding: 10px 14px; background: var(--l-bg-tint); border: 1px solid var(--l-forest-200); border-radius: var(--r-md);"><div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px;">Privacy architecture</div><p style="font-size: 10px; margin: 0">Privacy is an architectural decision, not a policy layer. Raw video never enters the data pipeline. Anonymization happens at the edge. The central platform only receives structured, non-identifiable data points.</p></div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 5 of 9</span></div>
+</div>
+
+<!-- PAGE 6 — PHASE 2: THE MODEL -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Customer Behavior Analytics</span><span>PROP-2026-BKS-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">05 —</span><h2>Phase 2 — the model</h2></div>
+    <p>The pilot data becomes the training set for a proprietary placement optimization algorithm. Phase 2 transforms observational data into predictive intelligence — a model that can recommend optimal QR code, signage, and branding placement without needing cameras or on-site observation.</p>
+    <div class="sub-h" style="margin-top: 14px">What goes in</div>
+    <div class="obj-grid">
+      <div class="obj-card blue"><h4>Location geometry</h4><p>Dimensions, layout type, counter position, queue area, entry/exit points, existing signage locations. Captured from location documentation and camera-derived spatial analysis.</p></div>
+      <div class="obj-card blue"><h4>Measured behavior data</h4><p>QR code attention scores, signage dwell times, gaze direction vectors, queue behavior patterns, transaction point interaction events, demographic-segmented behavior. Captured from the Phase 1 CV pipeline across 50–100 locations.</p></div>
+    </div>
+    <div class="sub-h">What the model learns</div>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>QR position → scan probability</h4><p>Which QR code positions maximize the likelihood that a customer notices and scans. How counter proximity, height, and angle affect visibility.</p></div>
+      <div class="obj-card"><h4>Signage → payment method choice</h4><p>How signage placement affects whether customers choose bKash over cash. Which positions influence the decision moment.</p></div>
+      <div class="obj-card"><h4>Queue time → conversion window</h4><p>How queue duration and signage placement during wait time correlate with digital payment adoption. The queue is an untapped influence window.</p></div>
+      <div class="obj-card"><h4>Format generalization</h4><p>Patterns that hold across location formats — from small agent kiosks to large merchant shops. Which principles are universal and which are format-specific.</p></div>
+    </div>
+    <div class="sub-h">What comes out</div>
+    <p>A predictive algorithm that takes location layout parameters as input and outputs optimal placement recommendations for QR codes, signage, and promotional materials — without needing cameras, on-site hardware, or behavioral observation. The model encodes what the cameras learned.</p>
+    <div style="margin-top: 14px; padding: 12px 16px; background: var(--l-bg-tint); border: 1px solid var(--l-forest-200); border-radius: var(--r-md);"><div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px;">Why it improves over time</div><p style="font-size: 10.5px; margin: 0">Every new location and every new layout format adds training data. The model becomes more accurate as the network expands — delivering better recommendations with each new merchant or agent point onboarded.</p></div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 6 of 9</span></div>
+</div>
+
+<!-- PAGE 7 — PHASE 3: THE TOOL -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Customer Behavior Analytics</span><span>PROP-2026-BKS-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">06 —</span><h2>Phase 3 — the tool</h2></div>
+    <p>Phase 3 packages the proprietary model into a standalone tool that eliminates the need for cameras, on-site hardware, and per-location installation. The tool makes placement optimization accessible to every merchant and agent location in the network — at the cost of uploading a photo and answering a few questions.</p>
+    <div class="sub-h" style="margin-top: 14px">How it works</div>
+    <div style="margin-top: 10px">
+      <div class="phase-card p1" style="border-left-color: var(--l-blue)"><div style="font-size: 11px; font-weight: 700; color: var(--l-blue); margin-bottom: 4px">Step 1 — Upload a photo</div><p style="font-size: 10.5px; margin: 0">A field representative takes a photo of the merchant or agent location. The system uses computer vision to analyze the spatial layout — identifying counter positions, display areas, queue zones, and existing signage locations.</p></div>
+      <div class="phase-card p2" style="border-left-color: var(--l-amber)"><div style="font-size: 11px; font-weight: 700; color: var(--l-amber); margin-bottom: 4px">Step 2 — Answer a few questions</div><p style="font-size: 10.5px; margin: 0">Location square footage, layout type, average daily footfall, transaction volume, and any placement constraints. A simple form designed for field representatives — no technical knowledge required.</p></div>
+      <div class="phase-card p3"><div style="font-size: 11px; font-weight: 700; color: var(--l-forest-700); margin-bottom: 4px">Step 3 — Get placement recommendations</div><p style="font-size: 10.5px; margin: 0">The model outputs a visual placement map: where to position QR codes, signage, and promotional materials for maximum customer attention and digital payment conversion. Recommendations are ranked by predicted impact and annotated with confidence scores. The output is immediately actionable — a field representative can implement the recommendations on the spot.</p></div>
+    </div>
+    <div class="sub-h" style="margin-top: 16px">Scaling across the network</div>
+    <p>The pilot covers 50–100 locations with cameras. The tool covers every location without them. With over 1 million merchants and 360,000 agent points, the ability to optimize placement at scale — without per-location camera installation — transforms how bKash drives digital payment adoption across the entire network.</p>
+    <div class="obj-grid" style="margin-top: 10px">
+      <div class="obj-card"><h4>Agent points</h4><p>Small-format cash-in/cash-out locations where counter space is limited and every placement decision has outsized impact on visibility.</p></div>
+      <div class="obj-card"><h4>Small merchants</h4><p>Roadside shops and kiosks where bKash competes with cash at the moment of payment. QR visibility is the conversion lever.</p></div>
+      <div class="obj-card"><h4>Retail merchants</h4><p>Larger shops with multiple product zones, counter displays, and queue areas creating multiple touchpoints for bKash branding.</p></div>
+      <div class="obj-card"><h4>New markets &amp; regions</h4><p>As the network expands geographically, the model adapts to new location formats and regional patterns without starting from scratch.</p></div>
+    </div>
+    <div style="margin-top: 14px; padding: 12px 16px; background: var(--l-bg-tint); border: 1px solid var(--l-forest-200); border-radius: var(--r-md);"><div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px;">The end state</div><p style="font-size: 10.5px; margin: 0">Every field representative in the network can optimize QR and signage placement in minutes — without hiring consultants, installing cameras, or running observational studies. The tool does what used to require weeks of fieldwork. That is the value of Phase 3.</p></div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 7 of 9</span></div>
+</div>
+
+<!-- PAGE 8 — THE PARTNERSHIP -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Customer Behavior Analytics</span><span>PROP-2026-BKS-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">07 —</span><h2>The Mouliqe–Parlance partnership</h2></div>
+    <p>This initiative is delivered through a strategic partnership that combines deep market research expertise with advanced AI and data architecture capability. Each firm brings a distinct and complementary set of capabilities that span all three phases.</p>
+    <div style="margin-top: 14px">
+      <div class="partner-block"><div class="partner-name parlance">Parlance Consulting Services Ltd.</div><div class="partner-role">Market Research &amp; Field Operations</div><p style="font-size: 10.5px; margin-bottom: 8px">Parlance owns the client relationship, research methodology, and physical deployment. With decades of experience in consumer research and direct relationships across Bangladesh, Parlance provides the domain expertise and field infrastructure that makes the technology meaningful across all three phases.</p><div class="partner-pills"><span class="partner-pill blue">Client relationship</span><span class="partner-pill blue">Location recruitment</span><span class="partner-pill blue">Camera installation</span><span class="partner-pill blue">Regulatory compliance</span><span class="partner-pill blue">Research methodology</span><span class="partner-pill blue">Research interpretation</span></div></div>
+      <div class="flow-arrow">RESEARCH QUESTIONS ↓ &nbsp;&nbsp;&nbsp; ↑ DATA, ANALYTICS &amp; TOOL</div>
+      <div class="partner-block"><div class="partner-name mouliqe">Mouliqe LLC</div><div class="partner-role">AI Architecture, Model Development &amp; Product Engineering</div><p style="font-size: 10.5px; margin-bottom: 8px">Mouliqe designs and builds the full technology stack across all three phases — from the Phase 1 edge processing pipeline through the Phase 2 predictive model to the Phase 3 standalone tool. With production AI systems experience, data engineering infrastructure expertise, and a track record of reducing manual processing by 80–95%, Mouliqe provides the technical architecture that turns raw camera footage into a scalable optimization tool.</p><div class="partner-pills"><span class="partner-pill green">Computer vision pipeline</span><span class="partner-pill green">Edge processing engine</span><span class="partner-pill green">Data architecture</span><span class="partner-pill green">Model development</span><span class="partner-pill green">Product engineering</span><span class="partner-pill green">Dashboards &amp; API</span></div></div>
+    </div>
+    <div class="sub-h" style="margin-top: 16px">How it works together</div>
+    <p>Parlance defines what needs to be measured and manages the physical deployment. Mouliqe builds the tools, develops the model, and engineers the product. Research questions flow from Parlance to Mouliqe as platform requirements. Data, analytics, and a scalable optimization tool flow back. The client receives a single, integrated deliverable at every phase.</p>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 8 of 9</span></div>
+</div>
+
+<!-- PAGE 9 — ABOUT MOULIQE + NEXT STEPS -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe × Parlance · POS Customer Behavior Analytics</span><span>PROP-2026-BKS-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">08 —</span><h2>About Mouliqe &amp; next steps</h2></div>
+    <p>Mouliqe (pronounced /moʊ.liːk/, Bangla for "fundamental") is an AI solutions and data architecture consultancy built on a simple principle: AI is only as good as the architecture underneath it. The firm specializes in AI solutions and architecture, data engineering and infrastructure, and analytics and business intelligence — the three disciplines this initiative requires across all phases.</p>
+    <p>Mouliqe's founding team brings over a decade of experience across marketing analytics, data engineering, and AI architecture, with a track record of building production AI systems that reduce manual processing by 80–95% and recover hundreds of employee hours annually. That experience spans Fortune-level enterprises, cloud-scale data platforms, and applied AI initiatives taken from concept through production deployment.</p>
+    <div class="obj-grid" style="margin-top: 12px">
+      <div class="obj-card"><h4>Intersection of all three pillars</h4><p>Computer vision AI, edge-to-cloud data pipelines, predictive modeling, and a scalable tool. This is exactly what Mouliqe does.</p></div>
+      <div class="obj-card"><h4>Production-grade engineering</h4><p>Systems designed for variable conditions — lighting, camera angles, location layouts — without manual tuning per site.</p></div>
+      <div class="obj-card"><h4>Model-first thinking</h4><p>Phase 1 is designed as training data acquisition. Every schema, zone definition, and labeling decision is optimized for Phase 2.</p></div>
+      <div class="obj-card"><h4>Honest about AI limitations</h4><p>Camera-based gaze estimation is directional intelligence. Accuracy reported transparently and calibrated against ground-truth.</p></div>
+    </div>
+    <div class="sub-h" style="margin-top: 18px">Next steps</div>
+    <div style="margin-top: 10px">
+      <div class="diff-item"><h4>1. Define pilot parameters</h4><p>Number of locations, mix of merchant vs. agent points, geographic distribution, pilot duration, and specific research questions. These drive hardware specifications, processing schedules, and the diversity of training data for Phase 2.</p></div>
+      <div class="diff-item"><h4>2. Technical blueprint</h4><p>Detailed architecture document covering the Phase 1 platform: hardware specifications, software stack, data schema, processing pipeline design, dashboard wireframes, and deployment plan.</p></div>
+      <div class="diff-item"><h4>3. Pilot site assessment</h4><p>On-site evaluation of representative locations for camera placement, power/storage requirements, and physical constraints. Joint Parlance (field logistics) and Mouliqe (technical requirements) assessment.</p></div>
+      <div class="diff-item"><h4>4. Full proposal</h4><p>A comprehensive proposal covering all three phases — pilot execution, model development, and tool roadmap — with detailed timelines, milestones, and investment breakdown.</p></div>
+    </div>
+    <div style="margin-top: 14px; padding: 14px 16px; background: var(--l-bg-tint); border: 1px solid var(--l-forest-200); border-radius: var(--r-md);"><div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px;">The Mouliqe Way</div><p style="font-size: 10.5px; margin: 0">Mouliqe follows a structured six-stage consulting process: Discovery, Diagnosis, Blueprint, Build, Refine, and Support. This document represents the Diagnosis stage — an assessment of the opportunity and a recommendation for how to proceed. The next stage (Blueprint) produces the detailed technical architecture. No stage begins until the previous one is accepted.</p></div>
+  </div>
+  <div class="content-footer"><span>Mouliqe × Parlance · Confidential</span><span>Page 9 of 9 — End of document</span></div>
+</div>
+
+</body>
+</html>
