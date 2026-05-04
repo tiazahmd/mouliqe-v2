@@ -17,7 +17,7 @@ export const slides = [
     type: 'title',
     label: 'Pre-Proposal',
     title: 'AI-Powered Pitch <br>Deck Engine',
-    subtitle: 'Automated research and pitch deck generation for IFC buy-side advisory engagements — from company name to presentation-ready pitch deck.',
+    subtitle: 'Automated research and pitch deck generation for IFC sell-side advisory engagements — from company name to presentation-ready pitch deck.',
     meta: 'Mouliqe LLC &middot; May 2026'
   },
 
@@ -25,7 +25,7 @@ export const slides = [
     id: 'problem',
     type: 'stats',
     title: 'The Problem',
-    subtitle: 'Every buy-side advisory engagement begins with a pitch deck. Building one requires deep research across company financials, industry dynamics, country macro, and IFC track record — then structuring it into a presentation-ready deck. The research is thorough but repetitive. The assembly is manual. The time cost is significant.',
+    subtitle: 'Every sell-side advisory engagement begins with a pitch deck. Building one requires deep research across company financials, industry dynamics, country macro, and IFC track record — then structuring it into a presentation-ready deck. The research is thorough but repetitive. The assembly is manual. The time cost is significant.',
     stats: [
       { value: '8-12', label: 'Hours per pitch deck' },
       { value: '5+', label: 'Research domains per deck' },
@@ -55,7 +55,7 @@ export const slides = [
       },
       {
         label: 'The analyst stays in control',
-        detail: 'This is not a replacement for analyst judgment. It is a first draft generator. The engine handles the research grunt work and initial assembly. The analyst reviews, edits, adds proprietary context, and makes the final call on what goes to the client.'
+        detail: 'This is not a replacement for analyst judgment. It is a first draft generator. The engine handles the research grunt work and initial assembly. The analyst reviews, edits, adds proprietary context, and makes the final call on what goes to the client. No proprietary IFC information is uploaded or shared at any point.'
       }
     ]
   },
@@ -98,7 +98,7 @@ export const slides = [
       },
       {
         label: 'What it produces',
-        detail: 'A structured pitch deck covering all standard sections. Each slide includes sourced data points, financial figures where available, and IFC boilerplate content. The output is a starting point — designed for analyst review and refinement, not final delivery.'
+        detail: 'A structured pitch deck covering all standard sections. Each slide includes sourced data points, financial figures where available, and IFC content. The output is a starting point — designed for analyst review and refinement, not final delivery.'
       },
       {
         label: 'Built for iteration',
@@ -138,18 +138,18 @@ export const slides = [
     id: 'output',
     type: 'grid',
     title: 'What It Produces',
-    subtitle: 'A structured pitch deck tailored to the company, sector, and engagement type. The number of slides and depth of each section adapts to the research output and requirements. Click any card for detail.',
+    subtitle: 'A structured pitch deck tailored to the company, sector, and engagement type. Designed to save 90% of the manual work — the analyst reviews and refines, not builds from scratch. Click any card for detail.',
     cards: [
-      { label: 'Cover Slide', tag: 'Standard', detail: 'Company name, country, sector, engagement type, and IFC branding. Formatted to IFC template standards.' },
-      { label: 'Disclaimer', tag: 'Boilerplate', detail: 'Standard IFC/WBG disclaimer text. Pre-loaded boilerplate — not researched, not generated. Verbatim from IFC templates.' },
-      { label: 'Executive Summary', tag: 'Research', detail: 'Synthesis of who the company is, what they need, why IFC is a fit, and the proposed engagement structure. The hardest slide to write — and the most valuable to automate.' },
-      { label: 'Company Overview', tag: 'Research', detail: 'History, ownership structure, leadership, operations, geographic footprint, and scale. Sourced from company IR pages, annual reports, and financial databases.' },
-      { label: 'Financial Highlights', tag: 'Research', detail: 'Revenue, EBITDA, total assets, debt structure — recent years where available. Charts and data callouts. Depth depends on public data availability for the target company.' },
-      { label: 'Industry & Market', tag: 'Research', detail: 'Market size, growth trajectory, competitive landscape, regulatory environment, and key trends. Sector-specific analysis sourced from industry reports and market data.' },
-      { label: 'Country & Macro', tag: 'Research', detail: 'GDP, investment climate, political stability, FX dynamics, and regulatory framework. Sourced from World Bank, IMF, and country-specific economic databases.' },
-      { label: 'IFC Capabilities', tag: 'Boilerplate', detail: 'WBG overview, IFC global reach stats, sector-specific track record, and selected past transactions. Mix of boilerplate and targeted research.' },
-      { label: 'Proposed Engagement', tag: 'Generated', detail: 'Scope of work, deliverables, and engagement structure tailored to the specific company and sector. Generated from research findings and engagement type selection.' },
-      { label: 'Additional Sections', tag: 'Adaptive', detail: 'The engine adds or removes sections based on research depth and engagement requirements. ESG considerations, case studies, risk analysis, or team bios may be included depending on what the research surfaces and what the engagement type demands.' }
+      { label: 'Cover & Disclaimer', tag: 'Standard', detail: 'Company name, country, sector, engagement type, IFC branding, and standard IFC disclaimer. Template-driven — no research required.' },
+      { label: 'Executive Summary', tag: 'Generated', detail: 'Key messages synthesized from the full deck: our understanding of the client, how IFC can support, IFC track record, and next steps. Created last — after all other sections are populated.' },
+      { label: 'Why IFC', tag: 'IFC Content', detail: 'Who IFC is, World Bank Group overview, unique capabilities, global reach. Mostly standard IFC slides that slot in directly — provided by the team.' },
+      { label: 'IFC Track Record', tag: 'Researched', detail: 'IFC experience in the relevant sector and region. Select tombstones of past transactions — project name, country, year, one-liner. Sourced from IFC disclosure pages and public project data.' },
+      { label: 'Our Understanding of Client', tag: 'Researched', detail: 'Who the client is, what they do, where they operate, their pipeline of projects. The core research-driven section — built from web search, client website, and any uploaded documents.' },
+      { label: 'Investment Highlights', tag: 'Generated', detail: 'Four to six bullet points on why investors should be interested in this company. Generated from research — looks specific but follows a repeatable pattern across engagements.' },
+      { label: 'Transaction Structure', tag: 'Template', detail: 'Current investors on the left, space for new investors on the right. Standard layout with a few variations — the tool picks one and the analyst adjusts.' },
+      { label: 'Indicative Investors', tag: 'Researched', detail: 'Key players who invest in this sector, organized by category. Names, country, AUM, and a two-line description. Sourced from public data — presented without identifying specific targets.' },
+      { label: 'Scope of Work & Timeline', tag: 'IFC Content', detail: 'Standard sell-side advisory process: preparation, outreach, due diligence, negotiation, closing. Boilerplate slides provided by the team. Fee structure left blank for the deal team.' },
+      { label: 'Next Steps & Deal Team', tag: 'Standard', detail: 'Standard next steps to advance the mandate. Deal team profiles in the annex — names and bios provided by the team, formatted by the engine.' }
     ]
   },
 
@@ -173,7 +173,7 @@ export const slides = [
       },
       {
         label: 'Phase 2 — Production Enhancements',
-        detail: 'Branded IFC PPTX templates (pixel-perfect to IFC standards), research verification agent (cross-references sources, flags contradictions), support for capital raise, sell-side, and pre-IPO engagement types, and analyst feedback loops for continuous prompt improvement.'
+        detail: 'Branded IFC PPTX templates — provide a few existing decks to emulate and the engine matches that look and feel. Research verification agent (cross-references sources, flags contradictions), support for additional engagement types, and analyst feedback loops for continuous prompt improvement.'
       },
       {
         label: 'Phase 3 — Scale',
