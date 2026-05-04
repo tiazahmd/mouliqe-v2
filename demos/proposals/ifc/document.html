@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mouliqe — IFC Pitch Deck Engine Pre-Proposal</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/templates/proposal.css">
+<link rel="stylesheet" href="/css/templates/proposal-toolbar.css">
+<style>
+  .cover { background: var(--l-bg); display: flex; flex-direction: column; justify-content: space-between; padding: 1in 0.9in; }
+  .cover .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover .top .meta { text-align: right; font-size: 10px; color: var(--l-ink-4); line-height: 1.7; letter-spacing: 0.04em; }
+  .cover .middle { padding: 40px 0; }
+  .cover .middle .eyebrow { margin-bottom: 16px; }
+  .cover .middle h1 { font-size: 38px; line-height: 1.12; color: var(--l-ink); max-width: 90%; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .cover .middle h1 .accent { color: var(--l-forest-700); }
+  .cover .middle .subhead { font-size: 14px; color: var(--l-ink-3); max-width: 82%; line-height: 1.6; }
+  .cover .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 24px 0; border-top: 1px solid var(--l-rule); border-bottom: 1px solid var(--l-rule); }
+  .cover .party .label { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .cover .party .name { font-size: 14px; font-weight: 700; color: var(--l-ink); margin-bottom: 4px; }
+  .cover .party .detail { font-size: 10px; color: var(--l-ink-3); line-height: 1.65; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover .bottom .doc-id { font-size: 10px; color: var(--l-ink-4); letter-spacing: 0.08em; max-width: 60%; }
+  .cover .bottom .doc-id strong { color: var(--l-ink); display: block; font-size: 12px; margin-bottom: 2px; }
+  .content-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--l-rule); margin-bottom: 22px; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.1em; text-transform: uppercase; }
+  .content-header .title { color: var(--l-ink); font-weight: 700; }
+  .content-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--l-rule); display: flex; justify-content: space-between; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.06em; }
+  .section-title { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; padding-top: 4px; }
+  .section-title .n { font-size: 12px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+  .section-title h2 { font-size: 20px; color: var(--l-ink); }
+  .section + .section { margin-top: 22px; }
+  .section p { font-size: 11.5px; color: var(--l-ink-3); line-height: 1.65; }
+  .section p + p { margin-top: 8px; }
+  .sub-h { font-size: 12px; color: var(--l-ink); font-weight: 700; margin: 14px 0 6px; letter-spacing: -0.005em; }
+  .micro-eyebrow { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin: 14px 0 6px; }
+  .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .obj-card { padding: 12px 16px; background: var(--l-bg-subtle); border-left: 2px solid var(--l-forest-700); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+  .obj-card h4 { font-size: 11px; color: var(--l-ink); margin-bottom: 4px; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .obj-card p { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  .phase { margin-bottom: 12px; padding: 14px 16px; border: 1px solid var(--l-rule); border-radius: var(--r-md); }
+  .phase .phase-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--l-rule-faint); }
+  .phase .phase-num { font-size: 10px; color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.16em; }
+  .phase .phase-title { font-size: 13px; font-weight: 700; color: var(--l-ink); }
+  .phase .phase-body p { font-size: 11px; color: var(--l-ink-3); line-height: 1.6; }
+  .toc { margin-top: 16px; }
+  .toc-row { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dotted var(--l-rule); font-size: 11px; }
+  .toc-row .num { color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.12em; min-width: 32px; }
+  .toc-row .title { color: var(--l-ink); flex: 1; font-weight: 600; }
+  .toc-row .pg { color: var(--l-ink-4); font-variant-numeric: tabular-nums; }
+  .sec-card { padding: 12px 16px; background: var(--l-bg-subtle); border-left: 2px solid var(--l-forest-700); border-radius: 0 var(--r-sm) var(--r-sm) 0; margin-bottom: 8px; }
+  .sec-card.blue { border-left-color: #3b82f6; }
+  .sec-card.amber { border-left-color: #f59e0b; }
+  .sec-card.green { border-left-color: var(--l-forest-700); }
+  .sec-card h4 { font-size: 11px; color: var(--l-ink); margin-bottom: 4px; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .sec-card p { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; margin: 0; }
+  .sec-card .tag { font-size: 8px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+  .sec-card .tag.blue { color: #3b82f6; }
+  .sec-card .tag.amber { color: #f59e0b; }
+  .sec-card .tag.green { color: var(--l-forest-700); }
+  .security-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--l-rule-faint); }
+  .security-row:last-child { border-bottom: 0; }
+  .security-row .check { color: var(--l-forest-700); font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: -1px; }
+  .security-row .sec-label { font-size: 11px; font-weight: 700; color: var(--l-ink); }
+  .security-row .sec-desc { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  .page { padding: 0.75in 0.85in; }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <span class="toolbar-label">IFC Pre-Proposal</span>
+  <button class="primary" onclick="window.print()">Print / PDF</button>
+</div>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" width="300" height="38" aria-label="Mouliqe">
+      <text x="0" y="32" font-family="Oxanium, sans-serif" font-weight="700" font-size="32" letter-spacing="5.2" fill="#0a0f1a">MOULIQE</text>
+      <circle cx="291" cy="28" r="3.8" fill="#15803d"></circle>
+    </svg>
+    <div class="meta">
+      <span style="display:block; font-size:9px; color:var(--l-forest-700); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:4px;">Pre-Proposal</span>
+      PROP-2026-IFC-01<br>
+      Issued · May 2026
+    </div>
+  </div>
+  <div class="middle">
+    <p class="eyebrow">AI-Powered Advisory Tools · Mouliqe</p>
+    <h1>Automated <span class="accent">pitch deck</span> generation for IFC buy-side advisory.</h1>
+    <p class="subhead">A purpose-built AI engine that automates the research and assembly of advisory pitch decks — from company name to presentation-ready output. Built for IFC analysts. Powered by public data only. No integration with IFC internal systems required.</p>
+  </div>
+  <div class="parties">
+    <div class="party">
+      <div class="label">Prepared For</div>
+      <div class="name">International Finance Corporation</div>
+      <div class="detail">World Bank Group<br>2121 Pennsylvania Avenue NW<br>Washington, DC 20433</div>
+    </div>
+    <div class="party">
+      <div class="label">Prepared By</div>
+      <div class="name">Mouliqe LLC</div>
+      <div class="detail">Imtiaz Ahmed, Founder &amp; Principal<br>13549 Innovation Station Loop<br>Herndon, VA 20171<br>imtiaz@mouliqe.com · +1 347 429 2441</div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="doc-id">
+      <strong>Confidential</strong>
+      This document contains commercially sensitive information. Do not distribute without consent of the parties named above.
+    </div>
+    <div style="font-size:9px; color: var(--l-ink-4); text-align:right; letter-spacing: 0.1em;">
+      VA BUSINESS ID 12001838<br>SAM.gov UEI · RYLMK67D8W45<br>EIN 42-1950267
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2 — TOC + EXECUTIVE SUMMARY -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · AI-Powered Pitch Deck Engine · IFC</span><span>PROP-2026-IFC-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>Contents</h2></div>
+    <div class="toc">
+      <div class="toc-row"><span class="num">01</span><span class="title">Executive summary</span><span class="pg">2</span></div>
+      <div class="toc-row"><span class="num">02</span><span class="title">The problem</span><span class="pg">3</span></div>
+      <div class="toc-row"><span class="num">03</span><span class="title">How it works</span><span class="pg">4</span></div>
+      <div class="toc-row"><span class="num">04</span><span class="title">What it produces</span><span class="pg">5</span></div>
+      <div class="toc-row"><span class="num">05</span><span class="title">Data privacy &amp; security</span><span class="pg">6</span></div>
+      <div class="toc-row"><span class="num">06</span><span class="title">Roadmap</span><span class="pg">7</span></div>
+      <div class="toc-row"><span class="num">07</span><span class="title">About Mouliqe &amp; next steps</span><span class="pg">8</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">01 —</span><h2>Executive summary</h2></div>
+    <p style="font-size: 12.5px; color: var(--l-ink-2); line-height: 1.7; margin-bottom: 8px">IFC's advisory teams produce pitch decks for every buy-side engagement. Each deck requires deep research across company financials, industry dynamics, country macro conditions, and IFC's own track record — then structuring that research into a presentation-ready format. The work is thorough, high-quality, and essential. It is also repetitive, time-intensive, and follows a consistent pattern that is well-suited to AI automation.</p>
+    <p>This document proposes an AI-powered engine that automates the research and assembly phases of pitch deck creation. The engine takes a company name, country, and sector as input, executes deep research across public sources, evaluates the quality of that research against IFC standards, and generates a structured pitch deck ready for analyst review and refinement.</p>
+    <p>A working prototype is live today. It generates complete pitch decks end-to-end in under 15 minutes — work that currently takes analysts 8 to 12 hours. The output is a first draft, not a final product. The analyst remains in control: reviewing, editing, adding proprietary context, and making the final call on what goes to the client.</p>
+    <p>Critically, the engine operates entirely outside IFC's security perimeter. It requires no integration with IFC internal systems, no access to proprietary databases, and no connection to IFC infrastructure. All inputs are public information. All research comes from public sources. The tool runs like any external research application an analyst might use in a browser.</p>
+    <div class="micro-eyebrow" style="margin-top: 16px">Guiding principles</div>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Analyst-in-the-loop</h4><p>The engine produces a first draft. The analyst reviews, refines, and decides what goes to the client. AI handles the research grunt work, not the judgment.</p></div>
+      <div class="obj-card"><h4>Zero proprietary data</h4><p>No IFC internal documents, deal data, or classified information enters the system. All inputs are public. All research is from public sources.</p></div>
+      <div class="obj-card"><h4>Working demo first</h4><p>No 6-month build cycle before anyone sees a result. The core pipeline is live. Enhancements are scoped. The roadmap is driven by analyst feedback.</p></div>
+      <div class="obj-card"><h4>Purpose-built for IFC</h4><p>Not a generic AI deck generator. The research domains, deck structure, quality standards, and institutional voice are all IFC-specific.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 2 of 8</span></div>
+</div>
+
+<!-- PAGE 3 — THE PROBLEM -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · AI-Powered Pitch Deck Engine · IFC</span><span>PROP-2026-IFC-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">02 —</span><h2>The problem</h2></div>
+    <p>Every buy-side advisory engagement at IFC begins with a pitch deck. The deck serves as the primary vehicle for presenting a target company to the advisory team and, ultimately, to the client. It must be comprehensive, well-sourced, and formatted to IFC's institutional standards.</p>
+    <p>Building a pitch deck is a multi-step process. The analyst researches the target company across multiple domains — corporate profile, ownership structure, financial performance, industry landscape, country macro conditions, and IFC's own track record in the relevant sector and region. Each domain requires searching multiple sources, cross-referencing data, and evaluating credibility. Once the research is complete, the analyst structures it into a slide deck, formats charts and tables, adds IFC boilerplate content, and reviews for consistency.</p>
+    <p>This process takes 8 to 12 hours per deck. The research methodology is well-defined. The slide structure is standardized. The quality bar is high but the pattern is predictable. Analysts follow the same sequence of steps for every engagement — the variables are the company, the sector, and the country, not the process itself.</p>
+    <p>The bottleneck is not analyst skill. It is analyst time. Senior professionals spend hours on research and assembly work that follows a consistent, repeatable pattern. Every hour spent on a pitch deck is an hour not spent on higher-value advisory work — client relationships, deal structuring, strategic analysis.</p>
+    <div class="sub-h">Current process</div>
+    <div style="margin: 12px 0">
+      <div class="sec-card blue"><div class="tag blue">Step 1 — Research</div><p>Search company websites, financial databases, Bloomberg, Reuters, World Bank data, IFC.org, and sector reports. Gather data across 5+ domains. Cross-reference sources for accuracy. Flag gaps and contradictions. 4-6 hours.</p></div>
+      <div class="sec-card amber"><div class="tag amber">Step 2 — Assembly</div><p>Structure research into slide format. Write executive summary. Build financial tables and charts. Add IFC boilerplate (disclaimer, WBG overview, capabilities). Format to IFC template standards. 2-4 hours.</p></div>
+      <div class="sec-card green"><div class="tag green">Step 3 — Review</div><p>Check data consistency across slides. Verify source citations. Ensure institutional tone and formatting standards. Iterate with team feedback. 1-2 hours.</p></div>
+    </div>
+    <p>The engine automates Steps 1 and 2 — the research and assembly — and produces a first draft for Step 3. The analyst's review and refinement remains human-driven.</p>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 3 of 8</span></div>
+</div>
+
+<!-- PAGE 4 — HOW IT WORKS -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · AI-Powered Pitch Deck Engine · IFC</span><span>PROP-2026-IFC-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">03 —</span><h2>How it works</h2></div>
+    <p>The engine is a three-phase AI pipeline that mirrors the analyst's research process. Each phase is purpose-built, not a generic AI wrapper. The pipeline uses multiple specialized AI models — one for orchestration and evaluation, one for deep web research, and one for presentation rendering.</p>
+    <div style="margin-top: 16px; padding: 18px 20px; background: var(--l-bg-subtle); border: 1px solid var(--l-rule); border-radius: var(--r-md);">
+      <div class="sec-card blue" style="margin-bottom: 12px">
+        <div class="tag blue">Phase 1 — Deep Research</div>
+        <h4>Automated research across public sources</h4>
+        <p>The engine analyzes the analyst's input (company name, country, sector, optional supporting documents) and builds a targeted research brief. It then executes deep web research across company profile, financial performance, industry dynamics, country macro conditions, and IFC track record. Sources include company IR pages, financial databases, World Bank publications, IFC.org public pages, news outlets, and sector reports.</p>
+        <p style="font-size: 9.5px; color: var(--l-ink-4); margin-top: 6px; font-style: italic">Technology: Perplexity sonar-deep-research for web research, Claude for orchestration</p>
+      </div>
+      <div class="sec-card amber" style="margin-bottom: 12px">
+        <div class="tag amber">Phase 2 — Quality Evaluation</div>
+        <h4>Automated quality control with retry logic</h4>
+        <p>Research results are evaluated against IFC-calibrated quality standards. The evaluation checks source credibility, data recency, completeness across all required domains, and whether there is sufficient depth to produce a credible pitch deck. If gaps are found, the engine automatically rewrites the research brief with a different strategy and retries — up to three attempts — until quality thresholds are met or the system reports what could not be found.</p>
+        <p style="font-size: 9.5px; color: var(--l-ink-4); margin-top: 6px; font-style: italic">Technology: Claude with extended thinking for evaluation and decision-making</p>
+      </div>
+      <div class="sec-card green">
+        <div class="tag green">Phase 3 — Deck Generation</div>
+        <h4>Structured pitch deck output</h4>
+        <p>Verified research is structured into a presentation-ready pitch deck following IFC's standard format. The engine determines the appropriate sections and depth based on the research output and engagement type. Each slide includes sourced data points, financial figures where available, and IFC boilerplate content. The output is a downloadable PPTX file.</p>
+        <p style="font-size: 9.5px; color: var(--l-ink-4); margin-top: 6px; font-style: italic">Technology: Claude for content structuring, Gamma for PPTX rendering</p>
+      </div>
+    </div>
+    <div class="sub-h">Real-time progress</div>
+    <p>The entire pipeline streams progress in real time. The analyst sees each phase as it executes — research brief construction, deep research with source counts, quality evaluation decisions, retry attempts if needed, and deck generation. Total processing time is typically under 15 minutes.</p>
+    <div class="sub-h">File upload support</div>
+    <p>Analysts can optionally upload supporting documents (PDF, DOCX) — public reports such as Fitch ratings, Economist articles, or sector analyses. The engine extracts content from these documents and incorporates it into the research brief, giving the AI additional context for more targeted research.</p>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 4 of 8</span></div>
+</div>
+
+<!-- PAGE 5 — WHAT IT PRODUCES -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · AI-Powered Pitch Deck Engine · IFC</span><span>PROP-2026-IFC-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">04 —</span><h2>What it produces</h2></div>
+    <p>The engine generates a structured pitch deck tailored to the target company, sector, and engagement type. The number of slides and depth of each section adapts to the research output — well-documented public companies produce richer decks; less-documented private companies produce focused decks with clearly flagged data gaps.</p>
+    <p>The standard output includes the following sections, though the engine adds or removes content based on what the research surfaces:</p>
+    <div style="margin: 14px 0">
+      <table class="std">
+        <thead><tr><th style="width:28%">Section</th><th style="width:14%">Source</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Cover</strong></td><td>Template</td><td>Company name, country, sector, engagement type, IFC branding.</td></tr>
+          <tr><td><strong>Disclaimer</strong></td><td>Boilerplate</td><td>Standard IFC/WBG disclaimer. Pre-loaded, not generated.</td></tr>
+          <tr><td><strong>Executive Summary</strong></td><td>Generated</td><td>Synthesis of the company situation, needs, IFC fit, and proposed engagement. The highest-value automated section.</td></tr>
+          <tr><td><strong>Company Overview</strong></td><td>Researched</td><td>History, ownership, leadership, operations, geographic footprint, scale.</td></tr>
+          <tr><td><strong>Financial Highlights</strong></td><td>Researched</td><td>Revenue, EBITDA, assets, debt structure. Depth depends on public data availability.</td></tr>
+          <tr><td><strong>Industry &amp; Market</strong></td><td>Researched</td><td>Market size, growth, competitive landscape, regulatory environment, trends.</td></tr>
+          <tr><td><strong>Country &amp; Macro</strong></td><td>Researched</td><td>GDP, investment climate, political stability, FX, regulatory framework.</td></tr>
+          <tr><td><strong>IFC Capabilities</strong></td><td>Mixed</td><td>WBG overview, global reach, sector track record, selected transactions.</td></tr>
+          <tr><td><strong>Proposed Engagement</strong></td><td>Generated</td><td>Scope, deliverables, engagement structure tailored to the company and sector.</td></tr>
+          <tr><td><strong>Additional Sections</strong></td><td>Adaptive</td><td>ESG considerations, case studies, risk analysis, team bios — included when research supports them.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="padding: 12px 16px; background: var(--l-bg-tint); border: 1px solid var(--l-forest-200); border-radius: var(--r-md); margin-top: 14px;">
+      <div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px;">Important</div>
+      <p style="font-size: 10.5px; margin: 0">The output is a first draft — designed for analyst review and refinement, not final delivery. The engine handles the research and assembly. The analyst adds proprietary context, exercises judgment on content selection, and makes the final call on what goes to the client.</p>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 5 of 8</span></div>
+</div>
+
+<!-- PAGE 6 — DATA PRIVACY & SECURITY -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · AI-Powered Pitch Deck Engine · IFC</span><span>PROP-2026-IFC-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">05 —</span><h2>Data privacy &amp; security</h2></div>
+    <p>The engine is designed to operate entirely outside IFC's security perimeter. This is not a workaround — it is a deliberate architectural decision that eliminates the need for IT security review, systems integration, or network access approvals.</p>
+    <div style="margin: 16px 0; padding: 16px 20px; border: 2px solid var(--l-forest-200); border-radius: var(--r-md); background: var(--l-bg-tint);">
+      <div style="font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px;">Security Architecture</div>
+      <div class="security-row">
+        <span class="check">&#10003;</span>
+        <div><div class="sec-label">No IFC systems integration</div><div class="sec-desc">The engine is a standalone web application. It does not connect to, access, or require any IFC internal systems, databases, or infrastructure. No SSO, no VPN, no network access. It runs like any external research tool an analyst might use — no different from accessing Bloomberg or Google in a browser.</div></div>
+      </div>
+      <div class="security-row">
+        <span class="check">&#10003;</span>
+        <div><div class="sec-label">No proprietary data as input</div><div class="sec-desc">The only required inputs are public information: company name, country, and sector. Optional file uploads are for public reports — Fitch ratings, Economist articles, sector analyses. No IFC internal documents, deal data, client information, or classified material enters the system at any point.</div></div>
+      </div>
+      <div class="security-row">
+        <span class="check">&#10003;</span>
+        <div><div class="sec-label">All research from public sources</div><div class="sec-desc">The research engine searches the open web — company websites, financial databases, World Bank publications, IFC.org public pages, news outlets, and sector reports. These are the same sources an analyst would access through a browser. No proprietary databases, no internal IFC data, no restricted information.</div></div>
+      </div>
+      <div class="security-row">
+        <span class="check">&#10003;</span>
+        <div><div class="sec-label">No data retention</div><div class="sec-desc">Research sessions are ephemeral. No company data, research results, or generated decks are stored on the platform after the session ends. The analyst downloads the output and the session data is discarded. There is no persistent database of past research or generated content.</div></div>
+      </div>
+      <div class="security-row">
+        <span class="check">&#10003;</span>
+        <div><div class="sec-label">No AppSec review required</div><div class="sec-desc">Because the engine does not touch IFC's network, does not process proprietary data, and does not integrate with internal systems, it falls outside the scope of IT security review. It is an external tool used by analysts at their discretion — the same category as any web-based research service.</div></div>
+      </div>
+    </div>
+    <p>This architecture is intentional. The most common barrier to AI tool adoption in large institutions is the security review process. By designing the engine to require zero integration and zero proprietary data, that barrier is eliminated entirely.</p>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 6 of 8</span></div>
+</div>
+
+<!-- PAGE 7 — ROADMAP -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · AI-Powered Pitch Deck Engine · IFC</span><span>PROP-2026-IFC-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">06 —</span><h2>Roadmap</h2></div>
+    <p>The working demo represents the core pipeline — Phase 1. Production enhancements are scoped and ready to build. The roadmap is structured around analyst feedback: each phase delivers working functionality, and priorities are adjusted based on what analysts actually need.</p>
+    <div style="margin: 16px 0">
+      <div class="phase">
+        <div class="phase-head">
+          <div><span class="phase-num">PHASE 1</span> <span class="phase-title" style="margin-left: 8px">Core Pipeline</span></div>
+          <div class="phase-duration"><strong>Complete</strong></div>
+        </div>
+        <div class="phase-body">
+          <p>Deep research across 5 domains, quality evaluation with intelligent retry logic, and full pitch deck generation. Working demo deployed and generating decks today. Real-time progress streaming. File upload support for supplementary documents.</p>
+          <p style="font-size: 9.5px; color: var(--l-ink-4); margin-top: 6px; font-style: italic">Demo: <a href="https://ifc-demo-frontend-v73g.vercel.app/" style="color: var(--l-forest-700)">ifc-demo-frontend-v73g.vercel.app</a></p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-head">
+          <div><span class="phase-num">PHASE 2</span> <span class="phase-title" style="margin-left: 8px">Production Enhancements</span></div>
+          <div class="phase-duration"><strong>Scoped</strong></div>
+        </div>
+        <div class="phase-body">
+          <p><strong>Branded IFC templates</strong> — pixel-perfect PPTX output matching IFC's template standards, colors (navy #021F43, sky blue #00B0F0), and fonts (Calibri Light/Calibri). Boilerplate slides (cover, disclaimer, section dividers, contacts) rendered from the IFC master template.</p>
+          <p><strong>Research verification layer</strong> — a specialized verification agent that cross-references key data points across multiple sources, flags contradictions, checks data recency, and produces a confidence assessment per section. Designed to catch errors before the analyst sees them.</p>
+          <p><strong>Multi-engagement-type support</strong> — extend beyond buy-side advisory to capital raise, sell-side advisory, and pre-IPO engagement types. Each type has its own slide schema, research requirements, and boilerplate content.</p>
+          <p><strong>Analyst feedback loops</strong> — structured mechanism for analysts to flag issues, suggest improvements, and rate output quality. Feedback directly improves the prompts and pipeline with each iteration.</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-head">
+          <div><span class="phase-num">PHASE 3</span> <span class="phase-title" style="margin-left: 8px">Scale</span></div>
+          <div class="phase-duration"><strong>Planned</strong></div>
+        </div>
+        <div class="phase-body">
+          <p>Multi-user support with usage analytics. Prompt library for different engagement types and regional variations. Integration with analyst workflows — the tool becomes part of the standard engagement kickoff process. Built to handle the full advisory team's volume.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 7 of 8</span></div>
+</div>
+
+<!-- PAGE 8 — ABOUT MOULIQE & NEXT STEPS -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · AI-Powered Pitch Deck Engine · IFC</span><span>PROP-2026-IFC-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">07 —</span><h2>About Mouliqe &amp; next steps</h2></div>
+    <div class="sub-h">About Mouliqe</div>
+    <p>Mouliqe is an AI solutions and data architecture consultancy based in Virginia. The firm specializes in three areas: AI solutions architecture, data engineering and infrastructure, and analytics and business intelligence. The IFC pitch deck engine sits at the intersection of all three — a multi-model AI pipeline built on production-grade data architecture.</p>
+    <p>The engine was built in close collaboration with an IFC analyst who defined the research methodology, quality standards, and deck structure. The prompts and pipeline mirror how a human expert works — not generic AI instructions. This domain-specific foundation is what separates the engine from general-purpose AI deck generators.</p>
+    <p>Mouliqe's founder has designed automation platforms across Fortune-level companies, consistently reducing manual processing by 80-95%. The IFC engine applies the same approach to advisory research: identify the repeatable pattern, automate it with precision, and keep the human expert in control of the output.</p>
+    <div class="obj-grid" style="margin-top: 14px">
+      <div class="obj-card"><h4>AI architecture expertise</h4><p>Multi-model pipelines, orchestration with evaluation loops, quality-gated outputs. The kind of system design that requires deep AI engineering experience.</p></div>
+      <div class="obj-card"><h4>Production, not prototypes</h4><p>Systems designed for real use under real conditions. The demo is not a mockup — it is a working application generating pitch decks today.</p></div>
+      <div class="obj-card"><h4>Security by design</h4><p>The zero-proprietary-data architecture is a deliberate design choice, not a limitation. Built to operate outside the security perimeter from day one.</p></div>
+      <div class="obj-card"><h4>Iterative development</h4><p>Working software first, then iterate based on feedback. No long build cycles before anyone sees a result.</p></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>Next steps</h2></div>
+    <p>The core engine is built and generating pitch decks. The following steps move from demo to production tool.</p>
+    <div style="margin: 14px 0">
+      <div class="sec-card green" style="margin-bottom: 8px"><h4>1. Try the demo</h4><p>Run the engine on a real company. Evaluate the research quality, deck structure, and content against IFC standards. Identify gaps and areas for improvement.</p></div>
+      <div class="sec-card green" style="margin-bottom: 8px"><h4>2. Define the engagement model</h4><p>How should this tool be delivered? Options include a dedicated build-out for the advisory team, a subscription model, or a hybrid approach. The technical architecture supports all three.</p></div>
+      <div class="sec-card green" style="margin-bottom: 8px"><h4>3. Refine with analyst feedback</h4><p>The fastest path to production quality is iteration. Analysts run the tool, flag what needs improvement, and the prompts and pipeline are refined. Each round of feedback makes the output closer to what a senior analyst would produce.</p></div>
+      <div class="sec-card green"><h4>4. Production deployment</h4><p>Branded IFC templates, verification layer, multi-engagement-type support, and analyst workflow integration. Scoped and ready to build once the engagement model is defined.</p></div>
+    </div>
+    <div style="margin-top: 20px; padding: 16px 20px; background: var(--l-bg-subtle); border-radius: var(--r-md); text-align: center;">
+      <p style="font-size: 12px; color: var(--l-ink-2); margin-bottom: 8px; font-weight: 600;">Imtiaz Ahmed · Founder &amp; Principal</p>
+      <p style="font-size: 11px; color: var(--l-ink-3); margin: 0;">imtiaz@mouliqe.com · +1 347 429 2441 · <a href="https://mouliqe.com" style="color: var(--l-forest-700)">mouliqe.com</a></p>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>Page 8 of 8</span></div>
+</div>
+
+</body>
+</html>

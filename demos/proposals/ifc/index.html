@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>AI-Powered Pitch Deck Engine — IFC | Mouliqe</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../_presentation.css">
+  <style>
+    /* ---- IFC-specific visual styles ---- */
+
+    /* Pipeline diagram */
+    .ifc-pipeline { width: 100%; display: flex; flex-direction: column; gap: 0; }
+    .ifc-phase { display: flex; align-items: stretch; gap: 0.75rem; padding: 0.75rem; background: var(--p-bg-card); border: 1px solid var(--p-border); border-radius: 0.5rem; }
+    .ifc-phase:nth-child(1) { border-left: 3px solid var(--p-blue); }
+    .ifc-phase:nth-child(3) { border-left: 3px solid var(--p-amber); }
+    .ifc-phase:nth-child(5) { border-left: 3px solid var(--p-accent); }
+    .ifc-phase-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 0.375rem; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; flex-shrink: 0; }
+    .ifc-phase-icon.research { background: var(--p-blue-dim); border: 1px solid var(--p-blue); color: var(--p-blue); }
+    .ifc-phase-icon.evaluate { background: var(--p-amber-dim); border: 1px solid var(--p-amber); color: var(--p-amber); }
+    .ifc-phase-icon.generate { background: var(--p-accent-dim); border: 1px solid var(--p-accent); color: var(--p-accent); }
+    .ifc-phase-content { flex: 1; }
+    .ifc-phase-label { font-size: 0.78rem; font-weight: 700; color: var(--p-fg); }
+    .ifc-phase-desc { font-size: 0.65rem; color: var(--p-fg-subtle); line-height: 1.5; margin-top: 0.15rem; }
+    .ifc-phase-tags { display: flex; gap: 0.25rem; margin-top: 0.35rem; flex-wrap: wrap; }
+    .ifc-phase-tag { font-size: 0.55rem; padding: 0.1rem 0.4rem; border-radius: 0.2rem; font-weight: 600; letter-spacing: 0.04em; }
+    .ifc-phase-tag.blue { background: var(--p-blue-dim); color: var(--p-blue); }
+    .ifc-phase-tag.amber { background: var(--p-amber-dim); color: var(--p-amber); }
+    .ifc-phase-tag.green { background: var(--p-accent-dim); color: var(--p-accent); }
+    .ifc-pipe-arrow { width: 2px; height: 14px; background: var(--p-border); margin-left: 1.5rem; position: relative; }
+    .ifc-pipe-arrow::after { content: ''; position: absolute; bottom: -3px; left: -3px; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--p-border); }
+    .ifc-pipeline-output { padding: 0.5rem 0.75rem; background: var(--p-accent-dim); border: 1px solid var(--p-accent-border); border-radius: 0.375rem; text-align: center; }
+    .ifc-pipeline-output-label { font-size: 0.6rem; font-weight: 700; color: var(--p-accent); letter-spacing: 0.1em; text-transform: uppercase; }
+    .ifc-pipeline-output-sub { font-size: 0.55rem; color: var(--p-fg-subtle); margin-top: 0.1rem; }
+
+    /* Process comparison */
+    .ifc-compare { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; }
+    .ifc-compare-col { padding: 0.75rem; background: var(--p-bg-card); border: 1px solid var(--p-border); border-radius: 0.5rem; }
+    .ifc-compare-col.before { border-left: 3px solid var(--p-red); }
+    .ifc-compare-col.after { border-left: 3px solid var(--p-accent); }
+    .ifc-compare-header { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .ifc-compare-header.before { color: var(--p-red); }
+    .ifc-compare-header.after { color: var(--p-accent); }
+    .ifc-compare-time { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .ifc-compare-time.before { color: var(--p-red); }
+    .ifc-compare-time.after { color: var(--p-accent); }
+    .ifc-compare-steps { display: flex; flex-direction: column; gap: 0.2rem; }
+    .ifc-compare-step { display: flex; align-items: center; gap: 0.4rem; font-size: 0.6rem; color: var(--p-fg-subtle); }
+    .ifc-compare-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .ifc-compare-dot.red { background: var(--p-red); }
+    .ifc-compare-dot.green { background: var(--p-accent); }
+    .ifc-compare-vs { text-align: center; font-size: 0.65rem; font-weight: 700; color: var(--p-fg-faint); letter-spacing: 0.1em; padding: 0.15rem 0; }
+
+    /* Security architecture */
+    .ifc-security { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; }
+    .ifc-sec-zone { padding: 0.65rem 0.75rem; border-radius: 0.5rem; }
+    .ifc-sec-zone.external { background: var(--p-accent-dim); border: 1px solid var(--p-accent-border); }
+    .ifc-sec-zone.boundary { background: transparent; border: 2px dashed var(--p-red); opacity: 0.7; text-align: center; padding: 0.35rem; }
+    .ifc-sec-zone.internal { background: var(--p-bg-card); border: 1px solid var(--p-border); opacity: 0.5; }
+    .ifc-sec-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .ifc-sec-label.green { color: var(--p-accent); }
+    .ifc-sec-label.red { color: var(--p-red); }
+    .ifc-sec-label.muted { color: var(--p-fg-faint); }
+    .ifc-sec-items { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+    .ifc-sec-pill { font-size: 0.55rem; padding: 0.12rem 0.4rem; border-radius: 0.2rem; font-weight: 600; }
+    .ifc-sec-pill.green { background: var(--p-accent-dim); color: var(--p-accent); }
+    .ifc-sec-pill.muted { background: var(--p-bg-card); color: var(--p-fg-faint); border: 1px solid var(--p-border); }
+    .ifc-sec-boundary-text { font-size: 0.55rem; font-weight: 700; color: var(--p-red); letter-spacing: 0.1em; }
+    .ifc-sec-note { font-size: 0.55rem; color: var(--p-fg-faint); text-align: center; font-style: italic; margin-top: 0.25rem; }
+
+    /* Demo screenshot placeholder */
+    .ifc-demo { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; }
+    .ifc-demo-window { background: var(--p-bg-card); border: 1px solid var(--p-border); border-radius: 0.5rem; overflow: hidden; }
+    .ifc-demo-titlebar { display: flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.6rem; background: var(--p-bg-card); border-bottom: 1px solid var(--p-border); }
+    .ifc-demo-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .ifc-demo-dot.r { background: #ff5f57; }
+    .ifc-demo-dot.y { background: #febc2e; }
+    .ifc-demo-dot.g { background: #28c840; }
+    .ifc-demo-url { flex: 1; text-align: center; font-size: 0.5rem; color: var(--p-fg-faint); font-family: monospace; }
+    .ifc-demo-body { padding: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .ifc-demo-form { display: flex; flex-direction: column; gap: 0.3rem; }
+    .ifc-demo-field { display: flex; align-items: center; gap: 0.4rem; }
+    .ifc-demo-field-label { font-size: 0.55rem; color: var(--p-fg-faint); width: 50px; text-align: right; }
+    .ifc-demo-field-input { flex: 1; height: 18px; background: var(--p-bg); border: 1px solid var(--p-border); border-radius: 0.25rem; padding: 0 0.4rem; font-size: 0.55rem; color: var(--p-fg-subtle); display: flex; align-items: center; }
+    .ifc-demo-btn { align-self: flex-end; padding: 0.25rem 0.75rem; background: var(--p-accent); color: #000; border-radius: 0.25rem; font-size: 0.55rem; font-weight: 700; margin-top: 0.15rem; }
+    .ifc-demo-progress { display: flex; flex-direction: column; gap: 0.2rem; padding-top: 0.35rem; border-top: 1px solid var(--p-border); }
+    .ifc-demo-step { display: flex; align-items: center; gap: 0.35rem; font-size: 0.5rem; }
+    .ifc-demo-check { color: var(--p-accent); font-weight: 700; }
+    .ifc-demo-spin { color: var(--p-amber); }
+    .ifc-demo-step-text { color: var(--p-fg-subtle); }
+    .ifc-demo-step-text.active { color: var(--p-fg); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div id="p-deck" class="p-deck"></div>
+
+  <button class="p-theme-toggle" aria-label="Toggle theme"></button>
+  <button class="p-nav-arrow p-nav-prev" aria-label="Previous slide">&#8249;</button>
+  <button class="p-nav-arrow p-nav-next" aria-label="Next slide">&#8250;</button>
+
+  <div class="p-progress"><div class="p-progress-fill"></div></div>
+  <div class="p-counter"></div>
+  <a class="p-branding" href="https://mouliqe.com" target="_blank" rel="noopener">mouliqe.com</a>
+
+  <div class="p-detail-overlay">
+    <div class="p-detail-panel">
+      <button class="p-detail-close" aria-label="Close">&times;</button>
+      <div class="p-detail-title"></div>
+      <div class="p-detail-body"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { meta, slides } from './slides.js';
+    const engineModule = await import('../_presentation.js');
+
+    const customVisuals = {
+
+      'pipeline-diagram': () => `
+        <div class="ifc-pipeline">
+          <div class="ifc-phase">
+            <div class="ifc-phase-icon research">R</div>
+            <div class="ifc-phase-content">
+              <div class="ifc-phase-label">Phase 1 — Deep Research</div>
+              <div class="ifc-phase-desc">Builds targeted research brief, executes deep web research across 5 domains.</div>
+              <div class="ifc-phase-tags">
+                <span class="ifc-phase-tag blue">Company Profile</span>
+                <span class="ifc-phase-tag blue">Financials</span>
+                <span class="ifc-phase-tag blue">Industry</span>
+                <span class="ifc-phase-tag blue">Country Macro</span>
+                <span class="ifc-phase-tag blue">IFC Track Record</span>
+              </div>
+            </div>
+          </div>
+          <div class="ifc-pipe-arrow"></div>
+          <div class="ifc-phase">
+            <div class="ifc-phase-icon evaluate">E</div>
+            <div class="ifc-phase-content">
+              <div class="ifc-phase-label">Phase 2 — Quality Evaluation</div>
+              <div class="ifc-phase-desc">Evaluates research against IFC standards. Retries with rewritten brief if gaps found.</div>
+              <div class="ifc-phase-tags">
+                <span class="ifc-phase-tag amber">Source Credibility</span>
+                <span class="ifc-phase-tag amber">Data Recency</span>
+                <span class="ifc-phase-tag amber">Completeness</span>
+                <span class="ifc-phase-tag amber">Up to 3 Retries</span>
+              </div>
+            </div>
+          </div>
+          <div class="ifc-pipe-arrow"></div>
+          <div class="ifc-phase">
+            <div class="ifc-phase-icon generate">G</div>
+            <div class="ifc-phase-content">
+              <div class="ifc-phase-label">Phase 3 — Deck Generation</div>
+              <div class="ifc-phase-desc">Structures verified research into a complete pitch deck.</div>
+              <div class="ifc-phase-tags">
+                <span class="ifc-phase-tag green">IFC Format</span>
+                <span class="ifc-phase-tag green">Adaptive Sections</span>
+                <span class="ifc-phase-tag green">PPTX Output</span>
+                <span class="ifc-phase-tag green">Sourced Data</span>
+              </div>
+            </div>
+          </div>
+          <div class="ifc-pipe-arrow"></div>
+          <div class="ifc-pipeline-output">
+            <div class="ifc-pipeline-output-label">Output</div>
+            <div class="ifc-pipeline-output-sub">Downloadable PPTX — ready for analyst review</div>
+          </div>
+        </div>`,
+
+      'process-comparison': () => `
+        <div class="ifc-compare">
+          <div class="ifc-compare-col before">
+            <div class="ifc-compare-header before">Today</div>
+            <div class="ifc-compare-time before">8-12 hours</div>
+            <div class="ifc-compare-steps">
+              <div class="ifc-compare-step"><div class="ifc-compare-dot red"></div>Search company websites</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot red"></div>Pull financial data</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot red"></div>Research industry landscape</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot red"></div>Gather country macro data</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot red"></div>Find IFC track record</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot red"></div>Cross-reference sources</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot red"></div>Build slide deck manually</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot red"></div>Format charts and tables</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot red"></div>Review for consistency</div>
+            </div>
+          </div>
+          <div class="ifc-compare-vs">VS</div>
+          <div class="ifc-compare-col after">
+            <div class="ifc-compare-header after">With the Engine</div>
+            <div class="ifc-compare-time after">Under 15 minutes</div>
+            <div class="ifc-compare-steps">
+              <div class="ifc-compare-step"><div class="ifc-compare-dot green"></div>Enter company, country, sector</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot green"></div>Engine researches automatically</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot green"></div>Quality evaluated and retried</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot green"></div>Full pitch deck generated</div>
+              <div class="ifc-compare-step"><div class="ifc-compare-dot green"></div>Analyst reviews and refines</div>
+            </div>
+          </div>
+        </div>`,
+
+      'security-architecture': () => `
+        <div class="ifc-security">
+          <div class="ifc-sec-zone external">
+            <div class="ifc-sec-label green">Mouliqe Engine (External)</div>
+            <div class="ifc-sec-items">
+              <span class="ifc-sec-pill green">Standalone Web App</span>
+              <span class="ifc-sec-pill green">Public Data Only</span>
+              <span class="ifc-sec-pill green">No Data Retention</span>
+              <span class="ifc-sec-pill green">Ephemeral Sessions</span>
+            </div>
+          </div>
+          <div class="ifc-sec-zone boundary">
+            <div class="ifc-sec-boundary-text">IFC SECURITY PERIMETER</div>
+          </div>
+          <div class="ifc-sec-zone internal">
+            <div class="ifc-sec-label muted">IFC Internal Systems (Not Accessed)</div>
+            <div class="ifc-sec-items">
+              <span class="ifc-sec-pill muted">Deal Database</span>
+              <span class="ifc-sec-pill muted">Internal Docs</span>
+              <span class="ifc-sec-pill muted">Client Data</span>
+              <span class="ifc-sec-pill muted">SSO / VPN</span>
+              <span class="ifc-sec-pill muted">Proprietary Models</span>
+            </div>
+          </div>
+          <div class="ifc-sec-note">No integration. No access. No network connection. By design.</div>
+        </div>`,
+
+      'demo-screenshot': () => `
+        <div class="ifc-demo">
+          <div class="ifc-demo-window">
+            <div class="ifc-demo-titlebar">
+              <div class="ifc-demo-dot r"></div>
+              <div class="ifc-demo-dot y"></div>
+              <div class="ifc-demo-dot g"></div>
+              <div class="ifc-demo-url">ifc-demo-frontend-v73g.vercel.app</div>
+            </div>
+            <div class="ifc-demo-body">
+              <div style="display:flex;align-items:center;gap:0.35rem;margin-bottom:0.5rem">
+                <div style="width:20px;height:20px;background:#021F43;border-radius:0.2rem;display:flex;align-items:center;justify-content:center">
+                  <span style="color:#fff;font-size:0.4rem;font-weight:700">IFC</span>
+                </div>
+                <span style="font-size:0.5rem;color:var(--p-fg-faint)">Pitch Deck Engine</span>
+              </div>
+              <div style="font-size:0.75rem;font-weight:600;color:#021F43;margin-bottom:0.15rem">Generate a Pitch Deck</div>
+              <div style="font-size:0.5rem;color:var(--p-fg-faint);margin-bottom:0.5rem">Powered by AI research and IFC expertise</div>
+              <div style="background:var(--p-bg);border:1px solid var(--p-border);border-radius:0.375rem;padding:0.5rem;margin-bottom:0.35rem">
+                <div style="font-size:0.45rem;font-weight:700;color:var(--p-fg-faint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.35rem">Company Details</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.25rem">
+                  <div class="ifc-demo-field"><div class="ifc-demo-field-label">Company</div><div class="ifc-demo-field-input">Akij Group</div></div>
+                  <div class="ifc-demo-field"><div class="ifc-demo-field-label">Country</div><div class="ifc-demo-field-input">Bangladesh</div></div>
+                  <div class="ifc-demo-field"><div class="ifc-demo-field-label">Sector</div><div class="ifc-demo-field-input">Cement</div></div>
+                  <div class="ifc-demo-field"><div class="ifc-demo-field-label">Website</div><div class="ifc-demo-field-input" style="color:var(--p-fg-faint)">https://...</div></div>
+                </div>
+              </div>
+              <div style="background:var(--p-bg);border:1px solid var(--p-border);border-radius:0.375rem;padding:0.5rem;margin-bottom:0.35rem">
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem">
+                  <div style="font-size:0.45rem;font-weight:700;color:var(--p-fg-faint);letter-spacing:0.08em;text-transform:uppercase">Supporting Materials</div>
+                  <div style="font-size:0.4rem;color:var(--p-fg-faint)">Optional</div>
+                </div>
+                <div style="border:1px dashed var(--p-border);border-radius:0.25rem;padding:0.35rem;text-align:center">
+                  <div style="font-size:0.45rem;color:var(--p-fg-faint)">Drop files here or <span style="color:var(--p-accent);font-weight:600">click to upload</span></div>
+                  <div style="font-size:0.4rem;color:var(--p-fg-faint);margin-top:0.1rem">PDF, DOCX</div>
+                </div>
+              </div>
+              <div class="ifc-demo-btn" style="width:100%;text-align:center">Generate Pitch Deck &rarr;</div>
+            </div>
+          </div>
+        </div>`
+    };
+
+    engineModule.initPresentation({ meta, slides });
+
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.p-slide').forEach(slideEl => {
+        const id = slideEl.dataset.id;
+        const slideData = slides.find(s => s.id === id);
+        if (slideData?.visual && customVisuals[slideData.visual]) {
+          const rightCol = slideEl.querySelector('.p-split-right');
+          if (rightCol) {
+            rightCol.innerHTML = `<div class="p-visual">${customVisuals[slideData.visual]()}</div>`;
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
