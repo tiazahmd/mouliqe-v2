@@ -102,7 +102,7 @@ export const slides = [
       },
       {
         label: 'Built for iteration',
-        detail: 'The demo represents the core pipeline. Production enhancements — branded IFC templates, multi-engagement-type support, verification layer, and analyst feedback loops — are on the roadmap and ready to build once the engagement model is defined.'
+        detail: 'The demo represents the core pipeline. Production enhancements — branded IFC templates, multi-engagement-type support, verification layer, and analyst feedback loops — are on the roadmap.'
       }
     ]
   },
@@ -209,16 +209,12 @@ export const slides = [
         detail: 'Run the engine on a real company. See what it produces. Evaluate the research quality, slide structure, and content against your standards. Identify gaps and areas for improvement.'
       },
       {
-        label: 'Define the engagement model',
-        detail: 'How should this tool be delivered? Options include a dedicated build-out for the advisory team, a subscription model, or a hybrid approach. The technical architecture supports all three.'
-      },
-      {
         label: 'Refine with analyst feedback',
         detail: 'The fastest path to production quality is iteration. Analysts run the tool, flag what needs improvement, and the prompts and pipeline are refined. Each round of feedback makes the output closer to what a senior analyst would produce.'
       },
       {
         label: 'Production deployment',
-        detail: 'Branded IFC templates, verification layer, multi-engagement-type support, and analyst workflow integration. Scoped and ready to build once the engagement model is defined.'
+        detail: 'Branded IFC templates, verification layer, multi-engagement-type support, and analyst workflow integration. Scoped and ready to build.'
       }
     ]
   }

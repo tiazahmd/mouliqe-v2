@@ -52,22 +52,19 @@
     .ifc-compare-dot.green { background: var(--p-accent); }
     .ifc-compare-vs { text-align: center; font-size: 0.65rem; font-weight: 700; color: var(--p-fg-faint); letter-spacing: 0.1em; padding: 0.15rem 0; }
 
-    /* Security architecture */
-    .ifc-security { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; }
-    .ifc-sec-zone { padding: 0.65rem 0.75rem; border-radius: 0.5rem; }
-    .ifc-sec-zone.external { background: var(--p-accent-dim); border: 1px solid var(--p-accent-border); }
-    .ifc-sec-zone.boundary { background: transparent; border: 2px dashed var(--p-red); opacity: 0.7; text-align: center; padding: 0.35rem; }
-    .ifc-sec-zone.internal { background: var(--p-bg-card); border: 1px solid var(--p-border); opacity: 0.5; }
-    .ifc-sec-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.3rem; }
-    .ifc-sec-label.green { color: var(--p-accent); }
-    .ifc-sec-label.red { color: var(--p-red); }
-    .ifc-sec-label.muted { color: var(--p-fg-faint); }
-    .ifc-sec-items { display: flex; flex-wrap: wrap; gap: 0.25rem; }
-    .ifc-sec-pill { font-size: 0.55rem; padding: 0.12rem 0.4rem; border-radius: 0.2rem; font-weight: 600; }
-    .ifc-sec-pill.green { background: var(--p-accent-dim); color: var(--p-accent); }
-    .ifc-sec-pill.muted { background: var(--p-bg-card); color: var(--p-fg-faint); border: 1px solid var(--p-border); }
-    .ifc-sec-boundary-text { font-size: 0.55rem; font-weight: 700; color: var(--p-red); letter-spacing: 0.1em; }
-    .ifc-sec-note { font-size: 0.55rem; color: var(--p-fg-faint); text-align: center; font-style: italic; margin-top: 0.25rem; }
+    /* Security architecture — simplified */
+    .ifc-security { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 0; padding: 1rem 0; }
+    .ifc-sec-box { padding: 0.75rem 1rem; border-radius: 0.5rem; text-align: center; width: 85%; }
+    .ifc-sec-box.engine { background: var(--p-accent-dim); border: 1.5px solid var(--p-accent-border); }
+    .ifc-sec-box.internal { background: var(--p-bg-card); border: 1.5px solid var(--p-border); opacity: 0.6; }
+    .ifc-sec-box-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; }
+    .ifc-sec-box-label.green { color: var(--p-accent); }
+    .ifc-sec-box-label.muted { color: var(--p-fg-faint); }
+    .ifc-sec-box-sub { font-size: 0.55rem; color: var(--p-fg-subtle); margin-top: 0.2rem; }
+    .ifc-sec-connector { position: relative; width: 2px; height: 40px; background: var(--p-border); }
+    .ifc-sec-cross { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 28px; height: 28px; border-radius: 50%; background: var(--p-bg); border: 2px solid var(--p-red); display: flex; align-items: center; justify-content: center; }
+    .ifc-sec-cross-x { font-size: 0.75rem; font-weight: 700; color: var(--p-red); line-height: 1; }
+    .ifc-sec-note { font-size: 0.5rem; color: var(--p-fg-faint); text-align: center; margin-top: 0.5rem; font-style: italic; }
 
     /* Demo screenshot placeholder */
     .ifc-demo { width: 100%; display: flex; flex-direction: column; gap: 0.5rem; }
@@ -202,29 +199,18 @@
 
       'security-architecture': () => `
         <div class="ifc-security">
-          <div class="ifc-sec-zone external">
-            <div class="ifc-sec-label green">Mouliqe Engine (External)</div>
-            <div class="ifc-sec-items">
-              <span class="ifc-sec-pill green">Standalone Web App</span>
-              <span class="ifc-sec-pill green">Public Data Only</span>
-              <span class="ifc-sec-pill green">No Data Retention</span>
-              <span class="ifc-sec-pill green">Ephemeral Sessions</span>
-            </div>
+          <div class="ifc-sec-box engine">
+            <div class="ifc-sec-box-label green">Mouliqe Engine</div>
+            <div class="ifc-sec-box-sub">Standalone web app · Public data only · No data retention</div>
           </div>
-          <div class="ifc-sec-zone boundary">
-            <div class="ifc-sec-boundary-text">IFC SECURITY PERIMETER</div>
+          <div class="ifc-sec-connector">
+            <div class="ifc-sec-cross"><span class="ifc-sec-cross-x">&times;</span></div>
           </div>
-          <div class="ifc-sec-zone internal">
-            <div class="ifc-sec-label muted">IFC Internal Systems (Not Accessed)</div>
-            <div class="ifc-sec-items">
-              <span class="ifc-sec-pill muted">Deal Database</span>
-              <span class="ifc-sec-pill muted">Internal Docs</span>
-              <span class="ifc-sec-pill muted">Client Data</span>
-              <span class="ifc-sec-pill muted">SSO / VPN</span>
-              <span class="ifc-sec-pill muted">Proprietary Models</span>
-            </div>
+          <div class="ifc-sec-box internal">
+            <div class="ifc-sec-box-label muted">IFC Internal Systems</div>
+            <div class="ifc-sec-box-sub">Not accessed · No integration · No network connection</div>
           </div>
-          <div class="ifc-sec-note">No integration. No access. No network connection. By design.</div>
+          <div class="ifc-sec-note">No data flows between the engine and IFC systems. By design.</div>
         </div>`,
 
       'demo-screenshot': () => `
