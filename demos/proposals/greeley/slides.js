@@ -197,7 +197,7 @@ export const slides = [
     items: [
       { label: 'AI Governance Framework', detail: 'Source of truth definitions for each data type. Data update cadence and ownership assignments. Accuracy monitoring protocols — operationalized through the WS3 dashboards. Extension of Greeley\'s existing AI policy with operational specifics for data governance, validation standards, and maintenance procedures.' },
       { label: 'Executive Business Case', detail: 'Written for the City Manager\'s office and CIO, not the Innovation team. Current state summary, Phase 1 results with measured impact from all tools and dashboards, future opportunity roadmap with projected ROI, and a clear investment narrative. Answers: "How do we tell the story of where we are, where we want to be, and what it takes to get there?"' },
-      { label: 'Knowledge Transfer & Handoff', detail: 'Walkthrough sessions with IT and Innovation teams on all deliverables. Q&A, documentation review, and 2 weeks of post-delivery support for bug fixes, adjustments, and questions.' }
+      { label: 'Knowledge Transfer & Handoff', detail: 'Walkthrough sessions with IT and Innovation teams on all deliverables. Q&A, documentation review, and two months of post-engagement support for bug fixes, adjustments, and questions at no additional cost.' }
     ]
   },
 
@@ -260,15 +260,15 @@ export const slides = [
         label: 'WS4: Governance & Business Case',
         subtotal: '$10,000',
         items: [
-          { label: 'AI Governance Framework', price: '$4,000' },
+          { label: 'AI Governance Framework', price: '$4,500' },
           { label: 'Executive Business Case Document', price: '$4,000' },
-          { label: 'Knowledge Transfer & Handoff', price: '$1,000' },
-          { label: 'Post-Delivery Support (2 weeks)', price: '$1,000' }
+          { label: 'Knowledge Transfer & Handoff', price: '$1,500' }
         ]
       }
     ],
     items: [
-      { label: 'Payment milestones', detail: '30% ($12,600) at contract execution. 40% ($16,800) at completion of assessment and tool delivery to UAT. 30% ($12,600) at final delivery and handoff. Net 30 payment terms.' }
+      { label: 'Payment milestones', detail: '30% ($12,600) at contract execution. 40% ($16,800) at completion of assessment and tool delivery to UAT. 30% ($12,600) at final delivery and handoff. Net 30 payment terms.' },
+      { label: 'Post-engagement support', detail: 'Every Mouliqe engagement includes two months of post-project support at no additional cost. This covers bug fixes, configuration adjustments, questions, and minor tuning. New feature development or unrelated diagnosis would be scoped separately.' }
     ]
   },
 
