@@ -148,7 +148,7 @@
           backgroundColor: 'rgba(239,68,68,0.6)', pointRadius: 5
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Daily high temperature (F)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { title: { display: true, text: 'Heat-related EMS calls', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Daily high temperature (F)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { title: { display: true, text: 'Heat-related EMS calls', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('seasonalChart'), {
@@ -161,7 +161,7 @@
           backgroundColor: d => d.raw > 50 ? '#ef4444' : d.raw > 20 ? '#f59e0b' : '#4ade80'
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('coolingChart'), {
@@ -173,7 +173,7 @@
           { label: 'Peak demand (persons)', data: [145, 92, 55, 130, 38, 62], backgroundColor: '#ef4444' }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
   </script>
 </body>

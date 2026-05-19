@@ -148,7 +148,7 @@
           { label: 'Staff Handled', data: [9700,9100,10200,10900,11400,12100,11700,11600,11100,10400,9900,9200], backgroundColor: '#60a5fa' }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('costChart'), {
@@ -161,7 +161,7 @@
           backgroundColor: ['#60a5fa','#60a5fa','#60a5fa','#4ade80','#4ade80']
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => '$' + v.toFixed(2) }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => '$' + v.toFixed(2) }, grid: { color: gridColor() } } } }
     });
   </script>
 </body>

@@ -122,7 +122,7 @@
           borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.15)', fill: true, tension: 0.4
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() }, max: 100 } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() }, max: 100 } } }
     });
 
     new Chart(document.getElementById('waterChart'), {
@@ -134,7 +134,7 @@
           { label: 'Municipal (acre-ft)', data: [18,18,20,25,35,45,50,48,38,28,20,18], backgroundColor: '#60a5fa' }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('coverageChart'), {
@@ -146,7 +146,7 @@
           { label: 'Wireless mesh (% of ag land)', data: [0, 0, 10, 35, 68, 90], borderColor: '#60a5fa', tension: 0.3 }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() }, max: 100 } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() }, max: 100 } } }
     });
   </script>
 </body>

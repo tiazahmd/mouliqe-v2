@@ -122,7 +122,7 @@
           { label: 'Public Works', data: [0,0,0,5,35,45,40,42,38,25,5,0], borderColor: '#4ade80', tension: 0.4 }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { title: { display: true, text: 'Hour of day', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { title: { display: true, text: 'Transmissions', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { title: { display: true, text: 'Hour of day', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { title: { display: true, text: 'Transmissions', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('agencyChart'), {
@@ -131,7 +131,7 @@
         labels: ['Sheriff (42%)', 'Fire Districts (28%)', 'EMS (18%)', 'Search & Rescue (7%)', 'Public Works (5%)'],
         datasets: [{ data: [42, 28, 18, 7, 5], backgroundColor: ['#60a5fa','#ef4444','#f59e0b','#a78bfa','#4ade80'] }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
+      options: { responsive: true, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
     });
 
     new Chart(document.getElementById('coverageChart'), {
@@ -144,7 +144,7 @@
           backgroundColor: d => d.raw > 90 ? '#4ade80' : d.raw > 75 ? '#f59e0b' : '#ef4444'
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { max: 100, ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { max: 100, ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() } } } }
     });
   </script>
 </body>

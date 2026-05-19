@@ -122,7 +122,7 @@
           { label: 'Agriculture', data: [18, 12400, 8500, 580000], backgroundColor: '#60a5fa' }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { type: 'logarithmic', ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { type: 'logarithmic', ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('conversionChart'), {
@@ -135,7 +135,7 @@
           borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', fill: true, tension: 0.3
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('energyChart'), {
@@ -147,7 +147,7 @@
           { label: 'Available capacity (MW)', data: [900, 900, 900, 920, 950], backgroundColor: '#4ade80' }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + ' MW' }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + ' MW' }, grid: { color: gridColor() } } } }
     });
   </script>
 </body>

@@ -124,7 +124,7 @@
           { label: 'Target (12-month)', data: [90, 88, 82, 85, 80, 85], borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.1)', pointBackgroundColor: '#4ade80' }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { r: { ticks: { color: textColor(), backdropColor: 'transparent' }, grid: { color: gridColor() }, pointLabels: { color: textColor(), font: { family: 'Oxanium', size: 12 } }, max: 100 } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { r: { ticks: { color: textColor(), backdropColor: 'transparent' }, grid: { color: gridColor() }, pointLabels: { color: textColor(), font: { family: 'Oxanium', size: 12 } }, max: 100 } } }
     });
 
     new Chart(document.getElementById('vulnChart'), {
@@ -137,7 +137,7 @@
           { label: 'Medium', data: [85,92,98,88,82,95,105,98,90,85,80,78], borderColor: '#60a5fa', tension: 0.3 }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('trainingChart'), {
@@ -150,7 +150,7 @@
           backgroundColor: d => d.raw > 80 ? '#4ade80' : d.raw > 60 ? '#f59e0b' : '#ef4444'
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { max: 100, ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { max: 100, ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() } } } }
     });
   </script>
 </body>

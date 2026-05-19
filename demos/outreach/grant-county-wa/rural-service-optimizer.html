@@ -123,7 +123,7 @@
           backgroundColor: '#4ade80'
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('responseChart'), {
@@ -140,7 +140,7 @@
           pointRadius: 6
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Distance from hub (miles)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { title: { display: true, text: 'Response time (minutes)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Distance from hub (miles)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { title: { display: true, text: 'Response time (minutes)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('capacityChart'), {
@@ -152,7 +152,7 @@
           { label: 'Effective Capacity (FTE equivalent)', data: [9, 10.1], backgroundColor: '#4ade80' }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() }, max: 12 } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() }, max: 12 } } }
     });
   </script>
 </body>

@@ -116,7 +116,7 @@
     const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
     const textColor = () => isDark() ? '#94a3b8' : '#64748b';
     const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
-    const baseOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } };
+    const baseOpts = { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } };
 
     new Chart(document.getElementById('timeChart'), {
       type: 'line',
@@ -136,7 +136,7 @@
         labels: ['Traffic/Accidents', 'Domestic', 'Theft/Burglary', 'Drug-Related', 'Welfare Check', 'Assault', 'Other'],
         datasets: [{ data: [28, 18, 16, 14, 12, 7, 5], backgroundColor: ['#4ade80','#60a5fa','#f59e0b','#ef4444','#a78bfa','#ec4899','#475569'] }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
+      options: { responsive: true, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
     });
 
     new Chart(document.getElementById('staffChart'), {

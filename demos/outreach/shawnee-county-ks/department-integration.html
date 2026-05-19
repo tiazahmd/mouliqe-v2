@@ -148,7 +148,7 @@
         labels: ['Zoning/Planning (35%)', 'Env Health Inspections (28%)', 'Code Enforcement (20%)', 'Permits (12%)', 'Other (5%)'],
         datasets: [{ data: [35, 28, 20, 12, 5], backgroundColor: ['#4ade80','#60a5fa','#f59e0b','#a78bfa','#475569'] }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
+      options: { responsive: true, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
     });
 
     new Chart(document.getElementById('processingChart'), {
@@ -161,7 +161,7 @@
           backgroundColor: d => d.raw > 40 ? '#ef4444' : d.raw > 25 ? '#f59e0b' : '#4ade80'
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + ' days' }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + ' days' }, grid: { color: gridColor() } } } }
     });
   </script>
 </body>

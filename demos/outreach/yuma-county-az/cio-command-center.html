@@ -132,7 +132,7 @@
           { label: 'Tickets resolved (30d)', data: [42, 26, 30, 82, 11], backgroundColor: '#4ade80' }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('securityChart'), {
@@ -145,7 +145,7 @@
           { label: 'Incidents (investigated)', data: [3,2,4,2,5,3,2,4,3,2,4,3], borderColor: '#4ade80', tension: 0.3 }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('budgetChart'), {
@@ -154,7 +154,7 @@
         labels: ['Personnel (62%)', 'Infrastructure (18%)', 'Software/Licensing (12%)', 'Projects (5%)', 'Training (3%)'],
         datasets: [{ data: [62, 18, 12, 5, 3], backgroundColor: ['#4ade80','#60a5fa','#a78bfa','#f59e0b','#475569'] }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
+      options: { responsive: true, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
     });
 
     new Chart(document.getElementById('staffChart'), {
@@ -167,7 +167,7 @@
           backgroundColor: '#4ade80'
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() }, max: 12 } } }
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() }, max: 12 } } }
     });
   </script>
 </body>

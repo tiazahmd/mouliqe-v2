@@ -117,7 +117,7 @@
         labels: ['Data Centers ($54M)', 'Agricultural ($18M)', 'Residential ($12M)', 'Commercial ($8M)', 'Other ($5M)'],
         datasets: [{ data: [54, 18, 12, 8, 5], backgroundColor: ['#4ade80','#60a5fa','#a78bfa','#f59e0b','#475569'] }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
+      options: { responsive: true, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
     });
 
     new Chart(document.getElementById('growthChart'), {
@@ -130,7 +130,7 @@
           borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.1)', fill: true, tension: 0.3
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => '$' + v + 'M' }, grid: { color: gridColor() } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => '$' + v + 'M' }, grid: { color: gridColor() } } } }
     });
 
     new Chart(document.getElementById('retailChart'), {
@@ -142,7 +142,7 @@
           { label: 'DC Tax Revenue ($M)', data: [35, 38, 42, 46, 50, 54], backgroundColor: '#4ade80', yAxisID: 'y1' }
         ]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { position: 'left', ticks: { color: textColor(), callback: v => '$' + v + 'B' }, grid: { color: gridColor() } }, y1: { position: 'right', ticks: { color: textColor(), callback: v => '$' + v + 'M' }, grid: { display: false } } } }
+      options: { responsive: true, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { position: 'left', ticks: { color: textColor(), callback: v => '$' + v + 'B' }, grid: { color: gridColor() } }, y1: { position: 'right', ticks: { color: textColor(), callback: v => '$' + v + 'M' }, grid: { display: false } } } }
     });
   </script>
 </body>
