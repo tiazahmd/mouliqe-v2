@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuma County — Extreme Heat Response Intelligence</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div>
+      <p class="demo-eyebrow">Prepared by Mouliqe for Yuma County, Arizona</p>
+      <h1 class="demo-title">Extreme Heat Response Intelligence</h1>
+      <p class="demo-subtitle">Heat is the #1 weather killer in the US. Yuma averages 107&deg;F in summer. Predictive modeling saves lives.</p>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--red">NWS / NOAA</span>
+      <span class="demo-tag demo-tag--amber">AZ Dept of Health</span>
+      <span class="demo-tag demo-tag--blue">EMS / Paramedics</span>
+      <span class="demo-tag demo-tag--green">Cooling Centers</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Avg Summer High</p>
+        <p class="demo-stat-value">107&deg;F</p>
+        <p class="demo-stat-delta demo-stat-delta--down">June-August average</p>
+        <p class="demo-stat-source">Source: NWS Yuma</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Heat-Related EMS Calls (2024)</p>
+        <p class="demo-stat-value">~340</p>
+        <p class="demo-stat-delta demo-stat-delta--up">+22% vs 2022</p>
+        <p class="demo-stat-source">Source: AZ DHS / EMS</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Vulnerable Population</p>
+        <p class="demo-stat-value">~48K</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Elderly + outdoor workers + homeless</p>
+        <p class="demo-stat-source">Source: Census + Ag Census</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Cooling Centers</p>
+        <p class="demo-stat-value">12</p>
+        <p class="demo-stat-delta demo-stat-delta--info">County + city + nonprofit</p>
+        <p class="demo-stat-source">Source: Emergency Mgmt</p>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Temperature &amp; EMS Correlation</p>
+          <p class="demo-section-title">Daily High Temp vs. Heat-Related Calls (Summer 2024)</p>
+        </div>
+        <canvas id="correlationChart" height="220"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Seasonal Pattern</p>
+          <p class="demo-section-title">Monthly Heat-Related Incidents (3-Year Average)</p>
+        </div>
+        <canvas id="seasonalChart" height="220"></canvas>
+      </div>
+    </section>
+
+    <!-- Vulnerable Population Map Concept -->
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <div style="margin-bottom:1.5rem">
+        <p class="demo-section-label">Vulnerable Population Mapping</p>
+        <p class="demo-section-title">Who Is Most at Risk &mdash; and Where Are They?</p>
+      </div>
+      <div class="demo-grid demo-grid--3" style="gap:1rem">
+        <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:1rem;text-align:center">
+          <p style="font-size:1.5rem;font-weight:700;color:#ef4444">~32K</p>
+          <p style="font-size:0.75rem;color:var(--color-text-muted)">Agricultural workers</p>
+          <p style="font-size:0.65rem;color:#ef4444;margin-top:0.25rem">Outdoor exposure 8-12 hrs/day</p>
+        </div>
+        <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:1rem;text-align:center">
+          <p style="font-size:1.5rem;font-weight:700;color:#f59e0b">~12K</p>
+          <p style="font-size:0.75rem;color:var(--color-text-muted)">Elderly (75+) living alone</p>
+          <p style="font-size:0.65rem;color:#f59e0b;margin-top:0.25rem">May lack AC or transportation</p>
+        </div>
+        <div style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:1rem;text-align:center">
+          <p style="font-size:1.5rem;font-weight:700;color:#60a5fa">~4K</p>
+          <p style="font-size:0.75rem;color:var(--color-text-muted)">Unsheltered / homeless</p>
+          <p style="font-size:0.65rem;color:#60a5fa;margin-top:0.25rem">No consistent cooling access</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Predictive Model -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Predictive Response Model</p>
+        <p class="demo-section-title">AI-Generated Recommendations Based on 72-Hour Forecast</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>Forecast Trigger</th><th>Automated Action</th><th>Resource Pre-Positioned</th><th>Lead Time</th></tr></thead>
+          <tbody>
+            <tr><td>High &gt; 110&deg;F for 3+ consecutive days</td><td>Activate all cooling centers + extend hours</td><td>Additional EMS units to south county</td><td>48 hours</td></tr>
+            <tr><td>Overnight low &gt; 90&deg;F</td><td>Welfare check alerts for elderly registry</td><td>Outreach teams to mobile home parks</td><td>24 hours</td></tr>
+            <tr><td>Humidity + heat index &gt; 120&deg;F</td><td>Agricultural worker advisory (multilingual)</td><td>Hydration stations at field access points</td><td>12 hours</td></tr>
+            <tr><td>EMS calls exceed 15/day (heat-related)</td><td>Surge protocol activation</td><td>Mutual aid request to neighboring counties</td><td>Real-time</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <div style="margin-bottom:1rem">
+        <p class="demo-section-label">Cooling Center Utilization</p>
+        <p class="demo-section-title">Capacity vs. Demand During Extreme Heat Events</p>
+      </div>
+      <canvas id="coolingChart" height="160"></canvas>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+    new Chart(document.getElementById('correlationChart'), {
+      type: 'scatter',
+      data: {
+        datasets: [{
+          label: 'Daily observations (Jun-Aug 2024)',
+          data: [
+            {x:98,y:2},{x:100,y:3},{x:102,y:4},{x:104,y:5},{x:105,y:6},{x:106,y:7},
+            {x:107,y:8},{x:108,y:9},{x:109,y:11},{x:110,y:13},{x:111,y:15},{x:112,y:18},
+            {x:113,y:21},{x:114,y:24},{x:115,y:28},{x:116,y:32},{x:118,y:38},
+            {x:103,y:4},{x:106,y:6},{x:109,y:10},{x:112,y:16},{x:114,y:22}
+          ],
+          backgroundColor: 'rgba(239,68,68,0.6)', pointRadius: 5
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Daily high temperature (F)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { title: { display: true, text: 'Heat-related EMS calls', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('seasonalChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [{
+          label: 'Heat-related incidents (3yr avg)',
+          data: [0,0,2,8,22,58,95,88,42,12,2,0],
+          backgroundColor: d => d.raw > 50 ? '#ef4444' : d.raw > 20 ? '#f59e0b' : '#4ade80'
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('coolingChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Center 1 (Yuma)', 'Center 2 (Yuma)', 'Center 3 (Somerton)', 'Center 4 (San Luis)', 'Center 5 (Wellton)', 'Center 6 (Gadsden)'],
+        datasets: [
+          { label: 'Capacity (persons)', data: [120, 80, 60, 100, 40, 50], backgroundColor: '#4ade80' },
+          { label: 'Peak demand (persons)', data: [145, 92, 55, 130, 38, 62], backgroundColor: '#ef4444' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+  </script>
+</body>
+</html>

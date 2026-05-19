@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Santa Fe County — Cybersecurity Posture Intelligence</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div>
+      <p class="demo-eyebrow">Prepared by Mouliqe for Santa Fe County, New Mexico</p>
+      <h1 class="demo-title">Cybersecurity Posture Intelligence</h1>
+      <p class="demo-subtitle">$5.18M in federal cybersecurity funding &mdash; are you deploying it strategically?</p>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--red">SLCGP Grant ($5.18M)</span>
+      <span class="demo-tag demo-tag--blue">NIST CSF 2.0</span>
+      <span class="demo-tag demo-tag--amber">CISA Guidelines</span>
+      <span class="demo-tag demo-tag--green">NM DoIT Standards</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Grant Amount</p>
+        <p class="demo-stat-value">$5.18M</p>
+        <p class="demo-stat-delta demo-stat-delta--info">State &amp; Local Cybersecurity</p>
+        <p class="demo-stat-source">Source: USASpending / DHS</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Deployed (est.)</p>
+        <p class="demo-stat-value">~24%</p>
+        <p class="demo-stat-delta demo-stat-delta--down">$1.24M of $5.18M</p>
+        <p class="demo-stat-source">Estimated from timeline</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Overall Posture Score</p>
+        <p class="demo-stat-value">62/100</p>
+        <p class="demo-stat-delta demo-stat-delta--amber">Moderate (illustrative)</p>
+        <p class="demo-stat-source">NIST CSF Assessment</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Broadband Expansion</p>
+        <p class="demo-stat-value">$382M</p>
+        <p class="demo-stat-delta demo-stat-delta--up">NM-wide (expanding attack surface)</p>
+        <p class="demo-stat-source">Source: Federal approval</p>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">NIST CSF 2.0 Maturity</p>
+          <p class="demo-section-title">Assessment by Function (Illustrative)</p>
+        </div>
+        <canvas id="nistChart" height="240"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Grant Deployment Timeline</p>
+          <p class="demo-section-title">$5.18M Spending Plan vs. Actuals</p>
+        </div>
+        <canvas id="spendChart" height="240"></canvas>
+      </div>
+    </section>
+
+    <!-- Posture Breakdown -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Security Posture Detail</p>
+        <p class="demo-section-title">Key Metrics Across NIST CSF Functions</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>NIST Function</th><th>Key Metric</th><th>Current</th><th>Target</th><th>Gap</th><th>Priority</th></tr></thead>
+          <tbody>
+            <tr><td>Identify</td><td>Asset inventory completeness</td><td>68%</td><td>95%</td><td>27%</td><td><span class="demo-badge demo-badge--red">High</span></td></tr>
+            <tr><td>Protect</td><td>MFA adoption (staff)</td><td>74%</td><td>100%</td><td>26%</td><td><span class="demo-badge demo-badge--red">High</span></td></tr>
+            <tr><td>Protect</td><td>Patch compliance (30-day)</td><td>81%</td><td>95%</td><td>14%</td><td><span class="demo-badge demo-badge--amber">Medium</span></td></tr>
+            <tr><td>Detect</td><td>Mean time to detect (hours)</td><td>18</td><td>4</td><td>14 hrs</td><td><span class="demo-badge demo-badge--red">High</span></td></tr>
+            <tr><td>Respond</td><td>Incident response plan tested</td><td>No</td><td>Annually</td><td>Overdue</td><td><span class="demo-badge demo-badge--red">Critical</span></td></tr>
+            <tr><td>Recover</td><td>Backup recovery test (last)</td><td>8 mo ago</td><td>Quarterly</td><td>5 months</td><td><span class="demo-badge demo-badge--amber">Medium</span></td></tr>
+            <tr><td>Govern</td><td>Security awareness training</td><td>62% complete</td><td>100%</td><td>38%</td><td><span class="demo-badge demo-badge--amber">Medium</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <div style="margin-bottom:1rem">
+        <p class="demo-section-label">Investment Allocation</p>
+        <p class="demo-section-title">Recommended $5.18M Deployment by Category</p>
+      </div>
+      <canvas id="allocChart" height="160"></canvas>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+    // NIST Radar Chart
+    new Chart(document.getElementById('nistChart'), {
+      type: 'radar',
+      data: {
+        labels: ['Identify', 'Protect', 'Detect', 'Respond', 'Recover', 'Govern'],
+        datasets: [
+          { label: 'Current', data: [68, 72, 45, 52, 58, 55], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', pointBackgroundColor: '#f59e0b' },
+          { label: 'Target (with $5.18M)', data: [95, 92, 88, 85, 90, 88], borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.1)', pointBackgroundColor: '#4ade80' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { r: { ticks: { color: textColor(), backdropColor: 'transparent' }, grid: { color: gridColor() }, pointLabels: { color: textColor(), font: { family: 'Oxanium', size: 12 } }, max: 100 } } }
+    });
+
+    // Grant Spending Timeline
+    new Chart(document.getElementById('spendChart'), {
+      type: 'line',
+      data: {
+        labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025', 'Q1 2026', 'Q2 2026', 'Q3 2026', 'Q4 2026', 'Q1 2027', 'Q2 2027'],
+        datasets: [
+          { label: 'Planned cumulative ($M)', data: [0.4, 1.0, 1.8, 2.5, 3.0, 3.5, 4.0, 4.4, 4.8, 5.18], borderColor: '#4ade80', borderDash: [5,5], tension: 0.3 },
+          { label: 'Actual cumulative ($M)', data: [0.2, 0.5, 0.8, 1.0, 1.24, null, null, null, null, null], borderColor: '#f59e0b', tension: 0.3, pointRadius: 5 }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => '$' + v + 'M' }, grid: { color: gridColor() } } } }
+    });
+
+    // Allocation
+    new Chart(document.getElementById('allocChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Detection & Monitoring', 'Identity & Access', 'Training & Awareness', 'Incident Response', 'Infrastructure Hardening', 'Assessment & Planning'],
+        datasets: [{
+          label: 'Recommended allocation ($K)',
+          data: [1400, 1100, 800, 680, 750, 450],
+          backgroundColor: '#4ade80'
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor(), callback: v => '$' + v + 'K' }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), font: { size: 11 } }, grid: { color: gridColor() } } } }
+    });
+  </script>
+</body>
+</html>

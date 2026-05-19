@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shawnee County — Department Integration Analytics</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div>
+      <p class="demo-eyebrow">Prepared by Mouliqe for Shawnee County, Kansas</p>
+      <h1 class="demo-title">Department Integration Analytics</h1>
+      <p class="demo-subtitle">Planning + Environmental Health merged into Land Use &amp; Development (Jan 2026). How&rsquo;s the data integration going?</p>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--green">Planning (legacy)</span>
+      <span class="demo-tag demo-tag--blue">Environmental Health (legacy)</span>
+      <span class="demo-tag demo-tag--amber">Land Use &amp; Development (new)</span>
+      <span class="demo-tag demo-tag--purple">Code Enforcement</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Merger Date</p>
+        <p class="demo-stat-value">Jan 2026</p>
+        <p class="demo-stat-delta demo-stat-delta--info">~5 months ago</p>
+        <p class="demo-stat-source">Source: snco.gov/ludev</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Director</p>
+        <p class="demo-stat-value">Joni Thadani</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Leading merged department</p>
+        <p class="demo-stat-source">Source: County website</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Legacy Systems</p>
+        <p class="demo-stat-value">2+</p>
+        <p class="demo-stat-delta demo-stat-delta--down">Separate databases</p>
+        <p class="demo-stat-source">Estimated from structure</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Unified Reporting</p>
+        <p class="demo-stat-value">TBD</p>
+        <p class="demo-stat-delta demo-stat-delta--down">Not yet achieved</p>
+        <p class="demo-stat-source">Integration assessment</p>
+      </div>
+    </section>
+
+    <!-- The Merger Challenge -->
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d3">
+      <div style="margin-bottom:1.5rem">
+        <p class="demo-section-label">The Integration Challenge</p>
+        <p class="demo-section-title">Two Departments Became One &mdash; But Did Their Data?</p>
+      </div>
+      <div class="demo-grid demo-grid--3" style="gap:1rem">
+        <div style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:8px;padding:1.25rem">
+          <p style="font-size:0.7rem;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem">Planning (Legacy)</p>
+          <ul style="list-style:none;padding:0;font-size:0.78rem;line-height:2">
+            <li>Zoning applications</li>
+            <li>Subdivision plats</li>
+            <li>Conditional use permits</li>
+            <li>Comprehensive plan</li>
+            <li>GIS parcel data</li>
+          </ul>
+        </div>
+        <div style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:1.25rem">
+          <p style="font-size:0.7rem;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem">Environmental Health (Legacy)</p>
+          <ul style="list-style:none;padding:0;font-size:0.78rem;line-height:2">
+            <li>Septic inspections</li>
+            <li>Food service permits</li>
+            <li>Water quality testing</li>
+            <li>Complaint investigations</li>
+            <li>Violation tracking</li>
+          </ul>
+        </div>
+        <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:1.25rem">
+          <p style="font-size:0.7rem;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem">Unified View (Goal)</p>
+          <ul style="list-style:none;padding:0;font-size:0.78rem;line-height:2">
+            <li>Single property record</li>
+            <li>All permits + inspections</li>
+            <li>Compliance history</li>
+            <li>Cross-reference violations</li>
+            <li>One dashboard for Thadani</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Workload Distribution</p>
+          <p class="demo-section-title">Cases by Type (Combined Department)</p>
+        </div>
+        <canvas id="workloadChart" height="200"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Processing Time</p>
+          <p class="demo-section-title">Avg Days to Complete by Application Type</p>
+        </div>
+        <canvas id="processingChart" height="200"></canvas>
+      </div>
+    </section>
+
+    <!-- Integration Roadmap -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Integration Roadmap</p>
+        <p class="demo-section-title">Steps to Unified Operations</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>Phase</th><th>Action</th><th>Timeline</th><th>IT Effort</th><th>Business Value</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Data mapping: identify shared entities (parcels, owners, addresses)</td><td>2-3 weeks</td><td>Low</td><td>Foundation for everything else</td></tr>
+            <tr><td>2</td><td>Unified property view: single record showing all permits + inspections</td><td>4-6 weeks</td><td>Medium</td><td>Staff see full context on any property</td></tr>
+            <tr><td>3</td><td>Cross-reference engine: flag properties with both planning AND health issues</td><td>3-4 weeks</td><td>Medium</td><td>Catch compliance gaps automatically</td></tr>
+            <tr><td>4</td><td>Director dashboard: Thadani sees combined workload, backlogs, trends</td><td>2-3 weeks</td><td>Low</td><td>Management visibility across merged dept</td></tr>
+            <tr><td>5</td><td>Public portal: residents see all their property interactions in one place</td><td>6-8 weeks</td><td>High</td><td>Reduced phone calls, better transparency</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+    new Chart(document.getElementById('workloadChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Zoning/Planning (35%)', 'Env Health Inspections (28%)', 'Code Enforcement (20%)', 'Permits (12%)', 'Other (5%)'],
+        datasets: [{ data: [35, 28, 20, 12, 5], backgroundColor: ['#4ade80','#60a5fa','#f59e0b','#a78bfa','#475569'] }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
+    });
+
+    new Chart(document.getElementById('processingChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Rezoning', 'Conditional Use', 'Septic Permit', 'Food License', 'Code Violation', 'Subdivision'],
+        datasets: [{
+          label: 'Avg days',
+          data: [45, 32, 18, 12, 28, 55],
+          backgroundColor: d => d.raw > 40 ? '#ef4444' : d.raw > 25 ? '#f59e0b' : '#4ade80'
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + ' days' }, grid: { color: gridColor() } } } }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canyon County — Growth Impact Dashboard</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div class="demo-flex demo-justify-between demo-items-center">
+      <div>
+        <p class="demo-eyebrow">Prepared by Mouliqe for Canyon County, Idaho</p>
+        <h1 class="demo-title">Growth Impact Dashboard</h1>
+        <p class="demo-subtitle">Population growth vs. service capacity &mdash; where will you break next?</p>
+      </div>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--green">Census Bureau</span>
+      <span class="demo-tag demo-tag--blue">County Budget Office</span>
+      <span class="demo-tag demo-tag--amber">Sheriff&rsquo;s Office</span>
+      <span class="demo-tag demo-tag--purple">Development Services</span>
+      <span class="demo-tag demo-tag--red">Courts / Third Judicial</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <!-- KPI Cards -->
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Population (July 2025)</p>
+        <p class="demo-stat-value">275,028</p>
+        <p class="demo-stat-delta demo-stat-delta--up">+19.0% since 2020</p>
+        <p class="demo-stat-source">Source: US Census Bureau</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Jail Capacity Used</p>
+        <p class="demo-stat-value">87.4%</p>
+        <p class="demo-stat-delta demo-stat-delta--down">457 of 523 beds</p>
+        <p class="demo-stat-source">Source: Canyon County Sheriff</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">FY2026 Budget</p>
+        <p class="demo-stat-value">$162.2M</p>
+        <p class="demo-stat-delta demo-stat-delta--info">+3.6% vs FY2025</p>
+        <p class="demo-stat-source">Source: BOCC Budget Office</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">ARPA Remaining</p>
+        <p class="demo-stat-value">$8.0M</p>
+        <p class="demo-stat-delta demo-stat-delta--down">Deadline: Dec 2026</p>
+        <p class="demo-stat-source">Source: BOCC / US Treasury</p>
+      </div>
+    </section>
+
+    <!-- The Gap Chart -->
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div class="demo-flex demo-justify-between demo-items-center" style="margin-bottom:1rem">
+          <div>
+            <p class="demo-section-label">The Growth-Budget Gap</p>
+            <p class="demo-section-title">Population vs. Budget Growth (2020-2025)</p>
+          </div>
+          <span class="demo-tag demo-tag--green">Census + Budget</span>
+        </div>
+        <canvas id="gapChart" height="220"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div class="demo-flex demo-justify-between demo-items-center" style="margin-bottom:1rem">
+          <div>
+            <p class="demo-section-label">Service Capacity</p>
+            <p class="demo-section-title">Projected Breaking Points</p>
+          </div>
+          <span class="demo-tag demo-tag--red">Predictive Model</span>
+        </div>
+        <canvas id="capacityChart" height="220"></canvas>
+      </div>
+    </section>
+
+    <!-- Growth by City -->
+    <section class="demo-grid demo-grid--2-3 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Development Services</p>
+          <p class="demo-section-title">Building Permits by Year</p>
+        </div>
+        <canvas id="permitsChart" height="180"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Population Distribution</p>
+          <p class="demo-section-title">Growth by Municipality</p>
+        </div>
+        <canvas id="cityChart" height="180"></canvas>
+      </div>
+    </section>
+
+    <!-- Capacity Scorecard -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Service Capacity Scorecard</p>
+        <p class="demo-section-title">Department-Level Strain Indicators</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead>
+            <tr>
+              <th>Department</th>
+              <th>Metric</th>
+              <th>Current</th>
+              <th>Capacity</th>
+              <th>Utilization</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sheriff / Detention</td>
+              <td>Jail beds occupied</td>
+              <td>457</td>
+              <td>523</td>
+              <td>87.4%</td>
+              <td><span class="demo-badge demo-badge--red">Critical</span></td>
+            </tr>
+            <tr>
+              <td>Development Services</td>
+              <td>Permits pending review</td>
+              <td>342</td>
+              <td>400</td>
+              <td>85.5%</td>
+              <td><span class="demo-badge demo-badge--amber">Warning</span></td>
+            </tr>
+            <tr>
+              <td>Third Judicial District</td>
+              <td>Active caseload</td>
+              <td>4,891</td>
+              <td>6,000</td>
+              <td>81.5%</td>
+              <td><span class="demo-badge demo-badge--amber">Warning</span></td>
+            </tr>
+            <tr>
+              <td>Paramedics (CCP)</td>
+              <td>Response time avg (min)</td>
+              <td>8.7</td>
+              <td>8.0 target</td>
+              <td>108.8%</td>
+              <td><span class="demo-badge demo-badge--red">Over target</span></td>
+            </tr>
+            <tr>
+              <td>IT (CCIT)</td>
+              <td>Open tickets</td>
+              <td>187</td>
+              <td>200</td>
+              <td>93.5%</td>
+              <td><span class="demo-badge demo-badge--red">Critical</span></td>
+            </tr>
+            <tr>
+              <td>Elections</td>
+              <td>Registered voters</td>
+              <td>142,500</td>
+              <td>180,000</td>
+              <td>79.2%</td>
+              <td><span class="demo-badge demo-badge--green">Healthy</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Projection -->
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <div style="margin-bottom:1rem">
+        <p class="demo-section-label">Forward Projection</p>
+        <p class="demo-section-title">At Current Growth Rate (2.9%/yr), When Does Each Service Break?</p>
+      </div>
+      <canvas id="projectionChart" height="160"></canvas>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+
+    const chartDefaults = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } },
+      scales: {
+        x: { ticks: { color: textColor(), font: { family: 'Oxanium' } }, grid: { color: gridColor() } },
+        y: { ticks: { color: textColor(), font: { family: 'Oxanium' } }, grid: { color: gridColor() } }
+      }
+    };
+
+    // Growth-Budget Gap
+    new Chart(document.getElementById('gapChart'), {
+      type: 'line',
+      data: {
+        labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+        datasets: [
+          { label: 'Population Growth (%)', data: [0, 3.8, 7.2, 11.5, 15.8, 19.0], borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.1)', fill: true, tension: 0.3 },
+          { label: 'Budget Growth (%)', data: [0, 1.2, 1.8, 2.4, 3.0, 3.6], borderColor: '#60a5fa', backgroundColor: 'rgba(96,165,250,0.1)', fill: true, tension: 0.3 }
+        ]
+      },
+      options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, title: { display: false } } }
+    });
+
+    // Capacity Utilization
+    new Chart(document.getElementById('capacityChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jail', 'Permits', 'Courts', 'EMS Response', 'IT Tickets', 'Elections'],
+        datasets: [{
+          label: '% Capacity Used',
+          data: [87.4, 85.5, 81.5, 108.8, 93.5, 79.2],
+          backgroundColor: d => d.raw > 90 ? '#ef4444' : d.raw > 80 ? '#f59e0b' : '#4ade80'
+        }]
+      },
+      options: { ...chartDefaults, indexAxis: 'y', plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+    });
+
+    // Building Permits
+    new Chart(document.getElementById('permitsChart'), {
+      type: 'bar',
+      data: {
+        labels: ['2020', '2021', '2022', '2023', '2024', '2025 (proj)'],
+        datasets: [{
+          label: 'Permits Issued',
+          data: [2840, 3420, 3890, 4210, 4580, 4950],
+          backgroundColor: '#4ade80'
+        }]
+      },
+      options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+    });
+
+    // Population by City
+    new Chart(document.getElementById('cityChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Nampa', 'Caldwell', 'Middleton', 'Other/Unincorporated'],
+        datasets: [{
+          data: [125310, 65200, 18400, 66118],
+          backgroundColor: ['#4ade80', '#60a5fa', '#a78bfa', '#475569']
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium' } } } } }
+    });
+
+    // Breaking Point Projection
+    new Chart(document.getElementById('projectionChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jail (523 beds)', 'EMS Response', 'IT Capacity', 'Permits Backlog', 'Court Caseload', 'Elections'],
+        datasets: [{
+          label: 'Months Until Capacity Exceeded',
+          data: [4, 0, 6, 14, 22, 48],
+          backgroundColor: d => d.raw <= 6 ? '#ef4444' : d.raw <= 12 ? '#f59e0b' : '#4ade80'
+        }]
+      },
+      options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } }, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, title: { display: true, text: 'Months', color: textColor() } } } }
+    });
+  </script>
+</body>
+</html>

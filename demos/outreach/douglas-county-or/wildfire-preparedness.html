@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Douglas County — Wildfire Preparedness Dashboard</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div>
+      <p class="demo-eyebrow">Prepared by Mouliqe for Douglas County, Oregon</p>
+      <h1 class="demo-title">Wildfire Preparedness Dashboard</h1>
+      <p class="demo-subtitle">Drought emergency declared. $7.5M in wildfire funding arriving. Fire season starting early.</p>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--red">OR Dept of Forestry</span>
+      <span class="demo-tag demo-tag--amber">USGS Stream Gages</span>
+      <span class="demo-tag demo-tag--blue">NWS / NOAA</span>
+      <span class="demo-tag demo-tag--green">DC Citizen Alert System</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1" style="border-left:3px solid #ef4444">
+        <p class="demo-stat-label">Drought Status</p>
+        <p class="demo-stat-value" style="color:#ef4444">EMERGENCY</p>
+        <p class="demo-stat-delta demo-stat-delta--down">Declared April 29, 2026</p>
+        <p class="demo-stat-source">Source: BOCC Order</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Wildfire Funding</p>
+        <p class="demo-stat-value">$7.5M</p>
+        <p class="demo-stat-delta demo-stat-delta--up">2 projects in Douglas Co.</p>
+        <p class="demo-stat-source">Source: OR Legislature (May 2026)</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Fire Danger Level</p>
+        <p class="demo-stat-value" style="color:#f59e0b">HIGH</p>
+        <p class="demo-stat-delta demo-stat-delta--down">Season started May 2026</p>
+        <p class="demo-stat-source">Source: ODF</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">CWPP Status</p>
+        <p class="demo-stat-value">Updating</p>
+        <p class="demo-stat-delta demo-stat-delta--info">2026 revision in progress</p>
+        <p class="demo-stat-source">Source: Planning Dept</p>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Streamflow Monitoring</p>
+          <p class="demo-section-title">Umpqua River Basin &mdash; Current vs. Historical Average</p>
+        </div>
+        <canvas id="streamChart" height="220"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Fire History</p>
+          <p class="demo-section-title">Acres Burned in Douglas County (10-Year)</p>
+        </div>
+        <canvas id="fireChart" height="220"></canvas>
+      </div>
+    </section>
+
+    <!-- Risk Indicators -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Real-Time Risk Indicators</p>
+        <p class="demo-section-title">Conditions That Predict Wildfire Ignition &amp; Spread</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>Indicator</th><th>Current Value</th><th>Normal Range</th><th>Risk Level</th><th>Data Source</th></tr></thead>
+          <tbody>
+            <tr><td>Soil moisture (0-10cm)</td><td>12%</td><td>25-40%</td><td><span class="demo-badge demo-badge--red">Critical</span></td><td>USDA NRCS</td></tr>
+            <tr><td>Snowpack (% of normal)</td><td>45%</td><td>80-120%</td><td><span class="demo-badge demo-badge--red">Critical</span></td><td>NRCS SNOTEL</td></tr>
+            <tr><td>Streamflow (% of avg)</td><td>62%</td><td>80-120%</td><td><span class="demo-badge demo-badge--amber">Elevated</span></td><td>USGS Stream Gages</td></tr>
+            <tr><td>Dead fuel moisture (1000-hr)</td><td>14%</td><td>18-25%</td><td><span class="demo-badge demo-badge--red">Critical</span></td><td>NFDRS</td></tr>
+            <tr><td>Days since last rain</td><td>18</td><td>5-10 (May avg)</td><td><span class="demo-badge demo-badge--amber">Elevated</span></td><td>NWS Roseburg</td></tr>
+            <tr><td>Wind forecast (next 72hr)</td><td>15-25 mph gusts</td><td>5-10 mph</td><td><span class="demo-badge demo-badge--amber">Elevated</span></td><td>NWS</td></tr>
+            <tr><td>Lightning probability (7-day)</td><td>35%</td><td>10-15%</td><td><span class="demo-badge demo-badge--amber">Elevated</span></td><td>NWS/SPC</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <div style="margin-bottom:1rem">
+        <p class="demo-section-label">Resource Positioning</p>
+        <p class="demo-section-title">Pre-Positioned Assets Based on Risk Model</p>
+      </div>
+      <canvas id="resourceChart" height="160"></canvas>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+    new Chart(document.getElementById('streamChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [
+          { label: '2026 (actual + forecast)', data: [2800,3200,2400,1800,1200,800,450,320,280,400,1200,2200], borderColor: '#ef4444', tension: 0.3, pointRadius: 4 },
+          { label: '30-year average', data: [3500,4200,3800,3200,2400,1600,900,600,550,800,2000,3200], borderColor: '#4ade80', borderDash: [5,5], tension: 0.3 }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { title: { display: true, text: 'CFS (cubic ft/sec)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('fireChart'), {
+      type: 'bar',
+      data: {
+        labels: ['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
+        datasets: [{
+          label: 'Acres burned',
+          data: [1200, 3400, 8900, 2100, 45000, 12000, 5600, 18500, 32000, 8200],
+          backgroundColor: d => d.raw > 20000 ? '#ef4444' : d.raw > 5000 ? '#f59e0b' : '#4ade80'
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => (v/1000) + 'K' }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('resourceChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Roseburg area', 'Hwy 138 (east)', 'Coast (west)', 'Umpqua NF border', 'South county', 'North county'],
+        datasets: [
+          { label: 'Engines pre-positioned', data: [4, 6, 2, 8, 3, 3], backgroundColor: '#ef4444' },
+          { label: 'Crews available', data: [2, 3, 1, 4, 2, 1], backgroundColor: '#f59e0b' },
+          { label: 'Water tenders', data: [1, 2, 1, 3, 1, 1], backgroundColor: '#60a5fa' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor(), font: { size: 10 } }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+  </script>
+</body>
+</html>

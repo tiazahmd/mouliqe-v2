@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Douglas County — Justice Program ROI Tracker</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div>
+      <p class="demo-eyebrow">Prepared by Mouliqe for Douglas County, Oregon</p>
+      <h1 class="demo-title">Justice Program ROI Tracker</h1>
+      <p class="demo-subtitle">5 LPSCC programs. Separate tracking. No unified view of what works, for whom, at what cost.</p>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--green">H.O.P.E. Drug Court</span>
+      <span class="demo-tag demo-tag--blue">Mental Health Court</span>
+      <span class="demo-tag demo-tag--amber">IMPACTS</span>
+      <span class="demo-tag demo-tag--purple">RSAT</span>
+      <span class="demo-tag demo-tag--red">Second Chance Act</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Active Programs</p>
+        <p class="demo-stat-value">5</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Under LPSCC umbrella</p>
+        <p class="demo-stat-source">Source: LPSCC</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Annual Participants</p>
+        <p class="demo-stat-value">~285</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Across all programs</p>
+        <p class="demo-stat-source">Source: Program reports</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Avg Completion Rate</p>
+        <p class="demo-stat-value">58%</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Varies by program</p>
+        <p class="demo-stat-source">Source: Program data</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Cost per Jail Day Avoided</p>
+        <p class="demo-stat-value">$142</p>
+        <p class="demo-stat-delta demo-stat-delta--up">vs $185/day incarceration</p>
+        <p class="demo-stat-source">Source: Budget analysis</p>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Program Comparison</p>
+          <p class="demo-section-title">Completion Rate by Program</p>
+        </div>
+        <canvas id="completionChart" height="220"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Recidivism</p>
+          <p class="demo-section-title">3-Year Re-Offense Rate: Graduates vs. Non-Completers</p>
+        </div>
+        <canvas id="recidivismChart" height="220"></canvas>
+      </div>
+    </section>
+
+    <!-- Program Detail Table -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Program Performance Comparison</p>
+        <p class="demo-section-title">All 5 LPSCC Programs &mdash; Unified Outcome View</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>Program</th><th>Participants/yr</th><th>Completion</th><th>Recidivism (grads)</th><th>Cost/Participant</th><th>Jail Days Avoided</th><th>Net Savings</th></tr></thead>
+          <tbody>
+            <tr><td>H.O.P.E. Drug Court</td><td>65</td><td>62%</td><td>22%</td><td>$4,800</td><td>2,340</td><td style="color:#4ade80;font-weight:600">$120K</td></tr>
+            <tr><td>Mental Health Court</td><td>42</td><td>55%</td><td>28%</td><td>$6,200</td><td>1,680</td><td style="color:#4ade80;font-weight:600">$85K</td></tr>
+            <tr><td>IMPACTS</td><td>88</td><td>68%</td><td>18%</td><td>$3,200</td><td>3,520</td><td style="color:#4ade80;font-weight:600">$195K</td></tr>
+            <tr><td>RSAT</td><td>35</td><td>48%</td><td>35%</td><td>$8,500</td><td>1,050</td><td style="color:#f59e0b;font-weight:600">$42K</td></tr>
+            <tr><td>Second Chance Act</td><td>55</td><td>52%</td><td>30%</td><td>$5,100</td><td>1,650</td><td style="color:#4ade80;font-weight:600">$78K</td></tr>
+            <tr style="font-weight:700;border-top:2px solid var(--color-accent)"><td>TOTAL</td><td>285</td><td>58% avg</td><td>25% avg</td><td>$4,900 avg</td><td>10,240</td><td style="color:#4ade80">$520K</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <div style="margin-bottom:1rem">
+        <p class="demo-section-label">Return on Investment</p>
+        <p class="demo-section-title">Cost of Programs vs. Incarceration Costs Avoided</p>
+      </div>
+      <canvas id="roiChart" height="160"></canvas>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+    new Chart(document.getElementById('completionChart'), {
+      type: 'bar',
+      data: {
+        labels: ['IMPACTS', 'H.O.P.E.', 'Mental Health', 'Second Chance', 'RSAT'],
+        datasets: [{
+          label: 'Completion rate (%)',
+          data: [68, 62, 55, 52, 48],
+          backgroundColor: d => d.raw > 60 ? '#4ade80' : d.raw > 50 ? '#f59e0b' : '#ef4444'
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { max: 100, ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('recidivismChart'), {
+      type: 'bar',
+      data: {
+        labels: ['H.O.P.E.', 'Mental Health', 'IMPACTS', 'RSAT', 'Second Chance'],
+        datasets: [
+          { label: 'Graduates', data: [22, 28, 18, 35, 30], backgroundColor: '#4ade80' },
+          { label: 'Non-completers', data: [58, 62, 52, 68, 55], backgroundColor: '#ef4444' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { max: 80, ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('roiChart'), {
+      type: 'bar',
+      data: {
+        labels: ['H.O.P.E.', 'Mental Health', 'IMPACTS', 'RSAT', 'Second Chance'],
+        datasets: [
+          { label: 'Program cost ($K)', data: [312, 260, 282, 298, 281], backgroundColor: '#60a5fa' },
+          { label: 'Incarceration avoided ($K)', data: [432, 345, 477, 340, 359], backgroundColor: '#4ade80' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => '$' + v + 'K' }, grid: { color: gridColor() } } } }
+    });
+  </script>
+</body>
+</html>

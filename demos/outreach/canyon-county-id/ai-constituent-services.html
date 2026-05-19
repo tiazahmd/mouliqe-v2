@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canyon County — AI Constituent Services Agent</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div>
+      <p class="demo-eyebrow">Prepared by Mouliqe for Canyon County, Idaho</p>
+      <h1 class="demo-title">AI Constituent Services Agent</h1>
+      <p class="demo-subtitle">275,028 residents. No chatbot. No after-hours service. No new positions approved.</p>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--green">Constituent Services</span>
+      <span class="demo-tag demo-tag--blue">Development Services</span>
+      <span class="demo-tag demo-tag--amber">Assessor / Treasurer</span>
+      <span class="demo-tag demo-tag--purple">Clerk / Elections</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Residents Served</p>
+        <p class="demo-stat-value">275K</p>
+        <p class="demo-stat-delta demo-stat-delta--up">+2.9% annually</p>
+        <p class="demo-stat-source">Growing faster than staff</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Est. Annual Inquiries</p>
+        <p class="demo-stat-value">~185K</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Phone + walk-in + email</p>
+        <p class="demo-stat-source">Estimated from peer counties</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">After-Hours Coverage</p>
+        <p class="demo-stat-value">0%</p>
+        <p class="demo-stat-delta demo-stat-delta--down">No digital service</p>
+        <p class="demo-stat-source">County website review</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Projected Deflection</p>
+        <p class="demo-stat-value">35-45%</p>
+        <p class="demo-stat-delta demo-stat-delta--up">Of routine inquiries</p>
+        <p class="demo-stat-source">Industry benchmark</p>
+      </div>
+    </section>
+
+    <!-- What the Agent Handles -->
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d3">
+      <div style="margin-bottom:1.5rem">
+        <p class="demo-section-label">AI Agent Capabilities</p>
+        <p class="demo-section-title">What It Handles vs. What Gets Escalated to Staff</p>
+      </div>
+      <div class="demo-grid demo-grid--2" style="gap:1.5rem">
+        <div>
+          <p style="font-weight:600;color:var(--color-accent);margin-bottom:0.75rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em">AI Handles Autonomously (35-45% of volume)</p>
+          <ul style="list-style:none;padding:0;font-size:0.85rem;line-height:2">
+            <li>&#10003; Property tax payment status and due dates</li>
+            <li>&#10003; Building permit application status</li>
+            <li>&#10003; Court date lookups and directions</li>
+            <li>&#10003; DMV appointment scheduling</li>
+            <li>&#10003; Voter registration status</li>
+            <li>&#10003; Office hours and locations</li>
+            <li>&#10003; Trash/recycling schedules</li>
+            <li>&#10003; Parks and recreation info</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-weight:600;color:#60a5fa;margin-bottom:0.75rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em">Escalated to Staff (complex/sensitive)</p>
+          <ul style="list-style:none;padding:0;font-size:0.85rem;line-height:2">
+            <li>&#8594; Property assessment disputes</li>
+            <li>&#8594; Building code interpretation</li>
+            <li>&#8594; Legal questions (redirected to counsel)</li>
+            <li>&#8594; Complaints requiring investigation</li>
+            <li>&#8594; Indigent services applications</li>
+            <li>&#8594; Anything involving personal judgment</li>
+            <li>&#8594; Emotional/crisis situations (warm transfer)</li>
+            <li>&#8594; Requests in languages not yet supported</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Volume Projection</p>
+          <p class="demo-section-title">Monthly Inquiries: Human vs. AI Handled</p>
+        </div>
+        <canvas id="volumeChart" height="200"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Cost Model</p>
+          <p class="demo-section-title">Cost Per Inquiry: Staff vs. AI Agent</p>
+        </div>
+        <canvas id="costChart" height="200"></canvas>
+      </div>
+    </section>
+
+    <!-- ROI Table -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Return on Investment</p>
+        <p class="demo-section-title">Conservative Estimate &mdash; Year 1</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>Category</th><th>Current Cost</th><th>With AI Agent</th><th>Annual Savings</th></tr></thead>
+          <tbody>
+            <tr><td>Staff time on routine inquiries</td><td>$420,000</td><td>$252,000</td><td style="color:#4ade80;font-weight:600">$168,000</td></tr>
+            <tr><td>After-hours missed opportunities</td><td>$85,000 (est.)</td><td>$12,000</td><td style="color:#4ade80;font-weight:600">$73,000</td></tr>
+            <tr><td>Misdirected calls / transfers</td><td>$45,000</td><td>$15,000</td><td style="color:#4ade80;font-weight:600">$30,000</td></tr>
+            <tr style="font-weight:700;border-top:2px solid var(--color-accent)"><td>Total Annual Value</td><td>$550,000</td><td>$279,000</td><td style="color:#4ade80">$271,000</td></tr>
+            <tr><td>AI Agent Annual Cost (hosting + maintenance)</td><td colspan="2"></td><td>-$48,000</td></tr>
+            <tr style="font-weight:700"><td>Net Annual Benefit</td><td colspan="2"></td><td style="color:#4ade80;font-size:1.1rem">$223,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+    new Chart(document.getElementById('volumeChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [
+          { label: 'AI Handled', data: [5800,5400,6100,6500,6800,7200,7000,6900,6600,6200,5900,5500], backgroundColor: '#4ade80' },
+          { label: 'Staff Handled', data: [9700,9100,10200,10900,11400,12100,11700,11600,11100,10400,9900,9200], backgroundColor: '#60a5fa' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('costChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Phone (staff)', 'Walk-in (staff)', 'Email (staff)', 'AI Agent (auto)', 'AI + Escalation'],
+        datasets: [{
+          label: 'Cost per inquiry ($)',
+          data: [8.50, 12.00, 4.20, 0.35, 3.80],
+          backgroundColor: ['#60a5fa','#60a5fa','#60a5fa','#4ade80','#4ade80']
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => '$' + v.toFixed(2) }, grid: { color: gridColor() } } } }
+    });
+  </script>
+</body>
+</html>

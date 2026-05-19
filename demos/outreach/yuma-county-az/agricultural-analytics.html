@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuma County — Agricultural Infrastructure Analytics</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div>
+      <p class="demo-eyebrow">Prepared by Mouliqe for Yuma County, Arizona</p>
+      <h1 class="demo-title">Agricultural Infrastructure Analytics</h1>
+      <p class="demo-subtitle">170 miles of fiber + wireless mesh = data from the field. What intelligence runs on top?</p>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--green">Wireless Mesh Network</span>
+      <span class="demo-tag demo-tag--blue">Middle Mile Fiber</span>
+      <span class="demo-tag demo-tag--amber">USDA / Ag Census</span>
+      <span class="demo-tag demo-tag--purple">Water Resources</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">US Winter Vegetable Share</p>
+        <p class="demo-stat-value">33%</p>
+        <p class="demo-stat-delta demo-stat-delta--info">1/3 of national production</p>
+        <p class="demo-stat-source">Source: USDA</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Fiber Network</p>
+        <p class="demo-stat-value">170 mi</p>
+        <p class="demo-stat-delta demo-stat-delta--up">Phase 3 expanding</p>
+        <p class="demo-stat-source">Source: County ITS</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Agricultural Workers</p>
+        <p class="demo-stat-value">~32K</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Seasonal peak (Nov-Mar)</p>
+        <p class="demo-stat-source">Source: BLS / ESD</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Colorado River Allocation</p>
+        <p class="demo-stat-value">At risk</p>
+        <p class="demo-stat-delta demo-stat-delta--down">Compact renegotiation 2026</p>
+        <p class="demo-stat-source">Source: Bureau of Reclamation</p>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Seasonal Production Cycle</p>
+          <p class="demo-section-title">Agricultural Output by Month (Illustrative)</p>
+        </div>
+        <canvas id="productionChart" height="220"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Water Usage</p>
+          <p class="demo-section-title">Agricultural vs. Municipal Water Demand</p>
+        </div>
+        <canvas id="waterChart" height="220"></canvas>
+      </div>
+    </section>
+
+    <!-- Broadband ROI -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Broadband Investment ROI</p>
+        <p class="demo-section-title">What the 170-Mile Fiber + Wireless Mesh Enables</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>Capability</th><th>Before Broadband</th><th>After Broadband</th><th>Value Created</th></tr></thead>
+          <tbody>
+            <tr><td>Soil moisture monitoring</td><td>Manual sampling (weekly)</td><td>Real-time IoT sensors</td><td>15-20% water savings</td></tr>
+            <tr><td>Crop health surveillance</td><td>Visual inspection (labor-intensive)</td><td>Drone + satellite imagery analysis</td><td>Early disease detection (2-3 week advantage)</td></tr>
+            <tr><td>Workforce coordination</td><td>Phone/radio (limited range)</td><td>Mobile apps + GPS tracking</td><td>12% productivity improvement</td></tr>
+            <tr><td>Supply chain visibility</td><td>Manual tracking (paper-based)</td><td>Real-time logistics platform</td><td>Reduced spoilage, faster delivery</td></tr>
+            <tr><td>Weather station density</td><td>3 stations county-wide</td><td>Mesh-connected micro-stations</td><td>Field-level frost/heat warnings</td></tr>
+            <tr><td>Regulatory compliance</td><td>Manual reporting (quarterly)</td><td>Automated data collection + submission</td><td>80% reduction in reporting labor</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <div style="margin-bottom:1rem">
+        <p class="demo-section-label">Connectivity Coverage</p>
+        <p class="demo-section-title">Fiber + Wireless Mesh: Coverage Progression</p>
+      </div>
+      <canvas id="coverageChart" height="160"></canvas>
+      <p style="font-size:0.75rem;color:var(--color-text-muted);margin-top:0.75rem;text-align:center">Phase 3 of the Middle Mile Fiber Network is expanding coverage. Agricultural wireless mesh completing 2026. Combined: near-universal agricultural connectivity.</p>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+    new Chart(document.getElementById('productionChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [{
+          label: 'Relative production volume',
+          data: [95, 90, 75, 40, 15, 5, 5, 10, 20, 45, 80, 95],
+          borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.15)', fill: true, tension: 0.4
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() }, max: 100 } } }
+    });
+
+    new Chart(document.getElementById('waterChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [
+          { label: 'Agricultural (acre-ft)', data: [85,80,95,110,120,130,135,130,115,100,90,85], backgroundColor: '#4ade80' },
+          { label: 'Municipal (acre-ft)', data: [18,18,20,25,35,45,50,48,38,28,20,18], backgroundColor: '#60a5fa' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { stacked: true, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('coverageChart'), {
+      type: 'line',
+      data: {
+        labels: ['2022', '2023', '2024', '2025', '2026 (proj)', '2027 (proj)'],
+        datasets: [
+          { label: 'Fiber coverage (% of county)', data: [25, 42, 58, 72, 85, 92], borderColor: '#4ade80', tension: 0.3 },
+          { label: 'Wireless mesh (% of ag land)', data: [0, 0, 10, 35, 68, 90], borderColor: '#60a5fa', tension: 0.3 }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor(), callback: v => v + '%' }, grid: { color: gridColor() }, max: 100 } } }
+    });
+  </script>
+</body>
+</html>

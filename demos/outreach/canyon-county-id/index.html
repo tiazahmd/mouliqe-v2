@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Data & AI Strategy — Canyon County, Idaho | Mouliqe</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../proposals/_presentation.css">
+</head>
+<body>
+  <div id="p-deck" class="p-deck"></div>
+  <button class="p-theme-toggle" aria-label="Toggle theme"></button>
+  <button class="p-nav-arrow p-nav-prev" aria-label="Previous slide">&#8249;</button>
+  <button class="p-nav-arrow p-nav-next" aria-label="Next slide">&#8250;</button>
+  <div class="p-progress"><div class="p-progress-fill"></div></div>
+  <div class="p-counter"></div>
+  <a class="p-branding" href="https://mouliqe.com" target="_blank" rel="noopener">mouliqe.com</a>
+  <div class="p-detail-overlay">
+    <div class="p-detail-panel">
+      <button class="p-detail-close" aria-label="Close">&times;</button>
+      <h3 class="p-detail-title"></h3>
+      <div class="p-detail-body"></div>
+    </div>
+  </div>
+  <script type="module">
+    import { initPresentation } from '../../proposals/_presentation.js';
+    import { meta, slides } from './slides.js';
+    initPresentation({ meta, slides });
+  </script>
+</body>
+</html>

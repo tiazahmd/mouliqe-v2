@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuma County — CIO Strategic Command Center</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div>
+      <p class="demo-eyebrow">Prepared by Mouliqe for Yuma County, Arizona</p>
+      <h1 class="demo-title">CIO Strategic Command Center</h1>
+      <p class="demo-subtitle">All 5 IT divisions in one view &mdash; your first-year dashboard</p>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--green">Operations</span>
+      <span class="demo-tag demo-tag--blue">Security</span>
+      <span class="demo-tag demo-tag--amber">Infrastructure</span>
+      <span class="demo-tag demo-tag--purple">Projects</span>
+      <span class="demo-tag demo-tag--red">Budget</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">IT Staff</p>
+        <p class="demo-stat-value">35</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Across 5 divisions</p>
+        <p class="demo-stat-source">Source: ITS Department</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Systems Uptime (30d)</p>
+        <p class="demo-stat-value">99.7%</p>
+        <p class="demo-stat-delta demo-stat-delta--up">2.1 hrs unplanned downtime</p>
+        <p class="demo-stat-source">Source: Monitoring</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Open Tickets</p>
+        <p class="demo-stat-value">127</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Avg resolution: 4.2 days</p>
+        <p class="demo-stat-source">Source: Help Desk</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Active Projects</p>
+        <p class="demo-stat-value">8</p>
+        <p class="demo-stat-delta demo-stat-delta--up">3 on track, 4 at risk, 1 blocked</p>
+        <p class="demo-stat-source">Source: PMO</p>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Division Performance</p>
+          <p class="demo-section-title">Ticket Volume &amp; Resolution by Division</p>
+        </div>
+        <canvas id="divisionChart" height="220"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Security Posture</p>
+          <p class="demo-section-title">Threat Landscape (30-Day Rolling)</p>
+        </div>
+        <canvas id="securityChart" height="220"></canvas>
+      </div>
+    </section>
+
+    <!-- Project Portfolio -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Project Portfolio</p>
+        <p class="demo-section-title">Active IT Initiatives &mdash; Status at a Glance</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>Project</th><th>Division</th><th>Budget</th><th>% Complete</th><th>Status</th><th>Risk</th></tr></thead>
+          <tbody>
+            <tr><td>Middle Mile Fiber Phase 3</td><td>Infrastructure</td><td>$2.4M</td><td>72%</td><td><span class="demo-badge demo-badge--green">On track</span></td><td>Low</td></tr>
+            <tr><td>Agricultural Wireless Mesh</td><td>Infrastructure</td><td>$1.8M</td><td>58%</td><td><span class="demo-badge demo-badge--green">On track</span></td><td>Low</td></tr>
+            <tr><td>Security Operations Center upgrade</td><td>Security</td><td>$680K</td><td>35%</td><td><span class="demo-badge demo-badge--amber">At risk</span></td><td>Vendor delay</td></tr>
+            <tr><td>ERP module expansion</td><td>Operations</td><td>$420K</td><td>45%</td><td><span class="demo-badge demo-badge--amber">At risk</span></td><td>Scope creep</td></tr>
+            <tr><td>Disaster recovery site</td><td>Infrastructure</td><td>$950K</td><td>20%</td><td><span class="demo-badge demo-badge--amber">At risk</span></td><td>Budget review</td></tr>
+            <tr><td>Public portal redesign</td><td>Operations</td><td>$180K</td><td>88%</td><td><span class="demo-badge demo-badge--green">On track</span></td><td>Low</td></tr>
+            <tr><td>Body camera data management</td><td>Security</td><td>$340K</td><td>15%</td><td><span class="demo-badge demo-badge--amber">At risk</span></td><td>Storage costs</td></tr>
+            <tr><td>Network refresh (Phase 2)</td><td>Infrastructure</td><td>$520K</td><td>0%</td><td><span class="demo-badge demo-badge--red">Blocked</span></td><td>Awaiting approval</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2-3 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Budget Utilization</p>
+          <p class="demo-section-title">IT Spend by Category (FY2026 YTD)</p>
+        </div>
+        <canvas id="budgetChart" height="180"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d4">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Staff Allocation</p>
+          <p class="demo-section-title">35 Staff Across 5 Divisions</p>
+        </div>
+        <canvas id="staffChart" height="180"></canvas>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+    new Chart(document.getElementById('divisionChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Operations', 'Security', 'Infrastructure', 'Help Desk', 'PMO'],
+        datasets: [
+          { label: 'Tickets received (30d)', data: [45, 28, 32, 89, 12], backgroundColor: '#60a5fa' },
+          { label: 'Tickets resolved (30d)', data: [42, 26, 30, 82, 11], backgroundColor: '#4ade80' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('securityChart'), {
+      type: 'line',
+      data: {
+        labels: ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'],
+        datasets: [
+          { label: 'Blocked threats', data: [1240,1380,1520,1290,1450,1680,1820,1590,1720,1890,1650,1780], borderColor: '#ef4444', tension: 0.3 },
+          { label: 'Phishing attempts', data: [85,92,78,105,88,120,95,110,98,115,102,108], borderColor: '#f59e0b', tension: 0.3 },
+          { label: 'Incidents (investigated)', data: [3,2,4,2,5,3,2,4,3,2,4,3], borderColor: '#4ade80', tension: 0.3 }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('budgetChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Personnel (62%)', 'Infrastructure (18%)', 'Software/Licensing (12%)', 'Projects (5%)', 'Training (3%)'],
+        datasets: [{ data: [62, 18, 12, 5, 3], backgroundColor: ['#4ade80','#60a5fa','#a78bfa','#f59e0b','#475569'] }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor(), font: { family: 'Oxanium', size: 11 } } } } }
+    });
+
+    new Chart(document.getElementById('staffChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Operations', 'Security', 'Infrastructure', 'Help Desk', 'PMO'],
+        datasets: [{
+          label: 'Staff count',
+          data: [8, 6, 9, 8, 4],
+          backgroundColor: '#4ade80'
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() }, max: 12 } } }
+    });
+  </script>
+</body>
+</html>

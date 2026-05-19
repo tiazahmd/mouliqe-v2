@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grant County — Rural Service Optimizer</title>
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/demos/_demo.css?v=8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <button class="demo-theme-toggle" id="demoThemeToggle" aria-label="Toggle theme">
+    <span class="demo-theme-sun">&#9728;</span><span class="demo-theme-moon">&#9790;</span>
+  </button>
+
+  <header class="demo-container demo-anim">
+    <div>
+      <p class="demo-eyebrow">Prepared by Mouliqe for Grant County, Washington</p>
+      <h1 class="demo-title">Rural Service Optimizer</h1>
+      <p class="demo-subtitle">9 IT staff. 2,681 square miles. A hiring freeze. How AI extends your reach.</p>
+    </div>
+    <div class="demo-flex-wrap demo-gap-2 demo-mt-4">
+      <span class="demo-tag demo-tag--amber">Sheriff (150 staff, $28M)</span>
+      <span class="demo-tag demo-tag--blue">Technology Services (9 staff)</span>
+      <span class="demo-tag demo-tag--green">Public Works</span>
+      <span class="demo-tag demo-tag--purple">Emergency Management</span>
+    </div>
+  </header>
+
+  <main class="demo-container" style="padding-top:0;padding-bottom:4rem">
+
+    <section class="demo-grid demo-grid--4 demo-mt-6">
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Service Area</p>
+        <p class="demo-stat-value">2,681 mi&sup2;</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Larger than Delaware</p>
+        <p class="demo-stat-source">Source: WA State</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d1">
+        <p class="demo-stat-label">Population Density</p>
+        <p class="demo-stat-value">38/mi&sup2;</p>
+        <p class="demo-stat-delta demo-stat-delta--info">Concentrated in 3 cities</p>
+        <p class="demo-stat-source">Source: Census</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">Sheriff Staff</p>
+        <p class="demo-stat-value">~150</p>
+        <p class="demo-stat-delta demo-stat-delta--info">$28M annual budget</p>
+        <p class="demo-stat-source">Source: GCSO</p>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d2">
+        <p class="demo-stat-label">IT Staff</p>
+        <p class="demo-stat-value">9</p>
+        <p class="demo-stat-delta demo-stat-delta--down">Hiring freeze active</p>
+        <p class="demo-stat-source">Source: County Directory</p>
+      </div>
+    </section>
+
+    <section class="demo-grid demo-grid--2 demo-mt-4">
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Geographic Challenge</p>
+          <p class="demo-section-title">Service Requests by Region</p>
+        </div>
+        <canvas id="regionChart" height="220"></canvas>
+      </div>
+      <div class="demo-card demo-anim demo-anim-d3">
+        <div style="margin-bottom:1rem">
+          <p class="demo-section-label">Response Efficiency</p>
+          <p class="demo-section-title">Avg Response Time by Distance from Hub</p>
+        </div>
+        <canvas id="responseChart" height="220"></canvas>
+      </div>
+    </section>
+
+    <!-- Automation Opportunities -->
+    <section class="demo-card demo-card--flush demo-mt-4 demo-anim demo-anim-d4">
+      <div style="padding:1.25rem 1.25rem 0.75rem">
+        <p class="demo-section-label">Automation Opportunities</p>
+        <p class="demo-section-title">Where AI Lets 9 People Do the Work of 15</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="demo-table">
+          <thead><tr><th>Function</th><th>Current (Manual)</th><th>With AI Automation</th><th>Time Saved/Week</th><th>Feasibility</th></tr></thead>
+          <tbody>
+            <tr><td>Help desk ticket routing</td><td>Manual triage by 4 techs</td><td>AI categorizes + routes 70% automatically</td><td>12 hrs</td><td><span class="demo-badge demo-badge--green">Ready now</span></td></tr>
+            <tr><td>System monitoring / alerts</td><td>Reactive (wait for failure)</td><td>Predictive monitoring, auto-escalation</td><td>8 hrs</td><td><span class="demo-badge demo-badge--green">Ready now</span></td></tr>
+            <tr><td>Network switch health checks</td><td>Manual inspection across sites</td><td>Automated polling + anomaly detection</td><td>6 hrs</td><td><span class="demo-badge demo-badge--green">Ready now</span></td></tr>
+            <tr><td>Software patch compliance</td><td>Manual tracking per device</td><td>Automated scan + compliance dashboard</td><td>10 hrs</td><td><span class="demo-badge demo-badge--amber">Needs tooling</span></td></tr>
+            <tr><td>User provisioning / offboarding</td><td>Manual across 5+ systems</td><td>Automated workflow triggered by HR action</td><td>4 hrs</td><td><span class="demo-badge demo-badge--amber">Needs integration</span></td></tr>
+            <tr><td>Report generation for commissioners</td><td>Manual data pull + formatting</td><td>Scheduled auto-generation + delivery</td><td>5 hrs</td><td><span class="demo-badge demo-badge--green">Ready now</span></td></tr>
+          </tbody>
+          <tfoot><tr style="font-weight:700"><td colspan="3">Total Weekly Time Recovered</td><td style="color:#4ade80">45 hrs</td><td>= 1.1 FTE equivalent</td></tr></tfoot>
+        </table>
+      </div>
+    </section>
+
+    <section class="demo-card demo-mt-4 demo-anim demo-anim-d4">
+      <div style="margin-bottom:1rem">
+        <p class="demo-section-label">Capacity Impact</p>
+        <p class="demo-section-title">Effective Team Size: Before and After Automation</p>
+      </div>
+      <canvas id="capacityChart" height="160"></canvas>
+      <p style="font-size:0.75rem;color:var(--color-text-muted);margin-top:0.75rem;text-align:center">Automation recovers 45 hrs/week = equivalent of adding 1.1 full-time staff without hiring. Under a hiring freeze, this is the only path to increased capacity.</p>
+    </section>
+
+  </main>
+
+  <script src="/demos/_demo.js"></script>
+  <script>
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = () => isDark() ? '#94a3b8' : '#64748b';
+    const gridColor = () => isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+
+    new Chart(document.getElementById('regionChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Moses Lake area', 'Quincy/George', 'Ephrata', 'Soap Lake/Coulee', 'Rural South', 'Rural North'],
+        datasets: [{
+          label: 'Monthly service requests',
+          data: [420, 280, 190, 95, 65, 45],
+          backgroundColor: '#4ade80'
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('responseChart'), {
+      type: 'scatter',
+      data: {
+        datasets: [{
+          label: 'Response time vs distance',
+          data: [
+            {x: 2, y: 8}, {x: 5, y: 12}, {x: 8, y: 15}, {x: 12, y: 22},
+            {x: 18, y: 35}, {x: 25, y: 48}, {x: 30, y: 55}, {x: 40, y: 72},
+            {x: 3, y: 10}, {x: 7, y: 14}, {x: 15, y: 28}, {x: 22, y: 42}
+          ],
+          backgroundColor: '#4ade80',
+          pointRadius: 6
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Distance from hub (miles)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { title: { display: true, text: 'Response time (minutes)', color: textColor() }, ticks: { color: textColor() }, grid: { color: gridColor() } } } }
+    });
+
+    new Chart(document.getElementById('capacityChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Current Team', 'With Automation'],
+        datasets: [
+          { label: 'Actual Staff', data: [9, 9], backgroundColor: '#60a5fa' },
+          { label: 'Effective Capacity (FTE equivalent)', data: [9, 10.1], backgroundColor: '#4ade80' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor(), font: { family: 'Oxanium' } } } }, scales: { x: { ticks: { color: textColor() }, grid: { color: gridColor() } }, y: { ticks: { color: textColor() }, grid: { color: gridColor() }, max: 12 } } }
+    });
+  </script>
+</body>
+</html>
