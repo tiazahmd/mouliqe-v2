@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mouliqe — Live N Learn PRD</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/templates/proposal.css">
+<link rel="stylesheet" href="/css/templates/proposal-toolbar.css">
+<style>
+  .cover { background: var(--l-bg); display: flex; flex-direction: column; justify-content: space-between; padding: 1in 0.9in; }
+  .cover .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover .top .meta { text-align: right; font-size: 10px; color: var(--l-ink-4); line-height: 1.7; letter-spacing: 0.04em; }
+  .cover .middle { padding: 40px 0; }
+  .cover .middle .eyebrow { margin-bottom: 16px; }
+  .cover .middle h1 { font-size: 38px; line-height: 1.12; color: var(--l-ink); max-width: 90%; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .cover .middle h1 .accent { color: var(--l-forest-700); }
+  .cover .middle .subhead { font-size: 14px; color: var(--l-ink-3); max-width: 82%; line-height: 1.6; }
+  .cover .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 24px 0; border-top: 1px solid var(--l-rule); border-bottom: 1px solid var(--l-rule); }
+  .cover .party .label { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .cover .party .name { font-size: 14px; font-weight: 700; color: var(--l-ink); margin-bottom: 4px; }
+  .cover .party .detail { font-size: 10px; color: var(--l-ink-3); line-height: 1.65; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover .bottom .doc-id { font-size: 10px; color: var(--l-ink-4); letter-spacing: 0.08em; max-width: 60%; }
+  .cover .bottom .doc-id strong { color: var(--l-ink); display: block; font-size: 12px; margin-bottom: 2px; }
+  .content-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--l-rule); margin-bottom: 22px; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.1em; text-transform: uppercase; }
+  .content-header .title { color: var(--l-ink); font-weight: 700; }
+  .content-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--l-rule); display: flex; justify-content: space-between; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.06em; }
+  .section-title { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; padding-top: 4px; }
+  .section-title .n { font-size: 12px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+  .section-title h2 { font-size: 20px; color: var(--l-ink); }
+  .section + .section { margin-top: 22px; }
+  .section p { font-size: 11.5px; color: var(--l-ink-3); line-height: 1.65; }
+  .section p + p { margin-top: 8px; }
+  .sub-h { font-size: 12px; color: var(--l-ink); font-weight: 700; margin: 14px 0 6px; letter-spacing: -0.005em; }
+  .micro-eyebrow { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin: 14px 0 6px; }
+  .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .obj-card { padding: 12px 16px; background: var(--l-bg-subtle); border-left: 2px solid var(--l-forest-700); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+  .obj-card h4 { font-size: 11px; color: var(--l-ink); margin-bottom: 4px; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .obj-card p { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  table.std { font-size: 10.5px; }
+  table.std th { padding: 7px 10px; font-size: 9px; }
+  table.std td { padding: 6px 10px; font-size: 10.5px; line-height: 1.5; }
+  .toc { margin-top: 16px; }
+  .toc-row { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dotted var(--l-rule); font-size: 11px; }
+  .toc-row .num { color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.12em; min-width: 32px; }
+  .toc-row .title { color: var(--l-ink); flex: 1; font-weight: 600; }
+  .toc-row .pg { color: var(--l-ink-4); font-variant-numeric: tabular-nums; }
+  .req-list { list-style: none; padding: 0; margin: 8px 0; }
+  .req-list li { font-size: 10.5px; color: var(--l-ink-2); padding: 3px 0 3px 14px; position: relative; line-height: 1.55; }
+  .req-list li::before { content: '\203A'; position: absolute; left: 0; color: var(--l-forest-700); font-weight: 700; }
+  .persona-card { padding: 14px 16px; border: 1px solid var(--l-rule); border-radius: var(--r-md); margin-bottom: 10px; }
+  .persona-card h4 { font-size: 12px; font-weight: 700; color: var(--l-ink); margin-bottom: 4px; }
+  .persona-card .who { font-size: 10px; color: var(--l-forest-700); font-weight: 600; margin-bottom: 6px; }
+  .persona-card p { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  .page { padding: 0.7in 0.8in; --page-width: 210mm; --page-height: 297mm; }
+  @page { size: A4; margin: 0; }
+  @media print {
+    .page { min-height: unset; height: auto; overflow: visible; box-shadow: none; margin: 0; page-break-inside: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <span class="toolbar-label">Live N Learn — PRD</span>
+  <button class="primary" onclick="window.print()">Print / PDF</button>
+</div>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" width="300" height="38" aria-label="Mouliqe">
+      <text x="0" y="32" font-family="Oxanium, sans-serif" font-weight="700" font-size="32" letter-spacing="5.2" fill="#0a0f1a">MOULIQE</text>
+      <circle cx="291" cy="28" r="3.8" fill="#15803d"></circle>
+    </svg>
+    <div class="meta">
+      <span style="display:block; font-size:9px; color:var(--l-forest-700); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:4px;">Product Requirements</span>
+      PRD-2026-LNL-01<br>
+      Issued · May 2026
+    </div>
+  </div>
+  <div class="middle">
+    <p class="eyebrow">Stage 01 — Diagnosis</p>
+    <h1>Unified operations <span class="accent">platform</span> for Live N Learn.</h1>
+    <p class="subhead">A comprehensive product specification for a platform that consolidates outbound trip management, inbound hosting program operations, and trip pricing into a single system — replacing Youli and the current WordPress/Zapier/Sheets infrastructure.</p>
+  </div>
+  <div class="parties">
+    <div class="party">
+      <div class="label">Prepared For</div>
+      <div class="name">Live N Learn</div>
+      <div class="detail">Attention: Robin Hunsucker<br>Owner<br>Madrid, Spain<br>rhunsucker@livenlearn.com</div>
+    </div>
+    <div class="party">
+      <div class="label">Prepared By</div>
+      <div class="name">Mouliqe LLC</div>
+      <div class="detail">Imtiaz Ahmed, Founder &amp; Principal<br>imtiaz@mouliqe.com</div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="doc-id">
+      <strong>Confidential</strong>
+      This document contains commercially sensitive information about Live N Learn's operations and systems.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2 — TOC + EXECUTIVE SUMMARY -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Product Requirements · Live N Learn</span><span>PRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>Contents</h2></div>
+    <div class="toc">
+      <div class="toc-row"><span class="num">01</span><span class="title">Executive summary</span></div>
+      <div class="toc-row"><span class="num">02</span><span class="title">User personas</span></div>
+      <div class="toc-row"><span class="num">03</span><span class="title">Module 1 — Outbound trip management</span></div>
+      <div class="toc-row"><span class="num">04</span><span class="title">Module 2 — Inbound program management</span></div>
+      <div class="toc-row"><span class="num">05</span><span class="title">Module 3 — Trip pricing engine</span></div>
+      <div class="toc-row"><span class="num">06</span><span class="title">Module 4 — Portal &amp; dashboards</span></div>
+      <div class="toc-row"><span class="num">07</span><span class="title">Module 5 — Integrations</span></div>
+      <div class="toc-row"><span class="num">08</span><span class="title">Module 6 — Reporting</span></div>
+      <div class="toc-row"><span class="num">09</span><span class="title">Module 7 — Notifications &amp; automation</span></div>
+      <div class="toc-row"><span class="num">10</span><span class="title">Out of scope (Phase 2)</span></div>
+      <div class="toc-row"><span class="num">11</span><span class="title">Success criteria</span></div>
+      <div class="toc-row"><span class="num">—</span><span class="title">Appendix — Current tool costs</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">01 —</span><h2>Executive summary</h2></div>
+    <p>Live N Learn is a cultural exchange and group travel company operating two business lines — outbound student travel (US students abroad) and inbound hosting programs (international students in the US) — with a team of 8 across multiple US cities and an affiliate partner in Spain.</p>
+    <p>The company currently relies on a fragmented stack of tools (Youli, HubSpot, QuickBooks Online, Asana, WordPress, Google Sheets, Zapier) that are individually underutilized and collectively disconnected. This document defines the requirements for a unified operations platform that consolidates the core functionality of Youli (trip registration, payments, task management, parent/teacher portal) with the inbound program management currently handled through WordPress forms, Zapier automations, and Google Sheets.</p>
+    <p>The platform also includes an integrated trip pricing engine that removes the current single-point-of-failure dependency on the owner for all trip quoting.</p>
+    <p>The goal is not to replace every tool in the stack. Asana remains the project management tool (with automated integration). HubSpot remains the CRM for lead management and marketing. QuickBooks Online remains the accounting system. The platform replaces Youli (~$13-20K/year) and the WordPress/Zapier/Sheets inbound system, while providing proper integration points to the tools that remain.</p>
+    <p>This PRD is technology-agnostic. It defines what the system must do, not how it must be built. A companion Technical Requirements Document (TRD) provides the data model, architecture guidance, and integration specifications.</p>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>PRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 3 — USER PERSONAS -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Product Requirements · Live N Learn</span><span>PRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">02 —</span><h2>User personas</h2></div>
+    <div class="persona-card">
+      <h4>1. Traveler (Student)</h4>
+      <div class="who">US students (typically high school age) traveling abroad with their school group</div>
+      <p><strong>Goals:</strong> Register for a trip, make payments, complete required tasks (passport upload, forms, waivers), view trip itinerary and details.</p>
+      <p><strong>Context:</strong> Uses the system 5-10 times total over a 6-12 month period. Low technical sophistication. Often accessing on mobile. Parents may complete tasks on their behalf.</p>
+    </div>
+    <div class="persona-card">
+      <h4>2. Parent / Guardian</h4>
+      <div class="who">Parents of traveling students — may have their own account linked to their child's</div>
+      <p><strong>Goals:</strong> View child's registration status, make payments, complete parental consent forms, upload documents, view itinerary, communicate with LNL/teacher.</p>
+      <p><strong>Context:</strong> Low-frequency user. Needs clear visibility into what's been done and what's outstanding. Payment management is primary interaction.</p>
+    </div>
+    <div class="persona-card">
+      <h4>3. Group Leader (Teacher)</h4>
+      <div class="who">School teachers (typically world language teachers) who organize and lead student trips</div>
+      <p><strong>Goals:</strong> See group registration status (who's paid, who's missing documents), access pre-departure materials, communicate with students/parents and LNL, view trip logistics.</p>
+      <p><strong>Context:</strong> Manages 6-30+ students per trip. Needs dashboard-level visibility without admin complexity. Also registers themselves for the trip.</p>
+    </div>
+    <div class="persona-card">
+      <h4>4. Host Family</h4>
+      <div class="who">US families hosting international students during inbound programs</div>
+      <p><strong>Goals:</strong> Apply to host (multi-step process), complete profile, upload photos/video, view matched student profile, RSVP to events, pay for additional activity tickets, view program calendar.</p>
+      <p><strong>Context:</strong> Multi-step onboarding over several weeks. Profile data generates a formatted PDF sent to international partners. May host in multiple years (returning user).</p>
+    </div>
+    <div class="persona-card">
+      <h4>5. Local Coordinator</h4>
+      <div class="who">Part-time contracted employees of LNL in specific US cities managing inbound programs locally</div>
+      <p><strong>Goals:</strong> View their city's host families and inbound students, track vetting progress, plan and manage local events, communicate with host families, get notified of new signups.</p>
+      <p><strong>Context:</strong> Regional view only — sees their city's data, not the full system. Seasonal workload (heavy in spring/summer).</p>
+    </div>
+    <div class="persona-card">
+      <h4>6. Super Admin (LNL Staff)</h4>
+      <div class="who">Robin and her core team (8 people, transitioning to regional model)</div>
+      <p><strong>Goals:</strong> Full system oversight. Create and manage trips. Price trips. Manage all users. Run reports. Configure automations. Manage partner organizations. Oversee all programs across all cities.</p>
+      <p><strong>Context:</strong> Daily users. Need efficiency above all — the current pain is too much manual work, too many disconnected tools, too much copy-paste.</p>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>PRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 4 — MODULE 1: OUTBOUND TRIP MANAGEMENT -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Product Requirements · Live N Learn</span><span>PRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">03 —</span><h2>Module 1 — Outbound trip management</h2></div>
+
+    <div class="sub-h">1.1 Trip creation &amp; configuration</div>
+    <ul class="req-list">
+      <li>Admin creates a trip with: destination, dates, school, assigned teacher, Trip ID</li>
+      <li>Trip pricing engine (Module 3) generates pricing tiers based on group size</li>
+      <li>Admin configures: registration window (open/close dates), deposit amount, payment plan options, cancellation policy, late fee rules</li>
+      <li>Admin builds itinerary from provider library (Module 3)</li>
+      <li>Admin configures required tasks for travelers (forms, uploads, waivers)</li>
+      <li>Trip can be cloned from previous year's template (library of past trips)</li>
+    </ul>
+
+    <div class="sub-h">1.2 Student registration</div>
+    <ul class="req-list">
+      <li>Student/parent accesses registration via unique trip link</li>
+      <li>Registration form collects: personal info, emergency contacts, medical/allergy info, dietary restrictions, t-shirt size, passport details</li>
+      <li>Deposit payment collected at registration (Stripe)</li>
+      <li>Optional cancellation insurance offered at registration</li>
+      <li>Upon completion: user account created, student added to trip roster</li>
+    </ul>
+
+    <div class="sub-h">1.3 Payment management</div>
+    <ul class="req-list">
+      <li>Multiple payment plan options: autopay monthly, 2-payment split (configurable dates), full payment upfront</li>
+      <li>Automatic late fee assessment (configurable amount and grace period)</li>
+      <li>Automatic cancellation after configurable non-payment period</li>
+      <li>Payment status visible to: student, parent, teacher, admin</li>
+      <li>Stripe integration for all payment processing</li>
+      <li>Refund processing capability (admin-initiated)</li>
+      <li>Credit card fee pass-through calculation (configurable percentage)</li>
+    </ul>
+
+    <div class="sub-h">1.4 Traveler task management</div>
+    <ul class="req-list">
+      <li>Admin defines required tasks per trip (configurable per trip)</li>
+      <li>Task types: form completion, document upload (passport, consent forms), video viewing, payment, waiver signature</li>
+      <li>Each task has: title, description, deadline, status (incomplete/complete/overdue)</li>
+      <li>Automatic email reminders for incomplete tasks approaching deadline</li>
+      <li>Automatic email reminders for overdue tasks (configurable frequency)</li>
+      <li>Teacher can view task completion status for all students in their group</li>
+      <li>Admin can view task completion across all trips</li>
+    </ul>
+
+    <div class="sub-h">1.5 Trip itinerary &amp; information</div>
+    <ul class="req-list">
+      <li>Admin uploads/builds itinerary (day-by-day schedule)</li>
+      <li>Itinerary visible to: travelers, parents, teachers</li>
+      <li>Admin can update itinerary at any time (changes visible immediately)</li>
+      <li>Flight information, hotel details, activity schedule</li>
+      <li>Pre-departure materials section (documents, videos, links)</li>
+      <li>Google Calendar export for tour leaders</li>
+    </ul>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>PRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 5 — MODULE 2: INBOUND PROGRAM MANAGEMENT -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Product Requirements · Live N Learn</span><span>PRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">04 —</span><h2>Module 2 — Inbound program management</h2></div>
+
+    <div class="sub-h">2.1 Student enrollment (international partner side)</div>
+    <ul class="req-list">
+      <li>International partner organization submits student information via dedicated form</li>
+      <li>Form captures: student name, age, gender, nationality, language, program dates, interests/hobbies, allergies, dietary needs, medical info, school info, parent contact</li>
+      <li>Submission auto-populates into the correct program/city roster</li>
+      <li>Admin and assigned Local Coordinator notified of new enrollment</li>
+      <li>Student record tracks: enrollment status, profile received, interview completed, match status</li>
+    </ul>
+
+    <div class="sub-h">2.2 Host family application (multi-step funnel)</div>
+    <p>The application process is intentionally multi-step to filter casual interest from committed applicants. The system must replicate this progressive disclosure approach:</p>
+
+    <div class="micro-eyebrow">Step 1 — Interest form (short)</div>
+    <ul class="req-list">
+      <li>Collects: name, city, email, phone, brief interest statement</li>
+      <li>Upon submission: auto-forwards notification to assigned Local Coordinator</li>
+      <li>Provides immediate link to continue to full application</li>
+      <li>Triggers follow-up email with application link (for those who don't continue immediately)</li>
+    </ul>
+
+    <div class="micro-eyebrow">Step 2 — Full application (comprehensive)</div>
+    <ul class="req-list">
+      <li>Collects: household members (names, ages, relationships), home details (bedrooms, bathrooms, pets, smoking), school district, employment, hosting motivation, availability dates, language spoken, previous hosting experience</li>
+      <li>Collects: 3 references (name, relationship, phone, email)</li>
+      <li>Includes link to third-party background check service (positioned as LAST step to prevent mid-application dropout)</li>
+      <li>Upon submission: record created, Local Coordinator notified, vetting workflow initiated</li>
+    </ul>
+
+    <div class="micro-eyebrow">Step 3 — Profile (completed after vetting begins)</div>
+    <ul class="req-list">
+      <li>Collects: family photos (multiple), welcome letter/description, hobbies/interests, local activities, house rules, typical daily schedule</li>
+      <li>Optional: video upload</li>
+      <li>Data from all three steps feeds into PDF generation (see 2.4)</li>
+      <li>Triggered via email link after application submission</li>
+      <li>Auto-populates fields already collected in Steps 1-2 (no duplicate entry)</li>
+    </ul>
+
+    <div class="sub-h">2.3 Vetting workflow</div>
+    <ul class="req-list">
+      <li>For each host family, track: reference calls (3 required, date/notes/pass-fail), family interview, home visit, background check status</li>
+      <li>Overall vetting status: in progress / approved / denied</li>
+      <li>Local Coordinator updates vetting status; Admin has full visibility across all cities</li>
+      <li>Configurable: which vetting steps are required vs. optional per program type</li>
+    </ul>
+
+    <div class="sub-h">2.4 Profile PDF generation</div>
+    <ul class="req-list">
+      <li>System generates a formatted PDF pulling data from all three application steps</li>
+      <li>PDF follows a defined template (branded, professional appearance)</li>
+      <li>Admin can preview, make minor edits, and export as PDF</li>
+      <li>PDFs are sent to international partner organizations for student/family matching</li>
+    </ul>
+
+    <div class="sub-h">2.5 Matching</div>
+    <ul class="req-list">
+      <li>Admin manually assigns matches (international student ↔ host family)</li>
+      <li>Match recorded in both student record and host family record</li>
+      <li>Upon match confirmation: both parties notified</li>
+      <li>Matched profiles visible to both sides</li>
+      <li>Match can be changed by admin if needed</li>
+    </ul>
+
+    <div class="sub-h">2.6 Program events &amp; RSVPs</div>
+    <ul class="req-list">
+      <li>Local Coordinator creates events (date, time, location, description, capacity)</li>
+      <li>Host families can RSVP (attending / not attending / number of additional guests)</li>
+      <li>RSVP status visible to Local Coordinator</li>
+      <li>Reminder emails for upcoming events</li>
+      <li>Host families can pay for additional activity tickets (Stripe)</li>
+      <li>Program calendar visible to all participants in that city</li>
+    </ul>
+
+    <div class="sub-h">2.7 Local Coordinator views</div>
+    <ul class="req-list">
+      <li>Filtered to their assigned city/program only</li>
+      <li>Dashboard: new signups, vetting progress, upcoming events, matched/unmatched students</li>
+      <li>Notifications: new interest form submitted, application completed, profile completed</li>
+      <li>Communication tools: send email to all host families or filtered subsets</li>
+      <li>Active/inactive status for host families (year-off without deleting data)</li>
+    </ul>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>PRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 6 — MODULE 3: PRICING ENGINE -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Product Requirements · Live N Learn</span><span>PRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">05 —</span><h2>Module 3 — Trip pricing engine</h2></div>
+
+    <div class="sub-h">3.1 Provider database</div>
+    <ul class="req-list">
+      <li>Database of all service providers organized by city/destination: Hotels (name, location, per-night rate, capacity, contact, notes), Restaurants (name, per-person rate, cuisine type, group capacity), Tour guides (per-group rate, languages, specialties), Activities/attractions (per-person or per-group rate, duration), Transportation (per-day rate, capacity, provider)</li>
+      <li>Admin can add, edit, remove, activate/deactivate providers</li>
+      <li>Providers tagged by city/destination for easy filtering</li>
+      <li>Historical pricing tracked (rate changes over time)</li>
+    </ul>
+
+    <div class="sub-h">3.2 Itinerary builder</div>
+    <ul class="req-list">
+      <li>Admin selects destination city → system shows available providers filtered by type</li>
+      <li>Admin builds day-by-day itinerary by selecting providers</li>
+      <li>Each day: hotel, meals, activities, transportation</li>
+      <li>Itinerary can be saved as template for reuse</li>
+      <li>Library of saved itineraries (clone and modify for new trips)</li>
+    </ul>
+
+    <div class="sub-h">3.3 Pricing calculator</div>
+    <ul class="req-list">
+      <li>Based on selected itinerary, system calculates total trip cost</li>
+      <li>Variables: number of students (configurable tiers: 6, 12, 18, 24, 30+), free teacher ratio, number of paid chaperones, per-person vs. per-group costs, markup/margin (configurable), optional add-ons</li>
+      <li>Output: price per student at each tier, total trip cost, margin</li>
+      <li>Export as PDF quote for teacher/school</li>
+      <li>Any team member with admin access can use the pricing tool (removes owner as bottleneck)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="n">06 —</span><h2>Module 4 — Portal &amp; dashboards</h2></div>
+
+    <div class="sub-h">4.1 Traveler / Parent portal</div>
+    <ul class="req-list">
+      <li>Login with email + password (or magic link option)</li>
+      <li>Dashboard: trip name, registration status, payment status, outstanding tasks</li>
+      <li>Task list with deadlines and completion status</li>
+      <li>Payment history and upcoming payments</li>
+      <li>Itinerary view</li>
+      <li>Document upload interface (passport, forms)</li>
+      <li>Communication: view messages from LNL, contact support</li>
+    </ul>
+
+    <div class="sub-h">4.2 Teacher portal</div>
+    <ul class="req-list">
+      <li>Dashboard: trip overview, student roster with status indicators</li>
+      <li>Per-student view: registration complete?, payments current?, tasks done?</li>
+      <li>Filter: show everyone missing a passport, everyone with overdue payments</li>
+      <li>Access to pre-departure materials</li>
+      <li>Communication: message all students/parents, message LNL</li>
+    </ul>
+
+    <div class="sub-h">4.3 Host family portal</div>
+    <ul class="req-list">
+      <li>Dashboard: application status, vetting progress, match status</li>
+      <li>Profile management (update photos, letter, info)</li>
+      <li>View matched student profile (when matched)</li>
+      <li>Program calendar and event RSVPs</li>
+      <li>Payment for additional activity tickets</li>
+    </ul>
+
+    <div class="sub-h">4.4 Local Coordinator dashboard</div>
+    <ul class="req-list">
+      <li>City-specific view of all host families and inbound students</li>
+      <li>Vetting progress tracker (visual: how many at each stage)</li>
+      <li>Event management (create, view RSVPs, send reminders)</li>
+      <li>New signup notifications</li>
+      <li>Communication tools (email subsets of families)</li>
+    </ul>
+
+    <div class="sub-h">4.5 Admin dashboard</div>
+    <ul class="req-list">
+      <li>Global view across all trips, programs, cities</li>
+      <li>Quick stats: active trips, total registered students, revenue collected, outstanding payments</li>
+      <li>Alerts: overdue payments, overdue tasks, vetting items needing attention</li>
+      <li>User management (create, edit, deactivate accounts)</li>
+      <li>System configuration (payment rules, task templates, email templates)</li>
+    </ul>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>PRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 7 — MODULES 5, 6, 7 -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Product Requirements · Live N Learn</span><span>PRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">07 —</span><h2>Module 5 — Integrations</h2></div>
+
+    <table class="std" style="margin-top: 10px">
+      <thead><tr><th style="width:22%">System</th><th style="width:20%">Direction</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Stripe</strong></td><td>Bi-directional</td><td>All payment processing — one-time charges, recurring subscriptions, refunds, webhooks for payment events</td></tr>
+        <tr><td><strong>QuickBooks Online</strong></td><td>Platform → QBO</td><td>Each payment recorded individually with: student name, trip name, payment type. No more lump-sum batches.</td></tr>
+        <tr><td><strong>HubSpot</strong></td><td>Bi-directional</td><td>New registrations sync as contacts. Lead data from school visits available for reference. Marketing list segmentation by program.</td></tr>
+        <tr><td><strong>Asana</strong></td><td>Bi-directional</td><td>New trip → Asana project. Key milestones → Asana tasks. Email content auto-captured as task comments (replaces manual copy-paste).</td></tr>
+        <tr><td><strong>Email service</strong></td><td>Platform → Email</td><td>Transactional emails (confirmations, receipts, reminders). Bulk email to filtered groups. Admin-editable templates.</td></tr>
+        <tr><td><strong>Google Calendar</strong></td><td>Platform → Calendar</td><td>Trip itineraries and program events exportable as subscribable iCal feeds.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="n">08 —</span><h2>Module 6 — Reporting</h2></div>
+    <p>Pre-built report templates with CSV and PDF export:</p>
+
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Trip reports</h4><p>Registration status, payment summary, task completion by trip, student roster with all status fields.</p></div>
+      <div class="obj-card"><h4>Financial reports</h4><p>Revenue by trip/program/period, outstanding receivables, payment plan status, provider cost summary for margin analysis.</p></div>
+      <div class="obj-card"><h4>Inbound program reports</h4><p>Host family pipeline by city (interest → applied → vetted → matched), student enrollment, event attendance rates.</p></div>
+      <div class="obj-card"><h4>Operational reports</h4><p>System-wide dashboard: active trips, active programs, total users, revenue YTD, upcoming deadlines, overdue items.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="n">09 —</span><h2>Module 7 — Notifications &amp; automation</h2></div>
+
+    <table class="std" style="margin-top: 10px">
+      <thead><tr><th style="width:40%">Trigger</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>Registration deadline approaching</td><td>Email reminder to incomplete registrants</td></tr>
+        <tr><td>Task deadline approaching</td><td>Email reminder to student/parent</td></tr>
+        <tr><td>Task overdue</td><td>Escalation email (configurable frequency)</td></tr>
+        <tr><td>Payment failed</td><td>Retry notification + admin alert</td></tr>
+        <tr><td>Payment overdue (configurable days)</td><td>Late fee assessed + notification</td></tr>
+        <tr><td>Non-payment threshold reached</td><td>Auto-cancellation + notification to all parties</td></tr>
+        <tr><td>New host family interest form</td><td>Notification to Local Coordinator</td></tr>
+        <tr><td>Host family application completed</td><td>Notification to LC + vetting workflow initiated</td></tr>
+        <tr><td>Match confirmed</td><td>Notification to both parties</td></tr>
+        <tr><td>Event upcoming</td><td>Reminder to RSVPed families</td></tr>
+        <tr><td>Itinerary updated</td><td>Notification to affected travelers/teachers</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sub-h" style="margin-top: 14px">Admin-configurable rules</div>
+    <ul class="req-list">
+      <li>Late fee amount and grace period</li>
+      <li>Auto-cancellation threshold (days overdue)</li>
+      <li>Free teacher ratio per group size</li>
+      <li>Reminder frequency for overdue items</li>
+      <li>Which tasks are required vs. optional per trip</li>
+      <li>Which vetting steps are required per program type</li>
+      <li>Email template content (editable by admin)</li>
+    </ul>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>PRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 8 — OUT OF SCOPE + SUCCESS CRITERIA + APPENDIX -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Product Requirements · Live N Learn</span><span>PRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">10 —</span><h2>Out of scope (Phase 2 / Future)</h2></div>
+    <p>The following are explicitly excluded from this specification but noted as future enhancements:</p>
+    <ul class="req-list">
+      <li>AI-powered matching (host family ↔ student compatibility scoring)</li>
+      <li>WhatsApp Business API integration (message logging, automated responses)</li>
+      <li>Flexible report builder (custom queries, saved views, ad-hoc filtering)</li>
+      <li>Public-facing marketing website (SEO, blog — separate project)</li>
+      <li>Mobile native app (responsive web is sufficient for v1)</li>
+      <li>Multi-language support (English only for v1; Spanish/French UI is future)</li>
+      <li>Partner organization portal (international partners currently submit via form; dedicated portal is future)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="n">11 —</span><h2>Success criteria</h2></div>
+    <p>The platform is considered successful when:</p>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Youli fully replaced</h4><p>All outbound trip registration, payments, and task management handled by the new system.</p></div>
+      <div class="obj-card"><h4>Inbound system consolidated</h4><p>WordPress forms, Zapier automations, and Google Sheets replaced by native functionality.</p></div>
+      <div class="obj-card"><h4>Pricing democratized</h4><p>Any team member can price a trip — owner is no longer the bottleneck.</p></div>
+      <div class="obj-card"><h4>Zero manual copy-paste</h4><p>Asana integration handles email-to-task creation automatically.</p></div>
+      <div class="obj-card"><h4>Payments labeled in QBO</h4><p>Stripe payments appear individually labeled in QuickBooks — no more lump-sum reconciliation.</p></div>
+      <div class="obj-card"><h4>Profile PDFs auto-generated</h4><p>Host family profiles generate automatically from application data — no more broken "magic PDF maker."</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>Appendix — Current tool costs (annual)</h2></div>
+    <table class="std" style="margin-top: 10px">
+      <thead><tr><th>Tool</th><th>Current Cost</th><th>Role in New System</th></tr></thead>
+      <tbody>
+        <tr><td>Youli</td><td>~$13-20K/year</td><td><strong>Replaced entirely</strong></td></tr>
+        <tr><td>HubSpot</td><td>~$6-8K/year (est.)</td><td>Retained — CRM &amp; marketing</td></tr>
+        <tr><td>Asana (Advanced)</td><td>~$2-3K/year (est.)</td><td>Retained — project management</td></tr>
+        <tr><td>QuickBooks Online</td><td>~$1-2K/year</td><td>Retained — accounting</td></tr>
+        <tr><td>WordPress/GoDaddy</td><td>~$300-500/year</td><td>Retained for marketing site</td></tr>
+        <tr><td>Zapier</td><td>~$500-1K/year</td><td><strong>Replaced</strong> (automations native)</td></tr>
+        <tr><td>Google Workspace</td><td>~$500-1K/year</td><td>Retained — email, calendar, drive</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 12px; font-weight: 600; color: var(--l-ink);">Estimated annual savings from platform: $14-21K/year (Youli + Zapier eliminated)</p>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>PRD-2026-LNL-01</span></div>
+</div>
+
+</body>
+</html>

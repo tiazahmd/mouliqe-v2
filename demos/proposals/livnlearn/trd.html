@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mouliqe — Live N Learn TRD</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/templates/proposal.css">
+<link rel="stylesheet" href="/css/templates/proposal-toolbar.css">
+<style>
+  .cover { background: var(--l-bg); display: flex; flex-direction: column; justify-content: space-between; padding: 1in 0.9in; }
+  .cover .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover .top .meta { text-align: right; font-size: 10px; color: var(--l-ink-4); line-height: 1.7; letter-spacing: 0.04em; }
+  .cover .middle { padding: 40px 0; }
+  .cover .middle .eyebrow { margin-bottom: 16px; }
+  .cover .middle h1 { font-size: 38px; line-height: 1.12; color: var(--l-ink); max-width: 90%; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .cover .middle h1 .accent { color: var(--l-forest-700); }
+  .cover .middle .subhead { font-size: 14px; color: var(--l-ink-3); max-width: 82%; line-height: 1.6; }
+  .cover .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 24px 0; border-top: 1px solid var(--l-rule); border-bottom: 1px solid var(--l-rule); }
+  .cover .party .label { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .cover .party .name { font-size: 14px; font-weight: 700; color: var(--l-ink); margin-bottom: 4px; }
+  .cover .party .detail { font-size: 10px; color: var(--l-ink-3); line-height: 1.65; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover .bottom .doc-id { font-size: 10px; color: var(--l-ink-4); letter-spacing: 0.08em; max-width: 60%; }
+  .cover .bottom .doc-id strong { color: var(--l-ink); display: block; font-size: 12px; margin-bottom: 2px; }
+  .content-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--l-rule); margin-bottom: 22px; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.1em; text-transform: uppercase; }
+  .content-header .title { color: var(--l-ink); font-weight: 700; }
+  .content-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--l-rule); display: flex; justify-content: space-between; font-size: 9px; color: var(--l-ink-4); letter-spacing: 0.06em; }
+  .section-title { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; padding-top: 4px; }
+  .section-title .n { font-size: 12px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+  .section-title h2 { font-size: 20px; color: var(--l-ink); }
+  .section + .section { margin-top: 22px; }
+  .section p { font-size: 11.5px; color: var(--l-ink-3); line-height: 1.65; }
+  .section p + p { margin-top: 8px; }
+  .sub-h { font-size: 12px; color: var(--l-ink); font-weight: 700; margin: 14px 0 6px; letter-spacing: -0.005em; }
+  .micro-eyebrow { font-size: 9px; font-weight: 700; color: var(--l-forest-700); letter-spacing: 0.2em; text-transform: uppercase; margin: 14px 0 6px; }
+  .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .obj-card { padding: 12px 16px; background: var(--l-bg-subtle); border-left: 2px solid var(--l-forest-700); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+  .obj-card h4 { font-size: 11px; color: var(--l-ink); margin-bottom: 4px; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .obj-card p { font-size: 10.5px; color: var(--l-ink-3); line-height: 1.55; }
+  table.std { font-size: 10.5px; }
+  table.std th { padding: 7px 10px; font-size: 9px; }
+  table.std td { padding: 6px 10px; font-size: 10.5px; line-height: 1.5; }
+  .toc { margin-top: 16px; }
+  .toc-row { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dotted var(--l-rule); font-size: 11px; }
+  .toc-row .num { color: var(--l-forest-700); font-weight: 700; letter-spacing: 0.12em; min-width: 32px; }
+  .toc-row .title { color: var(--l-ink); flex: 1; font-weight: 600; }
+  .req-list { list-style: none; padding: 0; margin: 8px 0; }
+  .req-list li { font-size: 10.5px; color: var(--l-ink-2); padding: 3px 0 3px 14px; position: relative; line-height: 1.55; }
+  .req-list li::before { content: '\203A'; position: absolute; left: 0; color: var(--l-forest-700); font-weight: 700; }
+  .code-block { background: #f8f9fa; border: 1px solid var(--l-rule); border-radius: var(--r-sm); padding: 12px 16px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 9.5px; line-height: 1.6; color: var(--l-ink-2); overflow-x: auto; margin: 8px 0; white-space: pre; }
+  .page { padding: 0.7in 0.8in; --page-width: 210mm; --page-height: 297mm; }
+  @page { size: A4; margin: 0; }
+  @media print {
+    .page { min-height: unset; height: auto; overflow: visible; box-shadow: none; margin: 0; page-break-inside: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <span class="toolbar-label">Live N Learn — TRD</span>
+  <button class="primary" onclick="window.print()">Print / PDF</button>
+</div>
+
+<!-- COVER -->
+<div class="page cover">
+  <div class="top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" width="300" height="38" aria-label="Mouliqe">
+      <text x="0" y="32" font-family="Oxanium, sans-serif" font-weight="700" font-size="32" letter-spacing="5.2" fill="#0a0f1a">MOULIQE</text>
+      <circle cx="291" cy="28" r="3.8" fill="#15803d"></circle>
+    </svg>
+    <div class="meta">
+      <span style="display:block; font-size:9px; color:var(--l-forest-700); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:4px;">Technical Requirements</span>
+      TRD-2026-LNL-01<br>
+      Issued · May 2026
+    </div>
+  </div>
+  <div class="middle">
+    <p class="eyebrow">Stage 01 — Diagnosis</p>
+    <h1>Technical <span class="accent">architecture</span> specification for Live N Learn.</h1>
+    <p class="subhead">Data model, integration specifications, business rules, authentication design, and implementation guidance for the Live N Learn Unified Operations Platform. Technology-agnostic — companion to PRD-2026-LNL-01.</p>
+  </div>
+  <div class="parties">
+    <div class="party">
+      <div class="label">Prepared For</div>
+      <div class="name">Live N Learn</div>
+      <div class="detail">Attention: Robin Hunsucker<br>Owner<br>Madrid, Spain<br>rhunsucker@livenlearn.com</div>
+    </div>
+    <div class="party">
+      <div class="label">Prepared By</div>
+      <div class="name">Mouliqe LLC</div>
+      <div class="detail">Imtiaz Ahmed, Founder &amp; Principal<br>imtiaz@mouliqe.com</div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="doc-id">
+      <strong>Confidential</strong>
+      This document contains commercially sensitive technical specifications for Live N Learn's operations platform.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2 — TOC + ARCHITECTURE PRINCIPLES -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Technical Requirements · Live N Learn</span><span>TRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>Contents</h2></div>
+    <div class="toc">
+      <div class="toc-row"><span class="num">01</span><span class="title">Architecture principles</span></div>
+      <div class="toc-row"><span class="num">02</span><span class="title">Data model</span></div>
+      <div class="toc-row"><span class="num">03</span><span class="title">Authentication &amp; authorization</span></div>
+      <div class="toc-row"><span class="num">04</span><span class="title">Integration specifications</span></div>
+      <div class="toc-row"><span class="num">05</span><span class="title">Business rules engine</span></div>
+      <div class="toc-row"><span class="num">06</span><span class="title">PDF generation</span></div>
+      <div class="toc-row"><span class="num">07</span><span class="title">Migration considerations</span></div>
+      <div class="toc-row"><span class="num">08</span><span class="title">Non-functional requirements</span></div>
+      <div class="toc-row"><span class="num">—</span><span class="title">Appendix — Recommended approaches</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="n">01 —</span><h2>Architecture principles</h2></div>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Multi-tenant by role</h4><p>Single deployment serving all user types with role-based access control. Not multi-organization — single org, multiple permission levels.</p></div>
+      <div class="obj-card"><h4>API-first design</h4><p>All functionality accessible via API. The web interface consumes the same APIs that integrations use. Enables future mobile apps or partner integrations without rebuilding.</p></div>
+      <div class="obj-card"><h4>Event-driven automation</h4><p>System events (registration completed, payment received, deadline reached) trigger configurable actions. Replaces the current Zapier layer with native event handling.</p></div>
+      <div class="obj-card"><h4>Geographic data isolation</h4><p>Local Coordinators see only their city's data. Teachers see only their trip's data. Admins see everything. Enforced at the data layer, not just the UI.</p></div>
+      <div class="obj-card"><h4>Offline-resilient integrations</h4><p>External service failures (Stripe down, QBO unreachable) must not break core platform functionality. Queue failed operations and retry with exponential backoff.</p></div>
+      <div class="obj-card"><h4>Technology-agnostic</h4><p>This specification can be implemented on any modern web stack. No framework, language, or hosting provider is prescribed.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>TRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 3 — DATA MODEL I -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Technical Requirements · Live N Learn</span><span>TRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">02 —</span><h2>Data model</h2></div>
+    <p>Entity definitions with fields, types, and relationships. Enum values shown in parentheses.</p>
+
+    <div class="micro-eyebrow">Organizations &amp; People</div>
+    <div class="code-block">Organization
+├── id (PK)
+├── name, type (partner_outbound | partner_inbound | school)
+├── headquarters_city, headquarters_country
+├── email, phone (with country code)
+├── partnership_type (outbound_trips | inbound_programs | both | other)
+├── status (active | inactive), notes
+└── created_at, updated_at
+
+OrganizationContact
+├── id, organization_id (FK → Organization)
+├── name, role, email, phone, is_primary (bool), notes
+
+School
+├── id, name, prefix (for Trip ID generation, e.g. "WHS")
+├── address, city, state, zip, country, email, phone
+├── outbound_travel (bool), outbound_destinations (array)
+├── inbound_programs (bool), inbound_program_months (array)
+├── lead_contact_name, lead_contact_role, lead_contact_email
+├── status (active | inactive), notes
+
+User
+├── id, email (unique), password_hash
+├── first_name, last_name, phone
+├── role (traveler | parent | teacher | host_family | local_coordinator | admin)
+├── city (for geographic filtering)
+├── status (active | inactive | suspended)
+└── last_login, created_at, updated_at</div>
+
+    <div class="micro-eyebrow">Outbound Trips</div>
+    <div class="code-block">Trip
+├── id, trip_id_code (generated: PREFIX-YEAR-SEQ, e.g. "WHS-2026-01")
+├── destination_country, destination_cities (array)
+├── school_id (FK → School), teacher_id (FK → User)
+├── start_date, end_date
+├── registration_open_date, registration_close_date
+├── deposit_amount, cancellation_insurance_available (bool), cancellation_insurance_cost
+├── late_fee_amount, late_fee_grace_days, auto_cancel_after_days
+├── free_teacher_ratio (int, e.g. 8 = 1 free per 8 students)
+├── status (draft | registration_open | registration_closed | in_progress | completed | cancelled)
+├── itinerary_id (FK → Itinerary)
+└── created_at, updated_at
+
+TripRegistration
+├── id, trip_id (FK), student_user_id (FK), parent_user_id (FK, nullable)
+├── registration_date, status (registered | active | cancelled | completed)
+├── cancellation_insurance_purchased (bool)
+├── cancellation_date, cancellation_reason (nullable), notes
+
+PaymentPlan
+├── id, registration_id (FK → TripRegistration)
+├── plan_type (full_upfront | autopay_monthly | two_payment_split)
+├── total_amount, amount_paid, amount_outstanding
+├── next_payment_date, next_payment_amount
+├── status (current | overdue | completed | cancelled)
+└── stripe_subscription_id (nullable)
+
+Payment
+├── id, registration_id (FK → TripRegistration)
+├── amount, type (deposit | installment | late_fee | insurance | refund | additional)
+├── status (pending | succeeded | failed | refunded)
+├── stripe_payment_intent_id, processed_at
+├── qbo_synced (bool), qbo_sync_date, notes
+
+TravelerTask
+├── id, trip_id (FK), title, description
+├── type (form | document_upload | video_view | payment | waiver_signature)
+├── deadline, is_required (bool), sort_order
+
+TravelerTaskCompletion
+├── id, task_id (FK), registration_id (FK)
+├── status (incomplete | complete | overdue)
+├── completed_at, file_url (nullable), form_data (JSON)</div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>TRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 4 — DATA MODEL II -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Technical Requirements · Live N Learn</span><span>TRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="micro-eyebrow">Inbound Programs</div>
+    <div class="code-block">InboundProgram
+├── id, name (e.g. "Spanish July 2026 - Cincinnati")
+├── language (spanish | french), type (july_homestay | august_school | guestbook | full_year)
+├── city, state, year, start_date, end_date
+├── local_coordinator_id (FK → User), partner_organization_id (FK → Organization)
+├── status (planning | recruiting | active | completed)
+
+InboundStudent
+├── id, program_id (FK), first_name, last_name
+├── age, gender, nationality, language
+├── school_name, school_city, interests_hobbies
+├── allergies, dietary_needs, medical_info
+├── parent_name, parent_email, parent_phone
+├── partner_organization_id (FK), enrollment_date
+├── interview_completed (bool), interview_date, interview_notes
+├── profile_received (bool)
+├── match_status (unmatched | matched | confirmed)
+├── matched_host_family_id (FK → HostFamily, nullable)
+├── status (enrolled | active | completed | withdrawn)
+
+HostFamily
+├── id, user_id (FK → User), program_id (FK → InboundProgram)
+├── city, state
+├── application_step (interest | application | profile | complete)
+├── vetting_status (not_started | in_progress | approved | denied)
+├── match_status (unmatched | matched | confirmed)
+├── matched_student_id (FK, nullable)
+├── status (active | inactive | year_off)
+
+HostFamilyInterest (Step 1)
+├── id, host_family_id (FK), contact_name, city, state
+├── email, phone, interest_statement, submitted_at, lc_notified (bool)
+
+HostFamilyApplication (Step 2)
+├── id, host_family_id (FK)
+├── household_members (JSON array: name, age, relationship)
+├── home_bedrooms, home_bathrooms, has_pets (bool), pet_details
+├── smoking_household (bool), school_district, employment_info
+├── hosting_motivation, availability_dates, languages_spoken
+├── previous_hosting_experience (bool), experience_details
+├── reference_1/2/3: name, relationship, phone, email
+├── background_check_status (not_started | pending | clear | flagged)
+├── background_check_date, submitted_at
+
+HostFamilyProfile (Step 3)
+├── id, host_family_id (FK)
+├── photos (JSON array of file URLs), welcome_letter
+├── hobbies_interests, local_activities, house_rules
+├── typical_daily_schedule, video_url (nullable), submitted_at
+
+VettingRecord
+├── id, host_family_id (FK)
+├── step_type (reference_call_1 | reference_call_2 | reference_call_3 | interview | home_visit)
+├── completed_by (FK → User), completed_date
+├── result (pass | fail | pending), notes
+
+ProgramEvent
+├── id, program_id (FK), title, date, time, location
+├── description, capacity (nullable), additional_ticket_cost (nullable)
+├── created_by (FK → User)
+
+EventRSVP
+├── id, event_id (FK), host_family_id (FK)
+├── status (attending | not_attending), additional_guests (int)
+├── additional_tickets_paid (bool), responded_at</div>
+
+    <div class="micro-eyebrow">Trip Pricing Engine</div>
+    <div class="code-block">Provider
+├── id, name, type (hotel | restaurant | tour_guide | activity | transportation)
+├── city, country, address, contact_name, contact_email, contact_phone
+├── rate, rate_type (per_person | per_group | per_night | per_day)
+├── capacity, cuisine_type, languages, specialties, duration_hours
+├── status (active | inactive), notes
+
+ProviderRateHistory
+├── id, provider_id (FK), rate, effective_date, notes
+
+Itinerary
+├── id, name, destination_country, destination_cities (array)
+├── total_days, is_template (bool), created_by (FK), status (draft | active | archived)
+
+ItineraryDay
+├── id, itinerary_id (FK), day_number, city
+├── hotel_provider_id (FK, nullable), transportation_provider_id (FK, nullable), notes
+
+ItineraryDayItem
+├── id, itinerary_day_id (FK), provider_id (FK)
+├── time_slot (morning | afternoon | evening | meal_breakfast | meal_lunch | meal_dinner)
+├── notes, sort_order
+
+TripQuote
+├── id, itinerary_id (FK), school_id (FK, nullable), created_by (FK)
+├── pricing_tiers (JSON: [{student_count, free_teachers, price_per_student, total_cost, margin}])
+├── markup_percentage, additional_notes
+├── status (draft | sent | accepted | expired), created_at, exported_at</div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>TRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 5 — AUTH + INTEGRATIONS -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Technical Requirements · Live N Learn</span><span>TRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">03 —</span><h2>Authentication &amp; authorization</h2></div>
+
+    <div class="sub-h">Authentication</div>
+    <ul class="req-list">
+      <li>Email + password authentication (bcrypt or argon2 hashing)</li>
+      <li>Magic link option for low-frequency users (travelers, parents, host families)</li>
+      <li>Session-based or JWT token-based (implementation choice)</li>
+      <li>Password reset via email</li>
+      <li>Account lockout after configurable failed attempts</li>
+    </ul>
+
+    <div class="sub-h">Role-based access control</div>
+    <table class="std" style="margin-top: 8px">
+      <thead><tr><th>Resource</th><th>Traveler</th><th>Parent</th><th>Teacher</th><th>Host Family</th><th>Local Coord</th><th>Admin</th></tr></thead>
+      <tbody>
+        <tr><td>Own profile</td><td>RW</td><td>RW</td><td>RW</td><td>RW</td><td>RW</td><td>RW</td></tr>
+        <tr><td>Own trip/program data</td><td>R</td><td>R</td><td>R</td><td>R</td><td>R</td><td>RW</td></tr>
+        <tr><td>Trip roster (own trip)</td><td>—</td><td>—</td><td>R</td><td>—</td><td>—</td><td>RW</td></tr>
+        <tr><td>Host families (own city)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>RW</td><td>RW</td></tr>
+        <tr><td>Students (own city)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>R</td><td>RW</td></tr>
+        <tr><td>All trips / programs</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>RW</td></tr>
+        <tr><td>Provider database</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>RW</td></tr>
+        <tr><td>Pricing engine</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>RW</td></tr>
+        <tr><td>Reports</td><td>—</td><td>—</td><td>—</td><td>—</td><td>R (city)</td><td>RW</td></tr>
+        <tr><td>System config</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>RW</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 8px; font-size: 10px; color: var(--l-ink-4);">R = Read, RW = Read/Write, — = No access. Geographic filtering enforced at database query level for Local Coordinators.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="n">04 —</span><h2>Integration specifications</h2></div>
+
+    <div class="sub-h">Stripe (Payment Processing)</div>
+    <p><strong>Pattern:</strong> Direct API + Webhooks</p>
+    <ul class="req-list">
+      <li>Create Payment Intents (one-time charges: deposits, late fees, event tickets)</li>
+      <li>Create Subscriptions (recurring payment plans)</li>
+      <li>Cancel Subscriptions (on auto-cancellation or manual cancel)</li>
+      <li>Process Refunds (admin-initiated)</li>
+      <li>Handle Webhooks: payment_intent.succeeded, payment_intent.payment_failed, invoice.paid, invoice.payment_failed, customer.subscription.deleted</li>
+      <li>Business rules: auto-assess late fee after grace period, auto-cancel after threshold, configurable CC fee pass-through</li>
+      <li>Error handling: retry per Stripe's built-in schedule, notify admin after final failure, idempotent webhook processing</li>
+    </ul>
+
+    <div class="sub-h">QuickBooks Online (Accounting)</div>
+    <p><strong>Pattern:</strong> OAuth 2.0 + REST API (scheduled sync)</p>
+    <ul class="req-list">
+      <li>Create Sales Receipts for each payment — individually labeled, not batched</li>
+      <li>Each transaction includes: student name, trip name/ID, payment type, amount, date</li>
+      <li>Map to configurable QBO income accounts</li>
+      <li>Handle credit card fee accounting (expense line item)</li>
+      <li>Sync frequency: configurable (recommended every 4-6 hours)</li>
+      <li>Error handling: queue on API unavailability, retry with backoff, track qbo_synced flag per payment, respect 500 req/min rate limit</li>
+    </ul>
+
+    <div class="sub-h">HubSpot (CRM &amp; Marketing)</div>
+    <p><strong>Pattern:</strong> OAuth 2.0 + REST API (event-driven + scheduled)</p>
+    <ul class="req-list">
+      <li>Create/update Contacts when students register</li>
+      <li>Sync custom properties: trip name, registration status, payment status, program type</li>
+      <li>Read Contacts from school visit lead lists (for host family recruitment)</li>
+      <li>Direction: Platform → HubSpot (registration events, status changes); HubSpot → Platform (lead data, read-only)</li>
+      <li>Deduplication: match on email address</li>
+    </ul>
+
+    <div class="sub-h">Asana (Project Management)</div>
+    <p><strong>Pattern:</strong> OAuth 2.0 + REST API (event-driven)</p>
+    <ul class="req-list">
+      <li>Create Project when new trip is created</li>
+      <li>Create Tasks for key milestones (configurable triggers)</li>
+      <li>Create Task Comments from relevant emails (replaces manual copy-paste)</li>
+      <li>Email-to-Asana: platform monitors designated inboxes, matches email to trip based on subject/sender patterns, creates comment with full email content</li>
+      <li>Read Task status from Asana for platform dashboard display</li>
+      <li>Error handling: queue on unavailability, check for existing task before creating (duplicate prevention)</li>
+    </ul>
+
+    <div class="sub-h">Email Service</div>
+    <p><strong>Pattern:</strong> API-based (SendGrid, Mailgun, AWS SES, or similar)</p>
+    <ul class="req-list">
+      <li>Transactional emails (confirmations, receipts, reminders) + bulk emails (admin/LC to filtered groups)</li>
+      <li>Template system with admin-editable content and variable substitution</li>
+      <li>Variables: {{student_name}}, {{trip_name}}, {{payment_amount}}, {{task_deadline}}, {{event_name}}, {{portal_login_url}}, etc.</li>
+      <li>Delivery tracking (sent, delivered, bounced), unsubscribe handling</li>
+    </ul>
+
+    <div class="sub-h">Google Calendar</div>
+    <p><strong>Pattern:</strong> iCal feed generation (no OAuth required)</p>
+    <ul class="req-list">
+      <li>Generate subscribable iCal (.ics) feed URL per trip and per inbound program</li>
+      <li>Events include: title, date/time, location, description</li>
+      <li>Feed updates automatically when itinerary/events change</li>
+    </ul>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>TRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 6 — BUSINESS RULES + PDF + MIGRATION + NFR -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Technical Requirements · Live N Learn</span><span>TRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">05 —</span><h2>Business rules engine</h2></div>
+
+    <div class="sub-h">Payment rules</div>
+    <div class="code-block">RULE: Late Fee Assessment
+  WHEN payment.status = 'overdue'
+  AND days_since_due > trip.late_fee_grace_days
+  AND late_fee_not_already_assessed_this_cycle
+  THEN create_charge(trip.late_fee_amount)
+  AND send_email('late_fee_notification', student, parent)
+
+RULE: Auto-Cancellation
+  WHEN payment.status = 'overdue'
+  AND days_since_due > trip.auto_cancel_after_days
+  THEN cancel_subscription()
+  AND update_registration(status='cancelled', reason='non_payment')
+  AND send_email('auto_cancellation', student, parent, teacher)
+  AND notify_admin('auto_cancellation', registration)
+
+RULE: Free Teacher Calculation
+  GIVEN student_count, free_teacher_ratio
+  THEN free_teachers = FLOOR(student_count / free_teacher_ratio)
+  AND paid_positions = total_group_size - free_teachers
+  AND price_per_student = total_trip_cost / paid_positions</div>
+
+    <div class="sub-h">Notification rules</div>
+    <div class="code-block">RULE: Task Deadline Approaching
+  WHEN task.deadline - today <= configurable_days (default: 7)
+  AND task.status = 'incomplete'
+  THEN send_email('task_reminder', student, parent)
+
+RULE: Task Overdue
+  WHEN today > task.deadline AND task.status = 'incomplete'
+  THEN update_task(status='overdue')
+  AND send_email('task_overdue', student, parent)
+  AND repeat_every(configurable_days, default: 3)
+
+RULE: New Host Family Interest
+  WHEN interest_form.submitted
+  THEN notify_local_coordinator(interest_form.city)
+  AND send_email('interest_confirmation', host_family)
+  AND send_email('continue_application_link', host_family, delay: 24h)</div>
+
+    <div class="sub-h">Vetting rules</div>
+    <div class="code-block">RULE: Vetting Complete
+  WHEN all_required_steps_completed(host_family) AND all_steps_passed
+  THEN update_vetting_status('approved')
+  AND notify_admin('family_approved', host_family)
+  AND send_email('approved_notification', host_family)
+
+RULE: Background Check Flagged
+  WHEN background_check.status = 'flagged'
+  THEN notify_admin('background_flagged', host_family)
+  AND pause_vetting_workflow(host_family)</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="n">06 —</span><h2>PDF generation</h2></div>
+    <p><strong>Trigger:</strong> Admin clicks "Generate Profile" on approved host family.</p>
+    <p><strong>Data sources:</strong> HostFamilyInterest (contact info) + HostFamilyApplication (household details) + HostFamilyProfile (photos, letter, interests, schedule).</p>
+    <ul class="req-list">
+      <li>Branded header (LNL logo, program name)</li>
+      <li>Family photo(s) prominently displayed</li>
+      <li>Structured sections: Family Overview, Home Details, Interests &amp; Activities, Daily Schedule, Welcome Letter</li>
+      <li>Professional formatting suitable for sending to international partners</li>
+      <li>Admin can preview before finalizing</li>
+      <li>Implementation: HTML → PDF conversion (most flexible approach)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="n">07 —</span><h2>Migration considerations</h2></div>
+    <div class="sub-h">Data export requirements</div>
+    <ul class="req-list">
+      <li>From Youli: all active trip data (registrations, payment history, task completions), traveler/parent/teacher accounts, itinerary library</li>
+      <li>From Google Sheets: all inbound program spreadsheets (per-city vetting sheets), map columns to HostFamily/InboundStudent/VettingRecord entities</li>
+      <li>Handle: inconsistent data formats, missing fields, duplicate entries</li>
+      <li>Validate: no data loss during migration (reconcile record counts)</li>
+    </ul>
+    <div class="sub-h">Transition plan</div>
+    <ul class="req-list">
+      <li>Parallel operation period (1-2 months): run new platform alongside Youli for one trip cycle</li>
+      <li>Staff training: all 8 team members trained before cutover</li>
+      <li>Cutover timing: align with natural business cycle (between trip seasons, not mid-registration)</li>
+      <li>Rollback plan: maintain Youli access for 30 days post-cutover</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="n">08 —</span><h2>Non-functional requirements</h2></div>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Performance</h4><p>Page load &lt; 2s. API response &lt; 500ms. Support 200 concurrent users (peak registration). File upload up to 50MB (videos, photos).</p></div>
+      <div class="obj-card"><h4>Security</h4><p>HTTPS everywhere (TLS 1.2+). Input validation/sanitization. PCI compliant (Stripe handles all card data). Regular automated backups. GDPR: ability to export/delete user data.</p></div>
+      <div class="obj-card"><h4>Availability</h4><p>99.5% uptime target (~44 hours downtime/year). Scheduled maintenance communicated in advance. Automated health monitoring and alerting.</p></div>
+      <div class="obj-card"><h4>Scalability</h4><p>Current: ~8 admins, ~500-1000 travelers/year, ~200-400 host families/year. Design for 10x growth without architectural changes. Index on: user_id, trip_id, program_id, city, status, dates.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>TRD-2026-LNL-01</span></div>
+</div>
+
+<!-- PAGE 7 — APPENDIX: RECOMMENDED APPROACHES -->
+<div class="page">
+  <div class="content-header"><span class="title">Mouliqe · Technical Requirements · Live N Learn</span><span>TRD-2026-LNL-01 · May 2026</span></div>
+  <div class="section">
+    <div class="section-title"><span class="n">—</span><h2>Appendix — Recommended approaches</h2></div>
+    <p>This section provides guidance for evaluating implementation proposals. It is not prescriptive — the core specification can be implemented on any modern web stack.</p>
+
+    <div class="sub-h">Option 1: Modern web framework (custom build)</div>
+    <p><strong>Example stack:</strong> Next.js/React (frontend) + Node.js or Python (backend) + PostgreSQL (database) + Vercel/Railway/AWS (hosting)</p>
+    <table class="std" style="margin-top: 8px">
+      <thead><tr><th>Dimension</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td>Flexibility</td><td>Maximum — no platform limitations, full ownership</td></tr>
+        <tr><td>Ongoing costs</td><td>$50-200/month hosting + email service</td></tr>
+        <tr><td>Build time</td><td>3-5 months for core functionality</td></tr>
+        <tr><td>Build cost</td><td>$15,000-40,000 depending on developer rates</td></tr>
+        <tr><td>Maintenance</td><td>Requires developer for changes</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sub-h">Option 2: Low-code platform (Bubble, Retool, or similar)</div>
+    <p><strong>Example stack:</strong> Bubble.io (full app) or Retool (admin tools) + Xano (backend/database)</p>
+    <table class="std" style="margin-top: 8px">
+      <thead><tr><th>Dimension</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td>Flexibility</td><td>Moderate — ceiling on customization, platform lock-in</td></tr>
+        <tr><td>Ongoing costs</td><td>$200-500/month platform fees</td></tr>
+        <tr><td>Build time</td><td>2-3 months</td></tr>
+        <tr><td>Build cost</td><td>$8,000-20,000</td></tr>
+        <tr><td>Maintenance</td><td>Team can make minor changes themselves</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sub-h">Option 3: Headless CMS + custom frontend</div>
+    <p><strong>Example stack:</strong> Strapi or Directus (backend/CMS) + React/Vue (frontend) + PostgreSQL</p>
+    <table class="std" style="margin-top: 8px">
+      <thead><tr><th>Dimension</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td>Flexibility</td><td>High — admin interface included, API-first</td></tr>
+        <tr><td>Ongoing costs</td><td>$50-150/month hosting</td></tr>
+        <tr><td>Build time</td><td>3-4 months</td></tr>
+        <tr><td>Build cost</td><td>$12,000-30,000</td></tr>
+        <tr><td>Maintenance</td><td>Requires developer for complex logic changes</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sub-h" style="margin-top: 18px">Evaluation criteria when reviewing proposals</div>
+    <div class="obj-grid">
+      <div class="obj-card"><h4>Domain understanding</h4><p>Do they understand travel/education/multi-user portals? Ask for relevant portfolio examples.</p></div>
+      <div class="obj-card"><h4>Maintenance story</h4><p>Who fixes bugs after launch? What's the hourly rate for changes? Is there a support contract?</p></div>
+      <div class="obj-card"><h4>Incremental delivery</h4><p>Insist on milestone-based delivery. Bi-weekly demos minimum. Never "we'll show you everything at the end."</p></div>
+      <div class="obj-card"><h4>Code ownership</h4><p>Do you own the code? Can another developer pick it up? Avoid proprietary platforms where the builder holds the keys.</p></div>
+      <div class="obj-card"><h4>Scope change process</h4><p>Things will change during build. What's the process for adding/modifying requirements without blowing up the budget?</p></div>
+      <div class="obj-card"><h4>References</h4><p>Ask for 2-3 past clients you can contact. Specifically ask those clients about post-launch support quality.</p></div>
+    </div>
+  </div>
+  <div class="content-footer"><span>Mouliqe LLC · Confidential</span><span>TRD-2026-LNL-01</span></div>
+</div>
+
+</body>
+</html>
