@@ -37,11 +37,11 @@ Businesses of all sizes navigating AI transformation — from startups evaluatin
 - FAQ: https://mouliqe.com/faq
 - Blog: https://mouliqe.com/blog
 - Interactive AI Architecture Assessment: https://mouliqe.com/explore
-- Interactive Demos (11 tools): https://mouliqe.com/demo
+- Interactive Demos (12 tools): https://mouliqe.com/demo
 - Contact / Book Discovery Call: https://mouliqe.com/contact
 
 ## Blog Topics
-AI architecture, multi-agent systems, RAG pipelines, AI guardrails, context window management, AI memory systems, AI cost optimization, data quality, POC-to-production gaps, AI strategy for business.
+AI architecture, multi-agent systems, RAG pipelines, AI guardrails, context window management, AI memory systems, AI cost optimization, data quality, POC-to-production gaps, AI strategy for business, right-sized AI and small models.
 
 ## Contact
 - Website: https://mouliqe.com
