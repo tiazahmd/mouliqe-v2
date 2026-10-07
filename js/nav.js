@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: '/services', label: 'Services' },
   { href: '/process', label: 'Process' },
   { href: '/demo', label: 'Demo', children: [
+    { href: '/tools/right-sized-ai', label: 'Right-Sized AI', tag: 'ai' },
     { href: '/tools/data-quality', label: 'Data Quality', tag: 'ai' },
     { href: '/tools/rag-pipeline', label: 'RAG Pipeline', tag: 'ai' },
     { href: '/tools/agent-workflow', label: 'Agent Workflow', tag: 'ai' },

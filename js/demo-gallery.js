@@ -1,5 +1,6 @@
-// demo-gallery.js — renders all 11 tool cards grouped by AI vs Local
+// demo-gallery.js — renders all 12 tool cards grouped by AI vs Local
 const DEMOS = [
+  { href: '/tools/right-sized-ai',         type: 'ai',    title: 'Right-Sized AI',              desc: 'Pick an everyday request and watch rules, a small model, Jev and a big chatbot answer the same small questions. Then see which one you would actually pay for.', stages: ['Read','Rules','Small Model','Jev','Chatbot','Route'], aiStages: [2, 3, 4] },
   { href: '/tools/data-quality',           type: 'ai',    title: 'Data Quality Scanner',        desc: 'Upload a CSV or pick a sample dataset. AI detects inconsistent formats, outliers, nulls, and duplicates — then scores every column.',                           stages: ['Parse','Profile','Detect','Score','Report'],         aiStages: [2, 3] },
   { href: '/tools/rag-pipeline',           type: 'ai',    title: 'RAG Pipeline Explorer',       desc: 'Pick a document, ask a question, and watch every stage of a Retrieval-Augmented Generation pipeline — from chunking to answer generation.',                   stages: ['Chunk','Embed','Search','Retrieve','Generate'],      aiStages: [1, 3, 4] },
   { href: '/tools/agent-workflow',         type: 'ai',    title: 'Agent Workflow Simulator',    desc: 'Pick a business task and watch multi-agent AI systems use Fan-Out, Router, Map-Reduce, Chain, and ReAct patterns to execute work.',                          stages: ['Analyze','Plan','Execute','Synthesize','Deliver'],   aiStages: [0, 1, 2, 3] },
