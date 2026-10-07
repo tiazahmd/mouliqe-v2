@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <title>The coal question, again — Mouliqe</title>
+  <meta name="description" content="Better steam engines made England burn more coal. Cheaper AI will do the same. Most business AI questions are small, so use the smallest tool that answers them.">
+  <meta name="keywords" content="small language models, right-sized AI, Jevons paradox, Jev TypeSafe, AI decision models, AI automation cost, confidence scores">
+  <link rel="canonical" href="https://mouliqe.com/blog/the-coal-question">
+  <link rel="author" href="https://mouliqe.com/llms.txt">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Mouliqe">
+  <meta property="og:title" content="The coal question, again — Mouliqe">
+  <meta property="og:description" content="Better steam engines made England burn more coal. Cheaper AI will do the same, and most of the questions a business asks it are small.">
+  <meta property="og:url" content="https://mouliqe.com/blog/the-coal-question">
+  <meta property="og:image" content="https://mouliqe.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The coal question, again — Mouliqe">
+  <meta name="twitter:description" content="Better steam engines made England burn more coal. Cheaper AI will do the same, and most of the questions a business asks it are small.">
+  <meta name="twitter:image" content="https://mouliqe.com/og-image.png">
+
+  <script>(function(){try{var t=localStorage.getItem('mouliqe-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(_){}})();</script>
+  <link rel="preload" href="/assets/fonts/oxanium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+
+<body>
+  <div id="site-nav"></div>
+  <main class="main-content">
+
+    <section class="section section--hero" style="padding-bottom: var(--space-8)">
+      <div class="container">
+        <a href="/blog" class="post-back anim-fade">&larr; Back to Blog</a>
+        <h1 class="post__title anim-up">The coal question, again</h1>
+        <div class="row anim-up anim-delay-1" style="gap: var(--space-4); margin-top: var(--space-4)">
+          <time datetime="2026-10-07" class="post__date">October 7, 2026</time>
+          <span class="post-tag">AI Architecture</span><span class="post-tag">AI Strategy</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0; padding-bottom: var(--space-20)">
+      <div class="container">
+        <div class="blog-layout">
+          <article class="blog-main">
+            <div class="post post__body">
+              <p>In 1865, an English economist named William Stanley Jevons wrote a book called <em>The Coal Question</em>.</p>
+
+              <p>James Watt's steam engine had made coal go much further. The same work now took less of it.</p>
+
+              <p>Some experts expected England to burn less coal.</p>
+
+              <p>Jevons said the opposite would happen:</p>
+
+              <blockquote><p>"It is a confusion of ideas to suppose that the economical use of fuel is equivalent to diminished consumption. The very contrary is the truth."</p></blockquote>
+
+              <p>When something gets cheaper to use, we find more uses for it. So we use more of it.</p>
+
+              <p>He was right. Economists still call it the Jevons paradox.</p>
+
+              <p>Last month, a company called TypeSafe released an AI model and named it Jev, after him. In their words: "We expect machine intelligence to follow a similar path to coal, after steam-engine efficiency led to an increase in demand. Every order of magnitude drop in the cost of intelligence unlocks orders of magnitude more use cases."</p>
+
+              <p>I think they're right. But the interesting part isn't the price. It's the size of the question.</p>
+
+              <p>For the last few years, using AI has mostly meant talking to a chatbot. You type a question. It writes back a paragraph.</p>
+
+              <p>That's wonderful when you need a paragraph.</p>
+
+              <p>But look at the questions a business asks all day:</p>
+
+              <p>Which department handles this request?<br>How urgent is it?<br>Is this invoice a duplicate?<br>Are these two customer records the same person?</p>
+
+              <p>None of these needs a paragraph. Each needs one answer your software can act on.</p>
+
+              <p><strong>Most AI questions are small. Use the smallest tool that answers them.</strong></p>
+
+              <p>Here's the ladder I use, from the bottom up:</p>
+
+              <ul>
+                <li><strong>Rules.</strong> If the message says "pothole," send it to Public Works. Free and instant. Also brittle: one unexpected word, and it goes to the wrong place.</li>
+                <li><strong>A small model on your own machine.</strong> Open models with a few billion parameters now run on one server, or a good laptop. No per-call fee, and your data never leaves your building.</li>
+                <li><strong>A decision model.</strong> This is what Jev is. It doesn't write text at all. You give it the message and a few questions, and it gives back typed answers, each with a confidence. TypeSafe charges $0.042 per million input tokens, gives the output away free, and says it answers in 70 to 500 milliseconds.</li>
+                <li><strong>The big chatbot.</strong> Save it for when you actually need words: a draft reply, a summary, an explanation.</li>
+              </ul>
+
+              <p>Climb only as high as the question needs.</p>
+
+              <p>Here's what that looks like. A resident reports a pothole "by Lincoln Elementary." A keyword rule sees "Elementary" and sends it to the schools department. A small model or a decision model reads the whole sentence, notices the two blown tires, and sends it to Public Works as urgent. A chatbot gets it right too, in a friendly paragraph your software then has to pick apart.</p>
+
+              <p>The confidence part matters more than it looks.</p>
+
+              <p>TypeSafe put it well: "If a model can do a task 95% of the time but doesn't say when it's in the 5%, it can't automate that task."</p>
+
+              <p>A tool that says "I'm 58% sure" is more useful than one that always sounds certain. You let the sure answers through, and you hand the unsure ones to a person.</p>
+
+              <p>Pick a number to start. Say, 80%. Anything the tool is at least 80% sure about goes straight through. Everything else lands in a person's queue. Start strict, and loosen it as the tool earns your trust.</p>
+
+              <p>That's how you automate something without losing sleep over it.</p>
+
+              <p>Now back to Jevons.</p>
+
+              <p>When a decision costs a tiny fraction of a cent, you stop rationing decisions.</p>
+
+              <p>You check every invoice, not a sample.<br>You read every customer comment, not the top ten.<br>You sort every 311 request the moment it arrives, not when someone gets to the queue.</p>
+
+              <p>That's the Jevons paradox at the size of one small organization. The work doesn't shrink. It finally gets done.</p>
+
+              <p>Most of my work at Mouliqe sits right here: getting the data clean enough that these small questions have something solid to stand on, then fitting the smallest reliable tool into the work you already do.</p>
+
+              <p>One honest warning.</p>
+
+              <p>Decision models are new. Jev came out in September. It can't make up an answer that isn't on your list, but it can still pick the wrong one from the list.</p>
+
+              <p>So test it on your own data before you trust it. That goes for every tool on the ladder.</p>
+
+              <p>I built a <a href="/tools/right-sized-ai">small demo</a> that answers the same questions four ways: rules, a small model, Jev and a big chatbot. It's a simulation, but it shows the trade-offs in about a minute.</p>
+
+              <p>Jevons was right about coal.</p>
+
+              <p>I'd bet on him again.</p>
+
+              <blockquote><p>Related: <a href="/blog/data-problem-not-ai-problem">Why Most AI Projects Fail: It's a Data Problem, Not an AI Problem</a> | <a href="/blog/fix-your-data">How to Fix Your Business Data Without a 6-Month Project</a>. See also: <a href="/tools/cost-simulator">AI Cost Simulator</a> and <a href="/services">AI Solutions & Architecture Services</a>.</p></blockquote>
+
+            </div>
+          </article>
+
+          <aside class="blog-side">
+            <div class="blog-side__sticky">
+              <div class="sidebar-cta">
+                <p style="font-size: var(--fs-xxs); font-weight: var(--fw-bold); color: var(--color-accent); text-transform: uppercase; letter-spacing: var(--tracking-widest); margin-bottom: var(--space-3)">Have a challenge?</p>
+                <p style="font-size: var(--fs-sm); color: var(--color-fg-subtle); line-height: var(--lh-base); margin-bottom: var(--space-5)">Let's talk about your AI architecture.</p>
+                <a href="/contact" class="btn btn--primary">Book a Discovery Call</a>
+                <div class="divider" style="margin-block: var(--space-5)"></div>
+                <a href="https://www.linkedin.com/in/tiazahmed/" target="_blank" rel="noopener" class="social-link" style="justify-content: center; display: flex">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  <span>Follow on LinkedIn</span>
+                </a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="/js/boot.js"></script>
+</body>
+</html>

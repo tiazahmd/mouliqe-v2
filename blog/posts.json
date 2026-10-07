@@ -1,5 +1,13 @@
 [
   {
+    "slug": "the-coal-question",
+    "title": "The coal question, again",
+    "date": "2026-10-07",
+    "excerpt": "In 1865, Jevons saw better steam engines make England burn more coal. AI is about to repeat the pattern, and most of the questions a business asks it are small.",
+    "tags": ["AI Architecture", "AI Strategy"],
+    "linkedin": ""
+  },
+  {
     "slug": "ai-cant-read-your-mind",
     "title": "Your AI Can Read Your Data. It Can't Read Your Mind.",
     "date": "2026-04-11",
